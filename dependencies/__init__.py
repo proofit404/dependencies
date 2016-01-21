@@ -10,26 +10,42 @@
 
 import six
 
-__all__ = ['Injectable', 'Injector']
+__all__ = ['Injectable', 'Injector', 'DependencyError']
+
+
+class DependencyError(Exception):
+    """Broken dependencies configuration error."""
+
+    pass
+
+
+protocol_violation = (
+    'Classes inherited from Injectable can not redefine {0} method')
+
+
+def init_base(self, **kwargs):
+    self.kwargs = kwargs
+
+
+def getattr_base(self, name):
+    try:
+        return self.kwargs[name]
+    except KeyError:
+        return getattr(super(), name)
 
 
 class InjectableBase(type):
 
     def __new__(cls, name, bases, namespace):
 
+        for method in ('__init__', '__getattr__', '__getattribute__'):
+            if method in namespace:
+                raise DependencyError(protocol_violation.format(method))
+
         new = super(InjectableBase, cls).__new__
 
-        def __init__(self, **kwargs):
-            self.kwargs = kwargs
-
-        def __getattr__(self, name):
-            try:
-                return self.kwargs[name]
-            except KeyError:
-                return getattr(super(), name)
-
-        namespace['__init__'] = __init__
-        namespace['__getattr__'] = __getattr__
+        namespace['__init__'] = init_base
+        namespace['__getattr__'] = getattr_base
 
         return new(cls, name, bases, namespace)
 
