@@ -44,14 +44,19 @@ class InjectableBase(type):
 
         new = super(InjectableBase, cls).__new__
 
+        # Ensure initialization is only performed for subclasses of
+        # Injectable (excluded Injectable class itself).
+        parents = [base for base in bases if isinstance(base, InjectableBase)]
+        if not parents:
+            return new(cls, name, bases, namespace)
+
         namespace['__init__'] = init_base
         namespace['__getattr__'] = getattr_base
 
         return new(cls, name, bases, namespace)
 
 
-@six.add_metaclass(InjectableBase)
-class Injectable(object):
+class Injectable(six.with_metaclass(InjectableBase)):
     """Dependency Injection target.
 
     Classes inherited from this class may use constructor-based

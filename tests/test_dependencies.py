@@ -15,8 +15,11 @@ def test_constructor_based_di():
 
 
 def test_deny_protocol_modification():
-    """Classes inherited from `Injectable` can't redefine `__init__`,
-    `__getattr__` and `__getattribute__`  magic methods.
+    """Classes inherited from `Injectable` can't modify suggested protocol.
+
+    They unable to redefine `__init__`, `__getattr__` and
+    `__getattribute__` magic methods.
+
     """
 
     with pytest.raises(DependencyError) as error:
@@ -48,3 +51,17 @@ def test_deny_protocol_modification():
     assert message == (
         'Classes inherited from Injectable '
         'can not redefine __getattribute__ method')
+
+
+def test_magic_methods_does_not_injected_into_api_classes():
+    """`Injectable` and `Injector` doesn't affected by their metaclasses.
+
+    `__init__` and `__getattr__` should be injected in this classes.
+
+    """
+
+    assert '__init__' not in Injectable.__dict__
+    assert '__init__' not in Injector.__dict__
+
+    assert '__getattr__' not in Injectable.__dict__
+    assert '__getattr__' not in Injector.__dict__
