@@ -65,3 +65,32 @@ def test_magic_methods_does_not_injected_into_api_classes():
 
     assert '__getattr__' not in Injectable.__dict__
     assert '__getattr__' not in Injector.__dict__
+
+
+def test_injector_specify_default_dependencies():
+    """Inherit from `Injector` class will specify default dependencies."""
+
+    class Foo(Injectable):
+        def do(self, x):
+            return self.add(x, x)
+
+    class Summator(Injector, Foo):
+        add = lambda x, y: x + y
+
+    assert Summator().do(1) == 2
+
+
+def test_injector_does_not_store_literaly_defined_dependencies():
+    """If someone define dependency literaly (i.e. write it directly
+    inside Injector) we will store it in the metaclass.__new__ closure
+    and not in the derived class __dict__.
+    """
+
+    class Foo(Injectable):
+        def do(self, x):
+            return self.add(x, x)
+
+    class Summator(Injector, Foo):
+        add = lambda x, y: x + y
+
+    assert 'add' not in Summator.__dict__

@@ -68,7 +68,31 @@ class Injectable(six.with_metaclass(InjectableBase)):
     pass
 
 
-class Injector(object):
+class InjectorBase(InjectableBase):
+
+    def __new__(cls, name, bases, namespace):
+
+        # Skip Injectable.__new__ method.
+        new = super(InjectableBase, cls).__new__
+
+        # Ensure initialization is only performed for subclasses of
+        # Injection (excluded Injector class itself).
+        parents = [base for base in bases if isinstance(base, InjectorBase)]
+        if not parents:
+            return new(cls, name, bases, namespace)
+
+        def __init__(self, **kwargs):
+
+            dependencies = {}
+            dependencies.update(namespace)
+            dependencies.update(kwargs)
+            init_base(self, **dependencies)
+
+        ns = {'__init__': __init__}
+        return new(cls, name, bases, ns)
+
+
+class Injector(six.with_metaclass(InjectorBase)):
     """Default dependencies specification DSL.
 
     Classes inherited from this class may specify default dependencies
