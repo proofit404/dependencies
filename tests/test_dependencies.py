@@ -90,6 +90,25 @@ def test_injector_specify_default_dependencies():
     assert Summator().do(1) == 2
 
 
+def test_inherit_from_injectable_subclass():
+    """We can inherit from injectable subclass."""
+
+    class Foo(Injectable):
+        def apply(self, x):
+            return self.go(x)
+
+    class Bar(Foo):
+        def apply(self):
+            return super(Bar, self).apply(1)
+
+    class Baz(Foo):
+        def go(self, x):
+            return 2
+
+    assert Bar(go=lambda x: x).apply() == 1
+    assert Baz().apply(1) == 2
+
+
 def test_injector_does_not_store_literaly_defined_dependencies():
     """If someone define dependency literaly (i.e. write it directly
     inside Injector) we will store it in the metaclass.__new__ closure
