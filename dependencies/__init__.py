@@ -75,6 +75,10 @@ class InjectorBase(InjectableBase):
                 'You can not inherit from {0!r} on its own.  '
                 'Add some injectable classes.'.format(bases[0].__name__))
 
+        if any((not issubclass(x, (Injectable, Injector))
+                for x in bases)):
+            raise DependencyError('Injector require Injectable subclasses')
+
         def __init__(self, **kwargs):
 
             dependencies = {}

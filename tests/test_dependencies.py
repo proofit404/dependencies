@@ -133,3 +133,17 @@ def test_injector_allow_multiple_inheritance_only():
     with pytest.raises(DependencyError):
         class Foo(Injector):
             pass
+
+
+def test_injector_allow_injectalble_only():
+    """`Injector` allows `Injectable` in the inheritance chain only."""
+
+    class Foo(object):
+        pass
+
+    class Bar(Injectable):
+        pass
+
+    with pytest.raises(DependencyError):
+        class Baz(Injector, Bar, Foo):
+            pass
