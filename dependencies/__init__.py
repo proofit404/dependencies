@@ -23,11 +23,11 @@ protocol_violation = (
     'Classes inherited from Injectable can not redefine {0} method')
 
 
-def init_base(self, **kwargs):
+def injectable_init(self, **kwargs):
     self.kwargs = kwargs
 
 
-def getattr_base(self, name):
+def injectable_getattr(self, name):
     try:
         return self.kwargs[name]
     except KeyError:
@@ -50,8 +50,8 @@ class InjectableBase(type):
         if not parents:
             return new(cls, name, bases, namespace)
 
-        namespace['__init__'] = init_base
-        namespace['__getattr__'] = getattr_base
+        namespace['__init__'] = injectable_init
+        namespace['__getattr__'] = injectable_getattr
 
         return new(cls, name, bases, namespace)
 
@@ -86,7 +86,7 @@ class InjectorBase(InjectableBase):
             dependencies = {}
             dependencies.update(namespace)
             dependencies.update(kwargs)
-            init_base(self, **dependencies)
+            injectable_init(self, **dependencies)
 
         ns = {'__init__': __init__}
         return new(cls, name, bases, ns)
