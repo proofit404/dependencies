@@ -109,6 +109,21 @@ def test_inherit_from_injectable_subclass():
     assert Baz().apply(1) == 2
 
 
+def test_protect_protocol_inherit_from_injectable_subclass():
+    """We can't redefine magic methods on inheritance from `Injectable`
+    subclass.
+
+    """
+
+    class Foo(Injectable):
+        pass
+
+    with pytest.raises(DependencyError):
+        class Bar(Foo):
+            def __init__(self):
+                pass
+
+
 def test_injector_does_not_store_literaly_defined_dependencies():
     """If someone define dependency literaly (i.e. write it directly
     inside Injector) we will store it in the metaclass.__new__ closure
