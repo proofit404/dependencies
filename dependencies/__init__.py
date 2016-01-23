@@ -48,8 +48,9 @@ class InjectableBase(type):
                 'You can not use multiple inheritance together with Injectable'
             )
 
-        namespace['__init__'] = injectable_init
-        namespace['__getattr__'] = injectable_getattr
+        if bases[0] is Injectable:
+            namespace['__init__'] = injectable_init
+            namespace['__getattr__'] = injectable_getattr
 
         return new(cls, name, bases, namespace)
 
@@ -66,7 +67,7 @@ class InjectorBase(InjectableBase):
         if len(bases) == 0:
             return new(cls, name, bases, namespace)
 
-        if len(bases) == 1:
+        if Injector in bases and len(bases) == 1:
             raise DependencyError(
                 'You can not inherit from Injector on its own.  '
                 'Add some Injectable subclasses.')
@@ -75,14 +76,18 @@ class InjectorBase(InjectableBase):
                 for x in bases)):
             raise DependencyError('Injector require Injectable subclasses')
 
-        def __init__(self, **kwargs):
+        ns = {}  # TODO: keep __module__ and __qualname__
 
-            dependencies = {}
-            dependencies.update(namespace)
-            dependencies.update(kwargs)
-            injectable_init(self, **dependencies)
+        if bases[0] is Injector:
+            def __init__(self, **kwargs):
 
-        ns = {'__init__': __init__}  # TODO: keep __module__ and __qualname__
+                dependencies = {}
+                dependencies.update(namespace)
+                dependencies.update(kwargs)
+                injectable_init(self, **dependencies)
+
+            ns['__init__'] = __init__
+
         return new(cls, name, bases, ns)
 
 

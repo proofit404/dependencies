@@ -124,6 +124,36 @@ def test_protect_protocol_inherit_from_injectable_subclass():
                 pass
 
 
+def test_initialize_subclasses_ones():
+    """Apply protocol injection ones.
+
+    Protocol methods injected in the first subclass only.  Next
+    subclasses shouldn't be affected.
+
+    """
+
+    class Foo(Injectable):
+        pass
+
+    class Baz(Foo):
+        pass
+
+    assert '__init__' in Foo.__dict__
+    assert '__getattr__' in Foo.__dict__
+
+    assert '__init__' not in Baz.__dict__
+    assert '__getattr__' not in Baz.__dict__
+
+    class Bar(Injector, Baz):
+        pass
+
+    class Xyz(Bar):
+        pass
+
+    assert '__init__' in Bar.__dict__
+    assert '__init__' not in Xyz.__dict__
+
+
 def test_injector_does_not_store_literaly_defined_dependencies():
     """If someone define dependency literaly (i.e. write it directly
     inside Injector) we will store it in the metaclass.__new__ closure
