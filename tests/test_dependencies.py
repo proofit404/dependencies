@@ -22,35 +22,20 @@ def test_deny_protocol_modification():
 
     """
 
-    with pytest.raises(DependencyError) as error:
+    with pytest.raises(DependencyError):
         class Foo(Injectable):
             def __init__(self):
                 pass
 
-    message = error.value.args[0]
-    assert message == (
-        'Classes inherited from Injectable '
-        'can not redefine __init__ method')
-
-    with pytest.raises(DependencyError) as error:
+    with pytest.raises(DependencyError):
         class Baz(Injectable):
             def __getattr__(self):
                 pass
 
-    message = error.value.args[0]
-    assert message == (
-        'Classes inherited from Injectable '
-        'can not redefine __getattr__ method')
-
-    with pytest.raises(DependencyError) as error:
+    with pytest.raises(DependencyError):
         class Bar(Injectable):
             def __getattribute__(self):
                 pass
-
-    message = error.value.args[0]
-    assert message == (
-        'Classes inherited from Injectable '
-        'can not redefine __getattribute__ method')
 
 
 def test_magic_methods_does_not_injected_into_api_classes():
@@ -94,3 +79,24 @@ def test_injector_does_not_store_literaly_defined_dependencies():
         add = lambda x, y: x + y
 
     assert 'add' not in Summator.__dict__
+
+
+def test_inline_dependency_definition():
+    """Dependencies defined inside Injector should not be method wrapped."""
+
+    def default_go(x):
+        return 'Go, {x}! Go!'.format(x=x)
+
+    class Foo(Injectable):
+        def do(self, x):
+            return self.go(x)
+
+    class Bar(Injector, Foo):
+        go = default_go
+
+    class Baz(Injector, Foo):
+        def go(x):  # Preserve `default_go` signature.
+            return 'Run, {x}! Run!'.format(x=x)
+
+    assert Bar().do('user') == 'Go, user! Go!'
+    assert Baz().do('user') == 'Run, user! Run!'

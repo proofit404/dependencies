@@ -13,25 +13,20 @@ import six
 __all__ = ['Injectable', 'Injector', 'DependencyError']
 
 
-class DependencyError(Exception):
-    """Broken dependencies configuration error."""
-
-    pass
-
-
-protocol_violation = (
-    'Classes inherited from Injectable can not redefine {0} method')
-
-
 def injectable_init(self, **kwargs):
-    self.kwargs = kwargs
+    self.dependencies = kwargs
 
 
 def injectable_getattr(self, name):
     try:
-        return self.kwargs[name]
+        return self.dependencies[name]
     except KeyError:
-        return getattr(super(), name)
+        try:
+            return getattr(super(), name)
+        except AttributeError:
+            raise AttributeError(
+                'You should inject {0!r} dependency into {1.__name__!r} '
+                'constructor'.format(name, self))
 
 
 class InjectableBase(type):
@@ -40,7 +35,9 @@ class InjectableBase(type):
 
         for method in ('__init__', '__getattr__', '__getattribute__'):
             if method in namespace:
-                raise DependencyError(protocol_violation.format(method))
+                raise DependencyError(
+                    'Classes inherited from Injectable can not redefine'
+                    ' {0!r} method'.format(method))
 
         new = super(InjectableBase, cls).__new__
 
@@ -54,18 +51,6 @@ class InjectableBase(type):
         namespace['__getattr__'] = injectable_getattr
 
         return new(cls, name, bases, namespace)
-
-
-class Injectable(six.with_metaclass(InjectableBase)):
-    """Dependency Injection target.
-
-    Classes inherited from this class may use constructor-based
-    dependency injection.  Inherited classes can't override __init__
-    and __getattr__ methods.
-
-    """
-
-    pass
 
 
 class InjectorBase(InjectableBase):
@@ -88,8 +73,20 @@ class InjectorBase(InjectableBase):
             dependencies.update(kwargs)
             injectable_init(self, **dependencies)
 
-        ns = {'__init__': __init__}
+        ns = {'__init__': __init__}  # TODO: keep __module__ and __qualname__
         return new(cls, name, bases, ns)
+
+
+class Injectable(six.with_metaclass(InjectableBase)):
+    """Dependency Injection target.
+
+    Classes inherited from this class may use constructor-based
+    dependency injection.  Inherited classes can't override __init__
+    and __getattr__ methods.
+
+    """
+
+    pass
 
 
 class Injector(six.with_metaclass(InjectorBase)):
@@ -100,5 +97,11 @@ class Injector(six.with_metaclass(InjectorBase)):
     remains for the defined class.
 
     """
+
+    pass
+
+
+class DependencyError(Exception):
+    """Broken dependencies configuration error."""
 
     pass
