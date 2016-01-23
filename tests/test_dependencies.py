@@ -14,6 +14,20 @@ def test_constructor_based_di():
     assert foo.apply('ls') == 'LS'
 
 
+def test_missing_dependency():
+    """`Injectable` adherent throw `AttributeError` if some dependencies
+    are missed.
+
+    """
+
+    class Foo(Injectable):
+        def apply(self):
+            self.missed
+
+    with pytest.raises(AttributeError):
+        Foo().apply()
+
+
 def test_deny_protocol_modification():
     """Classes inherited from `Injectable` can't modify suggested protocol.
 
