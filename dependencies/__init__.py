@@ -21,12 +21,9 @@ def injectable_getattr(self, name):
     try:
         return self.dependencies[name]
     except KeyError:
-        try:
-            return getattr(super(self.__class__, self), name)
-        except AttributeError:
-            raise AttributeError(
-                'You should inject {0!r} dependency into {1!r} '
-                'constructor'.format(name, self.__class__.__name__))
+        raise AttributeError(
+            'You should inject {0!r} dependency into {1!r} '
+            'constructor'.format(name, self.__class__.__name__))
 
 
 class InjectableBase(type):
