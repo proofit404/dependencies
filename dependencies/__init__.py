@@ -66,6 +66,11 @@ class InjectorBase(InjectableBase):
         if not parents:
             return new(cls, name, bases, namespace)
 
+        if len(bases) == 1:
+            raise DependencyError(
+                'You can not inherit from {0!r} on its own.  '
+                'Add some injectable classes.'.format(bases[0].__name__))
+
         def __init__(self, **kwargs):
 
             dependencies = {}
