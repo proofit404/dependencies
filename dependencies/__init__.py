@@ -43,8 +43,7 @@ class InjectableBase(type):
 
         # Ensure initialization is only performed for subclasses of
         # Injectable (excluded Injectable class itself).
-        parents = [base for base in bases if isinstance(base, InjectableBase)]
-        if not parents:
+        if len(bases) == 0:
             return new(cls, name, bases, namespace)
 
         namespace['__init__'] = injectable_init
@@ -62,8 +61,7 @@ class InjectorBase(InjectableBase):
 
         # Ensure initialization is only performed for subclasses of
         # Injection (excluded Injector class itself).
-        parents = [base for base in bases if isinstance(base, InjectorBase)]
-        if not parents:
+        if len(bases) == 0:
             return new(cls, name, bases, namespace)
 
         if len(bases) == 1:

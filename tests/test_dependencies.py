@@ -102,7 +102,7 @@ def test_inline_dependency_definition():
     assert Baz().do('user') == 'Run, user! Run!'
 
 
-def test_injector_all_multiple_inheritance_only():
+def test_injector_allow_multiple_inheritance_only():
     """`Injector` may be used in multiple inheritance only."""
 
     with pytest.raises(DependencyError):
