@@ -47,10 +47,9 @@ class InjectableBase(type):
             return new(cls, name, bases, namespace)
 
         if len(bases) > 1:
-            base = next((x for x in bases if isinstance(x, InjectableBase)))
             raise DependencyError(
-                'You can not use multiple inheritance together with {!r}'
-                .format(base.__name__))
+                'You can not use multiple inheritance together with Injectable'
+            )
 
         namespace['__init__'] = injectable_init
         namespace['__getattr__'] = injectable_getattr
@@ -72,8 +71,8 @@ class InjectorBase(InjectableBase):
 
         if len(bases) == 1:
             raise DependencyError(
-                'You can not inherit from {0!r} on its own.  '
-                'Add some injectable classes.'.format(bases[0].__name__))
+                'You can not inherit from Injector on its own.  '
+                'Add some Injectable subclasses.')
 
         if any((not issubclass(x, (Injectable, Injector))
                 for x in bases)):
