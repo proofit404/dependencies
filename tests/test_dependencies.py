@@ -28,6 +28,17 @@ def test_missing_dependency():
         Foo().apply()
 
 
+def test_injectable_deny_multiple_inheritance():
+    """`Injectable` deny multiple inheritance."""
+
+    class Foo(object):
+        message = 'test'
+
+    with pytest.raises(DependencyError):
+        class Bar(Injectable, Foo):
+            pass
+
+
 def test_deny_protocol_modification():
     """Classes inherited from `Injectable` can't modify suggested protocol.
 
