@@ -38,9 +38,7 @@ class InjectableBase(type):
 
         new = super(InjectableBase, cls).__new__
 
-        # Ensure initialization is only performed for subclasses of
-        # Injectable (excluded Injectable class itself).
-        if len(bases) == 0:
+        if len(bases) == 0 or Injector in bases:
             return new(cls, name, bases, namespace)
 
         if len(bases) > 1:
@@ -59,11 +57,8 @@ class InjectorBase(InjectableBase):
 
     def __new__(cls, name, bases, namespace):
 
-        # Skip Injectable.__new__ method.
         new = super(InjectableBase, cls).__new__
 
-        # Ensure initialization is only performed for subclasses of
-        # Injection (excluded Injector class itself).
         if len(bases) == 0:
             return new(cls, name, bases, namespace)
 
@@ -78,7 +73,7 @@ class InjectorBase(InjectableBase):
 
         ns = {}  # TODO: keep __module__ and __qualname__
 
-        if bases[0] is Injector:
+        if Injector in bases:
             def __init__(self, **kwargs):
 
                 dependencies = {}

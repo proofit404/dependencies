@@ -211,3 +211,16 @@ def test_injector_allow_injectalble_only():
     with pytest.raises(DependencyError):
         class Baz(Injector, Bar, Foo):
             pass
+
+
+def test_injector_any_order():
+    """`Injector` may be used in any position."""
+
+    class Foo(Injectable):
+        def apply(self, x):
+            return self.do(x)
+
+    class Bar(Foo, Injector):
+        do = lambda x: x + 1
+
+    assert Bar().apply(1) == 2
