@@ -224,3 +224,32 @@ def test_injector_any_order():
         do = lambda x: x + 1
 
     assert Bar().apply(1) == 2
+
+
+def test_magic_methods_not_allowed_in_the_injector():
+    """`Injector` doesn't accept magic methods."""
+
+    class Foo(Injectable):
+        pass
+
+    with pytest.raises(DependencyError):
+        class Bar(Injector, Foo):
+            def __eq__(self, other):
+                pass
+
+
+def test_keep_default_dict_for_injector_subclass():
+    """`__dict__` of `Injector` subclass should contain default members
+    like `__module__`.
+
+    """
+
+    class Foo(Injectable):
+        pass
+
+    class Bar(Injector, Foo):
+        pass
+
+    bar = Bar()
+    assert '__module__' in Bar.__dict__
+    assert '__module__' not in bar.dependencies
