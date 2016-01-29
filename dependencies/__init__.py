@@ -71,22 +71,16 @@ class InjectorBase(InjectableBase):
                 for x in bases)):
             raise DependencyError('Injector require Injectable subclasses')
 
-        module = namespace.pop('__module__')
-        doc = namespace.pop('__doc__', None)
-        weakref = namespace.pop('__weakref__', None)
-        qualname = namespace.pop('__qualname__', None)
+        ns = {}
+        for attr in ('__module__', '__doc__', '__weakref__', '__qualname__'):
+            try:
+                ns[attr] = namespace.pop(attr)
+            except KeyError:
+                pass
 
         if any((x for x in namespace
                 if x.startswith('__') and x.endswith('__'))):
             raise DependencyError('Magic methods not allowed')
-
-        ns = {'__module__': module}
-        if doc:
-            ns['__doc__'] = doc
-        if weakref:
-            ns['__weakref__'] = weakref
-        if qualname:
-            ns['__qualname__'] = qualname
 
         if Injector in bases:
             def __init__(self, **kwargs):
