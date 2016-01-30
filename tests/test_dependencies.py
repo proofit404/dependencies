@@ -277,3 +277,22 @@ def test_multiple_inheritance_with_injector():
         b = 2
 
     assert 3 == Summator().add()
+
+
+def test_object_inheritance_restrictions():
+    """Follows `object` inheritance principles.
+
+    Deny to use same class in the bases twice.
+
+    """
+
+    class Foo(Injectable):
+        pass
+
+    with pytest.raises(TypeError):
+        class Bar(Injector, Foo, Foo):
+            pass
+
+    with pytest.raises(TypeError):
+        class Baz(Injector, Foo, Injector):
+            pass
