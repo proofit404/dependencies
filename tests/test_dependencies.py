@@ -253,3 +253,27 @@ def test_keep_default_dict_for_injector_subclass():
     bar = Bar()
     assert '__module__' in Bar.__dict__
     assert '__module__' not in bar.dependencies
+
+
+def test_multiple_inheritance_with_injector():
+    """Multiple inheritance is allowed to use with `Injector`."""
+
+    class Foo(Injectable):
+        @property
+        def x(self):
+            return self.a
+
+    class Bar(Injectable):
+        @property
+        def y(self):
+            return self.b
+
+    class Baz(Injectable):
+        def add(self):
+            return self.x + self.y
+
+    class Summator(Injector, Foo, Bar, Baz):
+        a = 1
+        b = 2
+
+    assert 3 == Summator().add()
