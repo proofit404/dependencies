@@ -26,3 +26,21 @@ Dependencies
 |travis| |coveralls| |requires| |codacy| |pypi|
 
 Dependency Injection for Humans.
+
+- `Source Code`_
+- `Issue Tracker`_
+- `Documentation`_
+
+Installation
+------------
+
+All released versions are hosted on the Python Package Index.  You can
+install this package with following command.
+
+.. code:: bash
+
+    pip install dependencies
+
+.. _source code: https://github.com/proofit404/dependencies
+.. _issue tracker: https://github.com/proofit404/dependencies/issues
+.. _documentation: http://dependencies.readthedocs.org/
