@@ -41,6 +41,11 @@ install this package with following command.
 
     pip install dependencies
 
+License
+-------
+
+Dependencies library is offered under LGPL license.
+
 .. _source code: https://github.com/proofit404/dependencies
 .. _issue tracker: https://github.com/proofit404/dependencies/issues
 .. _documentation: http://dependencies.readthedocs.org/
