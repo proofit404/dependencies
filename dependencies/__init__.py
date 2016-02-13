@@ -84,13 +84,18 @@ class InjectorBase(InjectableBase):
 
         if Injector in bases:
             def __init__(self, **kwargs):
-
                 dependencies = {}
                 dependencies.update(namespace)
                 dependencies.update(kwargs)
                 injectable_init(self, **dependencies)
+        else:
+            def __init__(self, **kwargs):
+                dependencies = {}
+                dependencies.update(namespace)
+                dependencies.update(kwargs)
+                super(self.__class__, self).__init__(**dependencies)
 
-            ns['__init__'] = __init__
+        ns['__init__'] = __init__
 
         return new(cls, name, bases, ns)
 

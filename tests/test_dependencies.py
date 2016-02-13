@@ -127,8 +127,12 @@ def test_protect_protocol_inherit_from_injectable_subclass():
 def test_initialize_subclasses_ones():
     """Apply protocol injection ones.
 
-    Protocol methods injected in the first subclass only.  Next
+    Injectable protocol methods injected in the first subclass only.  Next
     subclasses shouldn't be affected.
+
+    Injector protocol methods injected into each subclass.  This
+    allows to override specified dependencies in the inheritance
+    downstream.
 
     """
 
@@ -151,7 +155,7 @@ def test_initialize_subclasses_ones():
         pass
 
     assert '__init__' in Bar.__dict__
-    assert '__init__' not in Xyz.__dict__
+    assert '__init__' in Xyz.__dict__
 
 
 def test_injector_does_not_store_literaly_defined_dependencies():
@@ -296,3 +300,25 @@ def test_object_inheritance_restrictions():
     with pytest.raises(TypeError):
         class Baz(Injector, Foo, Injector):
             pass
+
+
+def test_redefine_injector_defaults_with_inheritance():
+    """We can send dependencies into injector not only with kwargs but
+    with inheritance too.
+
+    """
+
+    class Foo(Injectable):
+        def do(self):
+            return self.x()
+
+    class Bar(Injector, Foo):
+        def x():
+            return 1
+
+    class Baz(Bar):
+        def x():
+            return 2
+
+    assert Baz().do() == 2
+    assert Baz(x=lambda: 3).do() == 3
