@@ -8,7 +8,6 @@
     :license: LGPL-3, see LICENSE for more details.
 """
 
-import functools
 import inspect
 
 import six
@@ -51,11 +50,12 @@ class InjectorBase(type):
                     '{0!r} object has no attribute {1!r}'
                     .format(name, attrname))
 
-            if inspect.isfunction(attribute):
-                @functools.wraps(attribute)
-                def method_wrapper(self, *args, **kwargs):
-                    return v(*args, **kwargs)
-                return method_wrapper
+            if inspect.isclass(attribute):
+                constructor_attrs = inspect.getargspec(attribute.__init__)
+                constructor_arguments = {}
+                for a in constructor_attrs[0][1:]:
+                    constructor_arguments[a] = __getattr__(self, a)
+                return attribute(**constructor_arguments)
             else:
                 return attribute
 
