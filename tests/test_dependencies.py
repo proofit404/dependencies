@@ -100,7 +100,7 @@ def test_redefine_dependency():
         foo = Foo
         add = lambda x, y: x + y
 
-    class WrongSummator(Summator):
+    class WrongSummator(Summator.__class__):
         add = lambda x, y: x - y
 
     assert WrongSummator.foo.do(1) == 0
