@@ -150,3 +150,44 @@ def test_circle_dependencies():
 
         class Summator(Injector):
             foo = Foo
+
+
+def test_owerride_keyword_argument_if_dependency_was_specified():
+    """Use specified dependency for constructor keyword arguments if
+    dependency with desired name was mentioned in the injector.
+
+    """
+
+    class Foo(object):
+        def __init__(self, add, y=1):
+            self.add = add
+            self.y = y
+        def do(self, x):
+            return self.add(x, self.y)
+
+    class Summator(Injector):
+        foo = Foo
+        add = lambda x, y: x + y
+        y = 2
+
+    assert Summator.foo.do(1) == 3
+
+
+def test_preserve_keyword_argument_if_dependency_was_missed():
+    """Use constructor keyword arguments if dependency with desired name
+    was missed in the injector.
+
+    """
+
+    class Foo(object):
+        def __init__(self, add, y=1):
+            self.add = add
+            self.y = y
+        def do(self, x):
+            return self.add(x, self.y)
+
+    class Summator(Injector):
+        foo = Foo
+        add = lambda x, y: x + y
+
+    assert Summator.foo.do(1) == 2
