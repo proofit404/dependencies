@@ -40,16 +40,29 @@ class InjectorBase(type):
                 if x.startswith('__') and x.endswith('__'))):
             raise DependencyError('Magic methods are not allowed')
 
-        def __getattr__(self, attrname):
-            """Injector attribute lookup."""
+        def __rawattr__(self, attrname):
+            """Namespace based attribute lookup."""
 
             try:
                 attribute = namespace[attrname]
             except KeyError:
-                raise AttributeError(
-                    '{0!r} object has no attribute {1!r}'
-                    .format(name, attrname))
+                if Injector in self.__class__.__bases__:
+                    raise AttributeError(
+                        '{0!r} object has no attribute {1!r}'
+                        .format(name, attrname))
+                else:
+                    parent = super(self.__class__, self)
+                    attribute = parent.__rawattr__(attrname)
+            return attribute
 
+        def __getattr__(self, attrname):
+            """Injector attribute lookup.
+
+            Constructor based Dependency Injection happens here.
+
+            """
+
+            attribute = self.__rawattr__(attrname)
             if inspect.isclass(attribute):
                 constructor_attrs = inspect.getargspec(attribute.__init__)
                 constructor_arguments = {}
@@ -59,6 +72,7 @@ class InjectorBase(type):
             else:
                 return attribute
 
+        ns['__rawattr__'] = __rawattr__
         ns['__getattr__'] = __getattr__
 
         klass = new(cls, name, bases, ns)
