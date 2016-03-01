@@ -8,6 +8,9 @@
     :license: LGPL-3, see LICENSE for more details.
 """
 
+import functools
+import inspect
+
 import six
 
 __all__ = ['Injector', 'DependencyError']
@@ -22,12 +25,12 @@ class InjectorBase(type):
         if len(bases) == 0:
             return new(cls, name, bases, namespace)
 
-        if Injector in bases and len(bases) == 1:
+        if len(bases) > 1:
             raise DependencyError(
-                'You can not inherit from Injector on its own.  '
-                'Add some Injectable subclasses.')
+                'Multiple inheritance is not allowed')
 
         ns = {}
+
         for attr in ('__module__', '__doc__', '__weakref__', '__qualname__'):
             try:
                 ns[attr] = namespace.pop(attr)
@@ -36,25 +39,37 @@ class InjectorBase(type):
 
         if any((x for x in namespace
                 if x.startswith('__') and x.endswith('__'))):
-            raise DependencyError('Magic methods not allowed')
+            raise DependencyError('Magic methods are not allowed')
 
-        def __init__(self, **kwargs):
-            dependencies = {}
-            dependencies.update(namespace)
-            dependencies.update(kwargs)
-            super(self.__class__, self).__init__(**dependencies)
+        def __getattr__(self, attrname):
+            """Injector attribute lookup."""
 
-        ns['__init__'] = __init__
+            try:
+                attribute = namespace[attrname]
+            except KeyError:
+                raise AttributeError(
+                    '{0!r} object has no attribute {1!r}'
+                    .format(name, attrname))
 
-        return new(cls, name, bases, ns)
+            if inspect.isfunction(attribute):
+                @functools.wraps(attribute)
+                def method_wrapper(self, *args, **kwargs):
+                    return v(*args, **kwargs)
+                return method_wrapper
+            else:
+                return attribute
+
+        ns['__getattr__'] = __getattr__
+
+        klass = new(cls, name, bases, ns)
+        return klass()
 
 
 class Injector(six.with_metaclass(InjectorBase)):
     """Default dependencies specification DSL.
 
-    Classes inherited from this class may specify default dependencies
-    for one or more `Injectable` classes.  Constructor-based injection
-    remains for the defined class.
+    Classes inherited from this class may inject dependencies into
+    classes specified in it namespace.
 
     """
 

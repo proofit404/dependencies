@@ -3,19 +3,8 @@ import pytest
 from dependencies import Injector, DependencyError
 
 
-def test_magic_methods_does_not_injected_into_api_classes():
-    """`Injector` isn't affected by it metaclass.
-
-    `__init__` and `__getattr__` should be injected in this classes.
-
-    """
-
-    assert '__init__' not in Injector.__dict__
-    assert '__getattr__' not in Injector.__dict__
-
-
-def test_injector_specify_default_dependencies():
-    """Inherit from `Injector` class will specify default dependencies."""
+def test_lambda_dependency():
+    """Inject lambda function."""
 
     class Foo(object):
         def __init__(self, add):
@@ -23,41 +12,82 @@ def test_injector_specify_default_dependencies():
         def do(self, x):
             return self.add(x, x)
 
-    class Summator(Injector, Foo):
+    class Summator(Injector):
+        foo = Foo
         add = lambda x, y: x + y
 
-    assert Summator().do(1) == 2
+    assert Summator.foo.do(1) == 2
 
 
-def test_initialize_subclasses_ones():
-    """Apply protocol injection ones.
+def test_function_dependency():
+    """Inject regular function."""
 
-    Injector protocol methods injected into each subclass.  This
-    allows to override specified dependencies in the inheritance
-    downstream.
+    class Foo(object):
+        def __init__(self, add):
+            self.add = add
+        def do(self, x):
+            return self.add(x, x)
+
+    def plus(x, y):
+        return x + y
+
+    class Summator(Injector):
+        foo = Foo
+        add = plus
+
+    assert Summator.foo.do(1) == 2
+
+
+def test_inline_dependency():
+    """Inject method defined inside Injector subclass."""
+
+    class Foo(object):
+        def __init__(self, add):
+            self.add = add
+        def do(self, x):
+            return self.add(x, x)
+
+    class Summator(Injector):
+        foo = Foo
+        def add(x, y):
+            return x + y
+
+    assert Summator.foo.do(1) == 2
+
+
+def test_class_dependency():
+    """Inject class.
+
+    Instantiate class from the same scope and inject its instance.
 
     """
 
     class Foo(object):
-        pass
+        def __init__(self, add, bar):
+            self.add = add
+            self.bar = bar
+        def do(self, x):
+            return self.add(self.bar.go(x), self.bar.go(x))
 
-    class Baz(Foo):
-        pass
+    class Bar(object):
+        def __init__(self, mul):
+            self.mul = mul
+        def go(self, x):
+            return self.mul(x, x)
 
-    class Bar(Injector, Baz):
-        pass
+    class Summator(Injector):
+        foo = Foo
+        bar = Bar
+        add = lambda x, y: x + y
+        mul = lambda x, y: x * y
 
-    class Xyz(Bar):
-        pass
-
-    assert '__init__' in Bar.__dict__
-    assert '__init__' in Xyz.__dict__
+    assert Summator.foo.do(2) == 8
 
 
-def test_injector_does_not_store_literaly_defined_dependencies():
-    """If someone define dependency literaly (i.e. write it directly
-    inside Injector) we will store it in the metaclass.__new__ closure
-    and not in the derived class __dict__.
+def test_redefine_dependency():
+    """We can redefine dependency by inheritance from the `Injector`
+    subclass.
+
     """
 
     class Foo(object):
@@ -66,156 +96,57 @@ def test_injector_does_not_store_literaly_defined_dependencies():
         def do(self, x):
             return self.add(x, x)
 
-    class Summator(Injector, Foo):
+    class Summator(Injector):
+        foo = Foo
         add = lambda x, y: x + y
 
-    assert 'add' not in Summator.__dict__
+    class WrongSummator(Summator):
+        add = lambda x, y: x - y
+
+    assert WrongSummator.foo.do(1) == 0
 
 
-def test_inline_dependency_definition():
-    """Dependencies defined inside Injector should not be method wrapped."""
-
-    def default_go(x):
-        return 'Go, {x}! Go!'.format(x=x)
+def test_injector_deny_multiple_inheritance():
+    """`Injector` may be used in single inheritance only."""
 
     class Foo(object):
-        def __init__(self, go):
-            self.go = go
-        def do(self, x):
-            return self.go(x)
-
-    class Bar(Injector, Foo):
-        go = default_go
-
-    class Baz(Injector, Foo):
-        def go(x):
-            return 'Run, {x}! Run!'.format(x=x)
-
-    assert Bar().do('user') == 'Go, user! Go!'
-    assert Baz().do('user') == 'Run, user! Run!'
-
-
-def test_injector_allow_multiple_inheritance_only():
-    """`Injector` may be used in multiple inheritance only."""
+        pass
 
     with pytest.raises(DependencyError):
-        class Foo(Injector):
+        class Foo(Injector, Foo):
             pass
-
-
-def test_injector_any_order():
-    """`Injector` may be used in any position."""
-
-    class Foo(object):
-        def __init__(self, do):
-            self.do = do
-        def apply(self, x):
-            return self.do(x)
-
-    class Bar(Foo, Injector):
-        do = lambda x: x + 1
-
-    assert Bar().apply(1) == 2
 
 
 def test_magic_methods_not_allowed_in_the_injector():
     """`Injector` doesn't accept magic methods."""
 
-    class Foo(object):
-        pass
-
     with pytest.raises(DependencyError):
-        class Bar(Injector, Foo):
+        class Bar(Injector):
             def __eq__(self, other):
                 pass
 
 
-def test_keep_default_dict_for_injector_subclass():
-    """`__dict__` of `Injector` subclass should contain default members
-    like `__module__`.
+def test_attribute_error():
+    """Raise attribute error if we can't find dependency."""
 
-    """
-
-    class Foo(object):
+    class Foo(Injector):
         pass
 
-    class Bar(Injector, Foo):
-        pass
-
-    bar = Bar()
-    assert '__module__' in Bar.__dict__
-    assert '__module__' not in bar.__dict__
+    with pytest.raises(AttributeError):
+        Foo.test
 
 
-def test_multiple_inheritance_with_injector():
-    """Multiple inheritance is allowed to use with `Injector`."""
-
-    class Foo(object):
-        def __init__(self, a):
-            self.a = a
-        @property
-        def x(self):
-            return self.a
-
-    class Bar(object):
-        def __init__(self, b):
-            self.b = b
-        @property
-        def y(self):
-            return self.b
-
-    class Baz(object):
-        def __init__(self, x, y):
-            self.x = x
-            self.y = y
-        def add(self):
-            return self.x + self.y
-
-    class Summator(Injector, Foo, Bar, Baz):
-        a = 1
-        b = 2
-
-    assert 3 == Summator().add()
+def test_circle_dependencies():
+    """Throw `DependencyError` if class needs a dependency named same as class."""
 
 
-def test_object_inheritance_restrictions():
-    """Follows `object` inheritance principles.
+    with pytest.raises(DependencyError):
 
-    Deny to use same class in the bases twice.
+        class Foo(object):
+            def __init__(self, foo):
+                self.foo = foo
+            def do(self, x):
+                return self.foo(x, x)
 
-    """
-
-    class Foo(object):
-        pass
-
-    with pytest.raises(TypeError):
-        class Bar(Injector, Foo, Foo):
-            pass
-
-    with pytest.raises(TypeError):
-        class Baz(Injector, Foo, Injector):
-            pass
-
-
-def test_redefine_injector_defaults_with_inheritance():
-    """We can send dependencies into injector not only with kwargs but
-    with inheritance too.
-
-    """
-
-    class Foo(object):
-        def __init__(self, x):
-            self.x = x
-        def do(self):
-            return self.x()
-
-    class Bar(Injector, Foo):
-        def x():
-            return 1
-
-    class Baz(Bar):
-        def x():
-            return 2
-
-    assert Baz().do() == 2
-    assert Baz(x=lambda: 3).do() == 3
+        class Summator(Injector):
+            foo = Foo
