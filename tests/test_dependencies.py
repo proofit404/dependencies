@@ -223,7 +223,7 @@ def test_preserve_multiple_asterisk_arguments():
 
     class Summator(Injector):
         foo = Foo
-        func = sum
+        def func(sequence, start): return sum(sequence, start)
         kwargs = {
             'sequence': (1, 2, 3),
             'start': 5,

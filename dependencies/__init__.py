@@ -64,11 +64,17 @@ class InjectorBase(type):
 
             attribute = self.__rawattr__(attrname)
             if inspect.isclass(attribute):
-                constructor_attrs = inspect.getargspec(attribute.__init__)
-                constructor_arguments = {}
-                for a in constructor_attrs[0][1:]:
-                    constructor_arguments[a] = __getattr__(self, a)
-                return attribute(**constructor_arguments)
+                init = attribute.__init__
+                args, varargs, kwargs, defaults = inspect.getargspec(init)
+                arguments = []
+                keywords = {}
+                for a in args[1:]:
+                    arguments.append(__getattr__(self, a))
+                if varargs is not None:
+                    arguments.extend(__getattr__(self, varargs))
+                if kwargs is not None:
+                    keywords.update(__getattr__(self, kwargs))
+                return attribute(*arguments, **keywords)
             else:
                 return attribute
 
