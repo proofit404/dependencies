@@ -230,3 +230,29 @@ def test_preserve_multiple_asterisk_arguments():
         }
 
     assert Summator.foo.do() == 11
+
+
+def test_multiple_arguments_possition():
+    """We support injection all the stuff at ones."""
+
+    class Foo(object):
+        def __init__(self, a, b, c=1, d=2, *tail, **kw):
+            self.a = a
+            self.b = b
+            self.c = c
+            self.d = d
+            self.tail = tail
+            self.kw = kw
+        def do(self):
+            return sum((self.a, self.b, self.c, self.d) + self.tail + (self.kw['x'], self.kw['y']))
+
+    class Summator(Injector):
+        foo = Foo
+        a = 2
+        b = 3
+        c = 4
+        d = 5
+        tail = [6, 7, 8]
+        kw = {'x': 9, 'y': 10}
+
+    assert Summator.foo.do() == 54
