@@ -151,6 +151,7 @@ def test_circle_dependencies():
         class Summator(Injector):
             foo = Foo
 
+        Summator.foo            # Will fail with maximum recursion depth.
 
 def test_owerride_keyword_argument_if_dependency_was_specified():
     """Use specified dependency for constructor keyword arguments if

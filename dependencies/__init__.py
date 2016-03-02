@@ -40,6 +40,15 @@ class InjectorBase(type):
                 if x.startswith('__') and x.endswith('__'))):
             raise DependencyError('Magic methods are not allowed')
 
+        for k, v in six.iteritems(namespace):
+            if inspect.isclass(v):
+                spec = inspect.getargspec(v.__init__)
+                args = spec[0] + [spec[1], spec[2]]
+                if k in args:
+                    raise DependencyError(
+                        '{0!r} is a circle dependency in the {1!r} '
+                        'constructor')
+
         def __rawattr__(self, attrname):
             """Namespace based attribute lookup."""
 
