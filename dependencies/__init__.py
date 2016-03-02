@@ -66,10 +66,20 @@ class InjectorBase(type):
             if inspect.isclass(attribute):
                 init = attribute.__init__
                 args, varargs, kwargs, defaults = inspect.getargspec(init)
+                if defaults is not None:
+                    have_defaults = len(args) - len(defaults)
+                else:
+                    have_defaults = len(args)
                 arguments = []
                 keywords = {}
-                for a in args[1:]:
-                    arguments.append(__getattr__(self, a))
+                for n, a in enumerate(args[1:], 1):
+                    try:
+                        arguments.append(__getattr__(self, a))
+                    except AttributeError:
+                        if n < have_defaults:
+                            raise
+                        else:
+                            arguments.append(defaults[n - have_defaults])
                 if varargs is not None:
                     arguments.extend(__getattr__(self, varargs))
                 if kwargs is not None:
