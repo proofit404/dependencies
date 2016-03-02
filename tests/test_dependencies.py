@@ -191,3 +191,42 @@ def test_preserve_keyword_argument_if_dependency_was_missed():
         add = lambda x, y: x + y
 
     assert Summator.foo.do(1) == 2
+
+
+def test_preserve_single_asterisk_arguments():
+    """Inject `*args` into constructor."""
+
+    class Foo(object):
+        def __init__(self, func, *args):
+            self.func = func
+            self.args = args
+        def do(self):
+            return self.func(self.args)
+
+    class Summator(Injector):
+        foo = Foo
+        func = sum
+        args = (1, 2, 3)
+
+    assert Summator.foo.do() == 6
+
+
+def test_preserve_multiple_asterisk_arguments():
+    """Inject `**kwargs` into constructor."""
+
+    class Foo(object):
+        def __init__(self, func, **kwargs):
+            self.func = func
+            self.kwargs = kwargs
+        def do(self):
+            return self.func(**self.kwargs)
+
+    class Summator(Injector):
+        foo = Foo
+        func = sum
+        kwargs = {
+            'sequence': (1, 2, 3),
+            'start': 5,
+        }
+
+    assert Summator.foo.do() == 11
