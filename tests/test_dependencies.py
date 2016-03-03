@@ -257,3 +257,55 @@ def test_multiple_arguments_possition():
         kw = {'x': 9, 'y': 10}
 
     assert Summator.foo.do() == 54
+
+
+def test_injectable_without_its_own_init():
+    """Inject dependencies into object subclass which doesn't specify its
+    own `__init__`.
+
+    """
+
+    class Foo(object):
+        def do(self):
+            return 1
+
+    class Baz(Injector):
+        foo = Foo
+
+    assert Baz.foo.do() == 1
+
+
+def test_injectable_with_parent_init():
+    """Inject dependencies into object which parent class define `__init__`."""
+
+    class Foo(object):
+        def __init__(self, x, y):
+            self.x = x
+            self.y = y
+
+    class Bar(Foo):
+        def add(self):
+            return self.x + self.y
+
+    class Baz(Injector):
+        bar = Bar
+        x = 1
+        y = 2
+
+    assert Baz.bar.add() == 3
+
+
+def test_injectable_with_parent_without_init():
+    """Inject dependencies into object which parent doesn't define `__init__`."""
+
+    class Foo(object):
+        pass
+
+    class Bar(Foo):
+        def add(self):
+            return 3
+
+    class Baz(Injector):
+        bar = Bar
+
+    assert Baz.bar.add() == 3

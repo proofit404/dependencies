@@ -41,7 +41,7 @@ class InjectorBase(type):
             raise DependencyError('Magic methods are not allowed')
 
         for k, v in six.iteritems(namespace):
-            if inspect.isclass(v):
+            if inspect.isclass(v) and not use_object_init(v):
                 spec = inspect.getargspec(v.__init__)
                 args = spec[0] + [spec[1], spec[2]]
                 if k in args:
@@ -73,6 +73,8 @@ class InjectorBase(type):
 
             attribute = self.__rawattr__(attrname)
             if inspect.isclass(attribute):
+                if use_object_init(attribute):
+                    return attribute()
                 init = attribute.__init__
                 args, varargs, kwargs, defaults = inspect.getargspec(init)
                 if defaults is not None:
@@ -119,3 +121,19 @@ class DependencyError(Exception):
     """Broken dependencies configuration error."""
 
     pass
+
+
+def use_object_init(cls):
+    """Check if cls.__init__ will get us object.__init__."""
+
+    if '__init__' in cls.__dict__:
+        return False
+    else:
+        if cls.__bases__ == (object,):
+            return True
+        else:
+            for base in cls.__bases__:
+                if not use_object_init(base):
+                    return False
+            else:
+                return True
