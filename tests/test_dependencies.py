@@ -100,7 +100,7 @@ def test_redefine_dependency():
         foo = Foo
         add = lambda x, y: x + y
 
-    class WrongSummator(Summator.__class__):
+    class WrongSummator(Summator.c):
         add = lambda x, y: x - y
 
     assert WrongSummator.foo.do(1) == 0
@@ -236,22 +236,22 @@ def test_multiple_arguments_possition():
     """We support injection all the stuff at ones."""
 
     class Foo(object):
-        def __init__(self, a, b, c=1, d=2, *tail, **kw):
-            self.a = a
-            self.b = b
-            self.c = c
-            self.d = d
+        def __init__(self, first, second, third=1, fourth=2, *tail, **kw):
+            self.first = first
+            self.second = second
+            self.third = third
+            self.fourth = fourth
             self.tail = tail
             self.kw = kw
         def do(self):
-            return sum((self.a, self.b, self.c, self.d) + self.tail + (self.kw['x'], self.kw['y']))
+            return sum((self.first, self.second, self.third, self.fourth) + self.tail + (self.kw['x'], self.kw['y']))
 
     class Summator(Injector):
         foo = Foo
-        a = 2
-        b = 3
-        c = 4
-        d = 5
+        first = 2
+        second = 3
+        third = 4
+        fourth = 5
         tail = [6, 7, 8]
         kw = {'x': 9, 'y': 10}
 
@@ -316,7 +316,7 @@ def test_let_factory():
     class Foo(Injector):
         pass
 
-    assert issubclass(Foo.let().__class__, Foo.__class__)
+    assert issubclass(Foo.let().c, Foo.c)
 
 
 def test_let_factory_overwrite_dependencies():
@@ -363,3 +363,30 @@ def test_let_factory_deny_magic_methods():
 
     with pytest.raises(DependencyError):
         Foo.let(__eq__=lambda self, other: False)
+
+
+def test_c_property_allow_class_access():
+    """We can access to the `Injector` subclass with `c` property."""
+
+    class Foo(Injector):
+        pass
+
+    assert Foo.c is Foo.__class__
+
+
+def test_do_not_redefine_c_with_inheritance():
+    """We can't redefine `c` with inheritance from `Injector`."""
+
+    with pytest.raises(DependencyError):
+        class Foo(Injector):
+            c = 1
+
+
+def test_do_not_redefine_c_with_let():
+    """We can't redefine `c` with `let` factory."""
+
+    class Foo(Injector):
+        pass
+
+    with pytest.raises(DependencyError):
+        Foo.let(c=1)

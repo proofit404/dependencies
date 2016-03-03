@@ -40,8 +40,10 @@ class InjectorBase(type):
                 if x.startswith('__') and x.endswith('__'))):
             raise DependencyError('Magic methods are not allowed')
 
-        if any((x for x in namespace if x == 'let')):
-            raise DependencyError("'let' redefinition is not allowed")
+        for attr in ('let', 'c'):
+            if any((x for x in namespace if x == attr)):
+                raise DependencyError(
+                    '{0!r} redefinition is not allowed'.format(attr))
 
         for k, v in six.iteritems(namespace):
             if inspect.isclass(v) and not use_object_init(v):
@@ -107,9 +109,16 @@ class InjectorBase(type):
 
             return type(self.__class__.__name__, (self.__class__,), kwargs)
 
+        @property
+        def c(self):
+            """Dependency Injector subclass alias."""
+
+            return self.__class__
+
         ns['__rawattr__'] = __rawattr__
         ns['__getattr__'] = __getattr__
         ns['let'] = let
+        ns['c'] = c
 
         klass = new(cls, name, bases, ns)
         return klass()
