@@ -139,7 +139,6 @@ def test_attribute_error():
 def test_circle_dependencies():
     """Throw `DependencyError` if class needs a dependency named same as class."""
 
-
     with pytest.raises(DependencyError):
 
         class Foo(object):
@@ -309,3 +308,58 @@ def test_injectable_with_parent_without_init():
         bar = Bar
 
     assert Baz.bar.add() == 3
+
+
+def test_let_factory():
+    """`Injector` subclass can produce its own subclasses with `let` factory."""
+
+    class Foo(Injector):
+        pass
+
+    assert issubclass(Foo.let().__class__, Foo.__class__)
+
+
+def test_let_factory_overwrite_dependencies():
+    """`Injector.let` produce `Injector` subclass with overwritten dependencies."""
+
+    class Foo(Injector):
+        bar = 1
+
+    assert Foo.let(bar=2).bar == 2
+
+
+def test_let_factory_resolve_not_overwritten_dependencies():
+    """`Injector.let` can resolve dependencies it doesn't touch."""
+
+    class Foo(Injector):
+        bar = 1
+
+    assert Foo.let(baz=2).bar == 1
+
+
+def test_do_not_redefine_let_with_inheritance():
+    """We can't specify `let` attribute in the `Injector` subclass."""
+
+    with pytest.raises(DependencyError):
+        class Foo(Injector):
+            let = 2
+
+
+def test_do_not_redefine_let_with_let():
+    """We can't specify `let` attribute with `let` argument."""
+
+    class Foo(Injector):
+        pass
+
+    with pytest.raises(DependencyError):
+        Foo.let(let=1)
+
+
+def test_let_factory_deny_magic_methods():
+    """`Injector.let` deny magic methods the same way like `Injector` inheritance."""
+
+    class Foo(Injector):
+        pass
+
+    with pytest.raises(DependencyError):
+        Foo.let(__eq__=lambda self, other: False)

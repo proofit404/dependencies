@@ -40,6 +40,9 @@ class InjectorBase(type):
                 if x.startswith('__') and x.endswith('__'))):
             raise DependencyError('Magic methods are not allowed')
 
+        if any((x for x in namespace if x == 'let')):
+            raise DependencyError("'let' redefinition is not allowed")
+
         for k, v in six.iteritems(namespace):
             if inspect.isclass(v) and not use_object_init(v):
                 spec = inspect.getargspec(v.__init__)
@@ -99,8 +102,14 @@ class InjectorBase(type):
             else:
                 return attribute
 
+        def let(self, **kwargs):
+            """Produce new Injector with some dependencies overwritten."""
+
+            return type(self.__class__.__name__, (self.__class__,), kwargs)
+
         ns['__rawattr__'] = __rawattr__
         ns['__getattr__'] = __getattr__
+        ns['let'] = let
 
         klass = new(cls, name, bases, ns)
         return klass()
