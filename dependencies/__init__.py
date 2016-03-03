@@ -65,8 +65,9 @@ class InjectorBase(type):
                         '{0!r} object has no attribute {1!r}'
                         .format(name, attrname))
                 else:
-                    parent = super(self.__class__, self)
-                    attribute = parent.__rawattr__(attrname)
+                    parent = self.__class__.__bases__[0]
+                    instance = parent()
+                    attribute = parent.__rawattr__(instance, attrname)
             return attribute
 
         def __getattr__(self, attrname):

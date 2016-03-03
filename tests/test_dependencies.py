@@ -365,6 +365,16 @@ def test_let_factory_deny_magic_methods():
         Foo.let(__eq__=lambda self, other: False)
 
 
+def test_let_factory_attribute_error():
+    """`Injector.let` will raise `AttributeError` on missing dependency."""
+
+    class Foo(Injector):
+        pass
+
+    with pytest.raises(AttributeError):
+        Foo.let().x
+
+
 def test_c_property_allow_class_access():
     """We can access to the `Injector` subclass with `c` property."""
 
