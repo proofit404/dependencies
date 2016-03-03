@@ -4,6 +4,15 @@
 Changelog
 ---------
 
+0.5 (2016-03-03)
+++++++++++++++++
+
+- Avoid attribute search recursion.  This occurs with inheritance
+  chain length started at 3 and missing dependency on first level.
+- Add ``c`` alias for ``Injector`` subclass access.
+- Add ``let`` factory to temporarily overwrite specified
+  dependencies.
+
 0.4 (2016-03-03)
 ++++++++++++++++
 
