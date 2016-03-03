@@ -4,6 +4,11 @@
 Changelog
 ---------
 
+0.4 (2016-03-03)
+++++++++++++++++
+
+- Detect ``object.__init__`` and skip it in the argument injection.
+
 0.3 (2016-03-02)
 ++++++++++++++++
 
