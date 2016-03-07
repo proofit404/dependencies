@@ -78,7 +78,7 @@ class InjectorBase(type):
             """
 
             attribute = self.__rawattr__(attrname)
-            if inspect.isclass(attribute):
+            if inspect.isclass(attribute) and not attrname.endswith('_cls'):
                 if use_object_init(attribute):
                     return attribute()
                 init = attribute.__init__

@@ -1,3 +1,5 @@
+import inspect
+
 import pytest
 
 from dependencies import Injector, DependencyError
@@ -400,3 +402,18 @@ def test_do_not_redefine_c_with_let():
 
     with pytest.raises(DependencyError):
         Foo.let(c=1)
+
+
+def test_do_not_instantiate_dependencies_ended_with_cls():
+    """Do not call class constructor, if it stored with name ended `_cls`.
+
+    For example, `logger_cls`.
+    """
+
+    class Foo(object):
+        pass
+
+    class Bar(Injector):
+        foo_cls = Foo
+
+    assert inspect.isclass(Bar.foo_cls)
