@@ -105,15 +105,8 @@ class InjectorBase(type):
             else:
                 return attribute
 
-        @property
-        def c(self):
-            """Dependency Injector subclass alias."""
-
-            return self.__class__
-
         ns['__rawattr__'] = __rawattr__
         ns['__getattr__'] = __getattr__
-        ns['c'] = c
 
         klass = new(cls, name, bases, ns)
         return klass()
@@ -132,6 +125,12 @@ class Injector(six.with_metaclass(InjectorBase)):
         """Produce new Injector with some dependencies overwritten."""
 
         return type(cls.__name__, (cls,), kwargs)
+
+    @property
+    def c(self):
+        """Dependency Injector subclass alias."""
+
+        return self.__class__
 
 
 class DependencyError(Exception):
