@@ -19,10 +19,8 @@ class InjectorBase(type):
 
     def __new__(cls, name, bases, namespace):
 
-        new = super(InjectorBase, cls).__new__
-
         if len(bases) == 0:
-            return new(cls, name, bases, namespace)
+            return type.__new__(cls, name, bases, namespace)
 
         if len(bases) > 1:
             raise DependencyError(
@@ -40,10 +38,8 @@ class InjectorBase(type):
                 if x.startswith('__') and x.endswith('__'))):
             raise DependencyError('Magic methods are not allowed')
 
-        for attr in ('let', 'c'):
-            if any((x for x in namespace if x == attr)):
-                raise DependencyError(
-                    '{0!r} redefinition is not allowed'.format(attr))
+        if any((x for x in namespace if x == 'let')):
+            raise DependencyError("'let' redefinition is not allowed")
 
         for k, v in six.iteritems(namespace):
             if inspect.isclass(v) and not use_object_init(v):
@@ -54,62 +50,48 @@ class InjectorBase(type):
                         '{0!r} is a circle dependency in the {1!r} '
                         'constructor')
 
-        def __rawattr__(self, attrname):
-            """Namespace based attribute lookup."""
+        dependencies = {}
+        if '__dependencies__' in bases[0].__dict__:
+            dependencies.update(bases[0].__dependencies__)
+        dependencies.update(namespace)
+        ns['__dependencies__'] = dependencies
 
-            try:
-                attribute = namespace[attrname]
-            except KeyError:
-                if Injector in self.__class__.__bases__:
-                    raise AttributeError(
-                        '{0!r} object has no attribute {1!r}'
-                        .format(name, attrname))
-                else:
-                    parent = self.__class__.__bases__[0]
-                    instance = parent()
-                    attribute = parent.__rawattr__(instance, attrname)
-            return attribute
+        return type.__new__(cls, name, bases, ns)
 
-        def __getattr__(self, attrname):
-            """Injector attribute lookup.
+    def __getattr__(cls, attrname):
 
-            Constructor based Dependency Injection happens here.
-
-            """
-
-            attribute = self.__rawattr__(attrname)
-            if inspect.isclass(attribute) and not attrname.endswith('_cls'):
-                if use_object_init(attribute):
-                    return attribute()
-                init = attribute.__init__
-                args, varargs, kwargs, defaults = inspect.getargspec(init)
-                if defaults is not None:
-                    have_defaults = len(args) - len(defaults)
-                else:
-                    have_defaults = len(args)
-                arguments = []
-                keywords = {}
-                for n, a in enumerate(args[1:], 1):
-                    try:
-                        arguments.append(__getattr__(self, a))
-                    except AttributeError:
-                        if n < have_defaults:
-                            raise
-                        else:
-                            arguments.append(defaults[n - have_defaults])
-                if varargs is not None:
-                    arguments.extend(__getattr__(self, varargs))
-                if kwargs is not None:
-                    keywords.update(__getattr__(self, kwargs))
-                return attribute(*arguments, **keywords)
+        try:
+            attribute = cls.__dependencies__[attrname]
+        except KeyError:
+            raise AttributeError(
+                '{0!r} object has no attribute {1!r}'
+                .format(cls.__name__, attrname))
+        if inspect.isclass(attribute) and not attrname.endswith('_cls'):
+            if use_object_init(attribute):
+                return attribute()
+            init = attribute.__init__
+            args, varargs, kwargs, defaults = inspect.getargspec(init)
+            if defaults is not None:
+                have_defaults = len(args) - len(defaults)
             else:
-                return attribute
-
-        ns['__rawattr__'] = __rawattr__
-        ns['__getattr__'] = __getattr__
-
-        klass = new(cls, name, bases, ns)
-        return klass()
+                have_defaults = len(args)
+            arguments = []
+            keywords = {}
+            for n, a in enumerate(args[1:], 1):
+                try:
+                    arguments.append(getattr(cls, a))
+                except AttributeError:
+                    if n < have_defaults:
+                        raise
+                    else:
+                        arguments.append(defaults[n - have_defaults])
+            if varargs is not None:
+                arguments.extend(getattr(cls, varargs))
+            if kwargs is not None:
+                keywords.update(getattr(cls, kwargs))
+            return attribute(*arguments, **keywords)
+        else:
+            return attribute
 
 
 class Injector(six.with_metaclass(InjectorBase)):
@@ -125,12 +107,6 @@ class Injector(six.with_metaclass(InjectorBase)):
         """Produce new Injector with some dependencies overwritten."""
 
         return type(cls.__name__, (cls,), kwargs)
-
-    @property
-    def c(self):
-        """Dependency Injector subclass alias."""
-
-        return self.__class__
 
 
 class DependencyError(Exception):

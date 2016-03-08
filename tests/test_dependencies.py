@@ -102,7 +102,7 @@ def test_redefine_dependency():
         foo = Foo
         add = lambda x, y: x + y
 
-    class WrongSummator(Summator.c):
+    class WrongSummator(Summator):
         add = lambda x, y: x - y
 
     assert WrongSummator.foo.do(1) == 0
@@ -336,7 +336,7 @@ def test_let_factory():
     class Foo(Injector):
         pass
 
-    assert issubclass(Foo.let().c, Foo.c)
+    assert issubclass(Foo.let(), Foo)
 
 
 def test_let_factory_overwrite_dependencies():
@@ -410,33 +410,6 @@ def test_let_factory_on_injector_directly():
             self.baz = baz
 
     assert Injector.let(foo=Foo, bar=Bar, baz=1).foo.bar.baz == 1
-
-
-def test_c_property_allow_class_access():
-    """We can access to the `Injector` subclass with `c` property."""
-
-    class Foo(Injector):
-        pass
-
-    assert Foo.c is Foo.__class__
-
-
-def test_do_not_redefine_c_with_inheritance():
-    """We can't redefine `c` with inheritance from `Injector`."""
-
-    with pytest.raises(DependencyError):
-        class Foo(Injector):
-            c = 1
-
-
-def test_do_not_redefine_c_with_let():
-    """We can't redefine `c` with `let` factory."""
-
-    class Foo(Injector):
-        pass
-
-    with pytest.raises(DependencyError):
-        Foo.let(c=1)
 
 
 def test_do_not_instantiate_dependencies_ended_with_cls():

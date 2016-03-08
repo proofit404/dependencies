@@ -7,6 +7,7 @@ Changelog
 Next
 ++++
 
+- Deprecate ``c`` alias.  Use real classes.
 - Allow to use ``let`` directly on ``Injector``.
 - Do not instantiate dependencies named with ``cls`` at the end.
 
