@@ -377,6 +377,23 @@ def test_let_factory_attribute_error():
         Foo.let().x
 
 
+def test_let_factory_on_injector_directly():
+    """Dependencies can be specified with `let` factory applied to
+    `Injector` derectly.
+
+    """
+
+    class Foo(object):
+        def __init__(self, bar):
+            self.bar = bar
+
+    class Bar(object):
+        def __init__(self, baz):
+            self.baz = baz
+
+    assert Injector.let(foo=Foo, bar=Bar, baz=1).foo.bar.baz == 1
+
+
 def test_c_property_allow_class_access():
     """We can access to the `Injector` subclass with `c` property."""
 

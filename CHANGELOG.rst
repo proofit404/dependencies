@@ -7,6 +7,7 @@ Changelog
 Next
 ++++
 
+- Allow to use ``let`` directly on ``Injector``.
 - Do not instantiate dependencies named with ``cls`` at the end.
 
 0.5 (2016-03-03)
