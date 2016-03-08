@@ -234,6 +234,24 @@ def test_preserve_multiple_asterisk_arguments():
     assert Summator.foo.do() == 11
 
 
+def test_attribute_error_with_keyword_arguments_present():
+    """Reraise argument error when keyword arguments specify another
+    dependencies defaults.
+
+    """
+
+    class Foo(object):
+        def __init__(self, one, two=2):
+            self.one = one
+            self.two = two
+
+    class Bar(Injector):
+        foo = Foo
+
+    with pytest.raises(AttributeError):
+        Bar.foo
+
+
 def test_multiple_arguments_possition():
     """We support injection all the stuff at ones."""
 
