@@ -4,8 +4,8 @@
 Changelog
 ---------
 
-Next
-++++
+0.6 (2016-03-09)
+++++++++++++++++
 
 - Deprecate ``c`` alias.  Use real classes.
 - Allow to use ``let`` directly on ``Injector``.
