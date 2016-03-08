@@ -15,7 +15,7 @@ import six
 __all__ = ['Injector', 'DependencyError']
 
 
-class InjectorBase(type):
+class InjectorType(type):
 
     def __new__(cls, name, bases, namespace):
 
@@ -94,7 +94,7 @@ class InjectorBase(type):
             return attribute
 
 
-class Injector(six.with_metaclass(InjectorBase)):
+class Injector(six.with_metaclass(InjectorType)):
     """Default dependencies specification DSL.
 
     Classes inherited from this class may inject dependencies into
