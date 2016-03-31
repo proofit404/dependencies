@@ -8,3 +8,4 @@ build/
 dist/
 .coverage
 htmlcov/
+docs/_build/
