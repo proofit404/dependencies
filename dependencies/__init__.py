@@ -88,7 +88,7 @@ class InjectorType(type):
     def __dir__(cls):
 
         parent = set(dir(cls.__base__))
-        current = set(cls.__dict__.keys()) - {'__dependencies__'}
+        current = set(cls.__dict__.keys()) - set(['__dependencies__'])
         dependencies = set(cls.__dependencies__.keys())
         attributes = sorted(parent | current | dependencies)
         return attributes
