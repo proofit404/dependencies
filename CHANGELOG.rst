@@ -4,6 +4,14 @@
 Changelog
 ---------
 
+0.7 (2016-06-04)
+++++++++++++++++
+
+- Raise ``DependencyError`` for mutual recursion in constructor
+  arguments and specified dependencies.
+- Show injected dependencies in the ``dir`` result.
+- Deny to instantiate ``Injector`` and its subclasses.
+
 0.6 (2016-03-09)
 ++++++++++++++++
 
