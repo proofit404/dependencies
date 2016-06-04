@@ -20,6 +20,7 @@ class InjectorType(type):
     def __new__(cls, name, bases, namespace):
 
         if len(bases) == 0:
+            namespace['__dependencies__'] = {}
             return type.__new__(cls, name, bases, namespace)
 
         if len(bases) > 1:
@@ -51,8 +52,7 @@ class InjectorType(type):
                         'constructor'.format(k, v))
 
         dependencies = {}
-        if '__dependencies__' in bases[0].__dict__:
-            dependencies.update(bases[0].__dependencies__)
+        dependencies.update(bases[0].__dependencies__)
         dependencies.update(namespace)
         ns['__dependencies__'] = dependencies
 
@@ -92,6 +92,14 @@ class InjectorType(type):
             return attribute(*arguments, **keywords)
         else:
             return attribute
+
+    def __dir__(cls):
+
+        parent = set(dir(cls.__base__))
+        current = set(cls.__dict__.keys()) - {'__dependencies__'}
+        dependencies = set(cls.__dependencies__.keys())
+        attributes = sorted(parent | current | dependencies)
+        return attributes
 
 
 class Injector(six.with_metaclass(InjectorType)):
