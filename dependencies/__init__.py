@@ -35,8 +35,8 @@ class InjectorType(type):
             except KeyError:
                 pass
 
-        if any((x for x in namespace
-                if x.startswith('__') and x.endswith('__'))):
+        if any(x for x in namespace
+               if x.startswith('__') and x.endswith('__')):
             raise DependencyError('Magic methods are not allowed')
 
         if 'let' in namespace:
