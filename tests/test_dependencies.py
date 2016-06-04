@@ -169,6 +169,99 @@ def test_circle_dependencies_message():
     assert str(excinfo.value).endswith(".Foo'> constructor")
 
 
+def test_complex_circle_dependencies():
+    """Throw `DependencyError` in the case of complex dependency recursion.
+
+    One class define an argument in its constructor.  We have second
+    class in the container named for this dependency.  This class
+    define an argument in its constructor named like first class in
+    the container.  We have mutual recursion in this case.
+
+    """
+
+    with pytest.raises(DependencyError):
+
+        class Foo(object):
+            def __init__(self, bar):
+                self.bar = bar
+
+        class Bar(object):
+            def __init__(self, foo):
+                self.foo = foo
+
+        class Test(Injector):
+            foo = Foo
+            bar = Bar
+
+        Test.foo                # Will fail with maximum recursion depth.
+
+
+def test_complex_circle_dependencies_in_different_classes():
+    """Detect complex circle dependencies separated in different classes."""
+
+    with pytest.raises(DependencyError):
+
+        class Foo(object):
+            def __init__(self, bar):
+                self.bar = bar
+
+        class Bar(object):
+            def __init__(self, foo):
+                self.foo = foo
+
+        class First(Injector):
+            foo = Foo
+
+        class Second(First):
+            bar = Bar
+
+        Second.foo              # Will fail with maximum recursion depth.
+
+
+def test_complex_circle_dependencies_with_let_binding():
+    """Detect complex circle dependencies with `let` binding."""
+
+    with pytest.raises(DependencyError):
+
+        class Foo(object):
+            def __init__(self, bar):
+                self.bar = bar
+
+        class Bar(object):
+            def __init__(self, foo):
+                self.foo = foo
+
+        Injector.let(foo=Foo, bar=Bar).foo  # Will fail with maximum recursion depth.
+
+
+def test_complex_circle_dependencies_long_circle():
+    """Detect complex dependencies recursion with circles longer then two
+    constructors.
+
+    """
+
+    with pytest.raises(DependencyError):
+
+        class Foo(object):
+            def __init__(self, bar):
+                self.bar = bar
+
+        class Bar(object):
+            def __init__(self, baz):
+                self.baz = baz
+
+        class Baz(object):
+            def __init__(self, foo):
+                self.foo = foo
+
+        class Test(Injector):
+            foo = Foo
+            bar = Bar
+            baz = Baz
+
+        Test.foo                # Will fail with maximum recursion depth.
+
+
 def test_override_keyword_argument_if_dependency_was_specified():
     """Use specified dependency for constructor keyword arguments if
     dependency with desired name was mentioned in the injector.
