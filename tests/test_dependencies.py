@@ -146,8 +146,6 @@ def test_circle_dependencies():
         class Foo(object):
             def __init__(self, foo):
                 self.foo = foo
-            def do(self, x):
-                return self.foo(x, x)
 
         class Summator(Injector):
             foo = Foo
