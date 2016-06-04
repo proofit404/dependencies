@@ -42,18 +42,10 @@ class InjectorType(type):
         if 'let' in namespace:
             raise DependencyError("'let' redefinition is not allowed")
 
-        for k, v in six.iteritems(namespace):
-            if inspect.isclass(v) and not use_object_init(v):
-                spec = inspect.getargspec(v.__init__)
-                args = spec[0] + [spec[1], spec[2]]
-                if k in args:
-                    raise DependencyError(
-                        '{0!r} is a circle dependency in the {1!r} '
-                        'constructor'.format(k, v))
-
         dependencies = {}
         dependencies.update(bases[0].__dependencies__)
         dependencies.update(namespace)
+        check_circles(dependencies)
         ns['__dependencies__'] = dependencies
 
         return type.__new__(cls, name, bases, ns)
@@ -141,3 +133,28 @@ def use_object_init(cls):
                     return False
             else:
                 return True
+
+
+def check_circles(dependencies):
+    """Check if dependencies has circles in argument names."""
+
+    for depname in dependencies:
+        check_circles_for(dependencies, depname, depname)
+
+
+def check_circles_for(dependencies, attrname, origin):
+    """Check circle for one dependency."""
+
+    try:
+        attribute = dependencies[attrname]
+    except KeyError:
+        return
+    if inspect.isclass(attribute) and not use_object_init(attribute):
+        args, varargs, kwargs, _ = inspect.getargspec(attribute.__init__)
+        names = [name for name in args[1:] + [varargs, kwargs] if name]
+        if origin in names:
+            raise DependencyError(
+                '{0!r} is a circle dependency in the {1!r} constructor'
+                .format(origin, attribute))
+        for name in names:
+            check_circles_for(dependencies, name, origin)
