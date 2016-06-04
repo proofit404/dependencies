@@ -1,100 +1,84 @@
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from smtplib import SMTP
-from uuid import uuid4
 
-from dependencies import Injectable, Injector
-from redis import StrictRedis
+from dependencies import Injector
 
 
 settings = {
-    'redis': {
-        'host': 'localhost',
-        'port': 6379,
-    },
-    'email': {
-        'support': {
-            'address': 'support@service.com',
-        },
-        'relay': {
-            'host': 'localhost',
-            'port': 8025,
-        },
-    },
+    'support_address': 'user@gmail.com',
+    'support_user': 'user',
+    'support_passwd': 'secret',
+    'smtp_host': 'smtp.gmail.com',
+    'smtp_port': 587,
 }
 
 
-def uuid_generator():
-    return uuid4().hex
+class SMTPSender:
 
+    def __init__(self, support_address, support_user, support_passwd, smtp_host, smtp_port):
 
-class RedisStore(Injectable):
-
-    def write(self, **kwargs):
-        id = self.generate_id()
-        redis = self.get_connection()
-        redis.hmset(id, **kwargs)
-        return id
-
-    def get_connection(self):
-        if not hasattr(self, 'connection'):
-            conf = self.settings['redis']
-            address = (conf['host'], conf['port'])
-            self.connection = StrictRedis(address)
-        return self.connection
-
-
-class RedisDB(Injector, RedisStore):
-    settings = settings
-    generate_id = uuid_generator
-
-
-class SMTPSender(Injectable):
+        self.from_address = support_address
+        self.user = support_user
+        self.passwd = support_passwd
+        self.host = smtp_host
+        self.port = smtp_port
 
     def send(self, recipient, message):
-        address = self.settings['email']['support']['address']
-        relay_host = self.settings['email']['relay']['host']
-        relay_port = self.settings['email']['relay']['port']
-        data = self.get_data(address, recipient, message)
-        with SMTP(relay_host, relay_port) as smtp:
-            smtp.sendmail(address, [recipient], data)
+        data = self.prepare(recipient, message)
+        with SMTP(self.host, self.port) as smtp:
+            smtp.ehlo()
+            smtp.starttls()
+            smtp.login(self.user, self.passwd)
+            smtp.sendmail(self.from_address, [recipient], data)
 
-    def get_data(self, address, recipient, message):
+    def prepare(self, recipient, message):
         email = MIMEMultipart()
-        email['From'] = address
+        email['From'] = self.from_address
         email['To'] = recipient
         html = MIMEText(message, 'html')
         email.attach(html)
         return email.as_string()
 
 
-class Sender(Injector, SMTPSender):
-    settings = settings
+class EmailTemplate:
 
-
-class RegisterUser(Injectable):
-
-    def execute(self, username, email):
-        id = self.db.write(username=username, email=email)
-        message = self.render_notification(id, username)
-        self.sender.send(email, message)
-
-    def render_notification(self, id, username):
+    def render(self, username):
         return """
         <html>
             <head>
-                <title>Hello, {username}.</title>
             </head>
             <body>
-                <a href="http://www.service.com/profile/{id}/">Your profile.</a>
+                Hello, {username}.
             </body>
         </html>
-        """.format(id=id, username=username)
+        """.format(username=username)
 
 
-class UserRegistration(Injector):
-    db = RedisDB()
-    sender = Sender()
+class NotificationHandler:
+
+    def __init__(self, template, sender):
+
+        self.template = template
+        self.sender = sender
+
+    def handle(self, recipient):
+
+        username = self.get_username(recipient)
+        message = self.template.render(username)
+        self.sender.send(recipient, message)
+
+    def get_username(self, recipient):
+
+        return recipient.split('@')[0]
 
 
-UserRegistration().execute('me', 'me@gmail.com')
+class App(Injector):
+    handler = NotificationHandler
+    template = EmailTemplate
+    sender = SMTPSender
+
+
+AppContainer = App.let(**settings)
+
+AppContainer.handler.handle('tagretuser@gmail.com')
