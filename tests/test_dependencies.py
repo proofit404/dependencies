@@ -470,3 +470,51 @@ def test_ignore_injector_instantiation_signature():
 
     with pytest.raises(DependencyError):
         Injector(x=1)
+
+
+def test_show_common_class_attributes_with_dir():
+    """`dir` show common class attributes."""
+
+    class Common(object):
+        pass
+
+    class Foo(Injector):
+        pass
+
+    dir(Common) == dir(Foo)
+
+
+def test_show_injected_dependencies_with_dir():
+    """`dir` should show injected dependencies and hide `__dependencies__`
+    container.
+
+    """
+
+    class Foo(Injector):
+        x = 1
+
+    assert 'x' in dir(Foo)
+    assert '__dependencies__' not in dir(Foo)
+
+
+def test_show_injected_dependencies_with_dir_once():
+    """Do not repeat injected dependencies in the inheritance chain."""
+
+    class Foo(Injector):
+        x = 1
+
+    class Bar(Foo):
+        x = 2
+
+    assert dir(Bar).count('x') == 1
+
+
+def test_show_let_dependencies_with_dir():
+    """`dir` show dependencies injected with `let`."""
+
+    assert 'x' in dir(Injector.let(x=1))
+
+    class Foo(Injector):
+        pass
+
+    assert 'x' in dir(Foo.let(x=1))
