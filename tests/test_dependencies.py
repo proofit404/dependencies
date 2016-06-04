@@ -440,3 +440,33 @@ def test_do_not_instantiate_dependencies_ended_with_cls():
         foo_cls = Foo
 
     assert inspect.isclass(Bar.foo_cls)
+
+
+def test_do_not_instantiate_injector():
+    """Deny injector instantiation."""
+
+    with pytest.raises(DependencyError):
+        Injector()
+
+
+def test_do_not_instantiate_injector_subclasses():
+    """Deny injector subclasses instantiation."""
+
+    class Foo(Injector):
+        pass
+
+    with pytest.raises(DependencyError):
+        Foo()
+
+
+def test_ignore_injector_instantiation_signature():
+    """Raise `DependencyError` for instantiation with any arguments.  Do
+    not use `TypeError` here.
+
+    """
+
+    with pytest.raises(DependencyError):
+        Injector(1)
+
+    with pytest.raises(DependencyError):
+        Injector(x=1)

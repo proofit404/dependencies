@@ -102,6 +102,10 @@ class Injector(six.with_metaclass(InjectorType)):
 
     """
 
+    def __init__(self, *args, **kwargs):
+
+        raise DependencyError('Do not instantiate Injector')
+
     @classmethod
     def let(cls, **kwargs):
         """Produce new Injector with some dependencies overwritten."""
