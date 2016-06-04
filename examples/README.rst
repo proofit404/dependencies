@@ -20,4 +20,4 @@ Run development server and open browser at specified url
 
 .. code:: bash
 
-    flask notification.py
+    python notification.py
