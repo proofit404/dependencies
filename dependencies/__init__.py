@@ -48,7 +48,7 @@ class InjectorType(type):
                 if k in args:
                     raise DependencyError(
                         '{0!r} is a circle dependency in the {1!r} '
-                        'constructor')
+                        'constructor'.format(k, v))
 
         dependencies = {}
         if '__dependencies__' in bases[0].__dict__:

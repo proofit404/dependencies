@@ -154,6 +154,23 @@ def test_circle_dependencies():
 
         Summator.foo            # Will fail with maximum recursion depth.
 
+
+def test_circle_dependencies_message():
+    """Show correct error message if class needs a dependency named same as class."""
+
+    with pytest.raises(DependencyError) as excinfo:
+
+        class Foo(object):
+            def __init__(self, foo):
+                self.foo = foo
+
+        class Summator(Injector):
+            foo = Foo
+
+    assert str(excinfo.value).startswith("'foo' is a circle dependency in the <class")
+    assert str(excinfo.value).endswith(".Foo'> constructor")
+
+
 def test_owerride_keyword_argument_if_dependency_was_specified():
     """Use specified dependency for constructor keyword arguments if
     dependency with desired name was mentioned in the injector.
