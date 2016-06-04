@@ -38,7 +38,7 @@ class InjectorType(type):
                 if x.startswith('__') and x.endswith('__'))):
             raise DependencyError('Magic methods are not allowed')
 
-        if any((x for x in namespace if x == 'let')):
+        if 'let' in namespace:
             raise DependencyError("'let' redefinition is not allowed")
 
         for k, v in six.iteritems(namespace):
