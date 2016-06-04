@@ -169,7 +169,7 @@ def test_circle_dependencies_message():
     assert str(excinfo.value).endswith(".Foo'> constructor")
 
 
-def test_owerride_keyword_argument_if_dependency_was_specified():
+def test_override_keyword_argument_if_dependency_was_specified():
     """Use specified dependency for constructor keyword arguments if
     dependency with desired name was mentioned in the injector.
 
