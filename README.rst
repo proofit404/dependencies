@@ -29,6 +29,7 @@ Dependency Injection for Humans.
 
 - `Source Code`_
 - `Issue Tracker`_
+- Documentation_
 
 Installation
 ------------
@@ -73,3 +74,4 @@ Dependencies library is offered under LGPL license.
 
 .. _source code: https://github.com/proofit404/dependencies
 .. _issue tracker: https://github.com/proofit404/dependencies/issues
+.. _documentation: http://dependencies.readthedocs.org/
