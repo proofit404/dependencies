@@ -1,6 +1,9 @@
 Usage
 =====
 
+Preparations
+------------
+
 Before we start to inject dependencies lets define code which needs
 this dependencies.
 
@@ -20,7 +23,7 @@ will helps us to understand the path things go in your system.
 Attributes taken from nowhere in your code aren't fun.  Believe me.
 
 Behavior
-========
+--------
 
 So lets add some behavior to your robot.
 
@@ -79,8 +82,8 @@ So we are close to scream "It's alive!" and run out of the building.
 
 Congratulations!  We build our robot with dependency injection.
 
-Behavior
-========
+Injection rules
+---------------
 
 ``Container`` above is a dependency scope.  You can take any of them
 from his attribute.  Following things happens when you access an
@@ -135,7 +138,7 @@ dependency named ``x`` and find ``1``.  We build ``Baz`` instance then
 use it to build ``Foo`` instance.
 
 Scope extension
-===============
+---------------
 
 You need to have whole collection of dependencies only in injection
 moment i.e. on scope attribute access.  You can define scope partially
@@ -145,7 +148,7 @@ and then extend it.  There are two ways to do that:
 - ``let`` notation
 
 Inheritance
------------
++++++++++++
 
 You can add additional dependencies or redefine already provided in
 the scope subclasses:
@@ -161,7 +164,7 @@ the scope subclasses:
     ChildScope.foo
 
 ``let`` notation
-----------------
+++++++++++++++++
 
 You can temporary redefine dependency for only one case.  This is
 extremely useful for tests.  Inject asserts instead of some dependency
