@@ -12,12 +12,12 @@ project = 'dependencies'
 copyright = '2016, Artem Malyshev'
 author = 'Artem Malyshev'
 
-version = '0.6'
-release = '0.6'
+version = '0.8'
+release = '0.8'
 
 language = None
 
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
+exclude_patterns = ['_build']
 
 pygments_style = 'sphinx'
 
@@ -32,13 +32,17 @@ htmlhelp_basename = 'dependenciesdoc'
 latex_elements = {}
 
 latex_documents = [
-    (master_doc, 'dependencies.tex', 'dependencies Documentation', 'Artem Malyshev', 'manual'),
+    (master_doc, 'dependencies.tex', 'dependencies Documentation',
+     'Artem Malyshev', 'manual'),
 ]
 
 man_pages = [
-    (master_doc, 'dependencies', 'dependencies Documentation', [author], 1)
+    (master_doc, 'dependencies', 'dependencies Documentation',
+     [author], 1)
 ]
 
 texinfo_documents = [
-    (master_doc, 'dependencies', 'dependencies Documentation', author, 'dependencies', 'One line description of project.', 'Miscellaneous'),
+    (master_doc, 'dependencies', 'dependencies Documentation',
+     author, 'dependencies', 'One line description of project.',
+     'Miscellaneous'),
 ]
