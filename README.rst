@@ -40,6 +40,32 @@ install this package with following command.
 
     pip install dependencies
 
+Usage
+-----
+
+Dependency injection without ``dependencies``
+
+.. code:: python
+
+    robot = Robot(
+        servo=Servo(amplifier=Amplifier()),
+        controller=Controller(),
+        settings=Settings(environment="production"))
+
+Dependency injection with ``dependencies``
+
+.. code:: python
+
+    class Container(Injector):
+        robot = Robot
+        servo = Servo
+        amplifier = Amplifier
+        controller = Controller
+        settings = Settings
+        environment = "production"
+
+    robot = Container.robot
+
 License
 -------
 
