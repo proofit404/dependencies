@@ -12,8 +12,8 @@ project = 'dependencies'
 copyright = '2016, Artem Malyshev'
 author = 'Artem Malyshev'
 
-version = '0.8'
-release = '0.8'
+version = '0.9'
+release = '0.9'
 
 language = None
 

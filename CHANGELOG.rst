@@ -4,6 +4,11 @@
 Changelog
 ---------
 
+0.9 (2016-06-08)
+++++++++++++++++
+
+- Dependency assignment and cancellation for ``Injector`` subclasses.
+
 0.8 (2016-06-05)
 ++++++++++++++++
 
