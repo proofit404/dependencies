@@ -91,6 +91,11 @@ class InjectorType(type):
             raise DependencyError("'Injector' modification is not allowed")
         cls.__dependencies__[attrname] = value
 
+    def __delattr__(cls, attrname):
+
+        getattr(cls, attrname)
+        del cls.__dependencies__[attrname]
+
     def __dir__(cls):
 
         parent = set(dir(cls.__base__))

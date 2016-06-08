@@ -660,3 +660,54 @@ def test_mutable_injector_deny_to_modify_injector():
 
     with pytest.raises(DependencyError):
         Injector.foo = 1
+
+
+def test_unregister_dependency():
+    """We can unregister dependency from `Injector` subclasses."""
+
+    class Foo(object):
+        def __init__(self, bar):
+            self.bar = bar
+
+    class Bar(object):
+        pass
+
+    class Baz(Injector):
+        foo = Foo
+        bar = Bar
+
+    del Baz.bar
+
+    with pytest.raises(AttributeError):
+        Baz.foo
+
+
+def test_unregister_dependency_let_expression():
+    """We can unregister dependency from `let` expression results."""
+
+    class Foo(object):
+        def __init__(self, bar):
+            self.bar = bar
+
+    class Bar(object):
+        pass
+
+    Baz = Injector.let(foo=Foo, bar=Bar)
+
+    del Baz.bar
+
+    with pytest.raises(AttributeError):
+        Baz.foo
+
+
+def test_unregister_missing_dependency():
+    """Throw `AttributeError` if someone tries to delete missing dependency."""
+
+    with pytest.raises(AttributeError):
+        del Injector.foo
+
+    class Foo(Injector):
+        pass
+
+    with pytest.raises(AttributeError):
+        del Foo.foo
