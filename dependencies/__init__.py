@@ -85,6 +85,12 @@ class InjectorType(type):
         else:
             return attribute
 
+    def __setattr__(cls, attrname, value):
+
+        if cls.__bases__ == (object,):
+            raise DependencyError("'Injector' modification is not allowed")
+        cls.__dependencies__[attrname] = value
+
     def __dir__(cls):
 
         parent = set(dir(cls.__base__))

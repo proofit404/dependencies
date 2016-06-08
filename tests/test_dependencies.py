@@ -1,3 +1,5 @@
+"""Dependencies test suite."""
+
 import inspect
 
 import pytest
@@ -611,3 +613,50 @@ def test_show_let_dependencies_with_dir():
         pass
 
     assert 'x' in dir(Foo.let(x=1))
+
+
+def test_mutable_injector():
+    """We can extend existed `Injector` by attribute assignment."""
+
+    class Foo(object):
+        def __init__(self, bar):
+            self.bar = bar
+
+    class Bar(object):
+        pass
+
+    class Baz(Injector):
+        pass
+
+    Baz.foo = Foo
+    Baz.bar = Bar
+
+    assert isinstance(Baz.foo, Foo)
+
+
+def test_mutable_injector_let_expression():
+    """We can extend `Injector` created with `let` expression by attribute
+    assignment.
+
+    """
+
+    class Foo(object):
+        def __init__(self, bar):
+            self.bar = bar
+
+    class Bar(object):
+        pass
+
+    Baz = Injector.let()
+
+    Baz.foo = Foo
+    Baz.bar = Bar
+
+    assert isinstance(Baz.foo, Foo)
+
+
+def test_mutable_injector_deny_to_modify_injector():
+    """Deny to modify `Injector` itself."""
+
+    with pytest.raises(DependencyError):
+        Injector.foo = 1
