@@ -93,7 +93,10 @@ class InjectorType(type):
 
     def __delattr__(cls, attrname):
 
-        getattr(cls, attrname)
+        if attrname not in cls.__dependencies__:
+            raise AttributeError(
+                '{0!r} object has no attribute {1!r}'
+                .format(cls.__name__, attrname))
         del cls.__dependencies__[attrname]
 
     def __dir__(cls):

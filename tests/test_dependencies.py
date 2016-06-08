@@ -711,3 +711,16 @@ def test_unregister_missing_dependency():
 
     with pytest.raises(AttributeError):
         del Foo.foo
+
+
+def test_unregister_do_not_use_object_constructor():
+    """We shouldn't touch/run object `__init__` during it unregistration."""
+
+    class Foo(object):
+        def __init__(self):
+            raise Exception
+
+    class Bar(Injector):
+        foo = Foo
+
+    del Bar.foo
