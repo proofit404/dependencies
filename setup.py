@@ -1,4 +1,4 @@
-from setuptools import setup, find_packages
+from setuptools import setup
 
 readme = open('README.rst').read() + open('CHANGELOG.rst').read()
 
@@ -11,7 +11,7 @@ setup(
     license='LGPL-3',
     author='Artem Malyshev',
     author_email='proofit404@gmail.com',
-    packages=find_packages(),
+    py_modules=['dependencies'],
     install_requires=['six'],
     classifiers=[
         'Development Status :: 4 - Beta',
