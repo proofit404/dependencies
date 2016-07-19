@@ -90,6 +90,8 @@ class InjectorType(type):
             raise DependencyError("'Injector' modification is not allowed")
         if dunder_name(attrname):
             raise DependencyError('Magic methods are not allowed')
+        if attrname == 'let':
+            raise DependencyError("'let' redefinition is not allowed")
         cls.__dependencies__[attrname] = value
 
     def __delattr__(cls, attrname):

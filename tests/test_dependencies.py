@@ -765,13 +765,22 @@ def test_deny_magic_methods_assignment():
     """
 
     class Foo(Injector):
-        x = 1
+        pass
 
     with pytest.raises(DependencyError):
         Foo.__eq__ = lambda self, other: False
 
 
-# TODO: deny let redefinition with assignment
+def test_deny_let_redefinition_with_attribute_assignment():
+    """Deny `let` method redefinition with attribute assignment in `Injector` subclass."""
+
+    class Foo(Injector):
+        pass
+
+    with pytest.raises(DependencyError):
+        Foo.let = lambda cls, **kwargs: None
+
+
 # TODO: check circles on assignment
 # TODO: deny to remove let from injector
 # TODO: hide dependencies library KeyError from stack trace
