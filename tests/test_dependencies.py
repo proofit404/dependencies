@@ -756,3 +756,10 @@ def test_unregister_do_not_use_object_constructor():
         foo = Foo
 
     del Bar.foo
+
+
+# TODO: deny magic methods assignment
+# TODO: deny let redefinition with assignment
+# TODO: check circles on assignment
+# TODO: deny to remove let from injector
+# TODO: hide dependencies library KeyError from stack trace
