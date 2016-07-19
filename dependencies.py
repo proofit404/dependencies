@@ -109,11 +109,11 @@ class InjectorType(type):
 
 
 class Injector(six.with_metaclass(InjectorType)):
-    """Default dependencies specification DSL.
+    """
+    Default dependencies specification DSL.
 
     Classes inherited from this class may inject dependencies into
     classes specified in it namespace.
-
     """
 
     def __init__(self, *args, **kwargs):

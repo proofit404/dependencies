@@ -60,10 +60,10 @@ def test_inline_dependency():
 
 
 def test_class_dependency():
-    """Inject class.
+    """
+    Inject class.
 
     Instantiate class from the same scope and inject its instance.
-
     """
 
     class Foo(object):
@@ -89,9 +89,9 @@ def test_class_dependency():
 
 
 def test_redefine_dependency():
-    """We can redefine dependency by inheritance from the `Injector`
+    """
+    We can redefine dependency by inheritance from the `Injector`
     subclass.
-
     """
 
     class Foo(object):
@@ -141,7 +141,10 @@ def test_attribute_error():
 
 
 def test_circle_dependencies():
-    """Throw `DependencyError` if class needs a dependency named same as class."""
+    """
+    Throw `DependencyError` if class needs a dependency named same as
+    class.
+    """
 
     with pytest.raises(DependencyError):
 
@@ -156,7 +159,10 @@ def test_circle_dependencies():
 
 
 def test_circle_dependencies_message():
-    """Show correct error message if class needs a dependency named same as class."""
+    """
+    Show correct error message if class needs a dependency named same
+    as class.
+    """
 
     with pytest.raises(DependencyError) as excinfo:
 
@@ -172,13 +178,13 @@ def test_circle_dependencies_message():
 
 
 def test_complex_circle_dependencies():
-    """Throw `DependencyError` in the case of complex dependency recursion.
+    """
+    Throw `DependencyError` in the case of complex dependency recursion.
 
     One class define an argument in its constructor.  We have second
     class in the container named for this dependency.  This class
     define an argument in its constructor named like first class in
     the container.  We have mutual recursion in this case.
-
     """
 
     with pytest.raises(DependencyError):
@@ -199,7 +205,9 @@ def test_complex_circle_dependencies():
 
 
 def test_complex_circle_dependencies_in_different_classes():
-    """Detect complex circle dependencies separated in different classes."""
+    """
+    Detect complex circle dependencies separated in different classes.
+    """
 
     with pytest.raises(DependencyError):
 
@@ -237,9 +245,9 @@ def test_complex_circle_dependencies_with_let_binding():
 
 
 def test_complex_circle_dependencies_long_circle():
-    """Detect complex dependencies recursion with circles longer then two
+    """
+    Detect complex dependencies recursion with circles longer then two
     constructors.
-
     """
 
     with pytest.raises(DependencyError):
@@ -265,9 +273,9 @@ def test_complex_circle_dependencies_long_circle():
 
 
 def test_override_keyword_argument_if_dependency_was_specified():
-    """Use specified dependency for constructor keyword arguments if
+    """
+    Use specified dependency for constructor keyword arguments if
     dependency with desired name was mentioned in the injector.
-
     """
 
     class Foo(object):
@@ -286,9 +294,9 @@ def test_override_keyword_argument_if_dependency_was_specified():
 
 
 def test_preserve_keyword_argument_if_dependency_was_missed():
-    """Use constructor keyword arguments if dependency with desired name
+    """
+    Use constructor keyword arguments if dependency with desired name
     was missed in the injector.
-
     """
 
     class Foo(object):
@@ -345,9 +353,9 @@ def test_preserve_multiple_asterisk_arguments():
 
 
 def test_attribute_error_with_keyword_arguments_present():
-    """Reraise argument error when keyword arguments specify another
+    """
+    Reraise argument error when keyword arguments specify another
     dependencies defaults.
-
     """
 
     class Foo(object):
@@ -389,9 +397,9 @@ def test_multiple_arguments_possition():
 
 
 def test_injectable_without_its_own_init():
-    """Inject dependencies into object subclass which doesn't specify its
+    """
+    Inject dependencies into object subclass which doesn't specify its
     own `__init__`.
-
     """
 
     class Foo(object):
@@ -405,7 +413,10 @@ def test_injectable_without_its_own_init():
 
 
 def test_injectable_with_parent_init():
-    """Inject dependencies into object which parent class define `__init__`."""
+    """
+    Inject dependencies into object which parent class define
+    `__init__`.
+    """
 
     class Foo(object):
         def __init__(self, x, y):
@@ -425,7 +436,10 @@ def test_injectable_with_parent_init():
 
 
 def test_injectable_with_parent_without_init():
-    """Inject dependencies into object which parent doesn't define `__init__`."""
+    """
+    Inject dependencies into object which parent doesn't define
+    `__init__`.
+    """
 
     class Foo(object):
         pass
@@ -441,7 +455,10 @@ def test_injectable_with_parent_without_init():
 
 
 def test_let_factory():
-    """`Injector` subclass can produce its own subclasses with `let` factory."""
+    """
+    `Injector` subclass can produce its own subclasses with `let`
+    factory.
+    """
 
     class Foo(Injector):
         pass
@@ -450,7 +467,10 @@ def test_let_factory():
 
 
 def test_let_factory_overwrite_dependencies():
-    """`Injector.let` produce `Injector` subclass with overwritten dependencies."""
+    """
+    `Injector.let` produce `Injector` subclass with overwritten
+    dependencies.
+    """
 
     class Foo(Injector):
         bar = 1
@@ -486,7 +506,10 @@ def test_do_not_redefine_let_with_let():
 
 
 def test_let_factory_deny_magic_methods():
-    """`Injector.let` deny magic methods the same way like `Injector` inheritance."""
+    """
+    `Injector.let` deny magic methods the same way like `Injector`
+    inheritance.
+    """
 
     class Foo(Injector):
         pass
@@ -496,7 +519,9 @@ def test_let_factory_deny_magic_methods():
 
 
 def test_let_factory_attribute_error():
-    """`Injector.let` will raise `AttributeError` on missing dependency."""
+    """
+    `Injector.let` will raise `AttributeError` on missing dependency.
+    """
 
     class Foo(Injector):
         pass
@@ -506,9 +531,9 @@ def test_let_factory_attribute_error():
 
 
 def test_let_factory_on_injector_directly():
-    """Dependencies can be specified with `let` factory applied to
+    """
+    Dependencies can be specified with `let` factory applied to
     `Injector` derectly.
-
     """
 
     class Foo(object):
@@ -523,7 +548,9 @@ def test_let_factory_on_injector_directly():
 
 
 def test_do_not_instantiate_dependencies_ended_with_cls():
-    """Do not call class constructor, if it stored with name ended `_cls`.
+    """
+    Do not call class constructor, if it stored with name ended
+    `_cls`.
 
     For example, `logger_cls`.
     """
@@ -555,9 +582,9 @@ def test_do_not_instantiate_injector_subclasses():
 
 
 def test_ignore_injector_instantiation_signature():
-    """Raise `DependencyError` for instantiation with any arguments.  Do
+    """
+    Raise `DependencyError` for instantiation with any arguments.  Do
     not use `TypeError` here.
-
     """
 
     with pytest.raises(DependencyError):
@@ -580,9 +607,9 @@ def test_show_common_class_attributes_with_dir():
 
 
 def test_show_injected_dependencies_with_dir():
-    """`dir` should show injected dependencies and hide `__dependencies__`
-    container.
-
+    """
+    `dir` should show injected dependencies and hide
+    `__dependencies__` container.
     """
 
     class Foo(Injector):
@@ -635,9 +662,9 @@ def test_mutable_injector():
 
 
 def test_mutable_injector_let_expression():
-    """We can extend `Injector` created with `let` expression by attribute
-    assignment.
-
+    """
+    We can extend `Injector` created with `let` expression by
+    attribute assignment.
     """
 
     class Foo(object):
@@ -701,7 +728,10 @@ def test_unregister_dependency_let_expression():
 
 
 def test_unregister_missing_dependency():
-    """Throw `AttributeError` if someone tries to delete missing dependency."""
+    """
+    Throw `AttributeError` if someone tries to delete missing
+    dependency.
+    """
 
     with pytest.raises(AttributeError):
         del Injector.foo
@@ -714,7 +744,9 @@ def test_unregister_missing_dependency():
 
 
 def test_unregister_do_not_use_object_constructor():
-    """We shouldn't touch/run object `__init__` during it unregistration."""
+    """
+    We shouldn't touch/run object `__init__` during it unregistration.
+    """
 
     class Foo(object):
         def __init__(self):
