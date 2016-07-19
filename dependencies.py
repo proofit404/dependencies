@@ -35,8 +35,7 @@ class InjectorType(type):
             except KeyError:
                 pass
 
-        if any(x for x in namespace
-               if x.startswith('__') and x.endswith('__')):
+        if any(dunder_name(x) for x in namespace):
             raise DependencyError('Magic methods are not allowed')
 
         if 'let' in namespace:
@@ -89,6 +88,8 @@ class InjectorType(type):
 
         if cls.__bases__ == (object,):
             raise DependencyError("'Injector' modification is not allowed")
+        if dunder_name(attrname):
+            raise DependencyError('Magic methods are not allowed')
         cls.__dependencies__[attrname] = value
 
     def __delattr__(cls, attrname):
@@ -147,6 +148,12 @@ def use_object_init(cls):
                     return False
             else:
                 return True
+
+
+def dunder_name(name):
+    """Check if name is dunder method name."""
+
+    return name.startswith('__') and name.endswith('__')
 
 
 def check_circles(dependencies):

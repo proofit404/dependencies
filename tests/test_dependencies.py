@@ -758,8 +758,21 @@ def test_unregister_do_not_use_object_constructor():
     del Bar.foo
 
 
-# TODO: deny magic methods assignment
+def test_deny_magic_methods_assignment():
+    """
+    Deny any magic methods assignments to already defined `Injector`
+    subclasses.
+    """
+
+    class Foo(Injector):
+        x = 1
+
+    with pytest.raises(DependencyError):
+        Foo.__eq__ = lambda self, other: False
+
+
 # TODO: deny let redefinition with assignment
 # TODO: check circles on assignment
 # TODO: deny to remove let from injector
 # TODO: hide dependencies library KeyError from stack trace
+# TODO: test all exception messages
