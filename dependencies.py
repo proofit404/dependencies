@@ -43,7 +43,11 @@ class InjectorType(type):
 
         dependencies = {}
         dependencies.update(bases[0].__dependencies__)
-        dependencies.update(namespace)
+        for name, dep in namespace.items():
+            if inspect.isclass(dep) and not use_object_init(dep):
+                dependencies[name] = (dep, inspect.getargspec(dep.__init__))
+            else:
+                dependencies[name] = (dep, None)
         check_circles(dependencies)
         ns['__dependencies__'] = dependencies
 
@@ -52,16 +56,16 @@ class InjectorType(type):
     def __getattr__(cls, attrname):
 
         try:
-            attribute = cls.__dependencies__[attrname]
+            attribute_spec = cls.__dependencies__[attrname]
         except KeyError:
             raise AttributeError(
                 '{0!r} object has no attribute {1!r}'
                 .format(cls.__name__, attrname))
+        attribute, argspec = attribute_spec
         if inspect.isclass(attribute) and not attrname.endswith('_cls'):
             if use_object_init(attribute):
                 return attribute()
-            init = attribute.__init__
-            args, varargs, kwargs, defaults = inspect.getargspec(init)
+            args, varargs, kwargs, defaults = argspec
             if defaults is not None:
                 have_defaults = len(args) - len(defaults)
             else:
@@ -92,7 +96,11 @@ class InjectorType(type):
             raise DependencyError('Magic methods are not allowed')
         if attrname == 'let':
             raise DependencyError("'let' redefinition is not allowed")
-        cls.__dependencies__[attrname] = value
+        if inspect.isclass(value) and not use_object_init(value):
+            dependency = (value, inspect.getargspec(value.__init__))
+            cls.__dependencies__[attrname] = dependency
+        else:
+            cls.__dependencies__[attrname] = (value, None)
 
     def __delattr__(cls, attrname):
 
@@ -169,11 +177,12 @@ def check_circles_for(dependencies, attrname, origin):
     """Check circle for one dependency."""
 
     try:
-        attribute = dependencies[attrname]
+        attribute_spec = dependencies[attrname]
     except KeyError:
         return
+    attribute, argspec = attribute_spec
     if inspect.isclass(attribute) and not use_object_init(attribute):
-        args, varargs, kwargs, _ = inspect.getargspec(attribute.__init__)
+        args, varargs, kwargs, _ = argspec
         names = [name for name in args[1:] + [varargs, kwargs] if name]
         if origin in names:
             raise DependencyError(
