@@ -44,7 +44,7 @@ class InjectorType(type):
         dependencies = {}
         dependencies.update(bases[0].__dependencies__)
         for name, dep in namespace.items():
-            dependencies[name] = make_dependency_spec(dep)
+            dependencies[name] = make_dependency_spec(name, dep)
         check_circles(dependencies)
         ns['__dependencies__'] = dependencies
 
@@ -59,31 +59,30 @@ class InjectorType(type):
                 '{0!r} object has no attribute {1!r}'
                 .format(cls.__name__, attrname))
         attribute, argspec = attribute_spec
-        if inspect.isclass(attribute) and not attrname.endswith('_cls'):
-            if use_object_init(attribute):
-                return attribute()
-            args, varargs, kwargs, defaults = argspec
-            if defaults is not None:
-                have_defaults = len(args) - len(defaults)
-            else:
-                have_defaults = len(args)
-            arguments = []
-            keywords = {}
-            for n, a in enumerate(args[1:], 1):
-                try:
-                    arguments.append(getattr(cls, a))
-                except AttributeError:
-                    if n < have_defaults:
-                        raise
-                    else:
-                        arguments.append(defaults[n - have_defaults])
-            if varargs is not None:
-                arguments.extend(getattr(cls, varargs))
-            if kwargs is not None:
-                keywords.update(getattr(cls, kwargs))
-            return attribute(*arguments, **keywords)
-        else:
+        if argspec is None:
             return attribute
+        if argspec is False:
+            return attribute()
+        args, varargs, kwargs, defaults = argspec
+        if defaults is not None:
+            have_defaults = len(args) - len(defaults)
+        else:
+            have_defaults = len(args)
+        arguments = []
+        keywords = {}
+        for n, a in enumerate(args[1:], 1):
+            try:
+                arguments.append(getattr(cls, a))
+            except AttributeError:
+                if n < have_defaults:
+                    raise
+                else:
+                    arguments.append(defaults[n - have_defaults])
+        if varargs is not None:
+            arguments.extend(getattr(cls, varargs))
+        if kwargs is not None:
+            keywords.update(getattr(cls, kwargs))
+        return attribute(*arguments, **keywords)
 
     def __setattr__(cls, attrname, value):
 
@@ -93,7 +92,7 @@ class InjectorType(type):
             raise DependencyError('Magic methods are not allowed')
         if attrname == 'let':
             raise DependencyError("'let' redefinition is not allowed")
-        cls.__dependencies__[attrname] = make_dependency_spec(value)
+        cls.__dependencies__[attrname] = make_dependency_spec(attrname, value)
 
     def __delattr__(cls, attrname):
 
@@ -137,11 +136,14 @@ class DependencyError(Exception):
     pass
 
 
-def make_dependency_spec(dependency):
+def make_dependency_spec(name, dependency):
     """Make spec to store dependency in the __dependencies__."""
 
-    if inspect.isclass(dependency) and not use_object_init(dependency):
-        return (dependency, inspect.getargspec(dependency.__init__))
+    if inspect.isclass(dependency) and not name.endswith('_cls'):
+        if use_object_init(dependency):
+            return (dependency, False)
+        else:
+            return (dependency, inspect.getargspec(dependency.__init__))
     else:
         return (dependency, None)
 
