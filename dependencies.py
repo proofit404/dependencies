@@ -63,11 +63,7 @@ class InjectorType(type):
             return attribute
         if argspec is False:
             return attribute()
-        args, varargs, kwargs, defaults = argspec
-        if defaults is not None:
-            have_defaults = len(args) - len(defaults)
-        else:
-            have_defaults = len(args)
+        args, varargs, kwargs, have_defaults = argspec
         arguments = []
         keywords = {}
         for n, a in enumerate(args[1:], 1):
@@ -76,8 +72,6 @@ class InjectorType(type):
             except AttributeError:
                 if n < have_defaults:
                     raise
-                else:
-                    arguments.append(defaults[n - have_defaults])
         if varargs is not None:
             arguments.extend(getattr(cls, varargs))
         if kwargs is not None:
@@ -143,7 +137,14 @@ def make_dependency_spec(name, dependency):
         if use_object_init(dependency):
             return (dependency, False)
         else:
-            return (dependency, inspect.getargspec(dependency.__init__))
+            argspec = inspect.getargspec(dependency.__init__)
+            args, varargs, kwargs, defaults = argspec
+            if defaults is not None:
+                have_defaults = len(args) - len(defaults)
+            else:
+                have_defaults = len(args)
+            spec = args, varargs, kwargs, have_defaults
+            return (dependency, spec)
     else:
         return (dependency, None)
 
