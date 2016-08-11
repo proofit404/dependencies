@@ -803,3 +803,10 @@ def test_deny_let_redefinition_with_attribute_assignment():
 #     x_cls = x
 #
 # What spec should be stored in that case?
+#
+# TODO: incorrect behavior if we have five arguments in the
+# constructor.  We specify positional names for the first, the second
+# and the third arguments.  We skip the forth argument and specify the
+# fifth argument.  We must substitute specified arguments as it used
+# in the method signature.  Currently fifth argument will be setup as
+# forth argument.
