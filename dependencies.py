@@ -44,10 +44,7 @@ class InjectorType(type):
         dependencies = {}
         dependencies.update(bases[0].__dependencies__)
         for name, dep in namespace.items():
-            if inspect.isclass(dep) and not use_object_init(dep):
-                dependencies[name] = (dep, inspect.getargspec(dep.__init__))
-            else:
-                dependencies[name] = (dep, None)
+            dependencies[name] = make_dependency_spec(dep)
         check_circles(dependencies)
         ns['__dependencies__'] = dependencies
 
@@ -96,11 +93,7 @@ class InjectorType(type):
             raise DependencyError('Magic methods are not allowed')
         if attrname == 'let':
             raise DependencyError("'let' redefinition is not allowed")
-        if inspect.isclass(value) and not use_object_init(value):
-            dependency = (value, inspect.getargspec(value.__init__))
-            cls.__dependencies__[attrname] = dependency
-        else:
-            cls.__dependencies__[attrname] = (value, None)
+        cls.__dependencies__[attrname] = make_dependency_spec(value)
 
     def __delattr__(cls, attrname):
 
@@ -142,6 +135,15 @@ class DependencyError(Exception):
     """Broken dependencies configuration error."""
 
     pass
+
+
+def make_dependency_spec(dependency):
+    """Make spec to store dependency in the __dependencies__."""
+
+    if inspect.isclass(dependency) and not use_object_init(dependency):
+        return (dependency, inspect.getargspec(dependency.__init__))
+    else:
+        return (dependency, None)
 
 
 def use_object_init(cls):
