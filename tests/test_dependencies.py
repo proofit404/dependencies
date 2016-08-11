@@ -782,6 +782,24 @@ def test_deny_let_redefinition_with_attribute_assignment():
 
 
 # TODO: check circles on assignment
+#
 # TODO: deny to remove let from injector
+#
 # TODO: hide dependencies library KeyError from stack trace
+#
 # TODO: test all exception messages
+#
+# TODO: raise exception if init argument have class as its default
+# value and its name does not ends with _cls suffix.
+#
+# def __init__(self, x=CustomClass) - raise error
+#
+# def __init__(self, x_cls=CustomClass) - work as usual
+#
+# TODO: test case below
+#
+# class Container(Injector):
+#     x = CustomClass
+#     x_cls = x
+#
+# What spec should be stored in that case?
