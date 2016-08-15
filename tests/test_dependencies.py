@@ -810,3 +810,23 @@ def test_deny_let_redefinition_with_attribute_assignment():
 # fifth argument.  We must substitute specified arguments as it used
 # in the method signature.  Currently fifth argument will be setup as
 # forth argument.
+#
+# TODO: Add decorator based container modification
+#
+# class Container(Injector):
+#     pass
+#
+# @Container.as.foo
+# class Foo:
+#     def __init__(self, x, y):
+#         self.x = x
+#         self.y = y
+#
+# TODO: Lazy injection marker for nested containers.  For example we
+# have host and port in Database constructor.  We have host and port
+# in the Cache constructor.  It is nice to have the possibility use
+# simple `host` and `port` arguments in each class and specify this as
+# hierarchy in the injector.
+#
+# TODO: raise exception if *args or **kwargs are present in the
+# constructor.
