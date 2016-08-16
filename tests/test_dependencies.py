@@ -163,41 +163,49 @@ def test_attribute_error():
         Foo.test
 
 
-def test_circle_dependencies():
+@pytest.mark.parametrize('code', [
+    # Declarative injector.
+    """
+    class Summator(Injector):
+        foo = Foo
+
+    Summator.foo
+    """,
+    # Let notation.
+    """
+    Summator = Injector.let(foo=Foo)
+
+    Summator.foo
+    """,
+    # Attribute assignment.
+    """
+    Summator = Injector.let()
+
+    Summator.foo = Foo
+
+    Summator.foo
+    """,
+])
+def test_circle_dependencies(code):
     """
     Throw `DependencyError` if class needs a dependency named same as
-    class.
+    class.  `Summator.foo` will fail with maximum recursion depth.  So
+    we need to raise exception before this attribute access.
     """
 
-    with pytest.raises(DependencyError):
+    class Foo(object):
+        def __init__(self, foo):
+            self.foo = foo
 
-        class Foo(object):
-            def __init__(self, foo):
-                self.foo = foo
+    scope = {'Injector': Injector, 'Foo': Foo}
 
-        class Summator(Injector):
-            foo = Foo
+    with pytest.raises(DependencyError) as exc_info:
+        exec(dedent(code), scope)
 
-        Summator.foo            # Will fail with maximum recursion depth.
-
-
-def test_circle_dependencies_message():
-    """
-    Show correct error message if class needs a dependency named same
-    as class.
-    """
-
-    with pytest.raises(DependencyError) as excinfo:
-
-        class Foo(object):
-            def __init__(self, foo):
-                self.foo = foo
-
-        class Summator(Injector):
-            foo = Foo
-
-    assert str(excinfo.value).startswith("'foo' is a circle dependency in the <class")
-    assert str(excinfo.value).endswith(".Foo'> constructor")
+    assert str(exc_info.value).startswith(
+        "'foo' is a circle dependency in the <class 'test_dependencies."
+    )
+    assert str(exc_info.value).endswith(".Foo'> constructor")
 
 
 def test_complex_circle_dependencies():
