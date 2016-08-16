@@ -122,13 +122,35 @@ def test_injector_deny_multiple_inheritance():
             pass
 
 
-def test_magic_methods_not_allowed_in_the_injector():
+@pytest.mark.parametrize('code', [
+    # Declarative injector.
+    """
+    class Bar(Injector):
+        def __eq__(self, other):
+            return False
+    """,
+    # Let notation.
+    """
+    class Foo(Injector):
+        pass
+
+    Foo.let(__eq__=lambda self, other: False)
+    """,
+    # Attribute assignment.
+    """
+    class Foo(Injector):
+        pass
+
+    Foo.__eq__ = lambda self, other: False
+    """,
+])
+def test_deny_magic_methods_injection(code):
     """`Injector` doesn't accept magic methods."""
 
+    scope = {'Injector': Injector}
+
     with pytest.raises(DependencyError):
-        class Bar(Injector):
-            def __eq__(self, other):
-                pass
+        exec(dedent(code), scope)
 
 
 def test_attribute_error():
@@ -581,19 +603,6 @@ def test_do_not_redefine_let_with_let():
         Foo.let(let=1)
 
 
-def test_let_factory_deny_magic_methods():
-    """
-    `Injector.let` deny magic methods the same way like `Injector`
-    inheritance.
-    """
-
-    class Foo(Injector):
-        pass
-
-    with pytest.raises(DependencyError):
-        Foo.let(__eq__=lambda self, other: False)
-
-
 def test_let_factory_attribute_error():
     """
     `Injector.let` will raise `AttributeError` on missing dependency.
@@ -832,19 +841,6 @@ def test_unregister_do_not_use_object_constructor():
         foo = Foo
 
     del Bar.foo
-
-
-def test_deny_magic_methods_assignment():
-    """
-    Deny any magic methods assignments to already defined `Injector`
-    subclasses.
-    """
-
-    class Foo(Injector):
-        pass
-
-    with pytest.raises(DependencyError):
-        Foo.__eq__ = lambda self, other: False
 
 
 def test_deny_let_redefinition_with_attribute_assignment():
