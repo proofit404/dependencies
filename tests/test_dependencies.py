@@ -229,6 +229,12 @@ def test_circle_dependencies(code):
     """,
     # Let notation.
     """
+    Summator = Injector.let(foo=Foo, bar=Bar)
+
+    Summator.foo
+    """
+    # Let notation chain.
+    """
     Summator = Injector.let(foo=Foo).let(bar=Bar)
 
     Summator.foo
@@ -270,22 +276,6 @@ def test_complex_circle_dependencies(code):
         "'foo' is a circle dependency in the <class 'test_dependencies."
     )
     assert str(exc_info.value).endswith(".Foo'> constructor")
-
-
-def test_complex_circle_dependencies_with_let_binding():
-    """Detect complex circle dependencies with `let` binding."""
-
-    with pytest.raises(DependencyError):
-
-        class Foo(object):
-            def __init__(self, bar):
-                self.bar = bar
-
-        class Bar(object):
-            def __init__(self, foo):
-                self.foo = foo
-
-        Injector.let(foo=Foo, bar=Bar).foo  # Will fail with maximum recursion depth.
 
 
 def test_complex_circle_dependencies_long_circle():
