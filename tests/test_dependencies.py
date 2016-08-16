@@ -217,6 +217,16 @@ def test_circle_dependencies(code):
 
     Summator.foo
     """,
+    # Declarative injector with inheritance.
+    """
+    class First(Injector):
+        foo = Foo
+
+    class Second(First):
+        bar = Bar
+
+    Second.foo
+    """,
     # Let notation.
     """
     Summator = Injector.let(foo=Foo).let(bar=Bar)
@@ -260,30 +270,6 @@ def test_complex_circle_dependencies(code):
         "'foo' is a circle dependency in the <class 'test_dependencies."
     )
     assert str(exc_info.value).endswith(".Foo'> constructor")
-
-
-def test_complex_circle_dependencies_in_different_classes():
-    """
-    Detect complex circle dependencies separated in different classes.
-    """
-
-    with pytest.raises(DependencyError):
-
-        class Foo(object):
-            def __init__(self, bar):
-                self.bar = bar
-
-        class Bar(object):
-            def __init__(self, foo):
-                self.foo = foo
-
-        class First(Injector):
-            foo = Foo
-
-        class Second(First):
-            bar = Bar
-
-        Second.foo              # Will fail with maximum recursion depth.
 
 
 def test_complex_circle_dependencies_with_let_binding():
