@@ -203,8 +203,7 @@ def check_circles_for(dependencies, attrname, origin):
     except KeyError:
         return
     attribute, argspec = attribute_spec
-    # TODO: duplication?
-    if inspect.isclass(attribute) and not use_object_init(attribute):
+    if argspec:
         args = argspec[0]
         if origin in args:
             raise DependencyError(
