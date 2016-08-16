@@ -25,7 +25,8 @@ class InjectorType(type):
 
         if len(bases) > 1:
             raise DependencyError(
-                'Multiple inheritance is not allowed')
+                'Multiple inheritance is not allowed'
+            )
 
         ns = {}
 
@@ -57,21 +58,22 @@ class InjectorType(type):
         except KeyError:
             raise AttributeError(
                 '{0!r} object has no attribute {1!r}'
-                .format(cls.__name__, attrname))
+                .format(cls.__name__, attrname)
+            )
         attribute, argspec = attribute_spec
         if argspec is None:
             return attribute
         if argspec is False:
             return attribute()
         args, have_defaults = argspec
-        keywords = {}
+        kwargs = {}
         for n, arg in enumerate(args, 1):
             try:
-                keywords[arg] = getattr(cls, arg)
+                kwargs[arg] = getattr(cls, arg)
             except AttributeError:
                 if n < have_defaults:
                     raise
-        return attribute(**keywords)
+        return attribute(**kwargs)
 
     def __setattr__(cls, attrname, value):
 
@@ -94,8 +96,8 @@ class InjectorType(type):
     def __dir__(cls):
 
         parent = set(dir(cls.__base__))
-        current = set(cls.__dict__.keys()) - set(['__dependencies__'])
-        dependencies = set(cls.__dependencies__.keys())
+        current = set(cls.__dict__) - set(['__dependencies__'])
+        dependencies = set(cls.__dependencies__)
         attributes = sorted(parent | current | dependencies)
         return attributes
 
