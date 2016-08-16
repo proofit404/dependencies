@@ -313,6 +313,29 @@ def test_preserve_keyword_argument_if_dependency_was_missed():
     assert Summator.foo.do(1) == 2
 
 
+def test_preserve_missed_keyword_argument_in_the_middle():
+    """
+    Use default keyword argument and override following keyword
+    argument since it was specified in the constructor.
+    """
+
+    class Foo(object):
+        def __init__(self, x, y=1, z=2):
+            self.x = x
+            self.y = y
+            self.z = z
+
+        def do(self):
+            return self.x + self.y + self.z
+
+    class Container(Injector):
+        foo = Foo
+        x = 5
+        z = 1
+
+    assert Container.foo.do() == 7
+
+
 def test_deny_single_asterisk_arguments():
     """Raise `DependencyError` if constructor have *args argument."""
 
@@ -800,13 +823,6 @@ def test_deny_let_redefinition_with_attribute_assignment():
 #     x_cls = x
 #
 # What spec should be stored in that case?
-#
-# TODO: incorrect behavior if we have five arguments in the
-# constructor.  We specify positional names for the first, the second
-# and the third arguments.  We skip the forth argument and specify the
-# fifth argument.  We must substitute specified arguments as it used
-# in the method signature.  Currently fifth argument will be setup as
-# forth argument.
 #
 # TODO: Add decorator based container modification
 #

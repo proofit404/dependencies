@@ -64,15 +64,14 @@ class InjectorType(type):
         if argspec is False:
             return attribute()
         args, have_defaults = argspec
-        arguments = []
         keywords = {}
-        for n, a in enumerate(args, 1):
+        for n, arg in enumerate(args, 1):
             try:
-                arguments.append(getattr(cls, a))
+                keywords[arg] = getattr(cls, arg)
             except AttributeError:
                 if n < have_defaults:
                     raise
-        return attribute(*arguments, **keywords)
+        return attribute(**keywords)
 
     def __setattr__(cls, attrname, value):
 
