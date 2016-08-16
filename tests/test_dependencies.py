@@ -272,10 +272,11 @@ def test_complex_circle_dependencies(code):
     with pytest.raises(DependencyError) as exc_info:
         exec(dedent(code), scope)
 
-    assert str(exc_info.value).startswith(
-        "'foo' is a circle dependency in the <class 'test_dependencies."
-    )
-    assert str(exc_info.value).endswith(".Foo'> constructor")
+    message = str(exc_info.value)
+    assert message.startswith("'foo'") or message.startswith("'bar'")
+    assert (" is a circle dependency in the "
+            "<class 'test_dependencies.") in message
+    assert message.endswith(".Foo'> constructor")
 
 
 def test_complex_circle_dependencies_long_circle():
