@@ -139,6 +139,7 @@ def make_dependency_spec(name, dependency):
         else:
             argspec = inspect.getargspec(dependency.__init__)
             args, varargs, kwargs, defaults = argspec
+            check_varargs(dependency, varargs, kwargs)
             if defaults is not None:
                 have_defaults = len(args) - len(defaults)
             else:
@@ -169,6 +170,26 @@ def dunder_name(name):
     """Check if name is dunder method name."""
 
     return name.startswith('__') and name.endswith('__')
+
+
+def check_varargs(dependency, varargs, kwargs):
+    """Deny *args and **kwargs in the dependency constructor with proper message."""
+
+    if varargs and kwargs:
+        raise DependencyError(
+            '{0!r}.__init__ have arbitrary argument list and keyword arguments'
+            .format(dependency)
+        )
+    elif varargs:
+        raise DependencyError(
+            '{0!r}.__init__ have arbitrary argument list'
+            .format(dependency)
+        )
+    elif kwargs:
+        raise DependencyError(
+            '{0!r}.__init__ have arbitrary keyword arguments'
+            .format(dependency)
+        )
 
 
 def check_circles(dependencies):

@@ -313,43 +313,66 @@ def test_preserve_keyword_argument_if_dependency_was_missed():
     assert Summator.foo.do(1) == 2
 
 
-def test_preserve_single_asterisk_arguments():
-    """Inject `*args` into constructor."""
+def test_deny_single_asterisk_arguments():
+    """Raise `DependencyError` if constructor have *args argument."""
 
     class Foo(object):
-        def __init__(self, func, *args):
-            self.func = func
+        def __init__(self, *args):
             self.args = args
-        def do(self):
-            return self.func(self.args)
 
-    class Summator(Injector):
-        foo = Foo
-        func = sum
-        args = (1, 2, 3)
+    with pytest.raises(DependencyError) as exc_info:
 
-    assert Summator.foo.do() == 6
+        class Summator(Injector):
+            foo = Foo
+            args = (1, 2, 3)
+
+    assert str(exc_info.value).startswith("<class 'test_dependencies.")
+    assert str(exc_info.value).endswith(
+        "Foo'>.__init__ have arbitrary argument list"
+    )
 
 
-def test_preserve_multiple_asterisk_arguments():
-    """Inject `**kwargs` into constructor."""
+def test_deny_multiple_asterisk_arguments():
+    """Raise `DependencyError` if constructor have **kwargs argument."""
 
     class Foo(object):
-        def __init__(self, func, **kwargs):
-            self.func = func
+        def __init__(self, **kwargs):
             self.kwargs = kwargs
-        def do(self):
-            return self.func(**self.kwargs)
 
-    class Summator(Injector):
-        foo = Foo
-        def func(sequence, start): return sum(sequence, start)
-        kwargs = {
-            'sequence': (1, 2, 3),
-            'start': 5,
-        }
+    with pytest.raises(DependencyError) as exc_info:
 
-    assert Summator.foo.do() == 11
+        class Summator(Injector):
+            foo = Foo
+            kwargs = {'start': 5}
+
+    assert str(exc_info.value).startswith("<class 'test_dependencies.")
+    assert str(exc_info.value).endswith(
+        "Foo'>.__init__ have arbitrary keyword arguments"
+    )
+
+
+def test_deny_single_and_multiple_asterisk_arguments_together():
+    """
+    Raise `DependencyError` if constructor have *args and **kwargs
+    argument.
+    """
+
+    class Foo(object):
+        def __init__(self, *args, **kwargs):
+            self.args = args
+            self.kwargs = kwargs
+
+    with pytest.raises(DependencyError) as exc_info:
+
+        class Summator(Injector):
+            foo = Foo
+            args = (1, 2, 3)
+            kwargs = {'start': 5}
+
+    assert str(exc_info.value).startswith("<class 'test_dependencies.")
+    assert str(exc_info.value).endswith(
+        "Foo'>.__init__ have arbitrary argument list and keyword arguments"
+    )
 
 
 def test_attribute_error_with_keyword_arguments_present():
@@ -368,32 +391,6 @@ def test_attribute_error_with_keyword_arguments_present():
 
     with pytest.raises(AttributeError):
         Bar.foo
-
-
-def test_multiple_arguments_possition():
-    """We support injection all the stuff at ones."""
-
-    class Foo(object):
-        def __init__(self, first, second, third=1, fourth=2, *tail, **kw):
-            self.first = first
-            self.second = second
-            self.third = third
-            self.fourth = fourth
-            self.tail = tail
-            self.kw = kw
-        def do(self):
-            return sum((self.first, self.second, self.third, self.fourth) + self.tail + (self.kw['x'], self.kw['y']))
-
-    class Summator(Injector):
-        foo = Foo
-        first = 2
-        second = 3
-        third = 4
-        fourth = 5
-        tail = [6, 7, 8]
-        kw = {'x': 9, 'y': 10}
-
-    assert Summator.foo.do() == 54
 
 
 def test_injectable_without_its_own_init():
@@ -829,4 +826,4 @@ def test_deny_let_redefinition_with_attribute_assignment():
 # hierarchy in the injector.
 #
 # TODO: raise exception if *args or **kwargs are present in the
-# constructor.
+# constructor.  Test in let notation and attribute assignment.
