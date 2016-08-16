@@ -63,19 +63,15 @@ class InjectorType(type):
             return attribute
         if argspec is False:
             return attribute()
-        args, varargs, kwargs, have_defaults = argspec
+        args, have_defaults = argspec
         arguments = []
         keywords = {}
-        for n, a in enumerate(args[1:], 1):
+        for n, a in enumerate(args, 1):
             try:
                 arguments.append(getattr(cls, a))
             except AttributeError:
                 if n < have_defaults:
                     raise
-        if varargs is not None:
-            arguments.extend(getattr(cls, varargs))
-        if kwargs is not None:
-            keywords.update(getattr(cls, kwargs))
         return attribute(*arguments, **keywords)
 
     def __setattr__(cls, attrname, value):
@@ -135,7 +131,7 @@ def make_dependency_spec(name, dependency):
 
     if inspect.isclass(dependency) and not name.endswith('_cls'):
         if use_object_init(dependency):
-            return (dependency, False)
+            return dependency, False
         else:
             argspec = inspect.getargspec(dependency.__init__)
             args, varargs, kwargs, defaults = argspec
@@ -144,10 +140,10 @@ def make_dependency_spec(name, dependency):
                 have_defaults = len(args) - len(defaults)
             else:
                 have_defaults = len(args)
-            spec = args, varargs, kwargs, have_defaults
-            return (dependency, spec)
+            spec = args[1:], have_defaults
+            return dependency, spec
     else:
-        return (dependency, None)
+        return dependency, None
 
 
 def use_object_init(cls):
@@ -207,12 +203,13 @@ def check_circles_for(dependencies, attrname, origin):
     except KeyError:
         return
     attribute, argspec = attribute_spec
+    # TODO: duplication?
     if inspect.isclass(attribute) and not use_object_init(attribute):
-        args, varargs, kwargs, _ = argspec
-        names = [name for name in args[1:] + [varargs, kwargs] if name]
-        if origin in names:
+        args = argspec[0]
+        if origin in args:
             raise DependencyError(
                 '{0!r} is a circle dependency in the {1!r} constructor'
-                .format(origin, attribute))
-        for name in names:
+                .format(origin, attribute)
+            )
+        for name in args:
             check_circles_for(dependencies, name, origin)
