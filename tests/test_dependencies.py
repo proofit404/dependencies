@@ -274,37 +274,88 @@ def test_complex_circle_dependencies(code):
 
     message = str(exc_info.value)
     assert message.startswith("'foo'") or message.startswith("'bar'")
-    assert (" is a circle dependency in the "
-            "<class 'test_dependencies.") in message
-    assert message.endswith(".Foo'> constructor")
+    part = " is a circle dependency in the <class 'test_dependencies."
+    assert part in message
+    assert (message.endswith(".Foo'> constructor") or
+            message.endswith(".Bar'> constructor"))
 
 
-def test_complex_circle_dependencies_long_circle():
+@pytest.mark.parametrize('code', [
+    # Declarative injector.
+    """
+    class Summator(Injector):
+        foo = Foo
+        bar = Bar
+        baz = Baz
+
+    Summator.foo
+    """,
+    # Declarative injector with inheritance.
+    """
+    class First(Injector):
+        foo = Foo
+
+    class Second(First):
+        bar = Bar
+        baz = Baz
+
+    Second.foo
+    """,
+    # Let notation.
+    """
+    Summator = Injector.let(foo=Foo, bar=Bar, baz=Baz)
+
+    Summator.foo
+    """
+    # Let notation chain.
+    """
+    Summator = Injector.let(foo=Foo).let(bar=Bar).let(baz=Baz)
+
+    Summator.foo
+    """,
+    # Attribute assignment.
+    """
+    Summator = Injector.let()
+
+    Summator.foo = Foo
+    Summator.bar = Bar
+    Summator.baz = Baz
+
+    Summator.foo
+    """,
+])
+def test_complex_circle_dependencies_long_circle(code):
     """
     Detect complex dependencies recursion with circles longer then two
     constructors.
     """
 
-    with pytest.raises(DependencyError):
+    class Foo(object):
+        def __init__(self, bar):
+            self.bar = bar
 
-        class Foo(object):
-            def __init__(self, bar):
-                self.bar = bar
+    class Bar(object):
+        def __init__(self, baz):
+            self.baz = baz
 
-        class Bar(object):
-            def __init__(self, baz):
-                self.baz = baz
+    class Baz(object):
+        def __init__(self, foo):
+            self.foo = foo
 
-        class Baz(object):
-            def __init__(self, foo):
-                self.foo = foo
+    scope = {'Injector': Injector, 'Foo': Foo, 'Bar': Bar, 'Baz': Baz}
 
-        class Test(Injector):
-            foo = Foo
-            bar = Bar
-            baz = Baz
+    with pytest.raises(DependencyError) as exc_info:
+        exec(dedent(code), scope)
 
-        Test.foo                # Will fail with maximum recursion depth.
+    message = str(exc_info.value)
+    assert (message.startswith("'foo'") or
+            message.startswith("'bar'") or
+            message.startswith("'baz'"))
+    part = " is a circle dependency in the <class 'test_dependencies."
+    assert part in message
+    assert (message.endswith(".Foo'> constructor") or
+            message.endswith(".Bar'> constructor") or
+            message.endswith(".Baz'> constructor"))
 
 
 def test_override_keyword_argument_if_dependency_was_specified():
