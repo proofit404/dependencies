@@ -208,7 +208,32 @@ def test_circle_dependencies(code):
     assert str(exc_info.value).endswith(".Foo'> constructor")
 
 
-def test_complex_circle_dependencies():
+@pytest.mark.parametrize('code', [
+    # Declarative injector.
+    """
+    class Summator(Injector):
+        foo = Foo
+        bar = Bar
+
+    Summator.foo
+    """,
+    # Let notation.
+    """
+    Summator = Injector.let(foo=Foo).let(bar=Bar)
+
+    Summator.foo
+    """,
+    # Attribute assignment.
+    """
+    Summator = Injector.let()
+
+    Summator.foo = Foo
+    Summator.bar = Bar
+
+    Summator.foo
+    """,
+])
+def test_complex_circle_dependencies(code):
     """
     Throw `DependencyError` in the case of complex dependency recursion.
 
@@ -218,21 +243,23 @@ def test_complex_circle_dependencies():
     the container.  We have mutual recursion in this case.
     """
 
-    with pytest.raises(DependencyError):
+    class Foo(object):
+        def __init__(self, bar):
+            self.bar = bar
 
-        class Foo(object):
-            def __init__(self, bar):
-                self.bar = bar
+    class Bar(object):
+        def __init__(self, foo):
+            self.foo = foo
 
-        class Bar(object):
-            def __init__(self, foo):
-                self.foo = foo
+    scope = {'Injector': Injector, 'Foo': Foo, 'Bar': Bar}
 
-        class Test(Injector):
-            foo = Foo
-            bar = Bar
+    with pytest.raises(DependencyError) as exc_info:
+        exec(dedent(code), scope)
 
-        Test.foo                # Will fail with maximum recursion depth.
+    assert str(exc_info.value).startswith(
+        "'foo' is a circle dependency in the <class 'test_dependencies."
+    )
+    assert str(exc_info.value).endswith(".Foo'> constructor")
 
 
 def test_complex_circle_dependencies_in_different_classes():
