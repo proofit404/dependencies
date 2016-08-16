@@ -84,6 +84,7 @@ class InjectorType(type):
         if attrname == 'let':
             raise DependencyError("'let' redefinition is not allowed")
         cls.__dependencies__[attrname] = make_dependency_spec(attrname, value)
+        check_circles(cls.__dependencies__)
 
     def __delattr__(cls, attrname):
 

@@ -916,8 +916,6 @@ def test_deny_let_redefinition_with_attribute_assignment():
         Foo.let = lambda cls, **kwargs: None
 
 
-# TODO: check circles on assignment
-#
 # TODO: deny to remove let from injector
 #
 # TODO: hide dependencies library KeyError from stack trace
