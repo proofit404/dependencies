@@ -411,7 +411,28 @@ def test_deny_arbitrary_keyword_arguments(code):
     )
 
 
-def test_deny_single_and_multiple_asterisk_arguments_together():
+@pytest.mark.parametrize('code', [
+    # Declarative injector.
+    """
+    class Summator(Injector):
+        foo = Foo
+        args = (1, 2, 3)
+        kwargs = {'start': 5}
+    """,
+    # Let notation.
+    """
+    Injector.let(foo=Foo, args=(1, 2, 3), kwargs={'start': 5})
+    """,
+    # Attribute assignment.
+    """
+    class Summator(Injector):
+        args = (1, 2, 3)
+        kwargs = {'start': 5}
+
+    Summator.foo = Foo
+    """,
+])
+def test_deny_arbitrary_positional_and_keyword_arguments_together(code):
     """
     Raise `DependencyError` if constructor have *args and **kwargs
     argument.
@@ -422,12 +443,10 @@ def test_deny_single_and_multiple_asterisk_arguments_together():
             self.args = args
             self.kwargs = kwargs
 
-    with pytest.raises(DependencyError) as exc_info:
+    scope = {'Injector': Injector, 'Foo': Foo}
 
-        class Summator(Injector):
-            foo = Foo
-            args = (1, 2, 3)
-            kwargs = {'start': 5}
+    with pytest.raises(DependencyError) as exc_info:
+        exec(dedent(code), scope)
 
     assert str(exc_info.value).startswith("<class 'test_dependencies.")
     assert str(exc_info.value).endswith(
@@ -877,6 +896,3 @@ def test_deny_let_redefinition_with_attribute_assignment():
 # in the Cache constructor.  It is nice to have the possibility use
 # simple `host` and `port` arguments in each class and specify this as
 # hierarchy in the injector.
-#
-# TODO: raise exception if *args or **kwargs are present in the
-# constructor.  Test in let notation and attribute assignment.
