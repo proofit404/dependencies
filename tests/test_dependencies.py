@@ -374,18 +374,36 @@ def test_deny_arbitrary_argument_list(code):
     )
 
 
-def test_deny_multiple_asterisk_arguments():
+@pytest.mark.parametrize('code', [
+    # Declarative injector.
+    """
+    class Summator(Injector):
+        foo = Foo
+        kwargs = {'start': 5}
+    """,
+    # Let notation.
+    """
+    Injector.let(foo=Foo, kwargs = {'start': 5})
+    """,
+    # Attribute assignment.
+    """
+    class Summator(Injector):
+        kwargs = {'start': 5}
+
+    Summator.foo = Foo
+    """,
+])
+def test_deny_arbitrary_keyword_arguments(code):
     """Raise `DependencyError` if constructor have **kwargs argument."""
 
     class Foo(object):
         def __init__(self, **kwargs):
             self.kwargs = kwargs
 
-    with pytest.raises(DependencyError) as exc_info:
+    scope = {'Injector': Injector, 'Foo': Foo}
 
-        class Summator(Injector):
-            foo = Foo
-            kwargs = {'start': 5}
+    with pytest.raises(DependencyError) as exc_info:
+        exec(dedent(code), scope)
 
     assert str(exc_info.value).startswith("<class 'test_dependencies.")
     assert str(exc_info.value).endswith(
