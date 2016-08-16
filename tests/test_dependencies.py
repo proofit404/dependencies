@@ -1,6 +1,7 @@
 """Dependencies test suite."""
 
 import inspect
+from textwrap import dedent
 
 import pytest
 
@@ -336,18 +337,36 @@ def test_preserve_missed_keyword_argument_in_the_middle():
     assert Container.foo.do() == 7
 
 
-def test_deny_single_asterisk_arguments():
+@pytest.mark.parametrize('code', [
+    # Declarative injector.
+    """
+    class Summator(Injector):
+        foo = Foo
+        args = (1, 2, 3)
+    """,
+    # Let notation.
+    """
+    Injector.let(foo=Foo, args=(1, 2, 3))
+    """,
+    # Attribute assignment.
+    """
+    class Summator(Injector):
+        args = (1, 2, 3)
+
+    Summator.foo = Foo
+    """,
+])
+def test_deny_arbitrary_argument_list(code):
     """Raise `DependencyError` if constructor have *args argument."""
 
     class Foo(object):
         def __init__(self, *args):
             self.args = args
 
-    with pytest.raises(DependencyError) as exc_info:
+    scope = {'Injector': Injector, 'Foo': Foo}
 
-        class Summator(Injector):
-            foo = Foo
-            args = (1, 2, 3)
+    with pytest.raises(DependencyError) as exc_info:
+        exec(dedent(code), scope)
 
     assert str(exc_info.value).startswith("<class 'test_dependencies.")
     assert str(exc_info.value).endswith(
