@@ -17,11 +17,11 @@ __all__ = ['Injector', 'DependencyError']
 
 class InjectorType(type):
 
-    def __new__(cls, name, bases, namespace):
+    def __new__(cls, class_name, bases, namespace):
 
         if len(bases) == 0:
             namespace['__dependencies__'] = {}
-            return type.__new__(cls, name, bases, namespace)
+            return type.__new__(cls, class_name, bases, namespace)
 
         if len(bases) > 1:
             raise DependencyError(
@@ -49,7 +49,7 @@ class InjectorType(type):
         check_circles(dependencies)
         ns['__dependencies__'] = dependencies
 
-        return type.__new__(cls, name, bases, ns)
+        return type.__new__(cls, class_name, bases, ns)
 
     def __getattr__(cls, attrname):
 

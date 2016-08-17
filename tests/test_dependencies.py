@@ -191,8 +191,6 @@ def test_attribute_error(code):
     assert str(exc_info.value) in set([
         "'Foo' object has no attribute 'test'",
         "'Injector' object has no attribute 'test'",
-        # FIXME: this is some shit with MetaClass.__new__(name) argument.
-        "'bar' object has no attribute 'test'",
     ])
 
 
