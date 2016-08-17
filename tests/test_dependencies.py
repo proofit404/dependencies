@@ -665,22 +665,36 @@ def test_let_factory_resolve_not_overwritten_dependencies():
     assert Foo.let(baz=2).bar == 1
 
 
-def test_do_not_redefine_let_with_inheritance():
-    """We can't specify `let` attribute in the `Injector` subclass."""
-
-    with pytest.raises(DependencyError):
-        class Foo(Injector):
-            let = 2
-
-
-def test_do_not_redefine_let_with_let():
-    """We can't specify `let` attribute with `let` argument."""
-
+@pytest.mark.parametrize('code', [
+    # Declarative injector.
+    """
+    class Foo(Injector):
+        let = 2
+    """,
+    # Let notation.
+    """
     class Foo(Injector):
         pass
 
-    with pytest.raises(DependencyError):
-        Foo.let(let=1)
+    Foo.let(let=1)
+    """,
+    # Attribute assignment.
+    """
+    class Foo(Injector):
+        pass
+
+    Foo.let = lambda cls, **kwargs: None
+    """,
+])
+def test_deny_to_redefine_let_attribute(code):
+    """We can't redefine let attribute in the `Injector` subclasses."""
+
+    scope = {'Injector': Injector}
+
+    with pytest.raises(DependencyError) as exc_info:
+        exec(dedent(code), scope)
+
+    assert str(exc_info.value) == "'let' redefinition is not allowed"
 
 
 def test_let_factory_attribute_error():
@@ -921,19 +935,6 @@ def test_unregister_do_not_use_object_constructor():
         foo = Foo
 
     del Bar.foo
-
-
-def test_deny_let_redefinition_with_attribute_assignment():
-    """
-    Deny `let` method redefinition with attribute assignment in
-    `Injector` subclass.
-    """
-
-    class Foo(Injector):
-        pass
-
-    with pytest.raises(DependencyError):
-        Foo.let = lambda cls, **kwargs: None
 
 
 # TODO: deny to remove let from injector
