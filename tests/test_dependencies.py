@@ -151,8 +151,10 @@ def test_deny_magic_methods_injection(code):
 
     scope = {'Injector': Injector}
 
-    with pytest.raises(DependencyError):
+    with pytest.raises(DependencyError) as exc_info:
         exec(dedent(code), scope)
+
+    assert str(exc_info.value) == 'Magic methods are not allowed'
 
 
 @pytest.mark.parametrize('code', [
