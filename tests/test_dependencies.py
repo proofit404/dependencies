@@ -14,12 +14,12 @@ def test_lambda_dependency():
     class Foo(object):
         def __init__(self, add):
             self.add = add
-        def do(self, x):
+        def do(self, x):  # noqa: E301
             return self.add(x, x)
 
     class Summator(Injector):
         foo = Foo
-        add = lambda x, y: x + y
+        add = lambda x, y: x + y  # noqa: E731
 
     assert Summator.foo.do(1) == 2
 
@@ -30,7 +30,7 @@ def test_function_dependency():
     class Foo(object):
         def __init__(self, add):
             self.add = add
-        def do(self, x):
+        def do(self, x):  # noqa: E301
             return self.add(x, x)
 
     def plus(x, y):
@@ -49,12 +49,12 @@ def test_inline_dependency():
     class Foo(object):
         def __init__(self, add):
             self.add = add
-        def do(self, x):
+        def do(self, x):  # noqa: E301
             return self.add(x, x)
 
     class Summator(Injector):
         foo = Foo
-        def add(x, y):
+        def add(x, y):  # noqa: E301
             return x + y
 
     assert Summator.foo.do(1) == 2
@@ -71,20 +71,20 @@ def test_class_dependency():
         def __init__(self, add, bar):
             self.add = add
             self.bar = bar
-        def do(self, x):
+        def do(self, x):  # noqa: E301
             return self.add(self.bar.go(x), self.bar.go(x))
 
     class Bar(object):
         def __init__(self, mul):
             self.mul = mul
-        def go(self, x):
+        def go(self, x):  # noqa: E301
             return self.mul(x, x)
 
     class Summator(Injector):
         foo = Foo
         bar = Bar
-        add = lambda x, y: x + y
-        mul = lambda x, y: x * y
+        add = lambda x, y: x + y  # noqa: E731
+        mul = lambda x, y: x * y  # noqa: E731
 
     assert Summator.foo.do(2) == 8
 
@@ -98,15 +98,15 @@ def test_redefine_dependency():
     class Foo(object):
         def __init__(self, add):
             self.add = add
-        def do(self, x):
+        def do(self, x):  # noqa: E301
             return self.add(x, x)
 
     class Summator(Injector):
         foo = Foo
-        add = lambda x, y: x + y
+        add = lambda x, y: x + y  # noqa: E731
 
     class WrongSummator(Summator):
-        add = lambda x, y: x - y
+        add = lambda x, y: x - y  # noqa: E731
 
     assert WrongSummator.foo.do(1) == 0
 
@@ -368,12 +368,12 @@ def test_override_keyword_argument_if_dependency_was_specified():
         def __init__(self, add, y=1):
             self.add = add
             self.y = y
-        def do(self, x):
+        def do(self, x):  # noqa: E301
             return self.add(x, self.y)
 
     class Summator(Injector):
         foo = Foo
-        add = lambda x, y: x + y
+        add = lambda x, y: x + y  # noqa: E731
         y = 2
 
     assert Summator.foo.do(1) == 3
@@ -389,12 +389,12 @@ def test_preserve_keyword_argument_if_dependency_was_missed():
         def __init__(self, add, y=1):
             self.add = add
             self.y = y
-        def do(self, x):
+        def do(self, x):  # noqa: E301
             return self.add(x, self.y)
 
     class Summator(Injector):
         foo = Foo
-        add = lambda x, y: x + y
+        add = lambda x, y: x + y  # noqa: E731
 
     assert Summator.foo.do(1) == 2
 
@@ -907,7 +907,10 @@ def test_unregister_do_not_use_object_constructor():
 
 
 def test_deny_let_redefinition_with_attribute_assignment():
-    """Deny `let` method redefinition with attribute assignment in `Injector` subclass."""
+    """
+    Deny `let` method redefinition with attribute assignment in
+    `Injector` subclass.
+    """
 
     class Foo(Injector):
         pass

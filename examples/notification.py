@@ -17,7 +17,8 @@ settings = {
 
 class SMTPSender:
 
-    def __init__(self, support_address, support_user, support_passwd, smtp_host, smtp_port):
+    def __init__(self, support_address, support_user, support_passwd,
+                 smtp_host, smtp_port):
 
         self.from_address = support_address
         self.user = support_user

@@ -171,7 +171,10 @@ def dunder_name(name):
 
 
 def check_varargs(dependency, varargs, kwargs):
-    """Deny *args and **kwargs in the dependency constructor with proper message."""
+    """
+    Deny *args and **kwargs in the dependency constructor with proper
+    message.
+    """
 
     if varargs and kwargs:
         raise DependencyError(
