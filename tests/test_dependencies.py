@@ -861,8 +861,10 @@ def test_mutable_injector_let_expression():
 def test_mutable_injector_deny_to_modify_injector():
     """Deny to modify `Injector` itself."""
 
-    with pytest.raises(DependencyError):
+    with pytest.raises(DependencyError) as exc_info:
         Injector.foo = 1
+
+    assert str(exc_info.value) == "'Injector' modification is not allowed"
 
 
 def test_unregister_dependency():
