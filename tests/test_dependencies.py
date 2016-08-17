@@ -171,6 +171,13 @@ def test_deny_magic_methods_injection(code):
 
     Foo.test
     """,
+    # Let notation from subclass.
+    """
+    class Foo(Injector):
+        pass
+
+    Foo.let().test
+    """,
     # Keyword arguments in the constructor.
     """
     class Bar(object):
@@ -695,18 +702,6 @@ def test_deny_to_redefine_let_attribute(code):
         exec(dedent(code), scope)
 
     assert str(exc_info.value) == "'let' redefinition is not allowed"
-
-
-def test_let_factory_attribute_error():
-    """
-    `Injector.let` will raise `AttributeError` on missing dependency.
-    """
-
-    class Foo(Injector):
-        pass
-
-    with pytest.raises(AttributeError):
-        Foo.let().x
 
 
 def test_let_factory_on_injector_directly():
