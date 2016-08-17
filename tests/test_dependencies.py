@@ -738,34 +738,36 @@ def test_do_not_instantiate_dependencies_ended_with_cls():
     assert inspect.isclass(Bar.foo_cls)
 
 
-def test_do_not_instantiate_injector():
-    """Deny injector instantiation."""
-
-    with pytest.raises(DependencyError):
-        Injector()
-
-
-def test_do_not_instantiate_injector_subclasses():
-    """Deny injector subclasses instantiation."""
-
+@pytest.mark.parametrize('code', [
+    # Direct call.
+    """
+    Injector()
+    """,
+    # Subclass call.
+    """
     class Foo(Injector):
         pass
 
-    with pytest.raises(DependencyError):
-        Foo()
-
-
-def test_ignore_injector_instantiation_signature():
+    Foo()
+    """,
+    # Ignore any arguments passed.
     """
-    Raise `DependencyError` for instantiation with any arguments.  Do
-    not use `TypeError` here.
+    Injector(1)
+    """,
+    # Ignore any keyword argument passed.
     """
+    Injector(x=1)
+    """,
+])
+def test_deny_to_instantiate_injector(code):
+    """Deny injector instantiation."""
 
-    with pytest.raises(DependencyError):
-        Injector(1)
+    scope = {'Injector': Injector}
 
-    with pytest.raises(DependencyError):
-        Injector(x=1)
+    with pytest.raises(DependencyError) as exc_info:
+        exec(dedent(code), scope)
+
+    assert str(exc_info.value) == 'Do not instantiate Injector'
 
 
 def test_show_common_class_attributes_with_dir():
