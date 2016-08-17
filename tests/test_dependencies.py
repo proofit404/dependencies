@@ -117,9 +117,11 @@ def test_injector_deny_multiple_inheritance():
     class Foo(object):
         pass
 
-    with pytest.raises(DependencyError):
+    with pytest.raises(DependencyError) as exc_info:
         class Foo(Injector, Foo):
             pass
+
+    assert str(exc_info.value) == 'Multiple inheritance is not allowed'
 
 
 @pytest.mark.parametrize('code', [
