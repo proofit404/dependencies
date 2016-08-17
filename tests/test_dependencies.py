@@ -167,6 +167,18 @@ def test_deny_magic_methods_injection(code):
 
     Foo.test
     """,
+    # Keyword arguments in the constructor.
+    """
+    class Bar(object):
+        def __init__(self, test, two=2):
+            self.test = test
+            self.two = two
+
+    class Foo(Injector):
+        bar = Bar
+
+    Foo.bar
+    """,
 ])
 def test_attribute_error(code):
     """Raise attribute error if we can't find dependency."""
@@ -179,6 +191,8 @@ def test_attribute_error(code):
     assert str(exc_info.value) in set([
         "'Foo' object has no attribute 'test'",
         "'Injector' object has no attribute 'test'",
+        # FIXME: this is some shit with MetaClass.__new__(name) argument.
+        "'bar' object has no attribute 'test'",
     ])
 
 
@@ -556,24 +570,6 @@ def test_deny_arbitrary_positional_and_keyword_arguments_together(code):
     assert str(exc_info.value).endswith(
         "Foo'>.__init__ have arbitrary argument list and keyword arguments"
     )
-
-
-def test_attribute_error_with_keyword_arguments_present():
-    """
-    Reraise argument error when keyword arguments specify another
-    dependencies defaults.
-    """
-
-    class Foo(object):
-        def __init__(self, one, two=2):
-            self.one = one
-            self.two = two
-
-    class Bar(Injector):
-        foo = Foo
-
-    with pytest.raises(AttributeError):
-        Bar.foo
 
 
 def test_injectable_without_its_own_init():
