@@ -153,14 +153,33 @@ def test_deny_magic_methods_injection(code):
         exec(dedent(code), scope)
 
 
-def test_attribute_error():
-    """Raise attribute error if we can't find dependency."""
-
+@pytest.mark.parametrize('code', [
+    # Declarative injector.
+    """
     class Foo(Injector):
         pass
 
-    with pytest.raises(AttributeError):
-        Foo.test
+    Foo.test
+    """,
+    # Let notation.
+    """
+    Foo = Injector.let()
+
+    Foo.test
+    """,
+])
+def test_attribute_error(code):
+    """Raise attribute error if we can't find dependency."""
+
+    scope = {'Injector': Injector}
+
+    with pytest.raises(AttributeError) as exc_info:
+        exec(dedent(code), scope)
+
+    assert str(exc_info.value) in set([
+        "'Foo' object has no attribute 'test'",
+        "'Injector' object has no attribute 'test'",
+    ])
 
 
 @pytest.mark.parametrize('code', [
