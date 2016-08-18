@@ -867,7 +867,43 @@ def test_mutable_injector_deny_to_modify_injector():
     assert str(exc_info.value) == "'Injector' modification is not allowed"
 
 
-def test_unregister_dependency():
+# Unregister dependency.
+
+
+@pytest.mark.parametrize('code', [
+    # Declarative injector.
+    """
+    class Baz(Injector):
+        foo = Foo
+        bar = Bar
+
+    del Baz.bar
+
+    Baz.foo
+    """,
+    # Let notation.
+    """
+    Baz = Injector.let(foo=Foo, bar=Bar)
+
+    del Baz.bar
+
+    Baz.foo
+    """,
+    # Throw `AttributeError` if someone tries to delete missing
+    # dependency.
+    """
+    del Injector.bar
+    """,
+    # Throw `AttributeError` if someone tries to delete missing
+    # dependency in the `Injector` subclass.
+    """
+    class Baz(Injector):
+        pass
+
+    del Baz.bar
+    """,
+])
+def test_unregister_dependency(code):
     """We can unregister dependency from `Injector` subclasses."""
 
     class Foo(object):
@@ -877,48 +913,15 @@ def test_unregister_dependency():
     class Bar(object):
         pass
 
-    class Baz(Injector):
-        foo = Foo
-        bar = Bar
+    scope = {'Injector': Injector, 'Foo': Foo, 'Bar': Bar}
 
-    del Baz.bar
+    with pytest.raises(AttributeError) as exc_info:
+        exec(dedent(code), scope)
 
-    with pytest.raises(AttributeError):
-        Baz.foo
-
-
-def test_unregister_dependency_let_expression():
-    """We can unregister dependency from `let` expression results."""
-
-    class Foo(object):
-        def __init__(self, bar):
-            self.bar = bar
-
-    class Bar(object):
-        pass
-
-    Baz = Injector.let(foo=Foo, bar=Bar)
-
-    del Baz.bar
-
-    with pytest.raises(AttributeError):
-        Baz.foo
-
-
-def test_unregister_missing_dependency():
-    """
-    Throw `AttributeError` if someone tries to delete missing
-    dependency.
-    """
-
-    with pytest.raises(AttributeError):
-        del Injector.foo
-
-    class Foo(Injector):
-        pass
-
-    with pytest.raises(AttributeError):
-        del Foo.foo
+    assert str(exc_info.value) in set([
+        "'Baz' object has no attribute 'bar'",
+        "'Injector' object has no attribute 'bar'",
+    ])
 
 
 def test_unregister_do_not_use_object_constructor():
@@ -939,8 +942,6 @@ def test_unregister_do_not_use_object_constructor():
 # TODO: deny to remove let from injector
 #
 # TODO: hide dependencies library KeyError from stack trace
-#
-# TODO: test all exception messages
 #
 # TODO: raise exception if init argument have class as its default
 # value and its name does not ends with _cls suffix.
