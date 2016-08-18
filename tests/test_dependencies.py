@@ -89,6 +89,23 @@ def test_class_dependency():
     assert Summator.foo.do(2) == 8
 
 
+def test_do_not_instantiate_dependencies_ended_with_cls():
+    """
+    Do not call class constructor, if it stored with name ended
+    `_cls`.
+
+    For example, `logger_cls`.
+    """
+
+    class Foo(object):
+        pass
+
+    class Bar(Injector):
+        foo_cls = Foo
+
+    assert inspect.isclass(Bar.foo_cls)
+
+
 def test_redefine_dependency():
     """
     We can redefine dependency by inheritance from the `Injector`
@@ -111,6 +128,359 @@ def test_redefine_dependency():
     assert WrongSummator.foo.do(1) == 0
 
 
+def test_override_keyword_argument_if_dependency_was_specified():
+    """
+    Use specified dependency for constructor keyword arguments if
+    dependency with desired name was mentioned in the injector.
+    """
+
+    class Foo(object):
+        def __init__(self, add, y=1):
+            self.add = add
+            self.y = y
+        def do(self, x):  # noqa: E301
+            return self.add(x, self.y)
+
+    class Summator(Injector):
+        foo = Foo
+        add = lambda x, y: x + y  # noqa: E731
+        y = 2
+
+    assert Summator.foo.do(1) == 3
+
+
+def test_preserve_keyword_argument_if_dependency_was_missed():
+    """
+    Use constructor keyword arguments if dependency with desired name
+    was missed in the injector.
+    """
+
+    class Foo(object):
+        def __init__(self, add, y=1):
+            self.add = add
+            self.y = y
+        def do(self, x):  # noqa: E301
+            return self.add(x, self.y)
+
+    class Summator(Injector):
+        foo = Foo
+        add = lambda x, y: x + y  # noqa: E731
+
+    assert Summator.foo.do(1) == 2
+
+
+def test_preserve_missed_keyword_argument_in_the_middle():
+    """
+    Use default keyword argument and override following keyword
+    argument since it was specified in the constructor.
+    """
+
+    class Foo(object):
+        def __init__(self, x, y=1, z=2):
+            self.x = x
+            self.y = y
+            self.z = z
+
+        def do(self):
+            return self.x + self.y + self.z
+
+    class Container(Injector):
+        foo = Foo
+        x = 5
+        z = 1
+
+    assert Container.foo.do() == 7
+
+
+def test_injectable_without_its_own_init():
+    """
+    Inject dependencies into object subclass which doesn't specify its
+    own `__init__`.
+    """
+
+    class Foo(object):
+        def do(self):
+            return 1
+
+    class Baz(Injector):
+        foo = Foo
+
+    assert Baz.foo.do() == 1
+
+
+def test_injectable_with_parent_init():
+    """
+    Inject dependencies into object which parent class define
+    `__init__`.
+    """
+
+    class Foo(object):
+        def __init__(self, x, y):
+            self.x = x
+            self.y = y
+
+    class Bar(Foo):
+        def add(self):
+            return self.x + self.y
+
+    class Baz(Injector):
+        bar = Bar
+        x = 1
+        y = 2
+
+    assert Baz.bar.add() == 3
+
+
+def test_injectable_with_parent_without_init():
+    """
+    Inject dependencies into object which parent doesn't define
+    `__init__`.
+    """
+
+    class Foo(object):
+        pass
+
+    class Bar(Foo):
+        def add(self):
+            return 3
+
+    class Baz(Injector):
+        bar = Bar
+
+    assert Baz.bar.add() == 3
+
+
+# Let notation.
+
+
+def test_let_factory():
+    """
+    `Injector` subclass can produce its own subclasses with `let`
+    factory.
+    """
+
+    class Foo(Injector):
+        pass
+
+    assert issubclass(Foo.let(), Foo)
+
+
+def test_let_factory_overwrite_dependencies():
+    """
+    `Injector.let` produce `Injector` subclass with overwritten
+    dependencies.
+    """
+
+    class Foo(Injector):
+        bar = 1
+
+    assert Foo.let(bar=2).bar == 2
+
+
+def test_let_factory_resolve_not_overwritten_dependencies():
+    """`Injector.let` can resolve dependencies it doesn't touch."""
+
+    class Foo(Injector):
+        bar = 1
+
+    assert Foo.let(baz=2).bar == 1
+
+
+def test_let_factory_on_injector_directly():
+    """
+    Dependencies can be specified with `let` factory applied to
+    `Injector` derectly.
+    """
+
+    class Foo(object):
+        def __init__(self, bar):
+            self.bar = bar
+
+    class Bar(object):
+        def __init__(self, baz):
+            self.baz = baz
+
+    assert Injector.let(foo=Foo, bar=Bar, baz=1).foo.bar.baz == 1
+
+
+# Dir.
+
+
+def test_show_common_class_attributes_with_dir():
+    """`dir` show common class attributes."""
+
+    class Common(object):
+        pass
+
+    class Foo(Injector):
+        pass
+
+    dir(Common) == dir(Foo)
+
+
+def test_show_injected_dependencies_with_dir():
+    """
+    `dir` should show injected dependencies and hide
+    `__dependencies__` container.
+    """
+
+    class Foo(Injector):
+        x = 1
+
+    assert 'x' in dir(Foo)
+    assert '__dependencies__' not in dir(Foo)
+
+
+def test_show_injected_dependencies_with_dir_once():
+    """Do not repeat injected dependencies in the inheritance chain."""
+
+    class Foo(Injector):
+        x = 1
+
+    class Bar(Foo):
+        x = 2
+
+    assert dir(Bar).count('x') == 1
+
+
+def test_show_let_dependencies_with_dir():
+    """`dir` show dependencies injected with `let`."""
+
+    assert 'x' in dir(Injector.let(x=1))
+
+    class Foo(Injector):
+        pass
+
+    assert 'x' in dir(Foo.let(x=1))
+
+
+# Attribute assignment.
+
+
+def test_mutable_injector():
+    """We can extend existed `Injector` by attribute assignment."""
+
+    class Foo(object):
+        def __init__(self, bar):
+            self.bar = bar
+
+    class Bar(object):
+        pass
+
+    class Baz(Injector):
+        pass
+
+    Baz.foo = Foo
+    Baz.bar = Bar
+
+    assert isinstance(Baz.foo, Foo)
+
+
+def test_mutable_injector_let_expression():
+    """
+    We can extend `Injector` created with `let` expression by
+    attribute assignment.
+    """
+
+    class Foo(object):
+        def __init__(self, bar):
+            self.bar = bar
+
+    class Bar(object):
+        pass
+
+    Baz = Injector.let()
+
+    Baz.foo = Foo
+    Baz.bar = Bar
+
+    assert isinstance(Baz.foo, Foo)
+
+
+def test_mutable_injector_deny_to_modify_injector():
+    """Deny to modify `Injector` itself."""
+
+    with pytest.raises(DependencyError) as exc_info:
+        Injector.foo = 1
+
+    assert str(exc_info.value) == "'Injector' modification is not allowed"
+
+
+# Unregister dependency.
+
+
+@pytest.mark.parametrize('code', [
+    # Declarative injector.
+    """
+    class Baz(Injector):
+        foo = Foo
+        bar = Bar
+
+    del Baz.bar
+
+    Baz.foo
+    """,
+    # Let notation.
+    """
+    Baz = Injector.let(foo=Foo, bar=Bar)
+
+    del Baz.bar
+
+    Baz.foo
+    """,
+    # Throw `AttributeError` if someone tries to delete missing
+    # dependency.
+    """
+    del Injector.bar
+    """,
+    # Throw `AttributeError` if someone tries to delete missing
+    # dependency in the `Injector` subclass.
+    """
+    class Baz(Injector):
+        pass
+
+    del Baz.bar
+    """,
+])
+def test_unregister_dependency(code):
+    """We can unregister dependency from `Injector` subclasses."""
+
+    class Foo(object):
+        def __init__(self, bar):
+            self.bar = bar
+
+    class Bar(object):
+        pass
+
+    scope = {'Injector': Injector, 'Foo': Foo, 'Bar': Bar}
+
+    with pytest.raises(AttributeError) as exc_info:
+        exec(dedent(code), scope)
+
+    assert str(exc_info.value) in set([
+        "'Baz' object has no attribute 'bar'",
+        "'Injector' object has no attribute 'bar'",
+    ])
+
+
+def test_unregister_do_not_use_object_constructor():
+    """
+    We shouldn't touch/run object `__init__` during it unregistration.
+    """
+
+    class Foo(object):
+        def __init__(self):
+            raise Exception
+
+    class Bar(Injector):
+        foo = Foo
+
+    del Bar.foo
+
+
+# Deny multiple inheritance.
+
+
 def test_injector_deny_multiple_inheritance():
     """`Injector` may be used in single inheritance only."""
 
@@ -122,6 +492,9 @@ def test_injector_deny_multiple_inheritance():
             pass
 
     assert str(exc_info.value) == 'Multiple inheritance is not allowed'
+
+
+# Deny magic methods.
 
 
 @pytest.mark.parametrize('code', [
@@ -155,6 +528,9 @@ def test_deny_magic_methods_injection(code):
         exec(dedent(code), scope)
 
     assert str(exc_info.value) == 'Magic methods are not allowed'
+
+
+# Raise `AttributeError`.
 
 
 @pytest.mark.parametrize('code', [
@@ -203,6 +579,9 @@ def test_attribute_error(code):
         "'Foo' object has no attribute 'test'",
         "'Injector' object has no attribute 'test'",
     ])
+
+
+# Resolve circle dependencies.
 
 
 @pytest.mark.parametrize('code', [
@@ -400,68 +779,7 @@ def test_complex_circle_dependencies_long_circle(code):
             message.endswith(".Baz'> constructor"))
 
 
-def test_override_keyword_argument_if_dependency_was_specified():
-    """
-    Use specified dependency for constructor keyword arguments if
-    dependency with desired name was mentioned in the injector.
-    """
-
-    class Foo(object):
-        def __init__(self, add, y=1):
-            self.add = add
-            self.y = y
-        def do(self, x):  # noqa: E301
-            return self.add(x, self.y)
-
-    class Summator(Injector):
-        foo = Foo
-        add = lambda x, y: x + y  # noqa: E731
-        y = 2
-
-    assert Summator.foo.do(1) == 3
-
-
-def test_preserve_keyword_argument_if_dependency_was_missed():
-    """
-    Use constructor keyword arguments if dependency with desired name
-    was missed in the injector.
-    """
-
-    class Foo(object):
-        def __init__(self, add, y=1):
-            self.add = add
-            self.y = y
-        def do(self, x):  # noqa: E301
-            return self.add(x, self.y)
-
-    class Summator(Injector):
-        foo = Foo
-        add = lambda x, y: x + y  # noqa: E731
-
-    assert Summator.foo.do(1) == 2
-
-
-def test_preserve_missed_keyword_argument_in_the_middle():
-    """
-    Use default keyword argument and override following keyword
-    argument since it was specified in the constructor.
-    """
-
-    class Foo(object):
-        def __init__(self, x, y=1, z=2):
-            self.x = x
-            self.y = y
-            self.z = z
-
-        def do(self):
-            return self.x + self.y + self.z
-
-    class Container(Injector):
-        foo = Foo
-        x = 5
-        z = 1
-
-    assert Container.foo.do() == 7
+# Deny arbitrary arguments in the injectable constructor.
 
 
 @pytest.mark.parametrize('code', [
@@ -581,95 +899,7 @@ def test_deny_arbitrary_positional_and_keyword_arguments_together(code):
     )
 
 
-def test_injectable_without_its_own_init():
-    """
-    Inject dependencies into object subclass which doesn't specify its
-    own `__init__`.
-    """
-
-    class Foo(object):
-        def do(self):
-            return 1
-
-    class Baz(Injector):
-        foo = Foo
-
-    assert Baz.foo.do() == 1
-
-
-def test_injectable_with_parent_init():
-    """
-    Inject dependencies into object which parent class define
-    `__init__`.
-    """
-
-    class Foo(object):
-        def __init__(self, x, y):
-            self.x = x
-            self.y = y
-
-    class Bar(Foo):
-        def add(self):
-            return self.x + self.y
-
-    class Baz(Injector):
-        bar = Bar
-        x = 1
-        y = 2
-
-    assert Baz.bar.add() == 3
-
-
-def test_injectable_with_parent_without_init():
-    """
-    Inject dependencies into object which parent doesn't define
-    `__init__`.
-    """
-
-    class Foo(object):
-        pass
-
-    class Bar(Foo):
-        def add(self):
-            return 3
-
-    class Baz(Injector):
-        bar = Bar
-
-    assert Baz.bar.add() == 3
-
-
-def test_let_factory():
-    """
-    `Injector` subclass can produce its own subclasses with `let`
-    factory.
-    """
-
-    class Foo(Injector):
-        pass
-
-    assert issubclass(Foo.let(), Foo)
-
-
-def test_let_factory_overwrite_dependencies():
-    """
-    `Injector.let` produce `Injector` subclass with overwritten
-    dependencies.
-    """
-
-    class Foo(Injector):
-        bar = 1
-
-    assert Foo.let(bar=2).bar == 2
-
-
-def test_let_factory_resolve_not_overwritten_dependencies():
-    """`Injector.let` can resolve dependencies it doesn't touch."""
-
-    class Foo(Injector):
-        bar = 1
-
-    assert Foo.let(baz=2).bar == 1
+# Deny to redefine let factory.
 
 
 @pytest.mark.parametrize('code', [
@@ -704,38 +934,7 @@ def test_deny_to_redefine_let_attribute(code):
     assert str(exc_info.value) == "'let' redefinition is not allowed"
 
 
-def test_let_factory_on_injector_directly():
-    """
-    Dependencies can be specified with `let` factory applied to
-    `Injector` derectly.
-    """
-
-    class Foo(object):
-        def __init__(self, bar):
-            self.bar = bar
-
-    class Bar(object):
-        def __init__(self, baz):
-            self.baz = baz
-
-    assert Injector.let(foo=Foo, bar=Bar, baz=1).foo.bar.baz == 1
-
-
-def test_do_not_instantiate_dependencies_ended_with_cls():
-    """
-    Do not call class constructor, if it stored with name ended
-    `_cls`.
-
-    For example, `logger_cls`.
-    """
-
-    class Foo(object):
-        pass
-
-    class Bar(Injector):
-        foo_cls = Foo
-
-    assert inspect.isclass(Bar.foo_cls)
+# Deny `Injector` call.
 
 
 @pytest.mark.parametrize('code', [
@@ -768,175 +967,6 @@ def test_deny_to_instantiate_injector(code):
         exec(dedent(code), scope)
 
     assert str(exc_info.value) == 'Do not instantiate Injector'
-
-
-def test_show_common_class_attributes_with_dir():
-    """`dir` show common class attributes."""
-
-    class Common(object):
-        pass
-
-    class Foo(Injector):
-        pass
-
-    dir(Common) == dir(Foo)
-
-
-def test_show_injected_dependencies_with_dir():
-    """
-    `dir` should show injected dependencies and hide
-    `__dependencies__` container.
-    """
-
-    class Foo(Injector):
-        x = 1
-
-    assert 'x' in dir(Foo)
-    assert '__dependencies__' not in dir(Foo)
-
-
-def test_show_injected_dependencies_with_dir_once():
-    """Do not repeat injected dependencies in the inheritance chain."""
-
-    class Foo(Injector):
-        x = 1
-
-    class Bar(Foo):
-        x = 2
-
-    assert dir(Bar).count('x') == 1
-
-
-def test_show_let_dependencies_with_dir():
-    """`dir` show dependencies injected with `let`."""
-
-    assert 'x' in dir(Injector.let(x=1))
-
-    class Foo(Injector):
-        pass
-
-    assert 'x' in dir(Foo.let(x=1))
-
-
-def test_mutable_injector():
-    """We can extend existed `Injector` by attribute assignment."""
-
-    class Foo(object):
-        def __init__(self, bar):
-            self.bar = bar
-
-    class Bar(object):
-        pass
-
-    class Baz(Injector):
-        pass
-
-    Baz.foo = Foo
-    Baz.bar = Bar
-
-    assert isinstance(Baz.foo, Foo)
-
-
-def test_mutable_injector_let_expression():
-    """
-    We can extend `Injector` created with `let` expression by
-    attribute assignment.
-    """
-
-    class Foo(object):
-        def __init__(self, bar):
-            self.bar = bar
-
-    class Bar(object):
-        pass
-
-    Baz = Injector.let()
-
-    Baz.foo = Foo
-    Baz.bar = Bar
-
-    assert isinstance(Baz.foo, Foo)
-
-
-def test_mutable_injector_deny_to_modify_injector():
-    """Deny to modify `Injector` itself."""
-
-    with pytest.raises(DependencyError) as exc_info:
-        Injector.foo = 1
-
-    assert str(exc_info.value) == "'Injector' modification is not allowed"
-
-
-# Unregister dependency.
-
-
-@pytest.mark.parametrize('code', [
-    # Declarative injector.
-    """
-    class Baz(Injector):
-        foo = Foo
-        bar = Bar
-
-    del Baz.bar
-
-    Baz.foo
-    """,
-    # Let notation.
-    """
-    Baz = Injector.let(foo=Foo, bar=Bar)
-
-    del Baz.bar
-
-    Baz.foo
-    """,
-    # Throw `AttributeError` if someone tries to delete missing
-    # dependency.
-    """
-    del Injector.bar
-    """,
-    # Throw `AttributeError` if someone tries to delete missing
-    # dependency in the `Injector` subclass.
-    """
-    class Baz(Injector):
-        pass
-
-    del Baz.bar
-    """,
-])
-def test_unregister_dependency(code):
-    """We can unregister dependency from `Injector` subclasses."""
-
-    class Foo(object):
-        def __init__(self, bar):
-            self.bar = bar
-
-    class Bar(object):
-        pass
-
-    scope = {'Injector': Injector, 'Foo': Foo, 'Bar': Bar}
-
-    with pytest.raises(AttributeError) as exc_info:
-        exec(dedent(code), scope)
-
-    assert str(exc_info.value) in set([
-        "'Baz' object has no attribute 'bar'",
-        "'Injector' object has no attribute 'bar'",
-    ])
-
-
-def test_unregister_do_not_use_object_constructor():
-    """
-    We shouldn't touch/run object `__init__` during it unregistration.
-    """
-
-    class Foo(object):
-        def __init__(self):
-            raise Exception
-
-    class Bar(Injector):
-        foo = Foo
-
-    del Bar.foo
 
 
 # TODO: deny to remove let from injector
