@@ -178,18 +178,18 @@ def check_varargs(dependency, varargs, kwargs):
 
     if varargs and kwargs:
         raise DependencyError(
-            '{0!r}.__init__ have arbitrary argument list and keyword arguments'
-            .format(dependency)
+            '{0}.__init__ have arbitrary argument list and keyword arguments'
+            .format(dependency.__name__)
         )
     elif varargs:
         raise DependencyError(
-            '{0!r}.__init__ have arbitrary argument list'
-            .format(dependency)
+            '{0}.__init__ have arbitrary argument list'
+            .format(dependency.__name__)
         )
     elif kwargs:
         raise DependencyError(
-            '{0!r}.__init__ have arbitrary keyword arguments'
-            .format(dependency)
+            '{0}.__init__ have arbitrary keyword arguments'
+            .format(dependency.__name__)
         )
 
 

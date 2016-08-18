@@ -808,10 +808,8 @@ def test_deny_arbitrary_argument_list(code):
     with pytest.raises(DependencyError) as exc_info:
         exec(dedent(code), scope)
 
-    assert str(exc_info.value).startswith("<class 'test_dependencies.")
-    assert str(exc_info.value).endswith(
-        "Foo'>.__init__ have arbitrary argument list"
-    )
+    message = str(exc_info.value)
+    assert message == "Foo.__init__ have arbitrary argument list"
 
 
 @pytest.mark.parametrize('code', [
@@ -845,10 +843,8 @@ def test_deny_arbitrary_keyword_arguments(code):
     with pytest.raises(DependencyError) as exc_info:
         exec(dedent(code), scope)
 
-    assert str(exc_info.value).startswith("<class 'test_dependencies.")
-    assert str(exc_info.value).endswith(
-        "Foo'>.__init__ have arbitrary keyword arguments"
-    )
+    message = str(exc_info.value)
+    assert message == "Foo.__init__ have arbitrary keyword arguments"
 
 
 @pytest.mark.parametrize('code', [
@@ -888,9 +884,9 @@ def test_deny_arbitrary_positional_and_keyword_arguments_together(code):
     with pytest.raises(DependencyError) as exc_info:
         exec(dedent(code), scope)
 
-    assert str(exc_info.value).startswith("<class 'test_dependencies.")
-    assert str(exc_info.value).endswith(
-        "Foo'>.__init__ have arbitrary argument list and keyword arguments"
+    message = str(exc_info.value)
+    assert message == (
+        "Foo.__init__ have arbitrary argument list and keyword arguments"
     )
 
 
