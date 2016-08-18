@@ -10,7 +10,6 @@
 
 import inspect
 
-import six
 
 __all__ = ['Injector', 'DependencyError']
 
@@ -19,7 +18,7 @@ class InjectorType(type):
 
     def __new__(cls, class_name, bases, namespace):
 
-        if len(bases) == 0:
+        if not bases:
             namespace['__dependencies__'] = {}
             return type.__new__(cls, class_name, bases, namespace)
 
@@ -108,23 +107,28 @@ class InjectorType(type):
         return attributes
 
 
-class Injector(six.with_metaclass(InjectorType)):
-    """
+def __init__(self, *args, **kwargs):
+
+    raise DependencyError('Do not instantiate Injector')
+
+
+@classmethod
+def let(cls, **kwargs):
+    """Produce new Injector with some dependencies overwritten."""
+
+    return type(cls.__name__, (cls,), kwargs)
+
+
+Injector = InjectorType('Injector', (), {
+    '__init__': __init__,
+    'let': let,
+    '__doc__': """
     Default dependencies specification DSL.
 
     Classes inherited from this class may inject dependencies into
     classes specified in it namespace.
-    """
-
-    def __init__(self, *args, **kwargs):
-
-        raise DependencyError('Do not instantiate Injector')
-
-    @classmethod
-    def let(cls, **kwargs):
-        """Produce new Injector with some dependencies overwritten."""
-
-        return type(cls.__name__, (cls,), kwargs)
+    """,
+})
 
 
 class DependencyError(Exception):

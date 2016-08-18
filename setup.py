@@ -12,7 +12,6 @@ setup(
     author='Artem Malyshev',
     author_email='proofit404@gmail.com',
     py_modules=['dependencies'],
-    install_requires=['six'],
     classifiers=[
         'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
