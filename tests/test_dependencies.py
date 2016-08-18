@@ -518,6 +518,13 @@ def test_injector_deny_multiple_inheritance():
 
     Foo.__eq__ = lambda self, other: False
     """,
+    # Delete attribute.
+    """
+    class Foo(Injector):
+        pass
+
+    del Foo.__init__
+    """,
 ])
 def test_deny_magic_methods_injection(code):
     """`Injector` doesn't accept magic methods."""
