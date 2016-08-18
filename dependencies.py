@@ -144,6 +144,7 @@ def make_dependency_spec(name, dependency):
             args, varargs, kwargs, defaults = argspec
             check_varargs(dependency, varargs, kwargs)
             if defaults is not None:
+                check_cls_arguments(args, defaults)
                 have_defaults = len(args) - len(defaults)
             else:
                 have_defaults = len(args)
@@ -173,6 +174,27 @@ def dunder_name(name):
     """Check if name is dunder method name."""
 
     return name.startswith('__') and name.endswith('__')
+
+
+def check_cls_arguments(argnames, defaults):
+    """
+    Deny classes as default arguments values if argument name doesn't
+    ends with `_cls`.
+    """
+
+    for name, value in zip(reversed(argnames), reversed(defaults)):
+        expect_class = name.endswith('_cls')
+        is_class = inspect.isclass(value)
+        if expect_class and not is_class:
+            raise DependencyError(
+                '{0!r} default value should be a class'
+                .format(name)
+            )
+        if not expect_class and is_class:
+            raise DependencyError(
+                "'foo' argument can not have class as its default value"
+                .format(name)
+            )
 
 
 def check_varargs(dependency, varargs, kwargs):
