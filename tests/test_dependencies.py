@@ -1082,6 +1082,8 @@ def test_deny_non_classes_in_cls_named_arguments(code):
     assert message == "'foo_cls' default value should be a class"
 
 
+# TODO: use `inspect.signature` on Python3.
+#
 # TODO: hide dependencies library KeyError from stack trace
 #
 # TODO: Add decorator based container modification
