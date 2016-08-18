@@ -88,6 +88,8 @@ class InjectorType(type):
 
     def __delattr__(cls, attrname):
 
+        if attrname == 'let':
+            raise DependencyError("'let' redefinition is not allowed")
         if attrname not in cls.__dependencies__:
             raise AttributeError(
                 '{0!r} object has no attribute {1!r}'

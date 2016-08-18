@@ -913,6 +913,10 @@ def test_deny_arbitrary_positional_and_keyword_arguments_together(code):
 
     Foo.let = lambda cls, **kwargs: None
     """,
+    # Delete attribute.
+    """
+    del Injector.let
+    """,
 ])
 def test_deny_to_redefine_let_attribute(code):
     """We can't redefine let attribute in the `Injector` subclasses."""
@@ -960,8 +964,6 @@ def test_deny_to_instantiate_injector(code):
     assert str(exc_info.value) == 'Do not instantiate Injector'
 
 
-# TODO: deny to remove let from injector
-#
 # TODO: hide dependencies library KeyError from stack trace
 #
 # TODO: raise exception if init argument have class as its default
