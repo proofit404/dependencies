@@ -980,14 +980,6 @@ def test_deny_to_instantiate_injector(code):
 #
 # def __init__(self, x_cls=CustomClass) - work as usual
 #
-# TODO: test case below
-#
-# class Container(Injector):
-#     x = CustomClass
-#     x_cls = x
-#
-# What spec should be stored in that case?
-#
 # TODO: Add decorator based container modification
 #
 # class Container(Injector):
