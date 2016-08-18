@@ -623,10 +623,9 @@ def test_circle_dependencies(code):
     with pytest.raises(DependencyError) as exc_info:
         exec(dedent(code), scope)
 
-    assert str(exc_info.value).startswith(
-        "'foo' is a circle dependency in the <class 'test_dependencies."
+    assert str(exc_info.value) == (
+        "'foo' is a circle dependency in the 'Foo' constructor"
     )
-    assert str(exc_info.value).endswith(".Foo'> constructor")
 
 
 @pytest.mark.parametrize('code', [
@@ -694,11 +693,10 @@ def test_complex_circle_dependencies(code):
         exec(dedent(code), scope)
 
     message = str(exc_info.value)
-    assert message.startswith("'foo'") or message.startswith("'bar'")
-    part = " is a circle dependency in the <class 'test_dependencies."
-    assert part in message
-    assert (message.endswith(".Foo'> constructor") or
-            message.endswith(".Bar'> constructor"))
+    assert message in set([
+        "'foo' is a circle dependency in the 'Bar' constructor",
+        "'bar' is a circle dependency in the 'Foo' constructor",
+    ])
 
 
 @pytest.mark.parametrize('code', [
@@ -769,14 +767,11 @@ def test_complex_circle_dependencies_long_circle(code):
         exec(dedent(code), scope)
 
     message = str(exc_info.value)
-    assert (message.startswith("'foo'") or
-            message.startswith("'bar'") or
-            message.startswith("'baz'"))
-    part = " is a circle dependency in the <class 'test_dependencies."
-    assert part in message
-    assert (message.endswith(".Foo'> constructor") or
-            message.endswith(".Bar'> constructor") or
-            message.endswith(".Baz'> constructor"))
+    assert message in set([
+        "'foo' is a circle dependency in the 'Baz' constructor",
+        "'bar' is a circle dependency in the 'Foo' constructor",
+        "'baz' is a circle dependency in the 'Bar' constructor",
+    ])
 
 
 # Deny arbitrary arguments in the injectable constructor.

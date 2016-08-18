@@ -213,7 +213,7 @@ def check_circles_for(dependencies, attrname, origin):
         if origin in args:
             raise DependencyError(
                 '{0!r} is a circle dependency in the {1!r} constructor'
-                .format(origin, attribute)
+                .format(origin, attribute.__name__)
             )
         for name in args:
             check_circles_for(dependencies, name, origin)
