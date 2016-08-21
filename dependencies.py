@@ -171,14 +171,22 @@ else:
         """Make spec for __init__ call."""
 
         signature = inspect.signature(dependency.__init__)
-        args = list(signature.parameters)[1:]
-        params = signature.parameters.values()
-        varargs = any(param.kind is param.VAR_POSITIONAL for param in params)
-        kwargs = any(param.kind is param.VAR_KEYWORD for param in params)
+        parameters = iter(signature.parameters.items())
+        next(parameters)
+        args, defaults = [], []
+        varargs = kwargs = None
+        have_defaults = 1
+        for name, param in parameters:
+            args.append(name)
+            if param.default is not param.empty:
+                defaults.append(param.default)
+            else:
+                have_defaults += 1
+            if param.kind is param.VAR_POSITIONAL:
+                varargs = True
+            if param.kind is param.VAR_KEYWORD:
+                kwargs = True
         check_varargs(dependency, varargs, kwargs)
-        defaults = [param.default for param in params
-                    if param.default is not param.empty]
-        have_defaults = len(params) - len(defaults)
         if defaults:
             check_cls_arguments(args, defaults)
         return args, have_defaults
