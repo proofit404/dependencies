@@ -144,18 +144,44 @@ def make_dependency_spec(name, dependency):
         if use_object_init(dependency):
             return dependency, False
         else:
-            argspec = inspect.getargspec(dependency.__init__)
-            args, varargs, kwargs, defaults = argspec
-            check_varargs(dependency, varargs, kwargs)
-            if defaults is not None:
-                check_cls_arguments(args, defaults)
-                have_defaults = len(args) - len(defaults)
-            else:
-                have_defaults = len(args)
-            spec = args[1:], have_defaults
+            spec = make_init_spec(dependency)
             return dependency, spec
     else:
         return dependency, None
+
+
+try:
+    inspect.signature
+except AttributeError:
+    def make_init_spec(dependency):
+        """Make spec for __init__ call."""
+
+        argspec = inspect.getargspec(dependency.__init__)
+        args, varargs, kwargs, defaults = argspec
+        check_varargs(dependency, varargs, kwargs)
+        if defaults is not None:
+            check_cls_arguments(args, defaults)
+            have_defaults = len(args) - len(defaults)
+        else:
+            have_defaults = len(args)
+        spec = args[1:], have_defaults
+        return spec
+else:
+    def make_init_spec(dependency):
+        """Make spec for __init__ call."""
+
+        signature = inspect.signature(dependency.__init__)
+        args = list(signature.parameters)[1:]
+        params = signature.parameters.values()
+        varargs = any(param.kind is param.VAR_POSITIONAL for param in params)
+        kwargs = any(param.kind is param.VAR_KEYWORD for param in params)
+        check_varargs(dependency, varargs, kwargs)
+        defaults = [param.default for param in params
+                    if param.default is not param.empty]
+        have_defaults = len(params) - len(defaults)
+        if defaults:
+            check_cls_arguments(args, defaults)
+        return args, have_defaults
 
 
 def use_object_init(cls):
