@@ -4,6 +4,16 @@
 Changelog
 ---------
 
+0.11 (2016-08-22)
++++++++++++++++++
+
+- Twelve times speed up.
+- Protect from incorrect operations with attribute assignment.
+- Deny `*args` and `**kwargs` in the injectable classes.
+- Classes can be used as default argument values only if argument name
+  ends with ``_cls``.
+- Remove ``six`` library from install requires.
+
 0.10 (2016-06-09)
 +++++++++++++++++
 
