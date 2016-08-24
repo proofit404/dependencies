@@ -119,9 +119,33 @@ def let(cls, **kwargs):
     return type(cls.__name__, (cls,), kwargs)
 
 
+class Use(object):
+    """
+    Decorator based injector modification.
+
+    Similar to attribute assignment.
+    """
+
+    def __get__(self, obj, objtype):
+
+        class Register(object):
+
+            def __getattr__(self, attrname):
+
+                def register(dependency):
+
+                    spec = make_dependency_spec(attrname, dependency)
+                    objtype.__dependencies__[attrname] = spec
+
+                return register
+
+        return Register()
+
+
 Injector = InjectorType('Injector', (), {
     '__init__': __init__,
     'let': let,
+    'use': Use(),
     '__doc__': """
     Default dependencies specification DSL.
 

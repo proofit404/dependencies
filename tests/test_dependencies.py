@@ -497,6 +497,51 @@ def test_unregister_do_not_use_object_constructor():
     del Bar.foo
 
 
+# Register decorator.
+
+
+def test_use_decorator_inject_class():
+    """We must be allowed to register class with `use` decorator."""
+
+    Container = Injector.let(x=1, y=2)
+
+    @Container.use.foo
+    class Foo(object):
+        def __init__(self, x, y):
+            self.x = x
+            self.y = y
+        def __call__(self):  # noqa: E301
+            return self.x + self.y
+
+    assert Container.foo() == 3
+
+
+def test_use_decorator_inject_function():
+    """We must be allowed to register function with `use` decorator."""
+
+    class Foo(object):
+        def __init__(self, func, x, y):
+            self.func = func
+            self.x = x
+            self.y = y
+        def __call__(self):  # noqa: E301
+            return self.func(self.x, self.y)
+
+    class Container(Injector):
+        foo = Foo
+        x = 1
+        y = 2
+
+    @Container.use.func
+    def add(first, second):
+        return first + second
+
+    assert Container.foo() == 3
+
+
+# TODO: assert decorated objects.
+
+
 # Deny multiple inheritance.
 
 
