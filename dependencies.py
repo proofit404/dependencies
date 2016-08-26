@@ -52,9 +52,8 @@ class InjectorType(type):
 
     def __getattr__(cls, attrname):
 
-        try:
-            attribute_spec = cls.__dependencies__[attrname]
-        except KeyError:
+        attribute_spec = cls.__dependencies__.get(attrname)
+        if attribute_spec is None:
             raise AttributeError(
                 '{0!r} object has no attribute {1!r}'
                 .format(cls.__name__, attrname)
