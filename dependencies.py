@@ -163,7 +163,9 @@ class DependencyError(Exception):
 def make_dependency_spec(name, dependency):
     """Make spec to store dependency in the __dependencies__."""
 
-    if inspect.isclass(dependency) and not name.endswith('_cls'):
+    if inspect.isclass(dependency) and \
+       not name.endswith('_cls') and   \
+       not issubclass(dependency, Injector):
         if use_object_init(dependency):
             return dependency, False
         else:

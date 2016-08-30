@@ -542,6 +542,40 @@ def test_use_decorator_inject_function():
 # TODO: assert decorated objects.
 
 
+# Nested injectors.
+
+
+def test_nested_injectors():
+    """
+    It is possible to use `Injector` subclass as attribute in the
+    another `Injector` subclass.
+    """
+
+    def do_x(a, b): return a + b
+
+    def do_y(c, d): return c * d
+
+    class Call(object):
+        def __init__(self, foo, bar):
+            self.foo = foo
+            self.bar = bar
+        def __call__(self, one, two, three):  # noqa: E301
+            return self.bar.y(self.foo.x(one, two), three)
+
+    class Foo(Injector):
+        x = do_x
+
+    class Bar(Injector):
+        y = do_y
+
+    class Baz(Injector):
+        foo = Foo
+        bar = Bar
+        do = Call
+
+    assert Baz.do(1, 2, 3) == 9
+
+
 # Deny multiple inheritance.
 
 
@@ -1139,9 +1173,3 @@ def test_deny_non_classes_in_cls_named_arguments(code):
 #     def __init__(self, x, y):
 #         self.x = x
 #         self.y = y
-#
-# TODO: Lazy injection marker for nested containers.  For example we
-# have host and port in Database constructor.  We have host and port
-# in the Cache constructor.  It is nice to have the possibility use
-# simple `host` and `port` arguments in each class and specify this as
-# hierarchy in the injector.
