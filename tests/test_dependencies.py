@@ -539,7 +539,28 @@ def test_use_decorator_inject_function():
     assert Container.foo() == 3
 
 
-# TODO: assert decorated objects.
+def test_use_decorator_keep_argument():
+    """
+    Decorated class of function remains unmodified and we can use it
+    as usual.
+    """
+
+    Container = Injector.let()
+
+    @Container.use.foo
+    def x(a, b):
+        return a + b
+
+    @Container.use.bar
+    class Y(object):
+        def __init__(self, a, b):
+            self.a = a
+            self.b = b
+        def do(self):
+            return self.a + self.b
+
+    assert x(1, 2) == 3
+    assert Y(1, 2).do() == 3
 
 
 # Nested injectors.

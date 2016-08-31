@@ -135,6 +135,7 @@ class Use(object):
 
                     spec = make_dependency_spec(attrname, dependency)
                     objtype.__dependencies__[attrname] = spec
+                    return dependency
 
                 return register
 
