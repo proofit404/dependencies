@@ -556,7 +556,7 @@ def test_use_decorator_keep_argument():
         def __init__(self, a, b):
             self.a = a
             self.b = b
-        def do(self):
+        def do(self):  # noqa: E301
             return self.a + self.b
 
     assert x(1, 2) == 3
@@ -644,6 +644,14 @@ def test_injector_deny_multiple_inheritance():
 
     del Foo.__init__
     """,
+    # Use decorator.
+    """
+    Container = Injector.let()
+
+    @Container.use.__eq__
+    def eq(self, other):
+        return False
+    """,
 ])
 def test_deny_magic_methods_injection(code):
     """`Injector` doesn't accept magic methods."""
@@ -692,6 +700,17 @@ def test_deny_magic_methods_injection(code):
 
     Foo.bar
     """,
+    # Use decorator.
+    """
+    Container = Injector.let()
+
+    @Container.use.bar
+    class Bar(object):
+        def __init__(self, test):
+            pass
+
+    Container.bar
+    """,
 ])
 def test_attribute_error(code):
     """Raise attribute error if we can't find dependency."""
@@ -729,6 +748,17 @@ def test_attribute_error(code):
     Summator = Injector.let()
 
     Summator.foo = Foo
+
+    Summator.foo
+    """,
+    # Use decorator.
+    """
+    Summator = Injector.let()
+
+    @Summator.use.foo
+    class Foo(object):
+        def __init__(self, foo):
+            self.foo = foo
 
     Summator.foo
     """,
@@ -791,6 +821,22 @@ def test_circle_dependencies(code):
 
     Summator.foo = Foo
     Summator.bar = Bar
+
+    Summator.foo
+    """,
+    # Use decorator.
+    """
+    Summator = Injector.let()
+
+    @Summator.use.foo
+    class Foo(object):
+        def __init__(self, bar):
+            self.bar = bar
+
+    @Summator.use.bar
+    class Bar(object):
+        def __init__(self, foo):
+            self.foo = foo
 
     Summator.foo
     """,
@@ -868,6 +914,27 @@ def test_complex_circle_dependencies(code):
 
     Summator.foo
     """,
+    # Use decorator.
+    """
+    Summator = Injector.let()
+
+    @Summator.use.foo
+    class Foo(object):
+        def __init__(self, bar):
+            self.bar = bar
+
+    @Summator.use.bar
+    class Bar(object):
+        def __init__(self, baz):
+            self.baz = baz
+
+    @Summator.use.baz
+    class Baz(object):
+        def __init__(self, foo):
+            self.foo = foo
+
+    Summator.foo
+    """,
 ])
 def test_complex_circle_dependencies_long_circle(code):
     """
@@ -921,6 +988,15 @@ def test_complex_circle_dependencies_long_circle(code):
 
     Summator.foo = Foo
     """,
+    # Use decorator.
+    """
+    Summator = Injector.let(args=(1, 2, 3))
+
+    @Summator.use.foo
+    class Foo(object):
+        def __init__(self, *args):
+            self.args = args
+    """,
 ])
 def test_deny_arbitrary_argument_list(code):
     """Raise `DependencyError` if constructor have *args argument."""
@@ -947,7 +1023,7 @@ def test_deny_arbitrary_argument_list(code):
     """,
     # Let notation.
     """
-    Injector.let(foo=Foo, kwargs = {'start': 5})
+    Injector.let(foo=Foo, kwargs={'start': 5})
     """,
     # Attribute assignment.
     """
@@ -955,6 +1031,15 @@ def test_deny_arbitrary_argument_list(code):
         kwargs = {'start': 5}
 
     Summator.foo = Foo
+    """,
+    # Use decorator.
+    """
+    Summator = Injector.let(kwargs={'start': 5})
+
+    @Summator.use.foo
+    class Foo(object):
+        def __init__(self, **kwargs):
+            self.args = args
     """,
 ])
 def test_deny_arbitrary_keyword_arguments(code):
@@ -992,6 +1077,16 @@ def test_deny_arbitrary_keyword_arguments(code):
         kwargs = {'start': 5}
 
     Summator.foo = Foo
+    """,
+    # Use decorator.
+    """
+    Summator = Injector.let(args=(1, 2, 3), kwargs={'start': 5})
+
+    @Summator.use.foo
+    class Foo(object):
+        def __init__(self, *args, **kwargs):
+            self.args = args
+            self.kwargs = kwargs
     """,
 ])
 def test_deny_arbitrary_positional_and_keyword_arguments_together(code):
@@ -1042,6 +1137,14 @@ def test_deny_arbitrary_positional_and_keyword_arguments_together(code):
     # Delete attribute.
     """
     del Injector.let
+    """,
+    # Use decorator.
+    """
+    Summator = Injector.let()
+
+    @Summator.use.let
+    def let(cls, **kwargs):
+        pass
     """,
 ])
 def test_deny_to_redefine_let_attribute(code):
@@ -1121,6 +1224,15 @@ def test_deny_to_instantiate_injector(code):
 
     Container.bar = Bar
     """,
+    # Use decorator.
+    """
+    Container = Injector.let()
+
+    @Container.use.bar
+    class Bar(object):
+        def __init__(self, foo=Foo):
+            self.foo = foo
+    """,
 ])
 def test_deny_classes_as_default_values(code):
     """
@@ -1162,6 +1274,15 @@ def test_deny_classes_as_default_values(code):
 
     Container.bar = Bar
     """,
+    # Use decorator.
+    """
+    Container = Injector.let()
+
+    @Container.use.bar
+    class Bar(object):
+        def __init__(self, foo_cls=1):
+            self.foo_cls = foo_cls
+    """,
 ])
 def test_deny_non_classes_in_cls_named_arguments(code):
     """
@@ -1182,15 +1303,12 @@ def test_deny_non_classes_in_cls_named_arguments(code):
     assert message == "'foo_cls' default value should be a class"
 
 
-# TODO: hide dependencies library KeyError from stack trace
+# TODO: Hide dependencies library KeyError from stack trace
 #
-# TODO: Add decorator based container modification
+# TODO: Document decorator based container modification
 #
-# class Container(Injector):
-#     pass
+# TODO: Parametrize general tests
 #
-# @Container.as.foo
-# class Foo:
-#     def __init__(self, x, y):
-#         self.x = x
-#         self.y = y
+# TODO: Deny to redefine use attribute
+#
+# TODO: Test accessible docstrings and representations.

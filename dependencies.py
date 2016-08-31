@@ -35,11 +35,9 @@ class InjectorType(type):
             except KeyError:
                 pass
 
-        if any(dunder_name(x) for x in namespace):
-            raise DependencyError('Magic methods are not allowed')
-
-        if 'let' in namespace:
-            raise DependencyError("'let' redefinition is not allowed")
+        for x in namespace:
+            check_dunder_name(x)
+            check_let_redefinition(x)
 
         dependencies = {}
         dependencies.update(bases[0].__dependencies__)
@@ -77,19 +75,15 @@ class InjectorType(type):
 
         if cls.__bases__ == (object,):
             raise DependencyError("'Injector' modification is not allowed")
-        if dunder_name(attrname):
-            raise DependencyError('Magic methods are not allowed')
-        if attrname == 'let':
-            raise DependencyError("'let' redefinition is not allowed")
+        check_dunder_name(attrname)
+        check_let_redefinition(attrname)
         cls.__dependencies__[attrname] = make_dependency_spec(attrname, value)
         check_circles(cls.__dependencies__)
 
     def __delattr__(cls, attrname):
 
-        if dunder_name(attrname):
-            raise DependencyError('Magic methods are not allowed')
-        if attrname == 'let':
-            raise DependencyError("'let' redefinition is not allowed")
+        check_dunder_name(attrname)
+        check_let_redefinition(attrname)
         if attrname not in cls.__dependencies__:
             raise AttributeError(
                 '{0!r} object has no attribute {1!r}'
@@ -129,12 +123,15 @@ class Use(object):
 
         class Register(object):
 
-            def __getattr__(self, attrname):
+            def __getattribute__(self, attrname):
 
                 def register(dependency):
 
+                    check_dunder_name(attrname)
+                    check_let_redefinition(attrname)
                     spec = make_dependency_spec(attrname, dependency)
                     objtype.__dependencies__[attrname] = spec
+                    check_circles(objtype.__dependencies__)
                     return dependency
 
                 return register
@@ -234,10 +231,18 @@ def use_object_init(cls):
                 return True
 
 
-def dunder_name(name):
+def check_dunder_name(name):
     """Check if name is dunder method name."""
 
-    return name.startswith('__') and name.endswith('__')
+    if name.startswith('__') and name.endswith('__'):
+        raise DependencyError('Magic methods are not allowed')
+
+
+def check_let_redefinition(name):
+    """Check if name is let attribute."""
+
+    if name == 'let':
+        raise DependencyError("'let' redefinition is not allowed")
 
 
 def check_cls_arguments(argnames, defaults):
