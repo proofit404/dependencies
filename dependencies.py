@@ -112,18 +112,23 @@ def let(cls, **kwargs):
     return type(cls.__name__, (cls,), kwargs)
 
 
-class Use(object):
-    """
+use_doc = """
     Decorator based injector modification.
 
     Similar to attribute assignment.
     """
+
+
+class Use(object):
 
     def __get__(self, obj, objtype):
 
         class Register(object):
 
             def __getattribute__(self, attrname):
+
+                if attrname == '__doc__':
+                    return use_doc
 
                 def register(dependency):
 
@@ -159,7 +164,6 @@ class DependencyError(Exception):
 
 
 def make_dependency_spec(name, dependency):
-    """Make spec to store dependency in the __dependencies__."""
 
     if inspect.isclass(dependency) and \
        not name.endswith('_cls') and   \
@@ -177,7 +181,6 @@ try:
     inspect.signature
 except AttributeError:
     def make_init_spec(dependency):
-        """Make spec for __init__ call."""
 
         argspec = inspect.getargspec(dependency.__init__)
         args, varargs, kwargs, defaults = argspec
@@ -191,7 +194,6 @@ except AttributeError:
         return spec
 else:
     def make_init_spec(dependency):
-        """Make spec for __init__ call."""
 
         signature = inspect.signature(dependency.__init__)
         parameters = iter(signature.parameters.items())
@@ -216,7 +218,6 @@ else:
 
 
 def use_object_init(cls):
-    """Check if cls.__init__ will get us object.__init__."""
 
     if '__init__' in cls.__dict__:
         return False
@@ -232,24 +233,18 @@ def use_object_init(cls):
 
 
 def check_dunder_name(name):
-    """Check if name is dunder method name."""
 
     if name.startswith('__') and name.endswith('__'):
         raise DependencyError('Magic methods are not allowed')
 
 
 def check_let_redefinition(name):
-    """Check if name is let attribute."""
 
     if name == 'let':
         raise DependencyError("'let' redefinition is not allowed")
 
 
 def check_cls_arguments(argnames, defaults):
-    """
-    Deny classes as default arguments values if argument name doesn't
-    ends with `_cls`.
-    """
 
     for name, value in zip(reversed(argnames), reversed(defaults)):
         expect_class = name.endswith('_cls')
@@ -267,10 +262,6 @@ def check_cls_arguments(argnames, defaults):
 
 
 def check_varargs(dependency, varargs, kwargs):
-    """
-    Deny *args and **kwargs in the dependency constructor with proper
-    message.
-    """
 
     if varargs and kwargs:
         raise DependencyError(
@@ -290,14 +281,12 @@ def check_varargs(dependency, varargs, kwargs):
 
 
 def check_circles(dependencies):
-    """Check if dependencies has circles in argument names."""
 
     for depname in dependencies:
         check_circles_for(dependencies, depname, depname)
 
 
 def check_circles_for(dependencies, attrname, origin):
-    """Check circle for one dependency."""
 
     try:
         attribute_spec = dependencies[attrname]

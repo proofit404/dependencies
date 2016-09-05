@@ -597,6 +597,37 @@ def test_nested_injectors():
     assert Baz.do(1, 2, 3) == 9
 
 
+# Docstrings.
+
+
+def test_docstrings():
+    """Check we can access all API entry points documentation."""
+
+    assert Injector.__doc__ == """
+    Default dependencies specification DSL.
+
+    Classes inherited from this class may inject dependencies into
+    classes specified in it namespace.
+    """
+    assert Injector.let.__doc__ == (
+        'Produce new Injector with some dependencies overwritten.'
+    )
+    assert Injector.use.__doc__ == """
+    Decorator based injector modification.
+
+    Similar to attribute assignment.
+    """
+    assert DependencyError.__doc__ == (
+        'Broken dependencies configuration error.'
+    )
+
+    class Foo(Injector):
+        """New container."""
+        pass
+
+    assert Foo.__doc__ == 'New container.'
+
+
 # Deny multiple inheritance.
 
 
@@ -1310,5 +1341,3 @@ def test_deny_non_classes_in_cls_named_arguments(code):
 # TODO: Parametrize general tests
 #
 # TODO: Deny to redefine use attribute
-#
-# TODO: Test accessible docstrings and representations.
