@@ -113,10 +113,10 @@ def let(cls, **kwargs):
 
 
 use_doc = """
-    Decorator based injector modification.
+Decorator based injector modification.
 
-    Similar to attribute assignment.
-    """
+Similar to attribute assignment.
+"""
 
 
 class Use(object):

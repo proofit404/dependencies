@@ -5,7 +5,7 @@ from textwrap import dedent
 
 import pytest
 
-from dependencies import Injector, DependencyError
+from dependencies import Injector, DependencyError, use_doc
 
 
 def test_lambda_dependency():
@@ -612,11 +612,7 @@ def test_docstrings():
     assert Injector.let.__doc__ == (
         'Produce new Injector with some dependencies overwritten.'
     )
-    assert Injector.use.__doc__ == """
-    Decorator based injector modification.
-
-    Similar to attribute assignment.
-    """
+    assert Injector.use.__doc__ == use_doc
     assert DependencyError.__doc__ == (
         'Broken dependencies configuration error.'
     )
