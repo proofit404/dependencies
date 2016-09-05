@@ -259,7 +259,7 @@ def check_cls_arguments(argnames, defaults):
             )
         if not expect_class and is_class:
             raise DependencyError(
-                "'foo' argument can not have class as its default value"
+                "{0!r} argument can not have class as its default value"
                 .format(name)
             )
 
