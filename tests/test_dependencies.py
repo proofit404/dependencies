@@ -1185,6 +1185,53 @@ def test_deny_to_redefine_let_attribute(code):
     assert str(exc_info.value) == "'let' redefinition is not allowed"
 
 
+# Deny to redefine use attribute.
+
+
+@pytest.mark.parametrize('code', [
+    # Declarative injector.
+    """
+    class Foo(Injector):
+        use = 2
+    """,
+    # Let notation.
+    """
+    class Foo(Injector):
+        pass
+
+    Foo.let(use=1)
+    """,
+    # Attribute assignment.
+    """
+    class Foo(Injector):
+        pass
+
+    Foo.use = 2
+    """,
+    # Delete attribute.
+    """
+    del Injector.use
+    """,
+    # Use decorator.
+    """
+    Summator = Injector.let()
+
+    @Summator.use.use
+    def use():
+        pass
+    """,
+])
+def test_deny_to_redefine_use_attribute(code):
+    """We can't redefine `use` attribute in the `Injector` subclasses."""
+
+    scope = {'Injector': Injector}
+
+    with pytest.raises(DependencyError) as exc_info:
+        exec(dedent(code), scope)
+
+    assert str(exc_info.value) == "'use' redefinition is not allowed"
+
+
 # Deny `Injector` call.
 
 
@@ -1330,10 +1377,6 @@ def test_deny_non_classes_in_cls_named_arguments(code):
     assert message == "'foo_cls' default value should be a class"
 
 
-# TODO: Hide dependencies library KeyError from stack trace
-#
 # TODO: Document decorator based container modification
 #
 # TODO: Parametrize general tests
-#
-# TODO: Deny to redefine use attribute

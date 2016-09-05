@@ -37,7 +37,7 @@ class InjectorType(type):
 
         for x in namespace:
             check_dunder_name(x)
-            check_let_redefinition(x)
+            check_attrs_redefinition(x)
 
         dependencies = {}
         dependencies.update(bases[0].__dependencies__)
@@ -76,14 +76,14 @@ class InjectorType(type):
         if cls.__bases__ == (object,):
             raise DependencyError("'Injector' modification is not allowed")
         check_dunder_name(attrname)
-        check_let_redefinition(attrname)
+        check_attrs_redefinition(attrname)
         cls.__dependencies__[attrname] = make_dependency_spec(attrname, value)
         check_circles(cls.__dependencies__)
 
     def __delattr__(cls, attrname):
 
         check_dunder_name(attrname)
-        check_let_redefinition(attrname)
+        check_attrs_redefinition(attrname)
         if attrname not in cls.__dependencies__:
             raise AttributeError(
                 '{0!r} object has no attribute {1!r}'
@@ -133,7 +133,7 @@ class Use(object):
                 def register(dependency):
 
                     check_dunder_name(attrname)
-                    check_let_redefinition(attrname)
+                    check_attrs_redefinition(attrname)
                     spec = make_dependency_spec(attrname, dependency)
                     objtype.__dependencies__[attrname] = spec
                     check_circles(objtype.__dependencies__)
@@ -238,10 +238,13 @@ def check_dunder_name(name):
         raise DependencyError('Magic methods are not allowed')
 
 
-def check_let_redefinition(name):
+def check_attrs_redefinition(name):
 
-    if name == 'let':
-        raise DependencyError("'let' redefinition is not allowed")
+    for attr in ['let', 'use']:
+        if name == attr:
+            raise DependencyError(
+                '{0!r} redefinition is not allowed'.format(attr)
+            )
 
 
 def check_cls_arguments(argnames, defaults):
