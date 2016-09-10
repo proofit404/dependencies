@@ -180,8 +180,7 @@ def test_preserve_missed_keyword_argument_in_the_middle():
             self.x = x
             self.y = y
             self.z = z
-
-        def do(self):
+        def do(self):  # noqa: E301
             return self.x + self.y + self.z
 
     class Container(Injector):
