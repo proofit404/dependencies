@@ -1377,5 +1377,3 @@ def test_deny_non_classes_in_cls_named_arguments(code):
 
 
 # TODO: Document decorator based container modification
-#
-# TODO: Parametrize general tests
