@@ -334,7 +334,7 @@ def test_show_common_class_attributes_with_dir():
     class Foo(Injector):
         pass
 
-    dir(Common) == dir(Foo)
+    assert dir(Common) + ['let', 'use'] == dir(Foo)
 
 
 def test_show_injected_dependencies_with_dir():
