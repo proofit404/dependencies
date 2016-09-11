@@ -1377,3 +1377,11 @@ def test_deny_non_classes_in_cls_named_arguments(code):
 
 
 # TODO: Document decorator based container modification
+#
+# TODO: Evaluate dependencies ones for each attribute access
+#
+# For example, we have `Container` which consists from A, B, C, D.  Each
+# of this dependencies is a class.  A depends on B and C, B and C
+# depends on D.  When we write `Container.a` we need evaluate D only
+# once!  `a.b.d` and `a.c.d` must be the same object.  But when we
+# type `Container.a` second time, D must be evaluated one more time.
