@@ -21,55 +21,73 @@ class InjectorType(type):
         if not bases:
             namespace['__dependencies__'] = {}
             return type.__new__(cls, class_name, bases, namespace)
-
         if len(bases) > 1:
             raise DependencyError(
                 'Multiple inheritance is not allowed'
             )
-
         ns = {}
-
         for attr in ('__module__', '__doc__', '__weakref__', '__qualname__'):
             try:
                 ns[attr] = namespace.pop(attr)
             except KeyError:
                 pass
-
         for x in namespace:
             check_dunder_name(x)
             check_attrs_redefinition(x)
-
         dependencies = {}
         dependencies.update(bases[0].__dependencies__)
         for name, dep in namespace.items():
             dependencies[name] = make_dependency_spec(name, dep)
         check_circles(dependencies)
         ns['__dependencies__'] = dependencies
-
         return type.__new__(cls, class_name, bases, ns)
 
     def __getattr__(cls, attrname):
 
-        attribute_spec = cls.__dependencies__.get(attrname)
-        if attribute_spec is None:
-            raise AttributeError(
-                '{0!r} object has no attribute {1!r}'
-                .format(cls.__name__, attrname)
-            )
-        attribute, argspec = attribute_spec
-        if argspec is None:
-            return attribute
-        if argspec is False:
-            return attribute()
-        args, have_defaults = argspec
-        kwargs = {}
-        for n, arg in enumerate(args, 1):
-            try:
-                kwargs[arg] = getattr(cls, arg)
-            except AttributeError:
-                if n < have_defaults:
-                    raise
-        return attribute(**kwargs)
+        cache, cached, current_attr, have_default = {}, set(), attrname, False
+        # FIXME: remove redundant iteration here
+        while attrname not in cache:
+            attribute_spec = cls.__dependencies__.get(current_attr)
+            if attribute_spec is None:
+                if have_default:
+                    cached.add(current_attr)
+                    current_attr = attrname
+                    have_default = False
+                    continue
+                raise AttributeError(
+                    '{0!r} object has no attribute {1!r}'
+                    .format(cls.__name__, current_attr)
+                )
+            attribute, argspec = attribute_spec
+            if argspec is None:
+                cache[current_attr] = attribute
+                cached.add(current_attr)
+                current_attr = attrname
+                have_default = False
+                continue
+            if argspec is False:
+                cache[current_attr] = attribute()
+                cached.add(current_attr)
+                current_attr = attrname
+                have_default = False
+                continue
+            args, have_defaults = argspec
+            if set(args).issubset(cached):
+                kwargs = dict((k, cache[k]) for k in args if k in cache)
+                cache[current_attr] = attribute(**kwargs)
+                cached.add(current_attr)
+                current_attr = attrname
+                have_default = False
+                continue
+            for n, arg in enumerate(args, 1):
+                if arg not in cached:
+                    current_attr = arg
+                    have_default = False if n < have_defaults else True
+                    break
+            else:
+                current_attr = attrname
+                have_default = False
+        return cache[attrname]
 
     def __setattr__(cls, attrname, value):
 

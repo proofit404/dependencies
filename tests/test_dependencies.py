@@ -623,6 +623,62 @@ def test_docstrings():
     assert Foo.__doc__ == 'New container.'
 
 
+# Evaluate classes once.
+
+
+@pytest.mark.parametrize('code', [
+    # Each dependency evaluated once during injection.
+    """
+    class Container(Injector):
+        a = A
+        b = B
+        c = C
+        d = D
+
+    x = Container.a
+    assert x.b.d is x.c.d
+    """,
+    # We reevaluate each dependency for different injections.
+    """
+    class Container(Injector):
+        a = A
+        b = B
+        c = C
+        d = D
+
+    assert Container.a.b.d is not Container.a.b.d
+    assert Container.a.b.d is not Container.a.c.d
+    """,
+])
+def test_evaluate_dependencies_once(code):
+    """
+    Evaluate each node in the dependencies graph once.
+
+    For some reason we can't pass `Container` class into exec scope on
+    Python2.6, because of some reference error.
+    """
+
+    class A(object):
+        def __init__(self, b, c):
+            self.b = b
+            self.c = c
+
+    class B(object):
+        def __init__(self, d):
+            self.d = d
+
+    class C(object):
+        def __init__(self, d):
+            self.d = d
+
+    class D(object):
+        pass
+
+    scope = {'Injector': Injector, 'A': A, 'B': B, 'C': C, 'D': D}
+
+    exec(dedent(code), scope)
+
+
 # Deny multiple inheritance.
 
 
@@ -1378,10 +1434,4 @@ def test_deny_non_classes_in_cls_named_arguments(code):
 
 # TODO: Document decorator based container modification
 #
-# TODO: Evaluate dependencies ones for each attribute access
-#
-# For example, we have `Container` which consists from A, B, C, D.  Each
-# of this dependencies is a class.  A depends on B and C, B and C
-# depends on D.  When we write `Container.a` we need evaluate D only
-# once!  `a.b.d` and `a.c.d` must be the same object.  But when we
-# type `Container.a` second time, D must be evaluated one more time.
+# TODO: Document evaluation ones principle
