@@ -237,17 +237,11 @@ else:
 
 def use_object_init(cls):
 
-    if '__init__' in cls.__dict__:
-        return False
-    else:
-        if cls.__bases__ == (object,):
+    for base in cls.__mro__:
+        if base is object:
             return True
-        else:
-            for base in cls.__bases__:
-                if not use_object_init(base):
-                    return False
-            else:
-                return True
+        elif '__init__' in base.__dict__:
+            return False
 
 
 def check_dunder_name(name):
