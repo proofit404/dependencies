@@ -742,6 +742,50 @@ def test_multiple_inheritance(code):
 @pytest.mark.parametrize('code', [
     # Inheritance.
     """
+    class Foo(Container1, Container2, Container3):
+        pass
+
+    assert Foo.x == 1
+    """,
+    # Inheritance with own attributes.
+    """
+    class Foo(Container1, Container2, Container3):
+        x = 4
+
+    assert Foo.x == 4
+    """,
+    # Inplace creation.
+    """
+    assert (Container1 & Container2 & Container3).x == 1
+    """,
+])
+def test_multiple_inheritance_injectors_order(code):
+    """
+    `Injector` which comes first in the subclass bases or inplace
+    creation must have higher precedence.
+    """
+
+    class Container1(Injector):
+        x = 1
+
+    class Container2(Injector):
+        x = 2
+
+    class Container3(Injector):
+        x = 3
+
+    scope = {
+        'Container1': Container1,
+        'Container2': Container2,
+        'Container3': Container3,
+    }
+
+    exec(dedent(code), scope)
+
+
+@pytest.mark.parametrize('code', [
+    # Inheritance.
+    """
     class Foo(Injector, Foo):
         pass
     """,

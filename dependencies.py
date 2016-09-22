@@ -32,7 +32,7 @@ class InjectorType(type):
             check_dunder_name(x)
             check_attrs_redefinition(x)
         dependencies = {}
-        for base in bases:
+        for base in reversed(bases):
             dependencies.update(base.__dependencies__)
         for name, dep in namespace.items():
             dependencies[name] = make_dependency_spec(name, dep)
