@@ -21,10 +21,7 @@ class InjectorType(type):
         if not bases:
             namespace['__dependencies__'] = {}
             return type.__new__(cls, class_name, bases, namespace)
-        if len(bases) > 1:
-            raise DependencyError(
-                'Multiple inheritance is not allowed'
-            )
+        check_inheritance(bases)
         ns = {}
         for attr in ('__module__', '__doc__', '__weakref__', '__qualname__'):
             try:
@@ -35,7 +32,8 @@ class InjectorType(type):
             check_dunder_name(x)
             check_attrs_redefinition(x)
         dependencies = {}
-        dependencies.update(bases[0].__dependencies__)
+        for base in bases:
+            dependencies.update(base.__dependencies__)
         for name, dep in namespace.items():
             dependencies[name] = make_dependency_spec(name, dep)
         check_circles(dependencies)
@@ -108,6 +106,10 @@ class InjectorType(type):
                 .format(cls.__name__, attrname)
             )
         del cls.__dependencies__[attrname]
+
+    def __and__(cls, other):
+
+        return type(cls.__name__, (cls, other), {})
 
     def __dir__(cls):
 
@@ -242,6 +244,15 @@ def use_object_init(cls):
             return True
         elif '__init__' in base.__dict__:
             return False
+
+
+def check_inheritance(bases):
+
+    for base in bases:
+        if not issubclass(base, Injector):
+            raise DependencyError(
+                'Multiple inheritance is allowed for Injector subclasses only'
+            )
 
 
 def check_dunder_name(name):

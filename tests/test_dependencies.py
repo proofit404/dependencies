@@ -679,20 +679,94 @@ def test_evaluate_dependencies_once(code):
     exec(dedent(code), scope)
 
 
-# Deny multiple inheritance.
+# Multiple inheritance.
 
 
-def test_injector_deny_multiple_inheritance():
-    """`Injector` may be used in single inheritance only."""
+@pytest.mark.parametrize('code', [
+    # Inheritance.
+    """
+    class FooContainer(Injector):
+        foo = Foo
+
+    class BarContainer(Injector):
+        bar = Bar
+
+    class BazContainer(Injector):
+        baz = Baz
+
+    class Container(FooContainer, BarContainer, BazContainer):
+        pass
+
+    assert isinstance(Container.baz.bar.foo, Foo)
+    """,
+    # Inplace creation.
+    """
+    class FooContainer(Injector):
+        foo = Foo
+
+    class BarContainer(Injector):
+        bar = Bar
+
+    class BazContainer(Injector):
+        baz = Baz
+
+    assert isinstance(
+        (FooContainer & BarContainer & BazContainer).baz.bar.foo,
+        Foo,
+    )
+    """,
+])
+def test_multiple_inheritance(code):
+    """
+    We can mix injector together.
+
+    We can't define injectors inside test function because of Python2.6
+    """
 
     class Foo(object):
         pass
 
-    with pytest.raises(DependencyError) as exc_info:
-        class Foo(Injector, Foo):
-            pass
+    class Bar(object):
+        def __init__(self, foo):
+            self.foo = foo
 
-    assert str(exc_info.value) == 'Multiple inheritance is not allowed'
+    class Baz(object):
+        def __init__(self, bar):
+            self.bar = bar
+
+    scope = {'Injector': Injector, 'Foo': Foo, 'Bar': Bar, 'Baz': Baz}
+
+    exec(dedent(code), scope)
+
+
+@pytest.mark.parametrize('code', [
+    # Inheritance.
+    """
+    class Foo(Injector, Foo):
+        pass
+    """,
+    # Inplace creation.
+    """
+    Injector & Foo
+    """,
+])
+def test_multiple_inheritance_deny_regular_classes(code):
+    """
+    We can't use classes in multiple inheritance which are not
+    `Injector` subclasses.
+    """
+
+    class Foo(object):
+        pass
+
+    scope = {'Injector': Injector, 'Foo': Foo}
+
+    with pytest.raises(DependencyError) as exc_info:
+        exec(dedent(code), scope)
+
+    assert str(exc_info.value) == (
+        'Multiple inheritance is allowed for Injector subclasses only'
+    )
 
 
 # Deny magic methods.
