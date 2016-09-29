@@ -9,13 +9,12 @@ this dependencies.
 
 .. code:: python
 
-    class Robot:
-
-        def __init__(self, servo, controller, settings)
-
-            self.servo = servo
-            self.controller = controller
-            self.settings = settings
+    >>> class Robot:
+    ...     def __init__(self, servo, controller, settings)
+    ...         self.servo = servo
+    ...         self.controller = controller
+    ...         self.settings = settings
+    ...
 
 We use constructor based dependency injection.  We define necessary
 arguments and store it explicitly.  We do this for readability.  This
@@ -29,56 +28,48 @@ So lets add some behavior to your robot.
 
 .. code:: python
 
-    def run(self):
-
-        while True:
-            events = self.accept_events()
-            self.process(events)
-
-    def accept_events(self):
-
-        return self.controller()  # We can inject methods.
-
-    def process(self, events):
-
-        max_point = self.settings['max_point']  # Dictionaries.
-        for event in events:
-            if event.x > max_point:
-                self.servo.reverse('x')  # And objects.
-            if event.y > max_point:
-                self.servo.reverse('y')
+    >>> def run(self):
+    ...     while True:
+    ...         events = self.accept_events()
+    ...         self.process(events)
+    ...
+    >>> def accept_events(self):
+    ...     return self.controller()  # We can inject methods.
+    ...
+    >>> def process(self, events):
+    ...     max_point = self.settings['max_point']  # Dictionaries.
+    ...     for event in events:
+    ...         if event.x > max_point:
+    ...             self.servo.reverse('x')  # And objects.
+    ...         if event.y > max_point:
+    ...             self.servo.reverse('y')
 
 Now its time to make it work in real world
 
 .. code:: python
 
-    class MechanicalMotor:
-
-        def reverse(self, coordinate):
-
-            # Hardware work goes here.
-
-    def read_sensor():
-
-        # Another hardware work goes here.
-
-    production = {'max_point': 0.01}
+    >>> class MechanicalMotor:
+    ...     def reverse(self, coordinate):
+    ...         # Hardware work goes here.
+    ...
+    >>> def read_sensor():
+    ...     # Another hardware work goes here.
+    ...
+    >>> production = {'max_point': 0.01}
 
 So we are close to scream "It's alive!" and run out of the building.
 
 .. code:: python
 
-    from dependencies import Injector
-
-    class Container(Injector):
-
-        robot = Robot
-        servo = MechanicalMotor
-        controller = read_sensor
-        settings = production
-
-    robot = Container.robot  # Robots' constructor called here.
-    robot.run()
+    >>> from dependencies import Injector
+    >>> class Container(Injector):
+    ...     robot = Robot
+    ...     servo = MechanicalMotor
+    ...     controller = read_sensor
+    ...     settings = production
+    ...
+    >>> robot = Container.robot  # Robots' constructor called here.
+    >>> robot.run()
 
 Congratulations!  We build our robot with dependency injection.
 
@@ -155,13 +146,13 @@ the scope subclasses:
 
 .. code:: python
 
-    class Scope(Injector):
-        foo = Foo
-
-    class ChildScope(Scope):
-        bar = Bar
-
-    ChildScope.foo
+    >>> class Scope(Injector):
+    ...     foo = Foo
+    ...
+    >>> class ChildScope(Scope):
+    ...     bar = Bar
+    ...
+    >>> ChildScope.foo
 
 ``let`` notation
 ++++++++++++++++
@@ -174,18 +165,18 @@ access.
 
 .. code:: python
 
-    class Scope(Injector):
-        foo = Foo
-        bar = Bar
-
-    Scope.let(bar=Baz).foo
+    >>> class Scope(Injector):
+    ...     foo = Foo
+    ...     bar = Bar
+    ...
+    >>> Scope.let(bar=Baz).foo
 
 It is possible to build dependency scopes directly from dictionaries
 using ``let`` notation.
 
 .. code:: python
 
-    Scope = Injector.let(foo=Foo, bar=Bar, **settings)
+    >>> Scope = Injector.let(foo=Foo, bar=Bar, **settings)
 
 Changing scope
 --------------
