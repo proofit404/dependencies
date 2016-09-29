@@ -159,6 +159,42 @@ one injection process.  New attribute access - new object.
     >>> Container.bar.x is Container.bar.x
     False
 
+It is possible to inject ``Injector`` it self.  ``Injector``
+subclasses provided as is and calculate its attributes on first use.
+
+.. code:: python
+
+    >>> from dependencies import Injector
+    >>> class Container(Injector):
+    ...     class Foo:
+    ...         def __init__(self, bar):
+    ...             self.bar = bar
+    ...         def __call__(self):
+    ...             return self.bar.baz()
+    ...     class Bar(Injector):
+    ...         class Baz:
+    ...             def __init__(self, func):
+    ...                 self.func = func
+    ...             def __call__(self):
+    ...                 return self.func()
+    ...         def func():
+    ...             return 1
+    ...         # Names.
+    ...         baz = Baz
+    ...     # Names.
+    ...     foo, bar = Foo, Bar
+    ...
+    >>> Container.foo()
+    1
+    >>> Container.foo.bar
+    <class '__main__.Container.Bar'>
+    >>> Container.foo.bar.baz
+    <__main__.Container.Bar.Baz object at 0x7ffff610c390>
+    >>> Container.foo.bar.baz.func
+    <function Container.Bar.func at 0x7ffff61129d8>
+    >>> Container.foo.bar.baz.func()
+    1
+
 Scope extension
 ---------------
 
