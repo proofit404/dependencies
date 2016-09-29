@@ -1550,6 +1550,4 @@ def test_deny_non_classes_in_cls_named_arguments(code):
     assert message == "'foo_cls' default value should be a class"
 
 
-# TODO: Document decorator based container modification
-#
 # TODO: Document evaluation ones principle

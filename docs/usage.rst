@@ -204,6 +204,32 @@ existed scope and can replace already specified dependencies.
     >>> Scope.foo
     <__main__.Y object at 0x7f50445f2cc0>
 
+``use`` decorator
++++++++++++++++++
+
+It is possible to modify containers with ``use`` decorator.  Decorated
+classes and functions will be part of the container.  Dependencies
+names are specified by attribute name of ``use`` decorator.  Decorated
+targets stays unchanged and can be used in a regular way.
+
+.. code:: python
+
+    >>> from dependencies import Injector
+    >>> Container = Injector.let()
+    >>> @Container.use.foo
+    ... class Foo:
+    ...     def __init__(self, x):
+    ...         self.x = x
+    ...     def __call__(self):
+    ...         return self.x()
+    ...
+    >>> @Container.use.x
+    ... def bar():
+    ...     return 1
+    ...
+    >>> Container.foo()
+    1
+
 Dependency cancellation
 +++++++++++++++++++++++
 
