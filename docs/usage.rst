@@ -128,6 +128,9 @@ is a class - so we need to instantiate it too.  We search for
 dependency named ``x`` and find ``1``.  We build ``Baz`` instance then
 use it to build ``Foo`` instance.
 
+Calculation rules
++++++++++++++++++
+
 Each dependency evaluates once during injection process.  If during
 dependency injection different classes have constructor argument with
 same name, it will be one object.  But this objects lives only during
@@ -158,6 +161,9 @@ one injection process.  New attribute access - new object.
     True
     >>> Container.bar.x is Container.bar.x
     False
+
+Nested ``Injectors``
+++++++++++++++++++++
 
 It is possible to inject ``Injector`` it self.  ``Injector``
 subclasses provided as is and calculate its attributes on first use.
