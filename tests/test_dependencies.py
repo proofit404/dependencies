@@ -1548,6 +1548,3 @@ def test_deny_non_classes_in_cls_named_arguments(code):
 
     message = str(exc_info.value)
     assert message == "'foo_cls' default value should be a class"
-
-
-# TODO: Document evaluation ones principle

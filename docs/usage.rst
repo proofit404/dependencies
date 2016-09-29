@@ -128,6 +128,37 @@ is a class - so we need to instantiate it too.  We search for
 dependency named ``x`` and find ``1``.  We build ``Baz`` instance then
 use it to build ``Foo`` instance.
 
+Each dependency evaluates once during injection process.  If during
+dependency injection different classes have constructor argument with
+same name, it will be one object.  But this objects lives only during
+one injection process.  New attribute access - new object.
+
+.. code:: python
+
+    >>> from dependencies import Injector
+    >>> class Container(Injector):
+    ...     class Foo:
+    ...         def __init__(self, bar, baz):
+    ...             self.bar = bar
+    ...             self.baz = baz
+    ...         def check(self):
+    ...             return self.bar.x is self.baz.x
+    ...     class Bar:
+    ...         def __init__(self, x):
+    ...             self.x = x
+    ...     class Baz:
+    ...         def __init__(self, x):
+    ...             self.x = x
+    ...     class X:
+    ...         pass
+    ...     # Names.
+    ...     foo, bar, baz, x = Foo, Bar, Baz, X
+    ...
+    >>> Container.foo.check()
+    True
+    >>> Container.bar.x is Container.bar.x
+    False
+
 Scope extension
 ---------------
 
