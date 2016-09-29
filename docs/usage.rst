@@ -227,6 +227,35 @@ the scope subclasses:
     ...
     >>> ChildScope.foo
 
+Multiple inheritance is allowed as well.
+
+.. code:: python
+
+    >>> class Scope1(Injector):
+    ...     foo = Foo
+    ...
+    >>> class Scope2(Injector):
+    ...     bar = Bar
+    ...
+    >>> class ChildScope(Scope1, Scope2):
+    ...     pass
+    ...
+    >>> ChildScope.foo
+
+Also we provide ``and`` notation for inplace ``Injector``
+composition.  Example below is full equivalent to the previous one
+without intermediate class needed.
+
+.. code:: python
+
+    >>> class Scope1(Injector):
+    ...     foo = Foo
+    ...
+    >>> class Scope2(Injector):
+    ...     bar = Bar
+    ...
+    >>> (Scope1 & Scope2).foo
+
 ``let`` notation
 ++++++++++++++++
 
