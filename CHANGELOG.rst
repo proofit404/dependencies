@@ -4,6 +4,14 @@
 Changelog
 ---------
 
+0.12 (2016-09-29)
++++++++++++++++++
+
+- Allow multiple inheritance for Injector subclasses.
+- Evaluate dependencies once.
+- Add ``use`` decorator.
+- Allow nested injectors.
+
 0.11 (2016-08-22)
 +++++++++++++++++
 
