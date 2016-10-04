@@ -50,7 +50,7 @@ Contents
     :maxdepth: 2
 
     installation
-    usage
+    reference
 
 Indices and tables
 ==================
