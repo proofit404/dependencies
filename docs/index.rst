@@ -3,8 +3,8 @@ Dependencies
 
 Dependency Injection for Humans.
 
-Dependency Injection (or simply DI) is great technique.  You can
-organize responsibilities in you code base.  Define high level
+Dependency Injection (or simply DI) is great technique.  By using it
+you can organize responsibilities in you code base.  Define high level
 policies and system behavior in one part.  Delegate control to low
 level mechanisms from different part.  Simple and powerful.
 
