@@ -50,6 +50,7 @@ Contents
     :maxdepth: 2
 
     installation
+    tutorial
     reference
 
 Indices and tables
