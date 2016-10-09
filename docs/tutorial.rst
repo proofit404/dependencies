@@ -172,7 +172,8 @@ partner that we want to pass to the first partner.
 
     processors.add(SecondPartnerProcessor)
 
-    class SecondToFirstPartnerProcessor(SecondPartnerProcessor, PartnerProcessor):
+    class SecondToFirstPartnerProcessor(SecondPartnerProcessor,
+                                        PartnerProcessor):
 
         def appropriate_order(self, order):
 
@@ -226,4 +227,57 @@ looks like it do something else until you realize it was overwritten
 in the upper class.  Your awesome IDE can't get you this information
 since ``DeliveryInstructionsMixin`` method usage is outside of
 ``SecondToFirstPartnerProcessor`` context.  It's hard to work with
-this code.
+this code.  I need to open each mixin next to each other and literally
+draw execution path on my screen.
+
+Composition
+-----------
+
+We can write this blocks outside of mixins.
+
+.. code:: python
+
+    from dependencies import Injector
+
+    class SecondToFirstPartner(Injector):
+
+        processor = Processor
+        storage = APIStorage
+        instructions = DeliveryRules
+        is_appropriate = FromSecondToFirstPartner
+
+    processor.add(SecondToFirstPartner.processor)
+
+At first look it is not a big difference from mixins example.  But
+lets try to understand what this code doing.  Since we clearly see
+that key object here is ``Processor`` instance given from the
+``SecondToFirstPartner`` attribute.  Lets open this class and read its
+code:
+
+.. code:: python
+
+    class Processor(OrderProcessor):
+
+        def __init__(self, is_appropriate, instructions, storage):
+
+            self.is_appropriate = is_appropriate
+            self.instructions = instructions
+            self.storage = storage
+
+        def process(self, order):
+
+            assert 'some field' in order
+            if self.is_appropriate(order):
+                instructions = self.instructions(order)
+                self.storage.save(instructions)
+
+It is absolutely clean what this class doing.  And this code have some
+great possibilities for behavior extension and code reuse, which are
+not accessible with mixins.
+
+- Explicit separation of "who uses who".  It's easy to track how and
+  where something was defined.
+- Explicit separation of "who does what".  We don't have long flat
+  list of methods for all kinds of stuff.  We have hierarchy.
+- It is much easier to substitute parts of our system with another
+  one.  Al you need is to write another ``Injector``.
