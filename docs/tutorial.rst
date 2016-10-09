@@ -73,9 +73,9 @@ Now we are able to write integration part for our partner's system:
             for params in order.items:
                 requests.post(self.api_endpoint, **params)
 
-Customer's delivery department needs more detailed instructions that
+Partner's delivery department needs more detailed instructions that
 ours.  We need a special place in our codebase where we can write this
-additional behavior for our customer.  We need to extend ``Processor``
+additional behavior for our partner.  We need to extend ``Processor``
 class API one more time.  Also we need to change some methods
 signatures so they can work with this new data flow.
 
@@ -111,7 +111,7 @@ subclasses:
         ...
 
 Now we need to figure out what orders are processed ourselves and what
-orders are processed by our customer.  Yep, we will add more methods
+orders are processed by our partner.  Yep, we will add more methods
 to your classes.  Lets say we will look at the order content.  Then we
 send a signal to our frame work if we want to skip this processor and
 try another one.  This logic make sense only for ``PartnerProcessor``
@@ -148,3 +148,82 @@ class to have this ability.  Our classes becomes to look like that:
 
     # Finally we can use our subclass.
     processors.add(PartnerProcessor)
+
+Now we have two classes defining different parts of system behavior.
+Thanks to our tireless refactoring our service now have even more
+customers.  One customer was so happy by using our product, that he
+decide to become our partner.  He wants process some of his orders by
+our executives because it's chipper to him.  And some of this orders
+are perfect candidates to be processed by our first partner in his
+order processing system.  You get it.
+
+We need add more behavior to our system.  One class for regular orders,
+which comes from second partner.  One class for orders from second
+partner that we want to pass to the first partner.
+
+.. code:: python
+
+    class SecondPartnerProcessor(Processor):
+
+        def appropriate_order(self, order):
+
+            if 'second_partner_flag' not in order:
+                raise SkipThisProcessor
+
+    processors.add(SecondPartnerProcessor)
+
+    class SecondToFirstPartnerProcessor(SecondPartnerProcessor, PartnerProcessor):
+
+        def appropriate_order(self, order):
+
+            super().appropriate_order(order)
+            super(SecondPartnerProcessor, self).appropriate_order(order)
+
+    processors.add(SecondToFirstPartnerProcessor)
+
+We end up with lots of classes which depends on each other in all
+possible combinations.  It is difficult to read and modify this
+structure.  Imagine we need to add some additional hooks in between of
+process method of our second partner.  This will lead us to each
+class modification where we will stub things for the first partner.
+Some one can say "Mixins are good for this!"
+
+To mix or not to mix
+--------------------
+
+In my opinion mixins are great in this cases:
+
+- mixin class is self containing (no overlapping with another mixins)
+- it add functionality based on your own class characteristics
+
+They not so great where you define concrete behavior in mixins and
+then try to build concrete units from this separate behavior by using
+multiple inheritance and writing adapter methods.  If you saw Django
+class based views implementation, you know what I'm talking about.
+
+We will end up with something like this, if we will use this
+technique:
+
+.. code:: python
+
+    class SecondToFirstPartnerProcessor(
+            AppropriateSecondToFirstPartnerMixin,
+            APIStorageMixin,
+            DeliveryInstructionsMixin,
+            ProcessMixin,
+            OrderProcessor):
+        pass
+
+    processors.add(SecondToFirstPartnerProcessor)
+
+If I see this class first time, I'll have no idea what he's doing.
+It's hard to figure out execution chain because of many overlapping
+methods.  ``APIStorageMixin`` define methods used in ``ProcessMixin``.
+When you read ``ProcessMixin`` code it looks like ``self.something(``
+comes from nowhere.  ``DeliveryInstructionsMixin`` override
+``ProcessMixin`` methods.  When you read ``ProcessMixin`` code it
+looks like it do something else until you realize it was overwritten
+in the upper class.  Your awesome IDE can't get you this information
+since ``DeliveryInstructionsMixin`` method usage is outside of
+``SecondToFirstPartnerProcessor`` context.  It's hard to work with
+this code.
