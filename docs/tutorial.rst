@@ -95,7 +95,7 @@ signatures so they can work with this new data flow.
 
         ...
 
-Now we can add additional instructions in the ``Processor``
+Now we can write additional instructions in the ``Processor``
 subclasses:
 
 .. code:: python
@@ -110,15 +110,16 @@ subclasses:
 
         ...
 
-Now we need to figure out what orders are processed ourselves and what
-orders are processed by our partner.  Yep, we will add more methods
-to your classes.  Lets say we will look at the order content.  Then we
-send a signal to our frame work if we want to skip this processor and
-try another one.  This logic make sense only for ``PartnerProcessor``
-class.  We can't simply override ``process`` method and call its
-parent method.  Logic we want to add kinda in between of it.  So we
-add meaningless ``appropriate_order`` method to the ``Processor``
-class to have this ability.  Our classes becomes to look like that:
+Now we need to figure out what orders need to be processed ourselves
+and what orders need to be processed by our partner.  Yep, we will add
+more methods to our classes.  Lets say we will look at the order
+content.  Then we send a signal to our frame work if we want to skip
+this processor and try another one.  This logic make sense only for
+``PartnerProcessor`` class.  We can't simply override ``process``
+method and call its parent.  Logic we want to add kinda in
+between of it.  So we add meaningless ``appropriate_order`` method to
+the ``Processor`` class to have this ability.  Our classes becomes to
+look like that:
 
 .. code:: python
 
@@ -202,8 +203,7 @@ then try to build concrete units from this separate behavior by using
 multiple inheritance and writing adapter methods.  If you saw Django
 class based views implementation, you know what I'm talking about.
 
-We will end up with something like this, if we will use this
-technique:
+We will end up with something like this, if we use them this way:
 
 .. code:: python
 
@@ -217,18 +217,18 @@ technique:
 
     processors.add(SecondToFirstPartnerProcessor)
 
-If I see this class first time, I'll have no idea what he's doing.
-It's hard to figure out execution chain because of many overlapping
-methods.  ``APIStorageMixin`` define methods used in ``ProcessMixin``.
-When you read ``ProcessMixin`` code it looks like ``self.something(``
-comes from nowhere.  ``DeliveryInstructionsMixin`` override
-``ProcessMixin`` methods.  When you read ``ProcessMixin`` code it
-looks like it do something else until you realize it was overwritten
-in the upper class.  Your awesome IDE can't get you this information
-since ``DeliveryInstructionsMixin`` method usage is outside of
-``SecondToFirstPartnerProcessor`` context.  It's hard to work with
-this code.  I need to open each mixin next to each other and literally
-draw execution path on my screen.
+If I see this class first time, I'll have no idea what's going on in
+it.  It's hard to figure out execution chain because of many
+overlapping methods.  ``APIStorageMixin`` define methods used in
+``ProcessMixin``.  When you read ``ProcessMixin`` code it looks like
+``self.something(`` comes from nowhere.  ``DeliveryInstructionsMixin``
+override ``ProcessMixin`` methods.  When you read ``ProcessMixin``
+code it looks like it do something else until you realize it was
+overwritten in the upper class.  Your awesome IDE can't get you this
+information since ``DeliveryInstructionsMixin`` method usage is
+outside of ``SecondToFirstPartnerProcessor`` context.  It's hard to
+work with this code.  I need to open each mixin next to each other and
+literally draw execution path on my screen.
 
 Composition
 -----------
