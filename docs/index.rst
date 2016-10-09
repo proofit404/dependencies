@@ -51,7 +51,7 @@ Contents
 
     installation
     tutorial
-    reference
+    usage
 
 Indices and tables
 ==================

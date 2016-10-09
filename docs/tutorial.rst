@@ -1,5 +1,8 @@
+Tutorial
+========
+
 Inheritance is hard
-===================
+-------------------
 
 Inheritance is a rigid relation between code blocks, which is hard to
 control.  If you add behavior inside child classes, result class at
