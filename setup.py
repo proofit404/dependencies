@@ -4,7 +4,7 @@ readme = open('README.rst').read() + open('CHANGELOG.rst').read()
 
 setup(
     name='dependencies',
-    version='0.12',
+    version='0.13',
     description='Dependency Injection for Humans',
     long_description=readme,
     url='https://github.com/proofit404/dependencies',
