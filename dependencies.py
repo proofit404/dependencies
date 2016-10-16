@@ -11,7 +11,7 @@
 import inspect
 
 
-__all__ = ['Injector', 'DependencyError']
+__all__ = ['Injector', 'attribute', 'DependencyError']
 
 
 class InjectorType(type):
@@ -186,6 +186,18 @@ class DependencyError(Exception):
     pass
 
 
+def attribute(target, *attrs):
+    """TODO: write *and* test doc."""
+
+    __new__ = attrgetter(target, attrs)
+    __init__ = make_init(target)
+
+    return type('Attribute', (object,), {
+        '__new__': __new__,
+        '__init__': __init__,
+    })
+
+
 def make_dependency_spec(name, dependency):
 
     if inspect.isclass(dependency) and \
@@ -238,6 +250,38 @@ else:
         if defaults:
             check_cls_arguments(args, defaults)
         return args, have_defaults
+
+
+def attrgetter(argument, attrs):
+
+    def new(cls, target):
+        result = target
+        for attr in attrs:
+            result = getattr(result, attr)
+        return result
+
+    getter = make_new(argument, new)
+    return getter
+
+
+def make_new(argument, callback):
+
+    template = 'def __new__(cls, {argument}): return callback(cls ,{argument})'
+    code = template.format(argument=argument)
+    scope = {'callback': callback}
+    exec(code, scope)
+    __new__ = scope['__new__']
+    return __new__
+
+
+def make_init(argument):
+
+    template = 'def __init__(self, {argument}): pass'
+    code = template.format(argument=argument)
+    scope = {}
+    exec(code, scope)
+    __init__ = scope['__init__']
+    return __init__
 
 
 def use_object_init(cls):

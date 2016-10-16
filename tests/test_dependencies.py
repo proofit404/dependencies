@@ -5,7 +5,7 @@ from textwrap import dedent
 
 import pytest
 
-from dependencies import Injector, DependencyError, use_doc
+from dependencies import Injector, attribute, DependencyError, use_doc
 
 
 def test_lambda_dependency():
@@ -1548,3 +1548,66 @@ def test_deny_non_classes_in_cls_named_arguments(code):
 
     message = str(exc_info.value)
     assert message == "'foo_cls' default value should be a class"
+
+
+# Declarative attribute access.
+
+
+def test_attribute_getter():
+    """
+    We can describe attribute access in the `Injector` in the
+    declarative manner.
+    """
+
+    class Foo(object):
+        def __init__(self, one, two):
+            self.one = one
+            self.two = two
+        def do(self):  # noqa: E301
+            return self.one + self.two
+
+    class Container(Injector):
+        class SubContainer(Injector):
+            foo = Foo
+            one = 1
+            two = 2
+        foo = attribute('SubContainer', 'foo')
+
+    foo = Container.foo
+    assert isinstance(foo, Foo)
+    assert foo.do() == 3
+
+
+def test_attribute_getter_few_attributes():
+    """
+    We resolve attribute access until we find all specified
+    attributes.
+    """
+
+    class Foo(object):
+        def __init__(self, one):
+            self.one = one
+
+    class Container(Injector):
+        class SubContainer(Injector):
+            foo = Foo
+            one = 1
+        foo = attribute('SubContainer', 'foo', 'one')
+
+    assert Container.foo == 1
+
+
+def test_attribute_getter_no_attributes():
+    """
+    If user specify empty attribute chain, we return target as is.
+    """
+
+    class Foo(object):
+        pass
+
+    class Container(Injector):
+        foo_raw = Foo
+        foo = attribute('foo_raw')
+
+    foo = Container.foo
+    assert isinstance(foo, Foo)
