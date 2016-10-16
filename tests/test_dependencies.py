@@ -5,7 +5,7 @@ from textwrap import dedent
 
 import pytest
 
-from dependencies import Injector, attribute, DependencyError, use_doc
+from dependencies import Injector, attribute, item, DependencyError, use_doc
 
 
 def test_lambda_dependency():
@@ -1605,3 +1605,41 @@ def test_attribute_getter_no_attributes():
 
     message = str(exc_info.value)
     assert message == "'attrs' argument can not be empty"
+
+
+# Declarative item access.
+
+
+def test_item_getter():
+    """
+    We can describe item access in the `Injector` in the
+    declarative manner.
+    """
+
+    class Container(Injector):
+        foo = {'one': 1}
+        one = item('foo', 'one')
+
+    assert Container.one == 1
+
+
+def test_item_getter_few_items():
+    """
+    We resolve nested items until we find all specified item.
+    """
+
+    class Container(Injector):
+        foo = {'one': {'two': 2}}
+        two = item('foo', 'one', 'two')
+
+    assert Container.two == 2
+
+
+def test_item_getter_no_items():
+    """User can't specify empty items chain."""
+
+    with pytest.raises(DependencyError) as exc_info:
+        item('foo')
+
+    message = str(exc_info.value)
+    assert message == "'items' argument can not be empty"

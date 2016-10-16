@@ -11,7 +11,7 @@
 import inspect
 
 
-__all__ = ['Injector', 'attribute', 'DependencyError']
+__all__ = ['Injector', 'attribute', 'item', 'DependencyError']
 
 
 class InjectorType(type):
@@ -198,6 +198,18 @@ def attribute(target, *attrs):
     })
 
 
+def item(target, *items):
+    """TODO: write *and* test doc."""
+
+    check_empty('items', items)
+    __new__ = itemgetter(target, items)
+    __init__ = make_init(target)
+    return type('Item', (object,), {
+        '__new__': __new__,
+        '__init__': __init__,
+    })
+
+
 def make_dependency_spec(name, dependency):
 
     if inspect.isclass(dependency) and \
@@ -258,6 +270,18 @@ def attrgetter(argument, attrs):
         result = target
         for attr in attrs:
             result = getattr(result, attr)
+        return result
+
+    getter = make_new(argument, new)
+    return getter
+
+
+def itemgetter(argument, items):
+
+    def new(cls, target):
+        result = target
+        for item in items:
+            result = result[item]
         return result
 
     getter = make_new(argument, new)
