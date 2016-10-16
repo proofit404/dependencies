@@ -189,9 +189,9 @@ class DependencyError(Exception):
 def attribute(target, *attrs):
     """TODO: write *and* test doc."""
 
+    check_empty('attrs', attrs)
     __new__ = attrgetter(target, attrs)
     __init__ = make_init(target)
-
     return type('Attribute', (object,), {
         '__new__': __new__,
         '__init__': __init__,
@@ -375,3 +375,12 @@ def check_circles_for(dependencies, attrname, origin):
             )
         for name in args:
             check_circles_for(dependencies, name, origin)
+
+
+def check_empty(argname, arg):
+
+    if not arg:
+        raise DependencyError(
+            "'{argname}' argument can not be empty"
+            .format(argname=argname)
+        )

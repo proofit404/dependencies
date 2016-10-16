@@ -1555,8 +1555,8 @@ def test_deny_non_classes_in_cls_named_arguments(code):
 
 def test_attribute_getter():
     """
-    We can describe attribute access in the `Injector` in the
-    declarative manner.
+    We can describe attribute access in the `Injector` in declarative
+    manner.
     """
 
     class Foo(object):
@@ -1598,16 +1598,10 @@ def test_attribute_getter_few_attributes():
 
 
 def test_attribute_getter_no_attributes():
-    """
-    If user specify empty attribute chain, we return target as is.
-    """
+    """User can't specify empty attributes chain."""
 
-    class Foo(object):
-        pass
+    with pytest.raises(DependencyError) as exc_info:
+        attribute('foo')
 
-    class Container(Injector):
-        foo_raw = Foo
-        foo = attribute('foo_raw')
-
-    foo = Container.foo
-    assert isinstance(foo, Foo)
+    message = str(exc_info.value)
+    assert message == "'attrs' argument can not be empty"
