@@ -9,6 +9,7 @@
 """
 
 import inspect
+import weakref
 
 
 __all__ = ['Injector', 'attribute', 'item', 'DependencyError']
@@ -38,14 +39,16 @@ class InjectorType(type):
             dependencies[name] = make_dependency_spec(name, dep)
         check_circles(dependencies)
         ns['__dependencies__'] = dependencies
-        return type.__new__(cls, class_name, bases, ns)
+        result = type.__new__(cls, class_name, bases, ns)
+        for dep in namespace.values():
+            maybe_insert_parent(result, dep)
+        return result
 
     def __getattr__(cls, attrname):
 
         cache, cached = {}, set()
         current_attr, attrs_stack = attrname, [attrname]
         have_default = False
-
         while attrname not in cache:
             attribute_spec = cls.__dependencies__.get(current_attr)
             if attribute_spec is None:
@@ -189,6 +192,7 @@ class DependencyError(Exception):
 def attribute(target, *attrs):
     """TODO: write *and* test doc."""
 
+    target = '__parent__' if target == '..' else target
     check_empty('attrs', attrs)
     __new__ = attrgetter(target, attrs)
     __init__ = make_init(target)
@@ -222,6 +226,14 @@ def make_dependency_spec(name, dependency):
             return dependency, spec
     else:
         return dependency, None
+
+
+def maybe_insert_parent(parent, dependency):
+    """Make weak reference between Injector and nested Injector."""
+
+    if inspect.isclass(dependency) and issubclass(dependency, Injector):
+        spec = (weakref.ref(parent), False)
+        dependency.__dependencies__['__parent__'] = spec
 
 
 try:
@@ -290,7 +302,7 @@ def itemgetter(argument, items):
 
 def make_new(argument, callback):
 
-    template = 'def __new__(cls, {argument}): return callback(cls ,{argument})'
+    template = 'def __new__(cls, {argument}): return callback(cls, {argument})'
     code = template.format(argument=argument)
     scope = {'callback': callback}
     exec(code, scope)

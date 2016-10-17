@@ -1578,6 +1578,18 @@ def test_attribute_getter():
     assert foo.do() == 3
 
 
+def test_attribute_getter_parent_access():
+    """We can access attribute of outer container."""
+
+    class Container(Injector):
+        foo = 1
+
+        class SubContainer(Injector):
+            bar = attribute('..', 'foo')
+
+    assert Container.SubContainer.bar == 1
+
+
 def test_attribute_getter_few_attributes():
     """
     We resolve attribute access until we find all specified
