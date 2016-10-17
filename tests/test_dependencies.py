@@ -1578,15 +1578,51 @@ def test_attribute_getter():
     assert foo.do() == 3
 
 
-def test_attribute_getter_parent_access():
-    """We can access attribute of outer container."""
-
+@pytest.mark.parametrize('code', [
+    # Declarative injector.
+    """
     class Container(Injector):
         foo = 1
 
         class SubContainer(Injector):
             bar = attribute('..', 'foo')
+    """,
+    # Let notation.
+    """
+    class OuterContainer(Injector):
+        foo = 1
 
+    class SubContainer(Injector):
+        bar = attribute('..', 'foo')
+
+    Container = OuterContainer.let(SubContainer=SubContainer)
+    """,
+    # Attribute assignment.
+    """
+    class Container(Injector):
+        foo = 1
+
+    class SubContainer(Injector):
+        bar = attribute('..', 'foo')
+
+    Container.SubContainer = SubContainer
+    """,
+    # Use decorator.
+    """
+    class Container(Injector):
+        foo = 1
+
+    @Container.use.SubContainer
+    class SubContainer(Injector):
+        bar = attribute('..', 'foo')
+    """,
+])
+def test_attribute_getter_parent_access(code):
+    """We can access attribute of outer container."""
+
+    scope = {'Injector': Injector, 'attribute': attribute}
+    exec(dedent(code), scope)
+    Container = scope['Container']
     assert Container.SubContainer.bar == 1
 
 

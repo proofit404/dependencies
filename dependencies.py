@@ -101,6 +101,7 @@ class InjectorType(type):
         check_attrs_redefinition(attrname)
         cls.__dependencies__[attrname] = make_dependency_spec(attrname, value)
         check_circles(cls.__dependencies__)
+        maybe_insert_parent(cls, value)
 
     def __delattr__(cls, attrname):
 
@@ -163,6 +164,7 @@ class Use(object):
                     spec = make_dependency_spec(attrname, dependency)
                     objtype.__dependencies__[attrname] = spec
                     check_circles(objtype.__dependencies__)
+                    maybe_insert_parent(objtype, dependency)
                     return dependency
 
                 return register
