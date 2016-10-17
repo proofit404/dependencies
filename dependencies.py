@@ -122,7 +122,7 @@ class InjectorType(type):
 
         parent = set(dir(cls.__base__))
         current = set(cls.__dict__) - set(['__dependencies__'])
-        dependencies = set(cls.__dependencies__)
+        dependencies = set(cls.__dependencies__)  # TODO: remove __parent__?
         attributes = sorted(parent | current | dependencies)
         return attributes
 
@@ -191,10 +191,11 @@ class DependencyError(Exception):
     pass
 
 
-def attribute(target, *attrs):
+def attribute(*attrs):
     """TODO: write *and* test doc."""
 
-    target = '__parent__' if target == '..' else target
+    attrs = ['__parent__' if attr == '..' else attr for attr in attrs]
+    target, attrs = attrs[0], attrs[1:]
     check_empty('attrs', attrs)
     __new__ = attrgetter(target, attrs)
     __init__ = make_init(target)

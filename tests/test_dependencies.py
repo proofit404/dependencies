@@ -1626,6 +1626,64 @@ def test_attribute_getter_parent_access(code):
     assert Container.SubContainer.bar == 1
 
 
+@pytest.mark.parametrize('code', [
+    # Declarative injector.
+    """
+    class Container(Injector):
+        foo = 1
+
+        class SubContainer(Injector):
+
+            class SubSubContainer(Injector):
+                bar = attribute('..', '..', 'foo')
+    """,
+    # Let notation.
+    """
+    class OuterContainer(Injector):
+        foo = 1
+
+    class SubContainer(Injector):
+
+        class SubSubContainer(Injector):
+            bar = attribute('..', '..', 'foo')
+
+    Container = OuterContainer.let(SubContainer=SubContainer)
+    """,
+    # Attribute assignment.
+    """
+    class Container(Injector):
+        foo = 1
+
+        class SubContainer(Injector):
+            pass
+
+    class SubSubContainer(Injector):
+        bar = attribute('..', '..', 'foo')
+
+    Container.SubContainer.SubSubContainer = SubSubContainer
+    """,
+    # Use decorator.
+    """
+    class Container(Injector):
+        foo = 1
+
+        class SubContainer(Injector):
+            pass
+
+    @Container.SubContainer.use.SubSubContainer
+    class SubSubContainer(Injector):
+        bar = attribute('..', '..', 'foo')
+    """,
+])
+def test_attribute_getter_few_parents(code):
+    """We can access attribute of outer container in any nesting depth."""
+
+    scope = {'Injector': Injector, 'attribute': attribute}
+    exec(dedent(code), scope)
+    Container = scope['Container']
+    assert Container.SubContainer.SubSubContainer.bar == 1
+
+
 def test_attribute_getter_few_attributes():
     """
     We resolve attribute access until we find all specified
