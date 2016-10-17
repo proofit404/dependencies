@@ -1707,7 +1707,7 @@ def test_attribute_getter_no_attributes():
     """User can't specify empty attributes chain."""
 
     with pytest.raises(DependencyError) as exc_info:
-        attribute('foo')
+        attribute()
 
     message = str(exc_info.value)
     assert message == "'attrs' argument can not be empty"
@@ -1729,6 +1729,32 @@ def test_item_getter():
     assert Container.one == 1
 
 
+def test_item_getter_parent_access():
+    """We can access item of outer container."""
+
+    class Container(Injector):
+        foo = {'bar': {'baz': 1}}
+
+        class SubContainer(Injector):
+            spam = item('..', 'foo', 'bar', 'baz')
+
+    assert Container.SubContainer.spam == 1
+
+
+def test_item_getter_few_parents():
+    """We can access item of outer container in any nesting depth."""
+
+    class Container(Injector):
+        foo = {'bar': {'baz': 1}}
+
+        class SubContainer(Injector):
+
+            class SubSubContainer(Injector):
+                spam = item('..', '..', 'foo', 'bar', 'baz')
+
+    assert Container.SubContainer.SubSubContainer.spam == 1
+
+
 def test_item_getter_few_items():
     """
     We resolve nested items until we find all specified item.
@@ -1745,7 +1771,9 @@ def test_item_getter_no_items():
     """User can't specify empty items chain."""
 
     with pytest.raises(DependencyError) as exc_info:
+        item()
         item('foo')
+        item('..', 'foo')
 
     message = str(exc_info.value)
     assert message == "'items' argument can not be empty"

@@ -194,26 +194,26 @@ class DependencyError(Exception):
 def attribute(*attrs):
     """TODO: write *and* test doc."""
 
-    attrs = ['__parent__' if attr == '..' else attr for attr in attrs]
-    target, attrs = attrs[0], attrs[1:]
     check_empty('attrs', attrs)
-    __new__ = attrgetter(target, attrs)
-    __init__ = make_init(target)
+    attrs = ['__parent__' if attr == '..' else attr for attr in attrs]
+    __init__ = make_init(attrs)
+    __new__ = attrgetter(attrs)
     return type('Attribute', (object,), {
-        '__new__': __new__,
         '__init__': __init__,
+        '__new__': __new__,
     })
 
 
-def item(target, *items):
+def item(*items):
     """TODO: write *and* test doc."""
 
     check_empty('items', items)
-    __new__ = itemgetter(target, items)
-    __init__ = make_init(target)
+    items = ['__parent__' if item == '..' else item for item in items]
+    __init__ = make_init(items)
+    __new__ = itemgetter(items)
     return type('Item', (object,), {
-        '__new__': __new__,
         '__init__': __init__,
+        '__new__': __new__,
     })
 
 
@@ -279,48 +279,59 @@ else:
         return args, have_defaults
 
 
-def attrgetter(argument, attrs):
+def attrgetter(attrs):
 
-    def new(cls, target):
-        result = target
-        for attr in attrs:
-            result = getattr(result, attr)
-        return result
-
-    getter = make_new(argument, new)
+    argument = attrs[0]
+    return_expr = '.'.join(attrs)
+    getter = make_new(argument, return_expr)
     return getter
 
 
-def itemgetter(argument, items):
+def itemgetter(items):
 
-    def new(cls, target):
-        result = target
-        for item in items:
-            result = result[item]
-        return result
-
-    getter = make_new(argument, new)
+    argument = items[0]
+    head, tail = split(items)
+    # TODO: sanitize check
+    return_expr = '.'.join(head) + ''.join('["' + arg + '"]' for arg in tail)
+    check_empty('items', tail)
+    getter = make_new(argument, return_expr)
     return getter
 
 
-def make_new(argument, callback):
+def make_new(argument, return_expr):
 
-    template = 'def __new__(cls, {argument}): return callback(cls, {argument})'
-    code = template.format(argument=argument)
-    scope = {'callback': callback}
+    template = 'def __new__(cls, {argument}): return {return_expr}'
+    code = template.format(argument=argument, return_expr=return_expr)
+    scope = {}
     exec(code, scope)
     __new__ = scope['__new__']
     return __new__
 
 
-def make_init(argument):
+def make_init(arguments):
 
+    argument = arguments[0]
     template = 'def __init__(self, {argument}): pass'
     code = template.format(argument=argument)
     scope = {}
     exec(code, scope)
     __init__ = scope['__init__']
     return __init__
+
+
+def split(seq):
+
+    istail, head, tail = False, [], []
+    while seq:
+        item = seq.pop(0)
+        if istail:
+            tail.append(item)
+        elif item == '__parent__':
+            head.append(item)
+        else:
+            head.append(item)
+            istail = True
+    return head, tail
 
 
 def use_object_init(cls):
