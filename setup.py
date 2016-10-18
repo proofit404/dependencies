@@ -11,7 +11,7 @@ setup(
     license='LGPL-3',
     author='Artem Malyshev',
     author_email='proofit404@gmail.com',
-    py_modules=['dependencies'],
+    packages=['dependencies'],
     classifiers=[
         'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
