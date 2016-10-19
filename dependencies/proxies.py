@@ -17,11 +17,11 @@ def attribute(*attrs):
 
     check_empty('attrs', attrs)
     attrs = ['__parent__' if attr == '..' else attr for attr in attrs]
-    __init__ = make_init(attrs)
     __new__ = attrgetter(attrs)
+    __init__ = make_init(attrs)
     return type('Attribute', (object,), {
-        '__init__': __init__,
         '__new__': __new__,
+        '__init__': __init__,
     })
 
 
@@ -30,11 +30,11 @@ def item(*items):
 
     check_empty('items', items)
     items = ['__parent__' if item == '..' else item for item in items]
-    __init__ = make_init(items)
     __new__ = itemgetter(items)
+    __init__ = make_init(items)
     return type('Item', (object,), {
-        '__init__': __init__,
         '__new__': __new__,
+        '__init__': __init__,
     })
 
 
@@ -81,8 +81,7 @@ def make_init(arguments):
 def split(seq):
 
     istail, head, tail = False, [], []
-    while seq:
-        item = seq.pop(0)
+    for item in seq:
         if istail:
             tail.append(item)
         elif item == '__parent__':
