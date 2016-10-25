@@ -371,6 +371,19 @@ def test_show_let_dependencies_with_dir():
     assert 'x' in dir(Foo.let(x=1))
 
 
+def test_omit_parent_link_in_dir_listing():
+    """
+    Don't show `__parent__` link in the `dir` output.  It is an
+    implementation detail.
+    """
+
+    class Foo(Injector):
+        class Bar(Injector):
+            pass
+
+    assert '__parent__' not in dir(Foo.Bar)
+
+
 # Attribute assignment.
 
 

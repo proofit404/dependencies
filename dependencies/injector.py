@@ -121,7 +121,7 @@ class InjectorType(type):
 
         parent = set(dir(cls.__base__))
         current = set(cls.__dict__) - set(['__dependencies__'])
-        dependencies = set(cls.__dependencies__)  # TODO: remove __parent__?
+        dependencies = set(cls.__dependencies__) - set(['__parent__'])
         attributes = sorted(parent | current | dependencies)
         return attributes
 
