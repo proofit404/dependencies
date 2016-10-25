@@ -232,3 +232,17 @@ def test_item_getter_no_items():
 
     message = str(exc_info.value)
     assert message == "'items' argument can not be empty"
+
+
+# Docstrings.
+
+
+def test_docstrings():
+    """Check we can access all API entry points documentation."""
+
+    assert attribute.__doc__ == (
+        'Declare attribute access during dependency injection.'
+    )
+    assert item.__doc__ == (
+        'Declare item access during dependency injection.'
+    )

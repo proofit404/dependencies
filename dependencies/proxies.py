@@ -13,7 +13,7 @@ from .exceptions import DependencyError
 
 
 def attribute(*attrs):
-    """TODO: write *and* test doc."""
+    """Declare attribute access during dependency injection."""
 
     check_empty('attrs', attrs)
     attrs = ['__parent__' if attr == '..' else attr for attr in attrs]
@@ -26,7 +26,7 @@ def attribute(*attrs):
 
 
 def item(*items):
-    """TODO: write *and* test doc."""
+    """Declare item access during dependency injection."""
 
     check_empty('items', items)
     items = ['__parent__' if item == '..' else item for item in items]
