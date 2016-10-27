@@ -151,6 +151,10 @@ class Use(object):
 
         class Register(object):
 
+            def __call__(self, dependency):
+
+                return getattr(self, dependency.__name__)(dependency)
+
             def __getattribute__(self, attrname):
 
                 if attrname == '__doc__':

@@ -574,6 +574,46 @@ def test_use_decorator_keep_argument():
     assert Y(1, 2).do() == 3
 
 
+def test_use_decorator_no_name_class():
+    """
+    We can use `use` decorator without specifying the name of the
+    class dependency explicitly.
+    """
+
+    class Foo(object):
+        def __init__(self, Bar):
+            self.Bar = Bar
+
+    class Container(Injector):
+        foo = Foo
+
+    @Container.use
+    class Bar(object):
+        pass
+
+    assert isinstance(Container.foo.Bar, Bar)
+
+
+def test_use_decorator_no_name_function():
+    """
+    We can use `use` decorator without specifying the name of the
+    function dependency explicitly.
+    """
+
+    class Foo(object):
+        def __init__(self, do):
+            self.do = do
+
+    class Container(Injector):
+        foo = Foo
+
+    @Container.use
+    def do():
+        pass
+
+    assert Container.foo.do is do
+
+
 # Nested injectors.
 
 
