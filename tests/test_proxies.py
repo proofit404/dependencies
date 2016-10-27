@@ -67,7 +67,7 @@ def test_attribute_getter():
     class Container(Injector):
         foo = 1
 
-    @Container.use.SubContainer
+    @Container.use
     class SubContainer(Injector):
         bar = attribute('..', 'foo')
     """,
@@ -125,7 +125,7 @@ def test_attribute_getter_parent_access(code):
         class SubContainer(Injector):
             pass
 
-    @Container.SubContainer.use.SubSubContainer
+    @Container.SubContainer.use
     class SubSubContainer(Injector):
         bar = attribute('..', '..', 'foo')
     """,
