@@ -239,22 +239,6 @@ def test_attribute_getter_arguments_validation(args, error, error_type):
 
     result = Container.bar
     """,
-    # Get items from dict by any string.
-    """
-    class Container(Injector):
-        foo = {'1x': 1}
-        bar = item('foo', '1x')
-
-    result = Container.bar
-    """,
-    # Get items from dict by string containing double quotes.
-    """
-    class Container(Injector):
-        foo = {'f"o"o': 1}
-        bar = item('foo', 'f"o"o')
-
-    result = Container.bar
-    """,
 ])
 def test_item_getter(code):
     """
@@ -266,6 +250,29 @@ def test_item_getter(code):
     exec(dedent(code), scope)
     result = scope['result']
     assert result == 1
+
+
+def test_item_getter_non_printable_key():
+    """
+    We can describe item access for keys which can't be presented as
+    normal strings.
+    """
+
+    class Boom(object):
+        def __init__(self, salt):
+            self.salt = salt
+        def __hash__(self):     # noqa: E301
+            return hash(self.salt)
+        def __str__(self):      # noqa: E301
+            return "<boom>"
+
+    boom = Boom('hello')
+
+    class Container(Injector):
+        foo = {boom: 1}
+        bar = item('foo', boom)
+
+    assert Container.bar == 1
 
 
 @pytest.mark.parametrize('args, error', [

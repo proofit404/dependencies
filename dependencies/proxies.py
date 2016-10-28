@@ -14,6 +14,8 @@ during dependency injection process.
 
 
 import ast
+import random
+import string
 
 from .exceptions import DependencyError
 
@@ -58,20 +60,21 @@ def itemgetter(items):
     argument = items[0]
     attrs, items = split(items)
     check_attributes(attrs)
-    # TODO: use AST Transform here or try to avoid name substitution
-    # at all.
-    return_expr = '.'.join(attrs) + ''.join('[' + ('"' + item.replace('"', '\\"') + '"' if isinstance(item, str) else str(item)) + ']' for item in items)
-    # TODO: test against object with meaningless `str` result.
     check_empty('items', items)
-    getter = make_new(argument, return_expr)
+    item_names = [random_string() for each in items]
+    attrs_expr = '.'.join(attrs)
+    items_expr = ''.join('[' + name + ']' for name in item_names)
+    return_expr = attrs_expr + items_expr
+    scope = dict([(k, v) for k, v in zip(item_names, items)])
+    getter = make_new(argument, return_expr, scope)
     return getter
 
 
-def make_new(argument, return_expr):
+def make_new(argument, return_expr, scope=None):
 
     template = 'def __new__(cls, {argument}): return {return_expr}'
     code = template.format(argument=argument, return_expr=return_expr)
-    scope = {}
+    scope = scope or {}
     exec(code, scope)
     __new__ = scope['__new__']
     return __new__
@@ -100,6 +103,11 @@ def split(seq):
             head.append(item)
             istail = True
     return head, tail
+
+
+def random_string():
+
+    return ''.join(random.choice(string.ascii_letters) for i in range(8))
 
 
 def check_empty(argname, arg):
