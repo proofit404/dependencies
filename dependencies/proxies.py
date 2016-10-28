@@ -9,6 +9,14 @@ during dependency injection process.
 :license: LGPL-3, see LICENSE for more details.
 """
 
+
+# TODO: check order of ".." argument
+#
+# TODO: allow digit arguments for item access
+
+
+import ast
+
 from .exceptions import DependencyError
 
 
@@ -17,6 +25,7 @@ def attribute(*attrs):
 
     check_empty('attrs', attrs)
     attrs = ['__parent__' if attr == '..' else attr for attr in attrs]
+    check_identifiers('attribute', attrs)
     __new__ = attrgetter(attrs)
     __init__ = make_init(attrs)
     return type('Attribute', (object,), {
@@ -30,6 +39,7 @@ def item(*items):
 
     check_empty('items', items)
     items = ['__parent__' if item == '..' else item for item in items]
+    check_identifiers('item', items)
     __new__ = itemgetter(items)
     __init__ = make_init(items)
     return type('Item', (object,), {
@@ -50,7 +60,6 @@ def itemgetter(items):
 
     argument = items[0]
     head, tail = split(items)
-    # TODO: sanitize check
     return_expr = '.'.join(head) + ''.join('["' + arg + '"]' for arg in tail)
     check_empty('items', tail)
     getter = make_new(argument, return_expr)
@@ -99,3 +108,16 @@ def check_empty(argname, arg):
             "'{argname}' argument can not be empty"
             .format(argname=argname)
         )
+
+
+def check_identifiers(kind, names):
+
+    for name in names:
+        try:
+            ast.parse('{identifier} = None'.format(identifier=name))
+        except (SyntaxError, TypeError, ValueError):
+            raise DependencyError(
+                "{name!r} is invalid {kind} identifier".format(
+                    name=name, kind=kind
+                )
+            )

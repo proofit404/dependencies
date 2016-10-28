@@ -246,3 +246,29 @@ def test_docstrings():
     assert item.__doc__ == (
         'Declare item access during dependency injection.'
     )
+
+
+# Sanity check.
+
+
+@pytest.mark.parametrize('proxy', [attribute, item])
+@pytest.mark.parametrize('args, error', [
+    (['foo', '', 'bar'], ''),
+    (['1x', 'foo'], '1x'),
+    (['foo', 'yy"tt"'], 'yy"tt"'),
+])
+def test_arguments_validation(proxy, args, error):
+    """
+    Check `attribute` and `item` proxies against different incorrect
+    inputs.
+    """
+
+    with pytest.raises(DependencyError) as exc_info:
+        proxy(*args)
+
+    message = str(exc_info.value)
+    error = "'{error}' is invalid {proxy} identifier".format(
+        error=error,
+        proxy=proxy.__name__,
+    )
+    assert message == error
