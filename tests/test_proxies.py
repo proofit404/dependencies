@@ -161,7 +161,7 @@ def test_attribute_getter_few_attributes():
 @pytest.mark.parametrize('args, error, error_type', [
     ([], "'attrs' argument can not be empty", DependencyError),
     (['1x'], "'1x' is invalid attribute name", DependencyError),
-    ([1], "attribute name should be a string", TypeError)
+    ([1], "attribute name should be a string", TypeError),
 ])
 def test_attribute_getter_arguments_validation(args, error, error_type):
     """Check `attribute` proxy against different incorrect inputs."""
@@ -176,34 +176,35 @@ def test_attribute_getter_arguments_validation(args, error, error_type):
 # Declarative item access.
 
 
-def test_item_getter():
+@pytest.mark.parametrize('code', [
+    # Get item with string key.
     """
-    We can describe item access in the `Injector` in the
-    declarative manner.
-    """
-
     class Container(Injector):
         foo = {'one': 1}
         one = item('foo', 'one')
 
-    assert Container.one == 1
+    result = Container.one
+    """,
+    # Get items as many times as we want.
+    """
+    class Container(Injector):
+        foo = {'one': {'two': 1}}
+        two = item('foo', 'one', 'two')
 
-
-def test_item_getter_parent_access():
-    """We can access item of outer container."""
-
+    result = Container.two
+    """,
+    # Get item from the outer container.
+    """
     class Container(Injector):
         foo = {'bar': {'baz': 1}}
 
         class SubContainer(Injector):
             spam = item('..', 'foo', 'bar', 'baz')
 
-    assert Container.SubContainer.spam == 1
-
-
-def test_item_getter_few_parents():
-    """We can access item of outer container in any nesting depth."""
-
+    result = Container.SubContainer.spam
+    """,
+    # Get item from the outer container of any depth level.
+    """
     class Container(Injector):
         foo = {'bar': {'baz': 1}}
 
@@ -212,52 +213,59 @@ def test_item_getter_few_parents():
             class SubSubContainer(Injector):
                 spam = item('..', '..', 'foo', 'bar', 'baz')
 
-    assert Container.SubContainer.SubSubContainer.spam == 1
-
-
-def test_item_getter_few_items():
-    """
-    We resolve nested items until we find all specified item.
-    """
-
-    class Container(Injector):
-        foo = {'one': {'two': 2}}
-        two = item('foo', 'one', 'two')
-
-    assert Container.two == 2
-
-
-@pytest.mark.parametrize('code', [
-    # List items.
+    result = Container.SubContainer.SubSubContainer.spam
+    """,
+    # Get items from list.
     """
     class Container(Injector):
         foo = [1, 2, 3]
-        bar = item('foo', 1)
+        bar = item('foo', 0)
+
+    result = Container.bar
     """,
-    # Dict digit keys.
+    # Get items from dict with digit keys.
     """
     class Container(Injector):
-        foo = {1: 2}
-        bar = item('foo', 1)
+        foo = {2: 1}
+        bar = item('foo', 2)
+
+    result = Container.bar
     """,
-    # Dict tuple keys.
+    # Get items from dict with tuple keys.
     """
     class Container(Injector):
-        foo = {('x', 1): 2}
+        foo = {('x', 1): 1}
         bar = item('foo', ('x', 1))
+
+    result = Container.bar
+    """,
+    # Get items from dict by any string.
+    """
+    class Container(Injector):
+        foo = {'1x': 1}
+        bar = item('foo', '1x')
+
+    result = Container.bar
+    """,
+    # Get items from dict by string containing double quotes.
+    """
+    class Container(Injector):
+        foo = {'f"o"o': 1}
+        bar = item('foo', 'f"o"o')
+
+    result = Container.bar
     """,
 ])
-def test_item_getter_non_str_types(code):
+def test_item_getter(code):
     """
-    `item` getter can access list item by index.
-
-    This will also works for dict with integer keys.
+    We can describe item access in the `Injector` in the
+    declarative manner.
     """
 
     scope = {'Injector': Injector, 'item': item}
     exec(dedent(code), scope)
-    Container = scope['Container']
-    assert Container.bar == 2
+    result = scope['result']
+    assert result == 1
 
 
 @pytest.mark.parametrize('args, error', [
@@ -274,32 +282,6 @@ def test_item_getter_arguments_validation(args, error):
 
     message = str(exc_info.value)
     assert message == error
-
-
-# TODO: Group this tests.
-
-
-def test_item_getter_any_string_for_item_name():
-    """
-    We can use any string in the argument part responsible for items
-    notation.
-    """
-
-    class Container(Injector):
-        foo = {'1x': 2}
-        bar = item('foo', '1x')
-
-    assert Container.bar == 2
-
-
-def test_item_getter_escape_quotes():
-    """We should escape double quotes used as items."""
-
-    class Container(Injector):
-        foo = {'f"o"o': 2}
-        bar = item('foo', 'f"o"o')
-
-    assert Container.bar == 2
 
 
 # Docstrings.
