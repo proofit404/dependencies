@@ -158,16 +158,15 @@ def test_attribute_getter_few_attributes():
     assert Container.foo == 1
 
 
-@pytest.mark.parametrize('args, error', [
-    ([], "'attrs' argument can not be empty"),
-    (['foo', '', 'bar'], "'' is invalid attribute identifier"),
-    (['1x', 'foo'], "'1x' is invalid attribute identifier"),
-    (['foo', 'yy"tt"'], "'yy\"tt\"' is invalid attribute identifier"),
+@pytest.mark.parametrize('args, error, error_type', [
+    ([], "'attrs' argument can not be empty", DependencyError),
+    (['1x'], "'1x' is invalid attribute name", DependencyError),
+    ([1], "attribute name should be a string", TypeError)
 ])
-def test_attribute_getter_arguments_validation(args, error):
+def test_attribute_getter_arguments_validation(args, error, error_type):
     """Check `attribute` proxy against different incorrect inputs."""
 
-    with pytest.raises(DependencyError) as exc_info:
+    with pytest.raises(error_type) as exc_info:
         attribute(*args)
 
     message = str(exc_info.value)
@@ -228,13 +227,44 @@ def test_item_getter_few_items():
     assert Container.two == 2
 
 
+@pytest.mark.parametrize('code', [
+    # List items.
+    """
+    class Container(Injector):
+        foo = [1, 2, 3]
+        bar = item('foo', 1)
+    """,
+    # Dict digit keys.
+    """
+    class Container(Injector):
+        foo = {1: 2}
+        bar = item('foo', 1)
+    """,
+    # Dict tuple keys.
+    """
+    class Container(Injector):
+        foo = {('x', 1): 2}
+        bar = item('foo', ('x', 1))
+    """,
+])
+def test_item_getter_non_str_types(code):
+    """
+    `item` getter can access list item by index.
+
+    This will also works for dict with integer keys.
+    """
+
+    scope = {'Injector': Injector, 'item': item}
+    exec(dedent(code), scope)
+    Container = scope['Container']
+    assert Container.bar == 2
+
+
 @pytest.mark.parametrize('args, error', [
     ([], "'items' argument can not be empty"),
     (['foo'], "'items' argument can not be empty"),
     (['..', 'foo'], "'items' argument can not be empty"),
-    (['foo', '', 'bar'], "'' is invalid item identifier"),
-    (['1x', 'foo'], "'1x' is invalid item identifier"),
-    (['foo', 'yy"tt"'], "'yy\"tt\"' is invalid item identifier"),
+    (['1x', 'foo'], "'1x' is invalid attribute name"),
 ])
 def test_item_getter_arguments_validation(args, error):
     """Check `attribute` proxy against different incorrect inputs."""
@@ -244,6 +274,32 @@ def test_item_getter_arguments_validation(args, error):
 
     message = str(exc_info.value)
     assert message == error
+
+
+# TODO: Group this tests.
+
+
+def test_item_getter_any_string_for_item_name():
+    """
+    We can use any string in the argument part responsible for items
+    notation.
+    """
+
+    class Container(Injector):
+        foo = {'1x': 2}
+        bar = item('foo', '1x')
+
+    assert Container.bar == 2
+
+
+def test_item_getter_escape_quotes():
+    """We should escape double quotes used as items."""
+
+    class Container(Injector):
+        foo = {'f"o"o': 2}
+        bar = item('foo', 'f"o"o')
+
+    assert Container.bar == 2
 
 
 # Docstrings.

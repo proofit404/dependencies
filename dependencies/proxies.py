@@ -11,8 +11,6 @@ during dependency injection process.
 
 
 # TODO: check order of ".." argument
-#
-# TODO: allow digit arguments for item access
 
 
 import ast
@@ -25,7 +23,7 @@ def attribute(*attrs):
 
     check_empty('attrs', attrs)
     attrs = ['__parent__' if attr == '..' else attr for attr in attrs]
-    check_identifiers('attribute', attrs)
+    check_attributes(attrs)
     __new__ = attrgetter(attrs)
     __init__ = make_init(attrs)
     return type('Attribute', (object,), {
@@ -39,7 +37,6 @@ def item(*items):
 
     check_empty('items', items)
     items = ['__parent__' if item == '..' else item for item in items]
-    check_identifiers('item', items)
     __new__ = itemgetter(items)
     __init__ = make_init(items)
     return type('Item', (object,), {
@@ -59,9 +56,13 @@ def attrgetter(attrs):
 def itemgetter(items):
 
     argument = items[0]
-    head, tail = split(items)
-    return_expr = '.'.join(head) + ''.join('["' + arg + '"]' for arg in tail)
-    check_empty('items', tail)
+    attrs, items = split(items)
+    check_attributes(attrs)
+    # TODO: use AST Transform here or try to avoid name substitution
+    # at all.
+    return_expr = '.'.join(attrs) + ''.join('[' + ('"' + item.replace('"', '\\"') + '"' if isinstance(item, str) else str(item)) + ']' for item in items)
+    # TODO: test against object with meaningless `str` result.
+    check_empty('items', items)
     getter = make_new(argument, return_expr)
     return getter
 
@@ -105,19 +106,19 @@ def check_empty(argname, arg):
 
     if not arg:
         raise DependencyError(
-            "'{argname}' argument can not be empty"
+            '{argname!r} argument can not be empty'
             .format(argname=argname)
         )
 
 
-def check_identifiers(kind, names):
+def check_attributes(names):
 
     for name in names:
+        if not isinstance(name, str):
+            raise TypeError('attribute name should be a string')
         try:
             ast.parse('{identifier} = None'.format(identifier=name))
         except (SyntaxError, TypeError, ValueError):
             raise DependencyError(
-                "{name!r} is invalid {kind} identifier".format(
-                    name=name, kind=kind
-                )
+                '{name!r} is invalid attribute name'.format(name=name)
             )
