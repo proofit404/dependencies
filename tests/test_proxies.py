@@ -158,14 +158,20 @@ def test_attribute_getter_few_attributes():
     assert Container.foo == 1
 
 
-def test_attribute_getter_no_attributes():
-    """User can't specify empty attributes chain."""
+@pytest.mark.parametrize('args, error', [
+    ([], "'attrs' argument can not be empty"),
+    (['foo', '', 'bar'], "'' is invalid attribute identifier"),
+    (['1x', 'foo'], "'1x' is invalid attribute identifier"),
+    (['foo', 'yy"tt"'], "'yy\"tt\"' is invalid attribute identifier"),
+])
+def test_attribute_getter_arguments_validation(args, error):
+    """Check `attribute` proxy against different incorrect inputs."""
 
     with pytest.raises(DependencyError) as exc_info:
-        attribute()
+        attribute(*args)
 
     message = str(exc_info.value)
-    assert message == "'attrs' argument can not be empty"
+    assert message == error
 
 
 # Declarative item access.
@@ -222,16 +228,22 @@ def test_item_getter_few_items():
     assert Container.two == 2
 
 
-def test_item_getter_no_items():
-    """User can't specify empty items chain."""
+@pytest.mark.parametrize('args, error', [
+    ([], "'items' argument can not be empty"),
+    (['foo'], "'items' argument can not be empty"),
+    (['..', 'foo'], "'items' argument can not be empty"),
+    (['foo', '', 'bar'], "'' is invalid item identifier"),
+    (['1x', 'foo'], "'1x' is invalid item identifier"),
+    (['foo', 'yy"tt"'], "'yy\"tt\"' is invalid item identifier"),
+])
+def test_item_getter_arguments_validation(args, error):
+    """Check `attribute` proxy against different incorrect inputs."""
 
     with pytest.raises(DependencyError) as exc_info:
-        item()
-        item('foo')
-        item('..', 'foo')
+        item(*args)
 
     message = str(exc_info.value)
-    assert message == "'items' argument can not be empty"
+    assert message == error
 
 
 # Docstrings.
@@ -246,29 +258,3 @@ def test_docstrings():
     assert item.__doc__ == (
         'Declare item access during dependency injection.'
     )
-
-
-# Sanity check.
-
-
-@pytest.mark.parametrize('proxy', [attribute, item])
-@pytest.mark.parametrize('args, error', [
-    (['foo', '', 'bar'], ''),
-    (['1x', 'foo'], '1x'),
-    (['foo', 'yy"tt"'], 'yy"tt"'),
-])
-def test_arguments_validation(proxy, args, error):
-    """
-    Check `attribute` and `item` proxies against different incorrect
-    inputs.
-    """
-
-    with pytest.raises(DependencyError) as exc_info:
-        proxy(*args)
-
-    message = str(exc_info.value)
-    error = "'{error}' is invalid {proxy} identifier".format(
-        error=error,
-        proxy=proxy.__name__,
-    )
-    assert message == error
