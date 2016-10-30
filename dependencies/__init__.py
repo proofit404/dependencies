@@ -9,10 +9,10 @@ Dependency Injection for Humans.
 """
 
 from .injector import Injector
-from .proxies import attribute, item
+from .proxies import this
 from .exceptions import DependencyError
 
-__all__ = ['Injector', 'attribute', 'item', 'DependencyError']
+__all__ = ['Injector', 'this', 'DependencyError']
 
 # TODO: write documentation for proxies module
 #

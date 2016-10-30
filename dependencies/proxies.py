@@ -10,59 +10,56 @@ during dependency injection process.
 """
 
 
-# TODO: check order of ".." argument
-
-
-import ast
 import random
 import string
 
-from .exceptions import DependencyError
+
+class Thisable(object):
+    """Declare attribute and item access during dependency injection."""
+
+    def __getattr__(self, attrname):
+
+        return proxy((attrname,), ())
+
+    def __lshift__(self, num):
+
+        attrs = tuple(['__parent__' for i in range(num)])
+        return proxy(attrs, ())
 
 
-def attribute(*attrs):
-    """Declare attribute access during dependency injection."""
+this = Thisable()
 
-    check_empty('attrs', attrs)
-    attrs = ['__parent__' if attr == '..' else attr for attr in attrs]
-    check_attributes(attrs)
-    __new__ = attrgetter(attrs)
+
+class ProxyType(type):
+
+    def __getattr__(cls, attrname):
+
+        attrs = cls.__attrs__ + (attrname,)
+        return proxy(attrs, ())
+
+    def __getitem__(cls, item):
+
+        items = cls.__items__ + (item,)
+        return proxy(cls.__attrs__, items)
+
+
+def proxy(attrs, items):
+
+    __new__ = injection_hook(attrs, items)
     __init__ = make_init(attrs)
-    return type('Attribute', (object,), {
+    return ProxyType('Proxy', (object,), {
         '__new__': __new__,
         '__init__': __init__,
+        '__attrs__': attrs,
+        '__items__': items,
     })
 
 
-def item(*items):
-    """Declare item access during dependency injection."""
-
-    check_empty('items', items)
-    items = ['__parent__' if item == '..' else item for item in items]
-    __new__ = itemgetter(items)
-    __init__ = make_init(items)
-    return type('Item', (object,), {
-        '__new__': __new__,
-        '__init__': __init__,
-    })
-
-
-def attrgetter(attrs):
+def injection_hook(attrs, items):
 
     argument = attrs[0]
-    return_expr = '.'.join(attrs)
-    getter = make_new(argument, return_expr)
-    return getter
-
-
-def itemgetter(items):
-
-    argument = items[0]
-    attrs, items = split(items)
-    check_attributes(attrs)
-    check_empty('items', items)
-    item_names = [random_string() for each in items]
     attrs_expr = '.'.join(attrs)
+    item_names = [random_string() for each in items]
     items_expr = ''.join('[' + name + ']' for name in item_names)
     return_expr = attrs_expr + items_expr
     scope = dict([(k, v) for k, v in zip(item_names, items)])
@@ -70,11 +67,10 @@ def itemgetter(items):
     return getter
 
 
-def make_new(argument, return_expr, scope=None):
+def make_new(argument, return_expr, scope):
 
     template = 'def __new__(cls, {argument}): return {return_expr}'
     code = template.format(argument=argument, return_expr=return_expr)
-    scope = scope or {}
     exec(code, scope)
     __new__ = scope['__new__']
     return __new__
@@ -91,42 +87,6 @@ def make_init(arguments):
     return __init__
 
 
-def split(seq):
-
-    istail, head, tail = False, [], []
-    for item in seq:
-        if istail:
-            tail.append(item)
-        elif item == '__parent__':
-            head.append(item)
-        else:
-            head.append(item)
-            istail = True
-    return head, tail
-
-
 def random_string():
 
     return ''.join(random.choice(string.ascii_letters) for i in range(8))
-
-
-def check_empty(argname, arg):
-
-    if not arg:
-        raise DependencyError(
-            '{argname!r} argument can not be empty'
-            .format(argname=argname)
-        )
-
-
-def check_attributes(names):
-
-    for name in names:
-        if not isinstance(name, str):
-            raise TypeError('attribute name should be a string')
-        try:
-            ast.parse('{identifier} = None'.format(identifier=name))
-        except (SyntaxError, TypeError, ValueError):
-            raise DependencyError(
-                '{name!r} is invalid attribute name'.format(name=name)
-            )
