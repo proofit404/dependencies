@@ -9,7 +9,6 @@ during dependency injection process.
 :license: LGPL-3, see LICENSE for more details.
 """
 
-
 import random
 import string
 

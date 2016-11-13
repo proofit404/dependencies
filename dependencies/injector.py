@@ -58,7 +58,7 @@ class InjectorType(type):
                     continue
                 raise AttributeError(
                     '{0!r} object has no attribute {1!r}'
-                    .format(cls.__name__, current_attr)
+                    .format(cls.__name__, current_attr),
                 )
             attribute, argspec = attribute_spec
             if argspec is None:
@@ -109,7 +109,7 @@ class InjectorType(type):
         if attrname not in cls.__dependencies__:
             raise AttributeError(
                 '{0!r} object has no attribute {1!r}'
-                .format(cls.__name__, attrname)
+                .format(cls.__name__, attrname),
             )
         del cls.__dependencies__[attrname]
 
@@ -213,6 +213,7 @@ def maybe_insert_parent(parent, dependency):
 try:
     inspect.signature
 except AttributeError:
+
     def make_init_spec(dependency):
 
         argspec = inspect.getargspec(dependency.__init__)
@@ -226,6 +227,7 @@ except AttributeError:
         spec = args[1:], have_defaults
         return spec
 else:
+
     def make_init_spec(dependency):
 
         signature = inspect.signature(dependency.__init__)
@@ -264,7 +266,7 @@ def check_inheritance(bases):
     for base in bases:
         if not issubclass(base, Injector):
             raise DependencyError(
-                'Multiple inheritance is allowed for Injector subclasses only'
+                'Multiple inheritance is allowed for Injector subclasses only',
             )
 
 
@@ -279,7 +281,7 @@ def check_attrs_redefinition(name):
     for attr in ['let', 'use']:
         if name == attr:
             raise DependencyError(
-                '{0!r} redefinition is not allowed'.format(attr)
+                '{0!r} redefinition is not allowed'.format(attr),
             )
 
 
@@ -290,13 +292,12 @@ def check_cls_arguments(argnames, defaults):
         is_class = inspect.isclass(value)
         if expect_class and not is_class:
             raise DependencyError(
-                '{0!r} default value should be a class'
-                .format(name)
+                '{0!r} default value should be a class'.format(name),
             )
         if not expect_class and is_class:
             raise DependencyError(
                 "{0!r} argument can not have class as its default value"
-                .format(name)
+                .format(name),
             )
 
 
@@ -305,17 +306,17 @@ def check_varargs(dependency, varargs, kwargs):
     if varargs and kwargs:
         raise DependencyError(
             '{0}.__init__ have arbitrary argument list and keyword arguments'
-            .format(dependency.__name__)
+            .format(dependency.__name__),
         )
     elif varargs:
         raise DependencyError(
             '{0}.__init__ have arbitrary argument list'
-            .format(dependency.__name__)
+            .format(dependency.__name__),
         )
     elif kwargs:
         raise DependencyError(
             '{0}.__init__ have arbitrary keyword arguments'
-            .format(dependency.__name__)
+            .format(dependency.__name__),
         )
 
 
@@ -337,7 +338,7 @@ def check_circles_for(dependencies, attrname, origin):
         if origin in args:
             raise DependencyError(
                 '{0!r} is a circle dependency in the {1!r} constructor'
-                .format(origin, attribute.__name__)
+                .format(origin, attribute.__name__),
             )
         for name in args:
             check_circles_for(dependencies, name, origin)

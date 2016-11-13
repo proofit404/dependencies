@@ -8,6 +8,7 @@ This module contains the set of dependencies' exceptions.
 :license: LGPL-3, see LICENSE for more details.
 """
 
+
 class DependencyError(Exception):
     """Broken dependencies configuration error."""
 
