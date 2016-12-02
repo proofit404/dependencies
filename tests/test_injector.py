@@ -730,42 +730,12 @@ def test_docstrings():
     assert Foo.__doc__ == 'New container.'
 
 
-# Evaluate classes once.
+evaluate_classes = CodeCollector()
 
 
-@pytest.mark.parametrize(
-    'code',
-    [
-        # Each dependency evaluated once during injection.
-        """
-    class Container(Injector):
-        a = A
-        b = B
-        c = C
-        d = D
-
-    x = Container.a
-    assert x.b.d is x.c.d
-    """,
-        # We reevaluate each dependency for different injections.
-        """
-    class Container(Injector):
-        a = A
-        b = B
-        c = C
-        d = D
-
-    assert Container.a.b.d is not Container.a.b.d
-    assert Container.a.b.d is not Container.a.c.d
-    """,
-    ])
+@pytest.mark.parametrize('code', evaluate_classes)
 def test_evaluate_dependencies_once(code):
-    """
-    Evaluate each node in the dependencies graph once.
-
-    For some reason we can't pass `Container` class into exec scope on
-    Python2.6, because of some reference error.
-    """
+    """Evaluate each node in the dependencies graph once."""
 
     class A(object):
 
@@ -786,9 +756,29 @@ def test_evaluate_dependencies_once(code):
     class D(object):
         pass
 
-    scope = {'Injector': Injector, 'A': A, 'B': B, 'C': C, 'D': D}
+    class Container(Injector):
+        a = A
+        b = B
+        c = C
+        d = D
 
-    exec(dedent(code), scope)
+    code(Container)
+
+
+@evaluate_classes  # noqa: F811
+def f(Container):
+    """Each dependency evaluated once during injection."""
+
+    x = Container.a
+    assert x.b.d is x.c.d
+
+
+@evaluate_classes  # noqa: F811
+def f(Container):
+    """We reevaluate each dependency for different injections."""
+
+    assert Container.a.b.d is not Container.a.b.d
+    assert Container.a.b.d is not Container.a.c.d
 
 
 # Multiple inheritance.
