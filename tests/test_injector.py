@@ -833,28 +833,10 @@ def f(Foo, FooContainer, BarContainer, BazContainer):
     )
 
 
-@pytest.mark.parametrize(
-    'code',
-    [
-        # Inheritance.
-        """
-    class Foo(Container1, Container2, Container3):
-        pass
+inheritance_order = CodeCollector()
 
-    assert Foo.x == 1
-    """,
-        # Inheritance with own attributes.
-        """
-    class Foo(Container1, Container2, Container3):
-        x = 4
 
-    assert Foo.x == 4
-    """,
-        # Inplace creation.
-        """
-    assert (Container1 & Container2 & Container3).x == 1
-    """,
-    ])
+@pytest.mark.parametrize('code', inheritance_order)
 def test_multiple_inheritance_injectors_order(code):
     """
     `Injector` which comes first in the subclass bases or inplace
@@ -870,13 +852,34 @@ def test_multiple_inheritance_injectors_order(code):
     class Container3(Injector):
         x = 3
 
-    scope = {
-        'Container1': Container1,
-        'Container2': Container2,
-        'Container3': Container3,
-    }
+    code(Container1, Container2, Container3)
 
-    exec(dedent(code), scope)
+
+@inheritance_order  # noqa: F811
+def f(Container1, Container2, Container3):
+    """Inheritance."""
+
+    class Foo(Container1, Container2, Container3):
+        pass
+
+    assert Foo.x == 1
+
+
+@inheritance_order  # noqa: F811
+def f(Container1, Container2, Container3):
+    """Inheritance with own attributes."""
+
+    class Foo(Container1, Container2, Container3):
+        x = 4
+
+    assert Foo.x == 4
+
+
+@inheritance_order  # noqa: F811
+def f(Container1, Container2, Container3):
+    """Inplace creation."""
+
+    assert (Container1 & Container2 & Container3).x == 1
 
 
 @pytest.mark.parametrize(
