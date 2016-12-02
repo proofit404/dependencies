@@ -781,51 +781,12 @@ def f(Container):
     assert Container.a.b.d is not Container.a.c.d
 
 
-# Multiple inheritance.
+multiple_inheritance = CodeCollector()
 
 
-@pytest.mark.parametrize(
-    'code',
-    [
-        # Inheritance.
-        """
-    class FooContainer(Injector):
-        foo = Foo
-
-    class BarContainer(Injector):
-        bar = Bar
-
-    class BazContainer(Injector):
-        baz = Baz
-
-    class Container(FooContainer, BarContainer, BazContainer):
-        pass
-
-    assert isinstance(Container.baz.bar.foo, Foo)
-    """,
-        # Inplace creation.
-        """
-    class FooContainer(Injector):
-        foo = Foo
-
-    class BarContainer(Injector):
-        bar = Bar
-
-    class BazContainer(Injector):
-        baz = Baz
-
-    assert isinstance(
-        (FooContainer & BarContainer & BazContainer).baz.bar.foo,
-        Foo,
-    )
-    """,
-    ])
+@pytest.mark.parametrize('code', multiple_inheritance)
 def test_multiple_inheritance(code):
-    """
-    We can mix injector together.
-
-    We can't define injectors inside test function because of Python2.6
-    """
+    """We can mix injector together."""
 
     class Foo(object):
         pass
@@ -840,9 +801,36 @@ def test_multiple_inheritance(code):
         def __init__(self, bar):
             self.bar = bar
 
-    scope = {'Injector': Injector, 'Foo': Foo, 'Bar': Bar, 'Baz': Baz}
+    class FooContainer(Injector):
+        foo = Foo
 
-    exec(dedent(code), scope)
+    class BarContainer(Injector):
+        bar = Bar
+
+    class BazContainer(Injector):
+        baz = Baz
+
+    code(Foo, FooContainer, BarContainer, BazContainer)
+
+
+@multiple_inheritance  # noqa: F811
+def f(Foo, FooContainer, BarContainer, BazContainer):
+    """Inheritance."""
+
+    class Container(FooContainer, BarContainer, BazContainer):
+        pass
+
+    assert isinstance(Container.baz.bar.foo, Foo)
+
+
+@multiple_inheritance  # noqa: F811
+def f(Foo, FooContainer, BarContainer, BazContainer):
+    """Inplace creation."""
+
+    assert isinstance(
+        (FooContainer & BarContainer & BazContainer).baz.bar.foo,
+        Foo,
+    )
 
 
 @pytest.mark.parametrize(
