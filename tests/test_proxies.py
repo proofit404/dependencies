@@ -1,6 +1,7 @@
 from textwrap import dedent
 
 import pytest
+from helpers import CodeCollector
 
 from dependencies import Injector, this, DependencyError
 
@@ -58,22 +59,34 @@ def test_attribute_getter_few_attributes():
     assert Container.foo == 1
 
 
-# Parent attribute access.
+parent_attr = CodeCollector()
 
 
-@pytest.mark.parametrize(
-    'code',
-    [
-        # Declarative injector.
-        """
+@pytest.mark.parametrize('code', parent_attr)
+def test_attribute_getter_parent_access(code):
+    """We can access attribute of outer container."""
+
+    Container = code()
+    assert Container.SubContainer.bar == 1
+
+
+@parent_attr
+def f():
+    """Declarative injector."""
+
     class Container(Injector):
         foo = 1
 
         class SubContainer(Injector):
             bar = (this << 1).foo
-    """,
-        # Let notation.
-        """
+
+    return Container
+
+
+@parent_attr  # noqa: F811
+def f():
+    """Let notation."""
+
     class OuterContainer(Injector):
         foo = 1
 
@@ -81,9 +94,14 @@ def test_attribute_getter_few_attributes():
         bar = (this << 1).foo
 
     Container = OuterContainer.let(SubContainer=SubContainer)
-    """,
-        # Attribute assignment.
-        """
+
+    return Container
+
+
+@parent_attr  # noqa: F811
+def f():
+    """Attribute assignment."""
+
     class Container(Injector):
         foo = 1
 
@@ -91,24 +109,22 @@ def test_attribute_getter_few_attributes():
         bar = (this << 1).foo
 
     Container.SubContainer = SubContainer
-    """,
-        # Use decorator.
-        """
+
+    return Container
+
+
+@parent_attr  # noqa: F811
+def f():
+    """Use decorator."""
+
     class Container(Injector):
         foo = 1
 
     @Container.use
     class SubContainer(Injector):
         bar = (this << 1).foo
-    """,
-    ])
-def test_attribute_getter_parent_access(code):
-    """We can access attribute of outer container."""
 
-    scope = {'Injector': Injector, 'this': this}
-    exec(dedent(code), scope)
-    Container = scope['Container']
-    assert Container.SubContainer.bar == 1
+    return Container
 
 
 @pytest.mark.parametrize(
