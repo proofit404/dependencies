@@ -41,7 +41,7 @@ def test_attribute_getter_few_attributes():
     """
     We resolve attribute access until we find all specified
     attributes.
-    """
+    W    W    W    W    W    W    """
 
     class Foo(object):
 
@@ -342,9 +342,6 @@ def test_item_getter_non_printable_key():
     assert Container.bar == 1
 
 
-# Docstrings.
-
-
 def test_docstrings():
     """Check we can access all API entry points documentation."""
 
@@ -352,65 +349,81 @@ def test_docstrings():
         'Declare attribute and item access during dependency injection.')
 
 
-# Deny direct this proxy usage.
+direct_proxy = CodeCollector()
 
 
 @pytest.mark.xfail  # FIXME: support declared behavior
-@pytest.mark.parametrize(
-    'code',
-    [
-        # Declarative injector.
-        """
-    class Container(Injector):
-        foo = this
-    """,
-        # Declarative injector with parent access.
-        """
-    class Container(Injector):
-        foo = (this << 1)
-    """,
-        # Let notation.
-        """
-    Injector.let(foo=this)
-    """,
-        # Let notation with parent access.
-        """
-    Injector.let(foo=(this << 1))
-    """,
-        # Attribute assignment.
-        """
-    class Container(Injector):
-        pass
-
-    Container.foo = this
-    """,
-        # Attribute assignment with parent access.
-        """
-    class Container(Injector):
-        pass
-
-    Container.foo = (this << 1)
-    """,
-        # TODO: Maybe deny injection of `this` subclasses.
-        #
-        # Use decorator.
-        # """""",
-        #
-        # Use decorator with parent.
-        # """""",
-    ])
+@pytest.mark.parametrize('code', direct_proxy)
 def test_attribute_getter_arguments_validation(code):
     """TODO: write doc and proper test name"""
 
-    scope = {'Injector': Injector, 'this': this}
-
     with pytest.raises(DependencyError) as exc_info:
-        exec(dedent(code), scope)
+        code()
 
     message = str(exc_info.value)
     assert message == "You can not use 'this' directly in the 'Injector'"
 
 
+@direct_proxy  # noqa: F811
+def f():
+    """Declarative injector."""
+
+    class Container(Injector):
+        foo = this
+
+
+@direct_proxy  # noqa: F811
+def f():
+    """Declarative injector with parent access."""
+
+    class Container(Injector):
+        foo = (this << 1)
+
+
+@direct_proxy  # noqa: F811
+def f():
+    """Let notation."""
+
+    Injector.let(foo=this)
+
+
+@direct_proxy  # noqa: F811
+def f():
+    """Let notation with parent access."""
+
+    Injector.let(foo=(this << 1))
+
+
+@direct_proxy  # noqa: F811
+def f():
+    """Attribute assignment."""
+
+    class Container(Injector):
+        pass
+
+    Container.foo = this
+
+
+@direct_proxy  # noqa: F811
+def f():
+    """Attribute assignment with parent access."""
+
+    class Container(Injector):
+        pass
+
+    Container.foo = (this << 1)
+
+
+# TODO: Maybe deny injection of `this` subclasses.
+#
+# @direct_proxy  # noqa: F811
+# def f():
+#     """Use decorator."""
+#
+# @direct_proxy  # noqa: F811
+# def f():
+#     """Use decorator with parent."""
+#
 # TODO: minimize test number here.
 #
 # FIXME: same SubContainer for different parents should work.
