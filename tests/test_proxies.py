@@ -205,30 +205,50 @@ def f():
     return Container
 
 
-# Declarative item access.
+item_access = CodeCollector()
 
 
-@pytest.mark.parametrize(
-    'code',
-    [
-        # Get item with string key.
-        """
+@pytest.mark.parametrize('code', item_access)
+def test_item_getter(code):
+    """
+    We can describe item access in the `Injector` in the
+    declarative manner.
+    """
+
+    result = code()
+    assert result == 1
+
+
+@item_access  # noqa: F811
+def f():
+    """Get item with string key."""
+
     class Container(Injector):
         foo = {'one': 1}
         one = this.foo['one']
 
     result = Container.one
-    """,
-        # Get items as many times as we want.
-        """
+
+    return result
+
+
+@item_access  # noqa: F811
+def f():
+    """Get items as many times as we want."""
+
     class Container(Injector):
         foo = {'one': {'two': 1}}
         two = this.foo['one']['two']
 
     result = Container.two
-    """,
-        # Get item from the outer container.
-        """
+
+    return result
+
+
+@item_access  # noqa: F811
+def f():
+    """Get item from the outer container."""
+
     class Container(Injector):
         foo = {'bar': {'baz': 1}}
 
@@ -236,9 +256,14 @@ def f():
             spam = (this << 1).foo['bar']['baz']
 
     result = Container.SubContainer.spam
-    """,
-        # Get item from the outer container of any depth level.
-        """
+
+    return result
+
+
+@item_access  # noqa: F811
+def f():
+    """Get item from the outer container of any depth level."""
+
     class Container(Injector):
         foo = {'bar': {'baz': 1}}
 
@@ -248,42 +273,47 @@ def f():
                 spam = (this << 2).foo['bar']['baz']
 
     result = Container.SubContainer.SubSubContainer.spam
-    """,
-        # Get items from list.
-        """
+
+    return result
+
+
+@item_access  # noqa: F811
+def f():
+    """Get items from list."""
+
     class Container(Injector):
         foo = [1, 2, 3]
         bar = this.foo[0]
 
     result = Container.bar
-    """,
-        # Get items from dict with digit keys.
-        """
+
+    return result
+
+
+@item_access  # noqa: F811
+def f():
+    """Get items from dict with digit keys."""
+
     class Container(Injector):
         foo = {2: 1}
         bar = this.foo[2]
 
     result = Container.bar
-    """,
-        # Get items from dict with tuple keys.
-        """
+
+    return result
+
+
+@item_access  # noqa: F811
+def f():
+    """Get items from dict with tuple keys."""
+
     class Container(Injector):
         foo = {('x', 1): 1}
         bar = this.foo[('x', 1)]
 
     result = Container.bar
-    """,
-    ])
-def test_item_getter(code):
-    """
-    We can describe item access in the `Injector` in the
-    declarative manner.
-    """
 
-    scope = {'Injector': Injector, 'this': this}
-    exec(dedent(code), scope)
-    result = scope['result']
-    assert result == 1
+    return result
 
 
 def test_item_getter_non_printable_key():
