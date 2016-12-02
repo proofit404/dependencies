@@ -2,6 +2,7 @@ import inspect
 from textwrap import dedent
 
 import pytest
+from helpers import CodeCollector
 
 from dependencies import Injector, DependencyError
 from dependencies.injector import use_doc
@@ -465,44 +466,10 @@ def test_mutable_injector_deny_to_modify_injector():
     assert str(exc_info.value) == "'Injector' modification is not allowed"
 
 
-# Unregister dependency.
+unregister_dependency = CodeCollector()
 
 
-@pytest.mark.parametrize(
-    'code',
-    [
-        # Declarative injector.
-        """
-    class Baz(Injector):
-        foo = Foo
-        bar = Bar
-
-    del Baz.bar
-
-    Baz.foo
-    """,
-        # Let notation.
-        """
-    Baz = Injector.let(foo=Foo, bar=Bar)
-
-    del Baz.bar
-
-    Baz.foo
-    """,
-        # Throw `AttributeError` if someone tries to delete missing
-        # dependency.
-        """
-    del Injector.bar
-    """,
-        # Throw `AttributeError` if someone tries to delete missing
-        # dependency in the `Injector` subclass.
-        """
-    class Baz(Injector):
-        pass
-
-    del Baz.bar
-    """,
-    ])
+@pytest.mark.parametrize('code', unregister_dependency)
 def test_unregister_dependency(code):
     """We can unregister dependency from `Injector` subclasses."""
 
@@ -514,15 +481,60 @@ def test_unregister_dependency(code):
     class Bar(object):
         pass
 
-    scope = {'Injector': Injector, 'Foo': Foo, 'Bar': Bar}
-
     with pytest.raises(AttributeError) as exc_info:
-        exec(dedent(code), scope)
+        code(Foo, Bar)
 
     assert str(exc_info.value) in set([
         "'Baz' object has no attribute 'bar'",
         "'Injector' object has no attribute 'bar'",
     ])
+
+
+@unregister_dependency
+def f(Foo, Bar):
+    """Declarative injector."""
+
+    class Baz(Injector):
+        foo = Foo
+        bar = Bar
+
+    del Baz.bar
+
+    Baz.foo
+
+
+@unregister_dependency  # noqa: F811
+def f(Foo, Bar):
+    """Let notation."""
+
+    Baz = Injector.let(foo=Foo, bar=Bar)
+
+    del Baz.bar
+
+    Baz.foo
+
+
+@unregister_dependency  # noqa: F811
+def f(Foo, Bar):
+    """
+    Throw `AttributeError` if someone tries to delete missing
+    dependency.
+    """
+
+    del Injector.bar
+
+
+@unregister_dependency  # noqa: F811
+def f(Foo, Bar):
+    """
+    Throw `AttributeError` if someone tries to delete missing
+    dependency in the `Injector` subclass.
+    """
+
+    class Baz(Injector):
+        pass
+
+    del Baz.bar
 
 
 def test_unregister_do_not_use_object_constructor():
