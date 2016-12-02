@@ -127,11 +127,21 @@ def f():
     return Container
 
 
-@pytest.mark.parametrize(
-    'code',
-    [
-        # Declarative injector.
-        """
+few_parent_attr = CodeCollector()
+
+
+@pytest.mark.parametrize('code', few_parent_attr)
+def test_attribute_getter_few_parents(code):
+    """We can access attribute of outer container in any nesting depth."""
+
+    Container = code()
+    assert Container.SubContainer.SubSubContainer.bar == 1
+
+
+@few_parent_attr  # noqa: F811
+def f():
+    """Declarative injector."""
+
     class Container(Injector):
         foo = 1
 
@@ -139,9 +149,14 @@ def f():
 
             class SubSubContainer(Injector):
                 bar = (this << 2).foo
-    """,
-        # Let notation.
-        """
+
+    return Container
+
+
+@few_parent_attr  # noqa: F811
+def f():
+    """Let notation."""
+
     class OuterContainer(Injector):
         foo = 1
 
@@ -151,9 +166,14 @@ def f():
             bar = (this << 2).foo
 
     Container = OuterContainer.let(SubContainer=SubContainer)
-    """,
-        # Attribute assignment.
-        """
+
+    return Container
+
+
+@few_parent_attr  # noqa: F811
+def f():
+    """Attribute assignment."""
+
     class Container(Injector):
         foo = 1
 
@@ -164,9 +184,14 @@ def f():
         bar = (this << 2).foo
 
     Container.SubContainer.SubSubContainer = SubSubContainer
-    """,
-        # Use decorator.
-        """
+
+    return Container
+
+
+@few_parent_attr  # noqa: F811
+def f():
+    """Use decorator."""
+
     class Container(Injector):
         foo = 1
 
@@ -176,15 +201,8 @@ def f():
     @Container.SubContainer.use
     class SubSubContainer(Injector):
         bar = (this << 2).foo
-    """,
-    ])
-def test_attribute_getter_few_parents(code):
-    """We can access attribute of outer container in any nesting depth."""
 
-    scope = {'Injector': Injector, 'this': this}
-    exec(dedent(code), scope)
-    Container = scope['Container']
-    assert Container.SubContainer.SubSubContainer.bar == 1
+    return Container
 
 
 # Declarative item access.
