@@ -4,7 +4,6 @@ import pytest
 
 from dependencies import Injector, this, DependencyError
 
-
 # Declarative attribute access.
 
 
@@ -15,17 +14,21 @@ def test_attribute_getter():
     """
 
     class Foo(object):
+
         def __init__(self, one, two):
             self.one = one
             self.two = two
-        def do(self):  # noqa: E301
+
+        def do(self):
             return self.one + self.two
 
     class Container(Injector):
+
         class SubContainer(Injector):
             foo = Foo
             one = 1
             two = 2
+
         foo = this.SubContainer.foo
 
     foo = Container.foo
@@ -40,13 +43,16 @@ def test_attribute_getter_few_attributes():
     """
 
     class Foo(object):
+
         def __init__(self, one):
             self.one = one
 
     class Container(Injector):
+
         class SubContainer(Injector):
             foo = Foo
             one = 1
+
         foo = this.SubContainer.foo.one
 
     assert Container.foo == 1
@@ -55,17 +61,19 @@ def test_attribute_getter_few_attributes():
 # Parent attribute access.
 
 
-@pytest.mark.parametrize('code', [
-    # Declarative injector.
-    """
+@pytest.mark.parametrize(
+    'code',
+    [
+        # Declarative injector.
+        """
     class Container(Injector):
         foo = 1
 
         class SubContainer(Injector):
             bar = (this << 1).foo
     """,
-    # Let notation.
-    """
+        # Let notation.
+        """
     class OuterContainer(Injector):
         foo = 1
 
@@ -74,8 +82,8 @@ def test_attribute_getter_few_attributes():
 
     Container = OuterContainer.let(SubContainer=SubContainer)
     """,
-    # Attribute assignment.
-    """
+        # Attribute assignment.
+        """
     class Container(Injector):
         foo = 1
 
@@ -84,8 +92,8 @@ def test_attribute_getter_few_attributes():
 
     Container.SubContainer = SubContainer
     """,
-    # Use decorator.
-    """
+        # Use decorator.
+        """
     class Container(Injector):
         foo = 1
 
@@ -93,7 +101,7 @@ def test_attribute_getter_few_attributes():
     class SubContainer(Injector):
         bar = (this << 1).foo
     """,
-])
+    ])
 def test_attribute_getter_parent_access(code):
     """We can access attribute of outer container."""
 
@@ -103,9 +111,11 @@ def test_attribute_getter_parent_access(code):
     assert Container.SubContainer.bar == 1
 
 
-@pytest.mark.parametrize('code', [
-    # Declarative injector.
-    """
+@pytest.mark.parametrize(
+    'code',
+    [
+        # Declarative injector.
+        """
     class Container(Injector):
         foo = 1
 
@@ -114,8 +124,8 @@ def test_attribute_getter_parent_access(code):
             class SubSubContainer(Injector):
                 bar = (this << 2).foo
     """,
-    # Let notation.
-    """
+        # Let notation.
+        """
     class OuterContainer(Injector):
         foo = 1
 
@@ -126,8 +136,8 @@ def test_attribute_getter_parent_access(code):
 
     Container = OuterContainer.let(SubContainer=SubContainer)
     """,
-    # Attribute assignment.
-    """
+        # Attribute assignment.
+        """
     class Container(Injector):
         foo = 1
 
@@ -139,8 +149,8 @@ def test_attribute_getter_parent_access(code):
 
     Container.SubContainer.SubSubContainer = SubSubContainer
     """,
-    # Use decorator.
-    """
+        # Use decorator.
+        """
     class Container(Injector):
         foo = 1
 
@@ -151,7 +161,7 @@ def test_attribute_getter_parent_access(code):
     class SubSubContainer(Injector):
         bar = (this << 2).foo
     """,
-])
+    ])
 def test_attribute_getter_few_parents(code):
     """We can access attribute of outer container in any nesting depth."""
 
@@ -164,25 +174,27 @@ def test_attribute_getter_few_parents(code):
 # Declarative item access.
 
 
-@pytest.mark.parametrize('code', [
-    # Get item with string key.
-    """
+@pytest.mark.parametrize(
+    'code',
+    [
+        # Get item with string key.
+        """
     class Container(Injector):
         foo = {'one': 1}
         one = this.foo['one']
 
     result = Container.one
     """,
-    # Get items as many times as we want.
-    """
+        # Get items as many times as we want.
+        """
     class Container(Injector):
         foo = {'one': {'two': 1}}
         two = this.foo['one']['two']
 
     result = Container.two
     """,
-    # Get item from the outer container.
-    """
+        # Get item from the outer container.
+        """
     class Container(Injector):
         foo = {'bar': {'baz': 1}}
 
@@ -191,8 +203,8 @@ def test_attribute_getter_few_parents(code):
 
     result = Container.SubContainer.spam
     """,
-    # Get item from the outer container of any depth level.
-    """
+        # Get item from the outer container of any depth level.
+        """
     class Container(Injector):
         foo = {'bar': {'baz': 1}}
 
@@ -203,31 +215,31 @@ def test_attribute_getter_few_parents(code):
 
     result = Container.SubContainer.SubSubContainer.spam
     """,
-    # Get items from list.
-    """
+        # Get items from list.
+        """
     class Container(Injector):
         foo = [1, 2, 3]
         bar = this.foo[0]
 
     result = Container.bar
     """,
-    # Get items from dict with digit keys.
-    """
+        # Get items from dict with digit keys.
+        """
     class Container(Injector):
         foo = {2: 1}
         bar = this.foo[2]
 
     result = Container.bar
     """,
-    # Get items from dict with tuple keys.
-    """
+        # Get items from dict with tuple keys.
+        """
     class Container(Injector):
         foo = {('x', 1): 1}
         bar = this.foo[('x', 1)]
 
     result = Container.bar
     """,
-])
+    ])
 def test_item_getter(code):
     """
     We can describe item access in the `Injector` in the
@@ -247,11 +259,14 @@ def test_item_getter_non_printable_key():
     """
 
     class Boom(object):
+
         def __init__(self, salt):
             self.salt = salt
-        def __hash__(self):     # noqa: E301
+
+        def __hash__(self):
             return hash(self.salt)
-        def __str__(self):      # noqa: E301
+
+        def __str__(self):
             return "<boom>"
 
     boom = Boom('hello')
@@ -270,55 +285,56 @@ def test_docstrings():
     """Check we can access all API entry points documentation."""
 
     assert this.__doc__ == (
-        'Declare attribute and item access during dependency injection.'
-    )
+        'Declare attribute and item access during dependency injection.')
 
 
 # Deny direct this proxy usage.
 
 
-@pytest.mark.xfail              # FIXME: support declared behavior
-@pytest.mark.parametrize('code', [
-    # Declarative injector.
-    """
+@pytest.mark.xfail  # FIXME: support declared behavior
+@pytest.mark.parametrize(
+    'code',
+    [
+        # Declarative injector.
+        """
     class Container(Injector):
         foo = this
     """,
-    # Declarative injector with parent access.
-    """
+        # Declarative injector with parent access.
+        """
     class Container(Injector):
         foo = (this << 1)
     """,
-    # Let notation.
-    """
+        # Let notation.
+        """
     Injector.let(foo=this)
     """,
-    # Let notation with parent access.
-    """
+        # Let notation with parent access.
+        """
     Injector.let(foo=(this << 1))
     """,
-    # Attribute assignment.
-    """
+        # Attribute assignment.
+        """
     class Container(Injector):
         pass
 
     Container.foo = this
     """,
-    # Attribute assignment with parent access.
-    """
+        # Attribute assignment with parent access.
+        """
     class Container(Injector):
         pass
 
     Container.foo = (this << 1)
     """,
-    # TODO: Maybe deny injection of `this` subclasses.
-    #
-    # Use decorator.
-    # """""",
-    #
-    # Use decorator with parent.
-    # """""",
-])
+        # TODO: Maybe deny injection of `this` subclasses.
+        #
+        # Use decorator.
+        # """""",
+        #
+        # Use decorator with parent.
+        # """""",
+    ])
 def test_attribute_getter_arguments_validation(code):
     """TODO: write doc and proper test name"""
 
