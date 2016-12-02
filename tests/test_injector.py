@@ -11,9 +11,11 @@ def test_lambda_dependency():
     """Inject lambda function."""
 
     class Foo(object):
+
         def __init__(self, add):
             self.add = add
-        def do(self, x):  # noqa: E301
+
+        def do(self, x):
             return self.add(x, x)
 
     class Summator(Injector):
@@ -27,9 +29,11 @@ def test_function_dependency():
     """Inject regular function."""
 
     class Foo(object):
+
         def __init__(self, add):
             self.add = add
-        def do(self, x):  # noqa: E301
+
+        def do(self, x):
             return self.add(x, x)
 
     def plus(x, y):
@@ -46,14 +50,17 @@ def test_inline_dependency():
     """Inject method defined inside Injector subclass."""
 
     class Foo(object):
+
         def __init__(self, add):
             self.add = add
-        def do(self, x):  # noqa: E301
+
+        def do(self, x):
             return self.add(x, x)
 
     class Summator(Injector):
         foo = Foo
-        def add(x, y):  # noqa: E301
+
+        def add(x, y):
             return x + y
 
     assert Summator.foo.do(1) == 2
@@ -67,16 +74,20 @@ def test_class_dependency():
     """
 
     class Foo(object):
+
         def __init__(self, add, bar):
             self.add = add
             self.bar = bar
-        def do(self, x):  # noqa: E301
+
+        def do(self, x):
             return self.add(self.bar.go(x), self.bar.go(x))
 
     class Bar(object):
+
         def __init__(self, mul):
             self.mul = mul
-        def go(self, x):  # noqa: E301
+
+        def go(self, x):
             return self.mul(x, x)
 
     class Summator(Injector):
@@ -112,9 +123,11 @@ def test_redefine_dependency():
     """
 
     class Foo(object):
+
         def __init__(self, add):
             self.add = add
-        def do(self, x):  # noqa: E301
+
+        def do(self, x):
             return self.add(x, x)
 
     class Summator(Injector):
@@ -134,10 +147,12 @@ def test_override_keyword_argument_if_dependency_was_specified():
     """
 
     class Foo(object):
+
         def __init__(self, add, y=1):
             self.add = add
             self.y = y
-        def do(self, x):  # noqa: E301
+
+        def do(self, x):
             return self.add(x, self.y)
 
     class Summator(Injector):
@@ -155,10 +170,12 @@ def test_preserve_keyword_argument_if_dependency_was_missed():
     """
 
     class Foo(object):
+
         def __init__(self, add, y=1):
             self.add = add
             self.y = y
-        def do(self, x):  # noqa: E301
+
+        def do(self, x):
             return self.add(x, self.y)
 
     class Summator(Injector):
@@ -175,11 +192,13 @@ def test_preserve_missed_keyword_argument_in_the_middle():
     """
 
     class Foo(object):
+
         def __init__(self, x, y=1, z=2):
             self.x = x
             self.y = y
             self.z = z
-        def do(self):  # noqa: E301
+
+        def do(self):
             return self.x + self.y + self.z
 
     class Container(Injector):
@@ -200,6 +219,7 @@ def test_cls_named_argument_default_value():
         pass
 
     class Bar(object):
+
         def __init__(self, foo_cls=Foo):
             self.foo_cls = foo_cls
 
@@ -216,6 +236,7 @@ def test_injectable_without_its_own_init():
     """
 
     class Foo(object):
+
         def do(self):
             return 1
 
@@ -232,11 +253,13 @@ def test_injectable_with_parent_init():
     """
 
     class Foo(object):
+
         def __init__(self, x, y):
             self.x = x
             self.y = y
 
     class Bar(Foo):
+
         def add(self):
             return self.x + self.y
 
@@ -258,6 +281,7 @@ def test_injectable_with_parent_without_init():
         pass
 
     class Bar(Foo):
+
         def add(self):
             return 3
 
@@ -310,10 +334,12 @@ def test_let_factory_on_injector_directly():
     """
 
     class Foo(object):
+
         def __init__(self, bar):
             self.bar = bar
 
     class Bar(object):
+
         def __init__(self, baz):
             self.baz = baz
 
@@ -378,6 +404,7 @@ def test_omit_parent_link_in_dir_listing():
     """
 
     class Foo(Injector):
+
         class Bar(Injector):
             pass
 
@@ -391,6 +418,7 @@ def test_mutable_injector():
     """We can extend existed `Injector` by attribute assignment."""
 
     class Foo(object):
+
         def __init__(self, bar):
             self.bar = bar
 
@@ -413,6 +441,7 @@ def test_mutable_injector_let_expression():
     """
 
     class Foo(object):
+
         def __init__(self, bar):
             self.bar = bar
 
@@ -439,9 +468,11 @@ def test_mutable_injector_deny_to_modify_injector():
 # Unregister dependency.
 
 
-@pytest.mark.parametrize('code', [
-    # Declarative injector.
-    """
+@pytest.mark.parametrize(
+    'code',
+    [
+        # Declarative injector.
+        """
     class Baz(Injector):
         foo = Foo
         bar = Bar
@@ -450,32 +481,33 @@ def test_mutable_injector_deny_to_modify_injector():
 
     Baz.foo
     """,
-    # Let notation.
-    """
+        # Let notation.
+        """
     Baz = Injector.let(foo=Foo, bar=Bar)
 
     del Baz.bar
 
     Baz.foo
     """,
-    # Throw `AttributeError` if someone tries to delete missing
-    # dependency.
-    """
+        # Throw `AttributeError` if someone tries to delete missing
+        # dependency.
+        """
     del Injector.bar
     """,
-    # Throw `AttributeError` if someone tries to delete missing
-    # dependency in the `Injector` subclass.
-    """
+        # Throw `AttributeError` if someone tries to delete missing
+        # dependency in the `Injector` subclass.
+        """
     class Baz(Injector):
         pass
 
     del Baz.bar
     """,
-])
+    ])
 def test_unregister_dependency(code):
     """We can unregister dependency from `Injector` subclasses."""
 
     class Foo(object):
+
         def __init__(self, bar):
             self.bar = bar
 
@@ -499,6 +531,7 @@ def test_unregister_do_not_use_object_constructor():
     """
 
     class Foo(object):
+
         def __init__(self):
             raise Exception
 
@@ -518,10 +551,12 @@ def test_use_decorator_inject_class():
 
     @Container.use.foo
     class Foo(object):
+
         def __init__(self, x, y):
             self.x = x
             self.y = y
-        def __call__(self):  # noqa: E301
+
+        def __call__(self):
             return self.x + self.y
 
     assert Container.foo() == 3
@@ -531,11 +566,13 @@ def test_use_decorator_inject_function():
     """We must be allowed to register function with `use` decorator."""
 
     class Foo(object):
+
         def __init__(self, func, x, y):
             self.func = func
             self.x = x
             self.y = y
-        def __call__(self):  # noqa: E301
+
+        def __call__(self):
             return self.func(self.x, self.y)
 
     class Container(Injector):
@@ -564,10 +601,12 @@ def test_use_decorator_keep_argument():
 
     @Container.use.bar
     class Y(object):
+
         def __init__(self, a, b):
             self.a = a
             self.b = b
-        def do(self):  # noqa: E301
+
+        def do(self):
             return self.a + self.b
 
     assert x(1, 2) == 3
@@ -581,6 +620,7 @@ def test_use_decorator_no_name_class():
     """
 
     class Foo(object):
+
         def __init__(self, Bar):
             self.Bar = Bar
 
@@ -601,6 +641,7 @@ def test_use_decorator_no_name_function():
     """
 
     class Foo(object):
+
         def __init__(self, do):
             self.do = do
 
@@ -623,15 +664,19 @@ def test_nested_injectors():
     another `Injector` subclass.
     """
 
-    def do_x(a, b): return a + b
+    def do_x(a, b):
+        return a + b
 
-    def do_y(c, d): return c * d
+    def do_y(c, d):
+        return c * d
 
     class Call(object):
+
         def __init__(self, foo, bar):
             self.foo = foo
             self.bar = bar
-        def __call__(self, one, two, three):  # noqa: E301
+
+        def __call__(self, one, two, three):
             return self.bar.y(self.foo.x(one, two), three)
 
     class Foo(Injector):
@@ -661,12 +706,10 @@ def test_docstrings():
     classes specified in it namespace.
     """
     assert Injector.let.__doc__ == (
-        'Produce new Injector with some dependencies overwritten.'
-    )
+        'Produce new Injector with some dependencies overwritten.')
     assert Injector.use.__doc__ == use_doc
     assert DependencyError.__doc__ == (
-        'Broken dependencies configuration error.'
-    )
+        'Broken dependencies configuration error.')
 
     class Foo(Injector):
         """New container."""
@@ -678,9 +721,11 @@ def test_docstrings():
 # Evaluate classes once.
 
 
-@pytest.mark.parametrize('code', [
-    # Each dependency evaluated once during injection.
-    """
+@pytest.mark.parametrize(
+    'code',
+    [
+        # Each dependency evaluated once during injection.
+        """
     class Container(Injector):
         a = A
         b = B
@@ -690,8 +735,8 @@ def test_docstrings():
     x = Container.a
     assert x.b.d is x.c.d
     """,
-    # We reevaluate each dependency for different injections.
-    """
+        # We reevaluate each dependency for different injections.
+        """
     class Container(Injector):
         a = A
         b = B
@@ -701,7 +746,7 @@ def test_docstrings():
     assert Container.a.b.d is not Container.a.b.d
     assert Container.a.b.d is not Container.a.c.d
     """,
-])
+    ])
 def test_evaluate_dependencies_once(code):
     """
     Evaluate each node in the dependencies graph once.
@@ -711,15 +756,18 @@ def test_evaluate_dependencies_once(code):
     """
 
     class A(object):
+
         def __init__(self, b, c):
             self.b = b
             self.c = c
 
     class B(object):
+
         def __init__(self, d):
             self.d = d
 
     class C(object):
+
         def __init__(self, d):
             self.d = d
 
@@ -734,9 +782,11 @@ def test_evaluate_dependencies_once(code):
 # Multiple inheritance.
 
 
-@pytest.mark.parametrize('code', [
-    # Inheritance.
-    """
+@pytest.mark.parametrize(
+    'code',
+    [
+        # Inheritance.
+        """
     class FooContainer(Injector):
         foo = Foo
 
@@ -751,8 +801,8 @@ def test_evaluate_dependencies_once(code):
 
     assert isinstance(Container.baz.bar.foo, Foo)
     """,
-    # Inplace creation.
-    """
+        # Inplace creation.
+        """
     class FooContainer(Injector):
         foo = Foo
 
@@ -767,7 +817,7 @@ def test_evaluate_dependencies_once(code):
         Foo,
     )
     """,
-])
+    ])
 def test_multiple_inheritance(code):
     """
     We can mix injector together.
@@ -779,10 +829,12 @@ def test_multiple_inheritance(code):
         pass
 
     class Bar(object):
+
         def __init__(self, foo):
             self.foo = foo
 
     class Baz(object):
+
         def __init__(self, bar):
             self.bar = bar
 
@@ -791,26 +843,28 @@ def test_multiple_inheritance(code):
     exec(dedent(code), scope)
 
 
-@pytest.mark.parametrize('code', [
-    # Inheritance.
-    """
+@pytest.mark.parametrize(
+    'code',
+    [
+        # Inheritance.
+        """
     class Foo(Container1, Container2, Container3):
         pass
 
     assert Foo.x == 1
     """,
-    # Inheritance with own attributes.
-    """
+        # Inheritance with own attributes.
+        """
     class Foo(Container1, Container2, Container3):
         x = 4
 
     assert Foo.x == 4
     """,
-    # Inplace creation.
-    """
+        # Inplace creation.
+        """
     assert (Container1 & Container2 & Container3).x == 1
     """,
-])
+    ])
 def test_multiple_inheritance_injectors_order(code):
     """
     `Injector` which comes first in the subclass bases or inplace
@@ -835,17 +889,19 @@ def test_multiple_inheritance_injectors_order(code):
     exec(dedent(code), scope)
 
 
-@pytest.mark.parametrize('code', [
-    # Inheritance.
-    """
+@pytest.mark.parametrize(
+    'code',
+    [
+        # Inheritance.
+        """
     class Foo(Injector, Foo):
         pass
     """,
-    # Inplace creation.
-    """
+        # Inplace creation.
+        """
     Injector & Foo
     """,
-])
+    ])
 def test_multiple_inheritance_deny_regular_classes(code):
     """
     We can't use classes in multiple inheritance which are not
@@ -861,50 +917,51 @@ def test_multiple_inheritance_deny_regular_classes(code):
         exec(dedent(code), scope)
 
     assert str(exc_info.value) == (
-        'Multiple inheritance is allowed for Injector subclasses only'
-    )
+        'Multiple inheritance is allowed for Injector subclasses only')
 
 
 # Deny magic methods.
 
 
-@pytest.mark.parametrize('code', [
-    # Declarative injector.
-    """
+@pytest.mark.parametrize(
+    'code',
+    [
+        # Declarative injector.
+        """
     class Bar(Injector):
         def __eq__(self, other):
             return False
     """,
-    # Let notation.
-    """
+        # Let notation.
+        """
     class Foo(Injector):
         pass
 
     Foo.let(__eq__=lambda self, other: False)
     """,
-    # Attribute assignment.
-    """
+        # Attribute assignment.
+        """
     class Foo(Injector):
         pass
 
     Foo.__eq__ = lambda self, other: False
     """,
-    # Delete attribute.
-    """
+        # Delete attribute.
+        """
     class Foo(Injector):
         pass
 
     del Foo.__init__
     """,
-    # Use decorator.
-    """
+        # Use decorator.
+        """
     Container = Injector.let()
 
     @Container.use.__eq__
     def eq(self, other):
         return False
     """,
-])
+    ])
 def test_deny_magic_methods_injection(code):
     """`Injector` doesn't accept magic methods."""
 
@@ -919,29 +976,31 @@ def test_deny_magic_methods_injection(code):
 # Raise `AttributeError`.
 
 
-@pytest.mark.parametrize('code', [
-    # Declarative injector.
-    """
+@pytest.mark.parametrize(
+    'code',
+    [
+        # Declarative injector.
+        """
     class Foo(Injector):
         pass
 
     Foo.test
     """,
-    # Let notation.
-    """
+        # Let notation.
+        """
     Foo = Injector.let()
 
     Foo.test
     """,
-    # Let notation from subclass.
-    """
+        # Let notation from subclass.
+        """
     class Foo(Injector):
         pass
 
     Foo.let().test
     """,
-    # Keyword arguments in the constructor.
-    """
+        # Keyword arguments in the constructor.
+        """
     class Bar(object):
         def __init__(self, test, two=2):
             self.test = test
@@ -952,8 +1011,8 @@ def test_deny_magic_methods_injection(code):
 
     Foo.bar
     """,
-    # Use decorator.
-    """
+        # Use decorator.
+        """
     Container = Injector.let()
 
     @Container.use.bar
@@ -963,7 +1022,7 @@ def test_deny_magic_methods_injection(code):
 
     Container.bar
     """,
-])
+    ])
 def test_attribute_error(code):
     """Raise attribute error if we can't find dependency."""
 
@@ -981,30 +1040,32 @@ def test_attribute_error(code):
 # Resolve circle dependencies.
 
 
-@pytest.mark.parametrize('code', [
-    # Declarative injector.
-    """
+@pytest.mark.parametrize(
+    'code',
+    [
+        # Declarative injector.
+        """
     class Summator(Injector):
         foo = Foo
 
     Summator.foo
     """,
-    # Let notation.
-    """
+        # Let notation.
+        """
     Summator = Injector.let(foo=Foo)
 
     Summator.foo
     """,
-    # Attribute assignment.
-    """
+        # Attribute assignment.
+        """
     Summator = Injector.let()
 
     Summator.foo = Foo
 
     Summator.foo
     """,
-    # Use decorator.
-    """
+        # Use decorator.
+        """
     Summator = Injector.let()
 
     @Summator.use.foo
@@ -1014,7 +1075,7 @@ def test_attribute_error(code):
 
     Summator.foo
     """,
-])
+    ])
 def test_circle_dependencies(code):
     """
     Throw `DependencyError` if class needs a dependency named same as
@@ -1023,6 +1084,7 @@ def test_circle_dependencies(code):
     """
 
     class Foo(object):
+
         def __init__(self, foo):
             self.foo = foo
 
@@ -1032,21 +1094,22 @@ def test_circle_dependencies(code):
         exec(dedent(code), scope)
 
     assert str(exc_info.value) == (
-        "'foo' is a circle dependency in the 'Foo' constructor"
-    )
+        "'foo' is a circle dependency in the 'Foo' constructor")
 
 
-@pytest.mark.parametrize('code', [
-    # Declarative injector.
-    """
+@pytest.mark.parametrize(
+    'code',
+    [
+        # Declarative injector.
+        """
     class Summator(Injector):
         foo = Foo
         bar = Bar
 
     Summator.foo
     """,
-    # Declarative injector with inheritance.
-    """
+        # Declarative injector with inheritance.
+        """
     class First(Injector):
         foo = Foo
 
@@ -1055,20 +1118,21 @@ def test_circle_dependencies(code):
 
     Second.foo
     """,
-    # Let notation.
-    """
+        # Let notation.
+        """
     Summator = Injector.let(foo=Foo, bar=Bar)
 
     Summator.foo
     """
-    # Let notation chain.
-    """
+
+        # Let notation chain.
+        """
     Summator = Injector.let(foo=Foo).let(bar=Bar)
 
     Summator.foo
     """,
-    # Attribute assignment.
-    """
+        # Attribute assignment.
+        """
     Summator = Injector.let()
 
     Summator.foo = Foo
@@ -1076,8 +1140,8 @@ def test_circle_dependencies(code):
 
     Summator.foo
     """,
-    # Use decorator.
-    """
+        # Use decorator.
+        """
     Summator = Injector.let()
 
     @Summator.use.foo
@@ -1092,7 +1156,7 @@ def test_circle_dependencies(code):
 
     Summator.foo
     """,
-])
+    ])
 def test_complex_circle_dependencies(code):
     """
     Throw `DependencyError` in the case of complex dependency recursion.
@@ -1104,10 +1168,12 @@ def test_complex_circle_dependencies(code):
     """
 
     class Foo(object):
+
         def __init__(self, bar):
             self.bar = bar
 
     class Bar(object):
+
         def __init__(self, foo):
             self.foo = foo
 
@@ -1123,9 +1189,11 @@ def test_complex_circle_dependencies(code):
     ])
 
 
-@pytest.mark.parametrize('code', [
-    # Declarative injector.
-    """
+@pytest.mark.parametrize(
+    'code',
+    [
+        # Declarative injector.
+        """
     class Summator(Injector):
         foo = Foo
         bar = Bar
@@ -1133,8 +1201,8 @@ def test_complex_circle_dependencies(code):
 
     Summator.foo
     """,
-    # Declarative injector with inheritance.
-    """
+        # Declarative injector with inheritance.
+        """
     class First(Injector):
         foo = Foo
 
@@ -1144,20 +1212,21 @@ def test_complex_circle_dependencies(code):
 
     Second.foo
     """,
-    # Let notation.
-    """
+        # Let notation.
+        """
     Summator = Injector.let(foo=Foo, bar=Bar, baz=Baz)
 
     Summator.foo
     """
-    # Let notation chain.
-    """
+
+        # Let notation chain.
+        """
     Summator = Injector.let(foo=Foo).let(bar=Bar).let(baz=Baz)
 
     Summator.foo
     """,
-    # Attribute assignment.
-    """
+        # Attribute assignment.
+        """
     Summator = Injector.let()
 
     Summator.foo = Foo
@@ -1166,8 +1235,8 @@ def test_complex_circle_dependencies(code):
 
     Summator.foo
     """,
-    # Use decorator.
-    """
+        # Use decorator.
+        """
     Summator = Injector.let()
 
     @Summator.use.foo
@@ -1187,7 +1256,7 @@ def test_complex_circle_dependencies(code):
 
     Summator.foo
     """,
-])
+    ])
 def test_complex_circle_dependencies_long_circle(code):
     """
     Detect complex dependencies recursion with circles longer then two
@@ -1195,14 +1264,17 @@ def test_complex_circle_dependencies_long_circle(code):
     """
 
     class Foo(object):
+
         def __init__(self, bar):
             self.bar = bar
 
     class Bar(object):
+
         def __init__(self, baz):
             self.baz = baz
 
     class Baz(object):
+
         def __init__(self, foo):
             self.foo = foo
 
@@ -1222,26 +1294,28 @@ def test_complex_circle_dependencies_long_circle(code):
 # Deny arbitrary arguments in the injectable constructor.
 
 
-@pytest.mark.parametrize('code', [
-    # Declarative injector.
-    """
+@pytest.mark.parametrize(
+    'code',
+    [
+        # Declarative injector.
+        """
     class Summator(Injector):
         foo = Foo
         args = (1, 2, 3)
     """,
-    # Let notation.
-    """
+        # Let notation.
+        """
     Injector.let(foo=Foo, args=(1, 2, 3))
     """,
-    # Attribute assignment.
-    """
+        # Attribute assignment.
+        """
     class Summator(Injector):
         args = (1, 2, 3)
 
     Summator.foo = Foo
     """,
-    # Use decorator.
-    """
+        # Use decorator.
+        """
     Summator = Injector.let(args=(1, 2, 3))
 
     @Summator.use.foo
@@ -1249,11 +1323,12 @@ def test_complex_circle_dependencies_long_circle(code):
         def __init__(self, *args):
             self.args = args
     """,
-])
+    ])
 def test_deny_arbitrary_argument_list(code):
     """Raise `DependencyError` if constructor have *args argument."""
 
     class Foo(object):
+
         def __init__(self, *args):
             self.args = args
 
@@ -1266,26 +1341,28 @@ def test_deny_arbitrary_argument_list(code):
     assert message == "Foo.__init__ have arbitrary argument list"
 
 
-@pytest.mark.parametrize('code', [
-    # Declarative injector.
-    """
+@pytest.mark.parametrize(
+    'code',
+    [
+        # Declarative injector.
+        """
     class Summator(Injector):
         foo = Foo
         kwargs = {'start': 5}
     """,
-    # Let notation.
-    """
+        # Let notation.
+        """
     Injector.let(foo=Foo, kwargs={'start': 5})
     """,
-    # Attribute assignment.
-    """
+        # Attribute assignment.
+        """
     class Summator(Injector):
         kwargs = {'start': 5}
 
     Summator.foo = Foo
     """,
-    # Use decorator.
-    """
+        # Use decorator.
+        """
     Summator = Injector.let(kwargs={'start': 5})
 
     @Summator.use.foo
@@ -1293,11 +1370,12 @@ def test_deny_arbitrary_argument_list(code):
         def __init__(self, **kwargs):
             self.args = args
     """,
-])
+    ])
 def test_deny_arbitrary_keyword_arguments(code):
     """Raise `DependencyError` if constructor have **kwargs argument."""
 
     class Foo(object):
+
         def __init__(self, **kwargs):
             self.kwargs = kwargs
 
@@ -1310,28 +1388,30 @@ def test_deny_arbitrary_keyword_arguments(code):
     assert message == "Foo.__init__ have arbitrary keyword arguments"
 
 
-@pytest.mark.parametrize('code', [
-    # Declarative injector.
-    """
+@pytest.mark.parametrize(
+    'code',
+    [
+        # Declarative injector.
+        """
     class Summator(Injector):
         foo = Foo
         args = (1, 2, 3)
         kwargs = {'start': 5}
     """,
-    # Let notation.
-    """
+        # Let notation.
+        """
     Injector.let(foo=Foo, args=(1, 2, 3), kwargs={'start': 5})
     """,
-    # Attribute assignment.
-    """
+        # Attribute assignment.
+        """
     class Summator(Injector):
         args = (1, 2, 3)
         kwargs = {'start': 5}
 
     Summator.foo = Foo
     """,
-    # Use decorator.
-    """
+        # Use decorator.
+        """
     Summator = Injector.let(args=(1, 2, 3), kwargs={'start': 5})
 
     @Summator.use.foo
@@ -1340,7 +1420,7 @@ def test_deny_arbitrary_keyword_arguments(code):
             self.args = args
             self.kwargs = kwargs
     """,
-])
+    ])
 def test_deny_arbitrary_positional_and_keyword_arguments_together(code):
     """
     Raise `DependencyError` if constructor have *args and **kwargs
@@ -1348,6 +1428,7 @@ def test_deny_arbitrary_positional_and_keyword_arguments_together(code):
     """
 
     class Foo(object):
+
         def __init__(self, *args, **kwargs):
             self.args = args
             self.kwargs = kwargs
@@ -1359,46 +1440,47 @@ def test_deny_arbitrary_positional_and_keyword_arguments_together(code):
 
     message = str(exc_info.value)
     assert message == (
-        "Foo.__init__ have arbitrary argument list and keyword arguments"
-    )
+        "Foo.__init__ have arbitrary argument list and keyword arguments")
 
 
 # Deny to redefine let factory.
 
 
-@pytest.mark.parametrize('code', [
-    # Declarative injector.
-    """
+@pytest.mark.parametrize(
+    'code',
+    [
+        # Declarative injector.
+        """
     class Foo(Injector):
         let = 2
     """,
-    # Let notation.
-    """
+        # Let notation.
+        """
     class Foo(Injector):
         pass
 
     Foo.let(let=1)
     """,
-    # Attribute assignment.
-    """
+        # Attribute assignment.
+        """
     class Foo(Injector):
         pass
 
     Foo.let = lambda cls, **kwargs: None
     """,
-    # Delete attribute.
-    """
+        # Delete attribute.
+        """
     del Injector.let
     """,
-    # Use decorator.
-    """
+        # Use decorator.
+        """
     Summator = Injector.let()
 
     @Summator.use.let
     def let(cls, **kwargs):
         pass
     """,
-])
+    ])
 def test_deny_to_redefine_let_attribute(code):
     """We can't redefine let attribute in the `Injector` subclasses."""
 
@@ -1413,39 +1495,41 @@ def test_deny_to_redefine_let_attribute(code):
 # Deny to redefine use attribute.
 
 
-@pytest.mark.parametrize('code', [
-    # Declarative injector.
-    """
+@pytest.mark.parametrize(
+    'code',
+    [
+        # Declarative injector.
+        """
     class Foo(Injector):
         use = 2
     """,
-    # Let notation.
-    """
+        # Let notation.
+        """
     class Foo(Injector):
         pass
 
     Foo.let(use=1)
     """,
-    # Attribute assignment.
-    """
+        # Attribute assignment.
+        """
     class Foo(Injector):
         pass
 
     Foo.use = 2
     """,
-    # Delete attribute.
-    """
+        # Delete attribute.
+        """
     del Injector.use
     """,
-    # Use decorator.
-    """
+        # Use decorator.
+        """
     Summator = Injector.let()
 
     @Summator.use.use
     def use():
         pass
     """,
-])
+    ])
 def test_deny_to_redefine_use_attribute(code):
     """We can't redefine `use` attribute in the `Injector` subclasses."""
 
@@ -1460,27 +1544,29 @@ def test_deny_to_redefine_use_attribute(code):
 # Deny `Injector` call.
 
 
-@pytest.mark.parametrize('code', [
-    # Direct call.
-    """
+@pytest.mark.parametrize(
+    'code',
+    [
+        # Direct call.
+        """
     Injector()
     """,
-    # Subclass call.
-    """
+        # Subclass call.
+        """
     class Foo(Injector):
         pass
 
     Foo()
     """,
-    # Ignore any arguments passed.
-    """
+        # Ignore any arguments passed.
+        """
     Injector(1)
     """,
-    # Ignore any keyword argument passed.
-    """
+        # Ignore any keyword argument passed.
+        """
     Injector(x=1)
     """,
-])
+    ])
 def test_deny_to_instantiate_injector(code):
     """Deny injector instantiation."""
 
@@ -1495,9 +1581,11 @@ def test_deny_to_instantiate_injector(code):
 # `_cls` named arguments values.
 
 
-@pytest.mark.parametrize('code', [
-    # Declarative injector.
-    """
+@pytest.mark.parametrize(
+    'code',
+    [
+        # Declarative injector.
+        """
     class Bar(object):
         def __init__(self, foo=Foo):
             self.foo = foo
@@ -1505,16 +1593,16 @@ def test_deny_to_instantiate_injector(code):
     class Container(Injector):
         bar = Bar
     """,
-    # Let notation.
-    """
+        # Let notation.
+        """
     class Bar(object):
         def __init__(self, foo=Foo):
             self.foo = foo
 
     Injector.let(bar=Bar)
     """,
-    # Attribute assignment.
-    """
+        # Attribute assignment.
+        """
     class Bar(object):
         def __init__(self, foo=Foo):
             self.foo = foo
@@ -1523,8 +1611,8 @@ def test_deny_to_instantiate_injector(code):
 
     Container.bar = Bar
     """,
-    # Use decorator.
-    """
+        # Use decorator.
+        """
     Container = Injector.let()
 
     @Container.use.bar
@@ -1532,7 +1620,7 @@ def test_deny_to_instantiate_injector(code):
         def __init__(self, foo=Foo):
             self.foo = foo
     """,
-])
+    ])
 def test_deny_classes_as_default_values(code):
     """
     If argument name doesn't ends with `_cls`, its default value can't
@@ -1557,24 +1645,26 @@ def test_deny_classes_as_default_values(code):
     assert message == "'foo' argument can not have class as its default value"
 
 
-@pytest.mark.parametrize('code', [
-    # Declarative injector.
-    """
+@pytest.mark.parametrize(
+    'code',
+    [
+        # Declarative injector.
+        """
     class Container(Injector):
         bar = Bar
     """,
-    # Let notation.
-    """
+        # Let notation.
+        """
     Injector.let(bar=Bar)
     """,
-    # Attribute assignment.
-    """
+        # Attribute assignment.
+        """
     Container = Injector.let()
 
     Container.bar = Bar
     """,
-    # Use decorator.
-    """
+        # Use decorator.
+        """
     Container = Injector.let()
 
     @Container.use.bar
@@ -1582,7 +1672,7 @@ def test_deny_classes_as_default_values(code):
         def __init__(self, foo_cls=1):
             self.foo_cls = foo_cls
     """,
-])
+    ])
 def test_deny_non_classes_in_cls_named_arguments(code):
     """
     If argument name ends with `_cls`, it must have a class as it
@@ -1590,6 +1680,7 @@ def test_deny_non_classes_in_cls_named_arguments(code):
     """
 
     class Bar(object):
+
         def __init__(self, foo_cls=1):
             self.foo_cls = foo_cls
 
