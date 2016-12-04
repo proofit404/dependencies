@@ -981,35 +981,57 @@ def f():
         return False
 
 
-# Raise `AttributeError`.
+attribute_error = CodeCollector()
 
 
-@pytest.mark.parametrize(
-    'code',
-    [
-        # Declarative injector.
-        """
+@pytest.mark.parametrize('code', attribute_error)
+def test_attribute_error(code):
+    """Raise attribute error if we can't find dependency."""
+
+    with pytest.raises(AttributeError) as exc_info:
+        code()
+
+    assert str(exc_info.value) in set([
+        "'Foo' object has no attribute 'test'",
+        "'Injector' object has no attribute 'test'",
+    ])
+
+
+@attribute_error  # noqa: F811
+def f():
+    """Declarative injector."""
+
     class Foo(Injector):
         pass
 
     Foo.test
-    """,
-        # Let notation.
-        """
+
+
+@attribute_error  # noqa: F811
+def f():
+    """Let notation."""
+
     Foo = Injector.let()
 
     Foo.test
-    """,
-        # Let notation from subclass.
-        """
+
+
+@attribute_error  # noqa: F811
+def f():
+    """Let notation from subclass."""
+
     class Foo(Injector):
         pass
 
     Foo.let().test
-    """,
-        # Keyword arguments in the constructor.
-        """
+
+
+@attribute_error  # noqa: F811
+def f():
+    """Keyword arguments in the constructor."""
+
     class Bar(object):
+
         def __init__(self, test, two=2):
             self.test = test
             self.two = two
@@ -1018,31 +1040,21 @@ def f():
         bar = Bar
 
     Foo.bar
-    """,
-        # Use decorator.
-        """
+
+
+@attribute_error  # noqa: F811
+def f():
+    """Use decorator."""
+
     Container = Injector.let()
 
     @Container.use.bar
     class Bar(object):
+
         def __init__(self, test):
             pass
 
     Container.bar
-    """,
-    ])
-def test_attribute_error(code):
-    """Raise attribute error if we can't find dependency."""
-
-    scope = {'Injector': Injector}
-
-    with pytest.raises(AttributeError) as exc_info:
-        exec(dedent(code), scope)
-
-    assert str(exc_info.value) in set([
-        "'Foo' object has no attribute 'test'",
-        "'Injector' object has no attribute 'test'",
-    ])
 
 
 # Resolve circle dependencies.
