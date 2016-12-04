@@ -1057,45 +1057,10 @@ def f():
     Container.bar
 
 
-# Resolve circle dependencies.
+circle_deps = CodeCollector()
 
 
-@pytest.mark.parametrize(
-    'code',
-    [
-        # Declarative injector.
-        """
-    class Summator(Injector):
-        foo = Foo
-
-    Summator.foo
-    """,
-        # Let notation.
-        """
-    Summator = Injector.let(foo=Foo)
-
-    Summator.foo
-    """,
-        # Attribute assignment.
-        """
-    Summator = Injector.let()
-
-    Summator.foo = Foo
-
-    Summator.foo
-    """,
-        # Use decorator.
-        """
-    Summator = Injector.let()
-
-    @Summator.use.foo
-    class Foo(object):
-        def __init__(self, foo):
-            self.foo = foo
-
-    Summator.foo
-    """,
-    ])
+@pytest.mark.parametrize('code', circle_deps)
 def test_circle_dependencies(code):
     """
     Throw `DependencyError` if class needs a dependency named same as
@@ -1108,13 +1073,56 @@ def test_circle_dependencies(code):
         def __init__(self, foo):
             self.foo = foo
 
-    scope = {'Injector': Injector, 'Foo': Foo}
-
     with pytest.raises(DependencyError) as exc_info:
-        exec(dedent(code), scope)
+        code(Foo)
 
     assert str(exc_info.value) == (
         "'foo' is a circle dependency in the 'Foo' constructor")
+
+
+@circle_deps  # noqa: F811
+def f(Foo):
+    """Declarative injector."""
+
+    class Summator(Injector):
+        foo = Foo
+
+    Summator.foo
+
+
+@circle_deps  # noqa: F811
+def f(Foo):
+    """Let notation."""
+
+    Summator = Injector.let(foo=Foo)
+
+    Summator.foo
+
+
+@circle_deps  # noqa: F811
+def f(Foo):
+    """Attribute assignment."""
+
+    Summator = Injector.let()
+
+    Summator.foo = Foo
+
+    Summator.foo
+
+
+@circle_deps  # noqa: F811
+def f(Foo):
+    """Use decorator."""
+
+    Summator = Injector.let()
+
+    @Summator.use.foo
+    class Foo(object):
+
+        def __init__(self, foo):
+            self.foo = foo
+
+    Summator.foo
 
 
 @pytest.mark.parametrize(
