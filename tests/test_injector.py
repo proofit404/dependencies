@@ -1,4 +1,4 @@
-import inspect
+from inspect import getdoc, isclass
 from textwrap import dedent
 
 import pytest
@@ -114,7 +114,7 @@ def test_do_not_instantiate_dependencies_ended_with_cls():
     class Bar(Injector):
         foo_cls = Foo
 
-    assert inspect.isclass(Bar.foo_cls)
+    assert isclass(Bar.foo_cls)
 
 
 def test_redefine_dependency():
@@ -469,7 +469,7 @@ def test_mutable_injector_deny_to_modify_injector():
 unregister_dependency = CodeCollector()
 
 
-@pytest.mark.parametrize('code', unregister_dependency)
+@pytest.mark.parametrize('code', unregister_dependency, ids=getdoc)
 def test_unregister_dependency(code):
     """We can unregister dependency from `Injector` subclasses."""
 
@@ -733,7 +733,7 @@ def test_docstrings():
 evaluate_classes = CodeCollector()
 
 
-@pytest.mark.parametrize('code', evaluate_classes)
+@pytest.mark.parametrize('code', evaluate_classes, ids=getdoc)
 def test_evaluate_dependencies_once(code):
     """Evaluate each node in the dependencies graph once."""
 
@@ -784,7 +784,7 @@ def f(Container):
 multiple_inheritance = CodeCollector()
 
 
-@pytest.mark.parametrize('code', multiple_inheritance)
+@pytest.mark.parametrize('code', multiple_inheritance, ids=getdoc)
 def test_multiple_inheritance(code):
     """We can mix injector together."""
 
@@ -836,7 +836,7 @@ def f(Foo, FooContainer, BarContainer, BazContainer):
 inheritance_order = CodeCollector()
 
 
-@pytest.mark.parametrize('code', inheritance_order)
+@pytest.mark.parametrize('code', inheritance_order, ids=getdoc)
 def test_multiple_inheritance_injectors_order(code):
     """
     `Injector` which comes first in the subclass bases or inplace
@@ -885,7 +885,7 @@ def f(Container1, Container2, Container3):
 subclasses_only = CodeCollector()
 
 
-@pytest.mark.parametrize('code', subclasses_only)
+@pytest.mark.parametrize('code', subclasses_only, ids=getdoc)
 def test_multiple_inheritance_deny_regular_classes(code):
     """
     We can't use classes in multiple inheritance which are not
@@ -920,7 +920,7 @@ def f(Foo):
 deny_magic_methods = CodeCollector()
 
 
-@pytest.mark.parametrize('code', deny_magic_methods)
+@pytest.mark.parametrize('code', deny_magic_methods, ids=getdoc)
 def test_deny_magic_methods_injection(code):
     """`Injector` doesn't accept magic methods."""
 
@@ -984,7 +984,7 @@ def f():
 attribute_error = CodeCollector()
 
 
-@pytest.mark.parametrize('code', attribute_error)
+@pytest.mark.parametrize('code', attribute_error, ids=getdoc)
 def test_attribute_error(code):
     """Raise attribute error if we can't find dependency."""
 
@@ -1060,7 +1060,7 @@ def f():
 circle_deps = CodeCollector()
 
 
-@pytest.mark.parametrize('code', circle_deps)
+@pytest.mark.parametrize('code', circle_deps, ids=getdoc)
 def test_circle_dependencies(code):
     """
     Throw `DependencyError` if class needs a dependency named same as
@@ -1128,7 +1128,7 @@ def f(Foo):
 complex_circle_deps = CodeCollector()
 
 
-@pytest.mark.parametrize('code', complex_circle_deps)
+@pytest.mark.parametrize('code', complex_circle_deps, ids=getdoc)
 def test_complex_circle_dependencies(code):
     """
     Throw `DependencyError` in the case of complex dependency recursion.
@@ -1237,7 +1237,7 @@ def f(Foo, Bar):
 long_circle_deps = CodeCollector()
 
 
-@pytest.mark.parametrize('code', long_circle_deps)
+@pytest.mark.parametrize('code', long_circle_deps, ids=getdoc)
 def test_complex_circle_dependencies_long_circle(code):
     """
     Detect complex dependencies recursion with circles longer then two
