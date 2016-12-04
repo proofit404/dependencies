@@ -917,57 +917,68 @@ def f(Foo):
     Injector & Foo
 
 
-# Deny magic methods.
+deny_magic_methods = CodeCollector()
 
 
-@pytest.mark.parametrize(
-    'code',
-    [
-        # Declarative injector.
-        """
+@pytest.mark.parametrize('code', deny_magic_methods)
+def test_deny_magic_methods_injection(code):
+    """`Injector` doesn't accept magic methods."""
+
+    with pytest.raises(DependencyError) as exc_info:
+        code()
+
+    assert str(exc_info.value) == 'Magic methods are not allowed'
+
+
+@deny_magic_methods  # noqa: F811
+def f():
+    """Declarative injector."""
+
     class Bar(Injector):
+
         def __eq__(self, other):
             return False
-    """,
-        # Let notation.
-        """
+
+
+@deny_magic_methods  # noqa: F811
+def f():
+    """Let notation."""
+
     class Foo(Injector):
         pass
 
     Foo.let(__eq__=lambda self, other: False)
-    """,
-        # Attribute assignment.
-        """
+
+
+@deny_magic_methods  # noqa: F811
+def f():
+    """Attribute assignment."""
+
     class Foo(Injector):
         pass
 
     Foo.__eq__ = lambda self, other: False
-    """,
-        # Delete attribute.
-        """
+
+
+@deny_magic_methods  # noqa: F811
+def f():
+    """Delete attribute."""
+
     class Foo(Injector):
         pass
 
     del Foo.__init__
-    """,
-        # Use decorator.
-        """
+
+
+@deny_magic_methods  # noqa: F811
+def f():
+    """Use decorator."""
+
     Container = Injector.let()
 
     @Container.use.__eq__
     def eq(self, other):
         return False
-    """,
-    ])
-def test_deny_magic_methods_injection(code):
-    """`Injector` doesn't accept magic methods."""
-
-    scope = {'Injector': Injector}
-
-    with pytest.raises(DependencyError) as exc_info:
-        exec(dedent(code), scope)
-
-    assert str(exc_info.value) == 'Magic methods are not allowed'
 
 
 # Raise `AttributeError`.
