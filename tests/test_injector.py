@@ -1125,66 +1125,10 @@ def f(Foo):
     Summator.foo
 
 
-@pytest.mark.parametrize(
-    'code',
-    [
-        # Declarative injector.
-        """
-    class Summator(Injector):
-        foo = Foo
-        bar = Bar
+complex_circle_deps = CodeCollector()
 
-    Summator.foo
-    """,
-        # Declarative injector with inheritance.
-        """
-    class First(Injector):
-        foo = Foo
 
-    class Second(First):
-        bar = Bar
-
-    Second.foo
-    """,
-        # Let notation.
-        """
-    Summator = Injector.let(foo=Foo, bar=Bar)
-
-    Summator.foo
-    """
-
-        # Let notation chain.
-        """
-    Summator = Injector.let(foo=Foo).let(bar=Bar)
-
-    Summator.foo
-    """,
-        # Attribute assignment.
-        """
-    Summator = Injector.let()
-
-    Summator.foo = Foo
-    Summator.bar = Bar
-
-    Summator.foo
-    """,
-        # Use decorator.
-        """
-    Summator = Injector.let()
-
-    @Summator.use.foo
-    class Foo(object):
-        def __init__(self, bar):
-            self.bar = bar
-
-    @Summator.use.bar
-    class Bar(object):
-        def __init__(self, foo):
-            self.foo = foo
-
-    Summator.foo
-    """,
-    ])
+@pytest.mark.parametrize('code', complex_circle_deps)
 def test_complex_circle_dependencies(code):
     """
     Throw `DependencyError` in the case of complex dependency recursion.
@@ -1205,16 +1149,89 @@ def test_complex_circle_dependencies(code):
         def __init__(self, foo):
             self.foo = foo
 
-    scope = {'Injector': Injector, 'Foo': Foo, 'Bar': Bar}
-
     with pytest.raises(DependencyError) as exc_info:
-        exec(dedent(code), scope)
+        code(Foo, Bar)
 
     message = str(exc_info.value)
     assert message in set([
         "'foo' is a circle dependency in the 'Bar' constructor",
         "'bar' is a circle dependency in the 'Foo' constructor",
     ])
+
+
+@complex_circle_deps  # noqa: 811
+def f(Foo, Bar):
+    """Declarative injector."""
+
+    class Summator(Injector):
+        foo = Foo
+        bar = Bar
+
+    Summator.foo
+
+
+@complex_circle_deps  # noqa: 811
+def f(Foo, Bar):
+    """Declarative injector with inheritance."""
+
+    class First(Injector):
+        foo = Foo
+
+    class Second(First):
+        bar = Bar
+
+    Second.foo
+
+
+@complex_circle_deps  # noqa: 811
+def f(Foo, Bar):
+    """Let notation."""
+
+    Summator = Injector.let(foo=Foo, bar=Bar)
+
+    Summator.foo
+
+
+@complex_circle_deps  # noqa: 811
+def f(Foo, Bar):
+    """Let notation chain."""
+
+    Summator = Injector.let(foo=Foo).let(bar=Bar)
+
+    Summator.foo
+
+
+@complex_circle_deps  # noqa: 811
+def f(Foo, Bar):
+    """Attribute assignment."""
+
+    Summator = Injector.let()
+
+    Summator.foo = Foo
+    Summator.bar = Bar
+
+    Summator.foo
+
+
+@complex_circle_deps  # noqa: 811
+def f(Foo, Bar):
+    """Use decorator."""
+
+    Summator = Injector.let()
+
+    @Summator.use.foo
+    class Foo(object):
+
+        def __init__(self, bar):
+            self.bar = bar
+
+    @Summator.use.bar
+    class Bar(object):
+
+        def __init__(self, foo):
+            self.foo = foo
+
+    Summator.foo
 
 
 @pytest.mark.parametrize(
