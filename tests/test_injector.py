@@ -882,19 +882,10 @@ def f(Container1, Container2, Container3):
     assert (Container1 & Container2 & Container3).x == 1
 
 
-@pytest.mark.parametrize(
-    'code',
-    [
-        # Inheritance.
-        """
-    class Foo(Injector, Foo):
-        pass
-    """,
-        # Inplace creation.
-        """
-    Injector & Foo
-    """,
-    ])
+subclasses_only = CodeCollector()
+
+
+@pytest.mark.parametrize('code', subclasses_only)
 def test_multiple_inheritance_deny_regular_classes(code):
     """
     We can't use classes in multiple inheritance which are not
@@ -904,13 +895,26 @@ def test_multiple_inheritance_deny_regular_classes(code):
     class Foo(object):
         pass
 
-    scope = {'Injector': Injector, 'Foo': Foo}
-
     with pytest.raises(DependencyError) as exc_info:
-        exec(dedent(code), scope)
+        code(Foo)
 
     assert str(exc_info.value) == (
         'Multiple inheritance is allowed for Injector subclasses only')
+
+
+@subclasses_only  # noqa: F811
+def f(Foo):
+    """Inheritance."""
+
+    class Bar(Injector, Foo):
+        pass
+
+
+@subclasses_only  # noqa: F811
+def f(Foo):
+    """Inplace creation."""
+
+    Injector & Foo
 
 
 # Deny magic methods.
