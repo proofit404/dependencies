@@ -16,17 +16,21 @@ import string
 class Thisable(object):
     """Declare attribute and item access during dependency injection."""
 
+    def __init__(self, parents):
+
+        self.parents = parents
+
     def __getattr__(self, attrname):
 
-        return proxy((attrname,), ())
+        attrs = tuple(['__parent__'] * self.parents + [attrname])
+        return proxy(attrs, ())
 
     def __lshift__(self, num):
 
-        attrs = tuple(['__parent__' for i in range(num)])
-        return proxy(attrs, ())
+        return Thisable(num)
 
 
-this = Thisable()
+this = Thisable(0)
 
 
 class ProxyType(type):

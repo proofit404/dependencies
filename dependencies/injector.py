@@ -12,6 +12,7 @@ import inspect
 import weakref
 
 from .exceptions import DependencyError
+from .proxies import Thisable
 
 
 class InjectorType(type):
@@ -28,9 +29,10 @@ class InjectorType(type):
                 ns[attr] = namespace.pop(attr)
             except KeyError:
                 pass
-        for x in namespace:
-            check_dunder_name(x)
-            check_attrs_redefinition(x)
+        for k, v in namespace.items():
+            check_dunder_name(k)
+            check_attrs_redefinition(k)
+            check_proxies(v)
         dependencies = {}
         for base in reversed(bases):
             dependencies.update(base.__dependencies__)
@@ -98,6 +100,7 @@ class InjectorType(type):
             raise DependencyError("'Injector' modification is not allowed")
         check_dunder_name(attrname)
         check_attrs_redefinition(attrname)
+        check_proxies(value)
         cls.__dependencies__[attrname] = make_dependency_spec(attrname, value)
         check_circles(cls.__dependencies__)
         maybe_insert_parent(cls, value)
@@ -342,3 +345,11 @@ def check_circles_for(dependencies, attrname, origin):
             )
         for name in args:
             check_circles_for(dependencies, name, origin)
+
+
+def check_proxies(dependency):
+
+    if isinstance(dependency, Thisable):
+        raise DependencyError(
+            "You can not use 'this' directly in the 'Injector'",
+        )

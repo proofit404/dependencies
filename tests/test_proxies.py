@@ -351,7 +351,6 @@ def test_docstrings():
 direct_proxy = CodeCollector()
 
 
-@pytest.mark.xfail  # FIXME: support declared behavior
 @pytest.mark.parametrize('code', direct_proxy, ids=getdoc)
 def test_attribute_getter_arguments_validation(code):
     """TODO: write doc and proper test name"""
@@ -413,16 +412,6 @@ def f():
     Container.foo = (this << 1)
 
 
-# TODO: Maybe deny injection of `this` subclasses.
-#
-# @direct_proxy  # noqa: F811
-# def f():
-#     """Use decorator."""
-#
-# @direct_proxy  # noqa: F811
-# def f():
-#     """Use decorator with parent."""
-#
 # TODO: minimize test number here.
 #
 # FIXME: same SubContainer for different parents should work.
