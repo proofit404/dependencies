@@ -1,2 +1,2 @@
 ./tests/helpers/.
-pytest
+pytest>=3.0
