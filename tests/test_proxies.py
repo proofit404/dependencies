@@ -429,3 +429,6 @@ def f():
 # `Container.baz` will give us TypeError: 'Foo' object is not subscriptable
 #
 # TODO: test `this` against negative numbers and non digits
+#
+# TODO: what if we shift more that container levels available?  What
+# we should do in this case?
