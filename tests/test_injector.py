@@ -1469,39 +1469,10 @@ def f(Foo):
             self.kwargs = kwargs
 
 
-@pytest.mark.parametrize(
-    'code',
-    [
-        # Declarative injector.
-        """
-    class Summator(Injector):
-        foo = Foo
-        args = (1, 2, 3)
-        kwargs = {'start': 5}
-    """,
-        # Let notation.
-        """
-    Injector.let(foo=Foo, args=(1, 2, 3), kwargs={'start': 5})
-    """,
-        # Attribute assignment.
-        """
-    class Summator(Injector):
-        args = (1, 2, 3)
-        kwargs = {'start': 5}
+deny_varargs_kwargs = CodeCollector()
 
-    Summator.foo = Foo
-    """,
-        # Use decorator.
-        """
-    Summator = Injector.let(args=(1, 2, 3), kwargs={'start': 5})
 
-    @Summator.use.foo
-    class Foo(object):
-        def __init__(self, *args, **kwargs):
-            self.args = args
-            self.kwargs = kwargs
-    """,
-    ])
+@pytest.mark.parametrize('code', deny_varargs_kwargs, ids=getdoc)
 def test_deny_arbitrary_positional_and_keyword_arguments_together(code):
     """
     Raise `DependencyError` if constructor have *args and **kwargs
@@ -1514,14 +1485,54 @@ def test_deny_arbitrary_positional_and_keyword_arguments_together(code):
             self.args = args
             self.kwargs = kwargs
 
-    scope = {'Injector': Injector, 'Foo': Foo}
-
     with pytest.raises(DependencyError) as exc_info:
-        exec(dedent(code), scope)
+        code(Foo)
 
     message = str(exc_info.value)
     assert message == (
         "Foo.__init__ have arbitrary argument list and keyword arguments")
+
+
+@deny_varargs_kwargs  # noqa: F811
+def f(Foo):
+    """Declarative injector."""
+
+    class Summator(Injector):
+        foo = Foo
+        args = (1, 2, 3)
+        kwargs = {'start': 5}
+
+
+@deny_varargs_kwargs  # noqa: F811
+def f(Foo):
+    """Let notation."""
+
+    Injector.let(foo=Foo, args=(1, 2, 3), kwargs={'start': 5})
+
+
+@deny_varargs_kwargs  # noqa: F811
+def f(Foo):
+    """Attribute assignment."""
+
+    class Summator(Injector):
+        args = (1, 2, 3)
+        kwargs = {'start': 5}
+
+    Summator.foo = Foo
+
+
+@deny_varargs_kwargs  # noqa: F811
+def f(Foo):
+    """Use decorator."""
+
+    Summator = Injector.let(args=(1, 2, 3), kwargs={'start': 5})
+
+    @Summator.use.foo
+    class Foo(object):
+
+        def __init__(self, *args, **kwargs):
+            self.args = args
+            self.kwargs = kwargs
 
 
 # Deny to redefine let factory.
