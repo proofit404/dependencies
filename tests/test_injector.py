@@ -1535,53 +1535,63 @@ def f(Foo):
             self.kwargs = kwargs
 
 
-# Deny to redefine let factory.
+deny_let_redefine = CodeCollector()
 
 
-@pytest.mark.parametrize(
-    'code',
-    [
-        # Declarative injector.
-        """
+@pytest.mark.parametrize('code', deny_let_redefine, ids=getdoc)
+def test_deny_to_redefine_let_attribute(code):
+    """We can't redefine let attribute in the `Injector` subclasses."""
+
+    with pytest.raises(DependencyError) as exc_info:
+        code()
+
+    assert str(exc_info.value) == "'let' redefinition is not allowed"
+
+
+@deny_let_redefine  # noqa: F811
+def f():
+    """Declarative injector."""
+
     class Foo(Injector):
         let = 2
-    """,
-        # Let notation.
-        """
+
+
+@deny_let_redefine  # noqa: F811
+def f():
+    """Let notation."""
+
     class Foo(Injector):
         pass
 
     Foo.let(let=1)
-    """,
-        # Attribute assignment.
-        """
+
+
+@deny_let_redefine  # noqa: F811
+def f():
+    """Attribute assignment."""
+
     class Foo(Injector):
         pass
 
     Foo.let = lambda cls, **kwargs: None
-    """,
-        # Delete attribute.
-        """
+
+
+@deny_let_redefine  # noqa: F811
+def f():
+    """Delete attribute."""
+
     del Injector.let
-    """,
-        # Use decorator.
-        """
+
+
+@deny_let_redefine  # noqa: F811
+def f():
+    """Use decorator."""
+
     Summator = Injector.let()
 
     @Summator.use.let
     def let(cls, **kwargs):
         pass
-    """,
-    ])
-def test_deny_to_redefine_let_attribute(code):
-    """We can't redefine let attribute in the `Injector` subclasses."""
-
-    scope = {'Injector': Injector}
-
-    with pytest.raises(DependencyError) as exc_info:
-        exec(dedent(code), scope)
-
-    assert str(exc_info.value) == "'let' redefinition is not allowed"
 
 
 # Deny to redefine use attribute.
