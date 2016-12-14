@@ -1354,39 +1354,10 @@ def f(Foo, Bar, Baz):
     Summator.foo
 
 
-# Deny arbitrary arguments in the injectable constructor.
+deny_varargs = CodeCollector()
 
 
-@pytest.mark.parametrize(
-    'code',
-    [
-        # Declarative injector.
-        """
-    class Summator(Injector):
-        foo = Foo
-        args = (1, 2, 3)
-    """,
-        # Let notation.
-        """
-    Injector.let(foo=Foo, args=(1, 2, 3))
-    """,
-        # Attribute assignment.
-        """
-    class Summator(Injector):
-        args = (1, 2, 3)
-
-    Summator.foo = Foo
-    """,
-        # Use decorator.
-        """
-    Summator = Injector.let(args=(1, 2, 3))
-
-    @Summator.use.foo
-    class Foo(object):
-        def __init__(self, *args):
-            self.args = args
-    """,
-    ])
+@pytest.mark.parametrize('code', deny_varargs, ids=getdoc)
 def test_deny_arbitrary_argument_list(code):
     """Raise `DependencyError` if constructor have *args argument."""
 
@@ -1395,13 +1366,49 @@ def test_deny_arbitrary_argument_list(code):
         def __init__(self, *args):
             self.args = args
 
-    scope = {'Injector': Injector, 'Foo': Foo}
-
     with pytest.raises(DependencyError) as exc_info:
-        exec(dedent(code), scope)
+        code(Foo)
 
     message = str(exc_info.value)
     assert message == "Foo.__init__ have arbitrary argument list"
+
+
+@deny_varargs  # noqa: F811
+def f(Foo):
+    """Declarative injector."""
+
+    class Summator(Injector):
+        foo = Foo
+        args = (1, 2, 3)
+
+
+@deny_varargs  # noqa: F811
+def f(Foo):
+    """Let notation."""
+    Injector.let(foo=Foo, args=(1, 2, 3))
+
+
+@deny_varargs  # noqa: F811
+def f(Foo):
+    """Attribute assignment."""
+
+    class Summator(Injector):
+        args = (1, 2, 3)
+
+    Summator.foo = Foo
+
+
+@deny_varargs  # noqa: F811
+def f(Foo):
+    """Use decorator."""
+
+    Summator = Injector.let(args=(1, 2, 3))
+
+    @Summator.use.foo
+    class Foo(object):
+
+        def __init__(self, *args):
+            self.args = args
 
 
 @pytest.mark.parametrize(
