@@ -1697,71 +1697,66 @@ def f():
     Injector(x=1)
 
 
-# `_cls` named arguments values.
+cls_named_arguments = CodeCollector()
 
 
-@pytest.mark.parametrize(
-    'code',
-    [
-        # Declarative injector.
-        """
-    class Bar(object):
-        def __init__(self, foo=Foo):
-            self.foo = foo
-
-    class Container(Injector):
-        bar = Bar
-    """,
-        # Let notation.
-        """
-    class Bar(object):
-        def __init__(self, foo=Foo):
-            self.foo = foo
-
-    Injector.let(bar=Bar)
-    """,
-        # Attribute assignment.
-        """
-    class Bar(object):
-        def __init__(self, foo=Foo):
-            self.foo = foo
-
-    Container = Injector.let()
-
-    Container.bar = Bar
-    """,
-        # Use decorator.
-        """
-    Container = Injector.let()
-
-    @Container.use.bar
-    class Bar(object):
-        def __init__(self, foo=Foo):
-            self.foo = foo
-    """,
-    ])
+@cls_named_arguments.parametrize
 def test_deny_classes_as_default_values(code):
     """
     If argument name doesn't ends with `_cls`, its default value can't
     be a class.
-
-    For some reason python 2.6 can not pass `Bar` class into `exec`
-    function and fails with `SyntaxError`.  This occurs because we
-    have `Foo` class as default value for keyword argument.  Python
-    2.6 can't handle such scope manipulation.  We need to duplicate
-    `Bar` class definition above for that reason.
     """
 
     class Foo(object):
         pass
 
-    scope = {'Injector': Injector, 'Foo': Foo}
+    class Bar(object):
+
+        def __init__(self, foo=Foo):
+            self.foo = foo
 
     with pytest.raises(DependencyError) as exc_info:
-        exec(dedent(code), scope)
+        code(Foo, Bar)
 
     message = str(exc_info.value)
     assert message == "'foo' argument can not have class as its default value"
+
+
+@cls_named_arguments  # noqa: F811
+def f(Foo, Bar):
+    """Declarative injector."""
+
+    class Container(Injector):
+        bar = Bar
+
+
+@cls_named_arguments  # noqa: F811
+def f(Foo, Bar):
+    """Let notation."""
+
+    Injector.let(bar=Bar)
+
+
+@cls_named_arguments  # noqa: F811
+def f(Foo, Bar):
+    """Attribute assignment."""
+
+    Container = Injector.let()
+
+    Container.bar = Bar
+
+
+@cls_named_arguments  # noqa: F811
+def f(Foo, Bar):
+    """Use decorator."""
+
+    Container = Injector.let()
+
+    @Container.use.bar
+    class Bar(object):
+
+        def __init__(self, foo=Foo):
+            self.foo = foo
 
 
 @pytest.mark.parametrize(
