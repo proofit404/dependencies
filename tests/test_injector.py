@@ -1,4 +1,4 @@
-from inspect import getdoc, isclass
+from inspect import isclass
 from textwrap import dedent
 
 import pytest
@@ -469,7 +469,7 @@ def test_mutable_injector_deny_to_modify_injector():
 unregister_dependency = CodeCollector()
 
 
-@pytest.mark.parametrize('code', unregister_dependency, ids=getdoc)
+@unregister_dependency.parametrize
 def test_unregister_dependency(code):
     """We can unregister dependency from `Injector` subclasses."""
 
@@ -733,7 +733,7 @@ def test_docstrings():
 evaluate_classes = CodeCollector()
 
 
-@pytest.mark.parametrize('code', evaluate_classes, ids=getdoc)
+@evaluate_classes.parametrize
 def test_evaluate_dependencies_once(code):
     """Evaluate each node in the dependencies graph once."""
 
@@ -784,7 +784,7 @@ def f(Container):
 multiple_inheritance = CodeCollector()
 
 
-@pytest.mark.parametrize('code', multiple_inheritance, ids=getdoc)
+@multiple_inheritance.parametrize
 def test_multiple_inheritance(code):
     """We can mix injector together."""
 
@@ -836,7 +836,7 @@ def f(Foo, FooContainer, BarContainer, BazContainer):
 inheritance_order = CodeCollector()
 
 
-@pytest.mark.parametrize('code', inheritance_order, ids=getdoc)
+@inheritance_order.parametrize
 def test_multiple_inheritance_injectors_order(code):
     """
     `Injector` which comes first in the subclass bases or inplace
@@ -885,7 +885,7 @@ def f(Container1, Container2, Container3):
 subclasses_only = CodeCollector()
 
 
-@pytest.mark.parametrize('code', subclasses_only, ids=getdoc)
+@subclasses_only.parametrize
 def test_multiple_inheritance_deny_regular_classes(code):
     """
     We can't use classes in multiple inheritance which are not
@@ -920,7 +920,7 @@ def f(Foo):
 deny_magic_methods = CodeCollector()
 
 
-@pytest.mark.parametrize('code', deny_magic_methods, ids=getdoc)
+@deny_magic_methods.parametrize
 def test_deny_magic_methods_injection(code):
     """`Injector` doesn't accept magic methods."""
 
@@ -984,7 +984,7 @@ def f():
 attribute_error = CodeCollector()
 
 
-@pytest.mark.parametrize('code', attribute_error, ids=getdoc)
+@attribute_error.parametrize
 def test_attribute_error(code):
     """Raise attribute error if we can't find dependency."""
 
@@ -1060,7 +1060,7 @@ def f():
 circle_deps = CodeCollector()
 
 
-@pytest.mark.parametrize('code', circle_deps, ids=getdoc)
+@circle_deps.parametrize
 def test_circle_dependencies(code):
     """
     Throw `DependencyError` if class needs a dependency named same as
@@ -1128,7 +1128,7 @@ def f(Foo):
 complex_circle_deps = CodeCollector()
 
 
-@pytest.mark.parametrize('code', complex_circle_deps, ids=getdoc)
+@complex_circle_deps.parametrize
 def test_complex_circle_dependencies(code):
     """
     Throw `DependencyError` in the case of complex dependency recursion.
@@ -1237,7 +1237,7 @@ def f(Foo, Bar):
 long_circle_deps = CodeCollector()
 
 
-@pytest.mark.parametrize('code', long_circle_deps, ids=getdoc)
+@long_circle_deps.parametrize
 def test_complex_circle_dependencies_long_circle(code):
     """
     Detect complex dependencies recursion with circles longer then two
@@ -1357,7 +1357,7 @@ def f(Foo, Bar, Baz):
 deny_varargs = CodeCollector()
 
 
-@pytest.mark.parametrize('code', deny_varargs, ids=getdoc)
+@deny_varargs.parametrize
 def test_deny_arbitrary_argument_list(code):
     """Raise `DependencyError` if constructor have *args argument."""
 
@@ -1414,7 +1414,7 @@ def f(Foo):
 deny_kwargs = CodeCollector()
 
 
-@pytest.mark.parametrize('code', deny_kwargs, ids=getdoc)
+@deny_kwargs.parametrize
 def test_deny_arbitrary_keyword_arguments(code):
     """Raise `DependencyError` if constructor have **kwargs argument."""
 
@@ -1472,7 +1472,7 @@ def f(Foo):
 deny_varargs_kwargs = CodeCollector()
 
 
-@pytest.mark.parametrize('code', deny_varargs_kwargs, ids=getdoc)
+@deny_varargs_kwargs.parametrize
 def test_deny_arbitrary_positional_and_keyword_arguments_together(code):
     """
     Raise `DependencyError` if constructor have *args and **kwargs
@@ -1538,7 +1538,7 @@ def f(Foo):
 deny_let_redefine = CodeCollector()
 
 
-@pytest.mark.parametrize('code', deny_let_redefine, ids=getdoc)
+@deny_let_redefine.parametrize
 def test_deny_to_redefine_let_attribute(code):
     """We can't redefine let attribute in the `Injector` subclasses."""
 
@@ -1597,7 +1597,7 @@ def f():
 deny_use_redefine = CodeCollector()
 
 
-@pytest.mark.parametrize('code', deny_use_redefine, ids=getdoc)
+@deny_use_redefine.parametrize
 def test_deny_to_redefine_use_attribute(code):
     """We can't redefine `use` attribute in the `Injector` subclasses."""
 

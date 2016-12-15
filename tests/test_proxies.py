@@ -1,6 +1,5 @@
 import pytest
 from helpers import CodeCollector
-from inspect import getdoc
 
 from dependencies import Injector, this, DependencyError
 
@@ -61,7 +60,7 @@ def test_attribute_getter_few_attributes():
 parent_attr = CodeCollector()
 
 
-@pytest.mark.parametrize('code', parent_attr, ids=getdoc)
+@parent_attr.parametrize
 def test_attribute_getter_parent_access(code):
     """We can access attribute of outer container."""
 
@@ -129,7 +128,7 @@ def f():
 few_parent_attr = CodeCollector()
 
 
-@pytest.mark.parametrize('code', few_parent_attr, ids=getdoc)
+@few_parent_attr.parametrize
 def test_attribute_getter_few_parents(code):
     """We can access attribute of outer container in any nesting depth."""
 
@@ -207,7 +206,7 @@ def f():
 item_access = CodeCollector()
 
 
-@pytest.mark.parametrize('code', item_access, ids=getdoc)
+@item_access.parametrize
 def test_item_getter(code):
     """
     We can describe item access in the `Injector` in the
@@ -351,7 +350,7 @@ def test_docstrings():
 direct_proxy = CodeCollector()
 
 
-@pytest.mark.parametrize('code', direct_proxy, ids=getdoc)
+@direct_proxy.parametrize
 def test_attribute_getter_arguments_validation(code):
     """TODO: write doc and proper test name"""
 
