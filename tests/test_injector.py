@@ -1759,34 +1759,10 @@ def f(Foo, Bar):
             self.foo = foo
 
 
-@pytest.mark.parametrize(
-    'code',
-    [
-        # Declarative injector.
-        """
-    class Container(Injector):
-        bar = Bar
-    """,
-        # Let notation.
-        """
-    Injector.let(bar=Bar)
-    """,
-        # Attribute assignment.
-        """
-    Container = Injector.let()
+cls_named_defaults = CodeCollector()
 
-    Container.bar = Bar
-    """,
-        # Use decorator.
-        """
-    Container = Injector.let()
 
-    @Container.use.bar
-    class Bar(object):
-        def __init__(self, foo_cls=1):
-            self.foo_cls = foo_cls
-    """,
-    ])
+@cls_named_defaults.parametrize
 def test_deny_non_classes_in_cls_named_arguments(code):
     """
     If argument name ends with `_cls`, it must have a class as it
@@ -1798,10 +1774,45 @@ def test_deny_non_classes_in_cls_named_arguments(code):
         def __init__(self, foo_cls=1):
             self.foo_cls = foo_cls
 
-    scope = {'Injector': Injector, 'Bar': Bar}
-
     with pytest.raises(DependencyError) as exc_info:
-        exec(dedent(code), scope)
+        code(Bar)
 
     message = str(exc_info.value)
     assert message == "'foo_cls' default value should be a class"
+
+
+@cls_named_defaults  # noqa: F811
+def f(Bar):
+    """Declarative injector."""
+
+    class Container(Injector):
+        bar = Bar
+
+
+@cls_named_defaults  # noqa: F811
+def f(Bar):
+    """Let notation."""
+
+    Injector.let(bar=Bar)
+
+
+@cls_named_defaults  # noqa: F811
+def f(Bar):
+    """Attribute assignment."""
+
+    Container = Injector.let()
+
+    Container.bar = Bar
+
+
+@cls_named_defaults  # noqa: F811
+def f(Bar):
+    """Use decorator."""
+
+    Container = Injector.let()
+
+    @Container.use.bar
+    class Bar(object):
+
+        def __init__(self, foo_cls=1):
+            self.foo_cls = foo_cls
