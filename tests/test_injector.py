@@ -1594,53 +1594,63 @@ def f():
         pass
 
 
-# Deny to redefine use attribute.
+deny_use_redefine = CodeCollector()
 
 
-@pytest.mark.parametrize(
-    'code',
-    [
-        # Declarative injector.
-        """
+@pytest.mark.parametrize('code', deny_use_redefine, ids=getdoc)
+def test_deny_to_redefine_use_attribute(code):
+    """We can't redefine `use` attribute in the `Injector` subclasses."""
+
+    with pytest.raises(DependencyError) as exc_info:
+        code()
+
+    assert str(exc_info.value) == "'use' redefinition is not allowed"
+
+
+@deny_use_redefine  # noqa: F811
+def f():
+    """Declarative injector."""
+
     class Foo(Injector):
         use = 2
-    """,
-        # Let notation.
-        """
+
+
+@deny_use_redefine  # noqa: F811
+def f():
+    """Let notation."""
+
     class Foo(Injector):
         pass
 
     Foo.let(use=1)
-    """,
-        # Attribute assignment.
-        """
+
+
+@deny_use_redefine  # noqa: F811
+def f():
+    """Attribute assignment."""
+
     class Foo(Injector):
         pass
 
     Foo.use = 2
-    """,
-        # Delete attribute.
-        """
+
+
+@deny_use_redefine  # noqa: F811
+def f():
+    """Delete attribute."""
+
     del Injector.use
-    """,
-        # Use decorator.
-        """
+
+
+@deny_use_redefine  # noqa: F811
+def f():
+    """Use decorator."""
+
     Summator = Injector.let()
 
     @Summator.use.use
     def use():
         pass
-    """,
-    ])
-def test_deny_to_redefine_use_attribute(code):
-    """We can't redefine `use` attribute in the `Injector` subclasses."""
-
-    scope = {'Injector': Injector}
-
-    with pytest.raises(DependencyError) as exc_info:
-        exec(dedent(code), scope)
-
-    assert str(exc_info.value) == "'use' redefinition is not allowed"
 
 
 # Deny `Injector` call.
