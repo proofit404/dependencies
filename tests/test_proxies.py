@@ -69,7 +69,7 @@ def test_attribute_getter_parent_access(code):
 
 
 @parent_attr
-def f():
+def ac7814095628():
     """Declarative injector."""
 
     class Container(Injector):
@@ -81,8 +81,8 @@ def f():
     return Container
 
 
-@parent_attr  # noqa: F811
-def f():
+@parent_attr
+def f607abc82079():
     """Let notation."""
 
     class OuterContainer(Injector):
@@ -96,8 +96,8 @@ def f():
     return Container
 
 
-@parent_attr  # noqa: F811
-def f():
+@parent_attr
+def f2bfa4318b60():
     """Attribute assignment."""
 
     class Container(Injector):
@@ -111,8 +111,8 @@ def f():
     return Container
 
 
-@parent_attr  # noqa: F811
-def f():
+@parent_attr
+def ba9b64d1fed9():
     """Use decorator."""
 
     class Container(Injector):
@@ -136,8 +136,8 @@ def test_attribute_getter_few_parents(code):
     assert Container.SubContainer.SubSubContainer.bar == 1
 
 
-@few_parent_attr  # noqa: F811
-def f():
+@few_parent_attr
+def e477afc961b6():
     """Declarative injector."""
 
     class Container(Injector):
@@ -151,8 +151,8 @@ def f():
     return Container
 
 
-@few_parent_attr  # noqa: F811
-def f():
+@few_parent_attr
+def c4ed4c61e154():
     """Let notation."""
 
     class OuterContainer(Injector):
@@ -168,8 +168,8 @@ def f():
     return Container
 
 
-@few_parent_attr  # noqa: F811
-def f():
+@few_parent_attr
+def fc04e2ab714b():
     """Attribute assignment."""
 
     class Container(Injector):
@@ -186,8 +186,8 @@ def f():
     return Container
 
 
-@few_parent_attr  # noqa: F811
-def f():
+@few_parent_attr
+def ecd27596248a():
     """Use decorator."""
 
     class Container(Injector):
@@ -217,8 +217,8 @@ def test_item_getter(code):
     assert result == 1
 
 
-@item_access  # noqa: F811
-def f():
+@item_access
+def ce642f492941():
     """Get item with string key."""
 
     class Container(Injector):
@@ -230,8 +230,8 @@ def f():
     return result
 
 
-@item_access  # noqa: F811
-def f():
+@item_access
+def ffa208dc1130():
     """Get items as many times as we want."""
 
     class Container(Injector):
@@ -243,8 +243,8 @@ def f():
     return result
 
 
-@item_access  # noqa: F811
-def f():
+@item_access
+def e5c358190fef():
     """Get item from the outer container."""
 
     class Container(Injector):
@@ -258,8 +258,8 @@ def f():
     return result
 
 
-@item_access  # noqa: F811
-def f():
+@item_access
+def ab4cdbf60b2f():
     """Get item from the outer container of any depth level."""
 
     class Container(Injector):
@@ -275,8 +275,8 @@ def f():
     return result
 
 
-@item_access  # noqa: F811
-def f():
+@item_access
+def be332433b74d():
     """Get items from list."""
 
     class Container(Injector):
@@ -288,8 +288,8 @@ def f():
     return result
 
 
-@item_access  # noqa: F811
-def f():
+@item_access
+def fe150d5ebe93():
     """Get items from dict with digit keys."""
 
     class Container(Injector):
@@ -301,8 +301,8 @@ def f():
     return result
 
 
-@item_access  # noqa: F811
-def f():
+@item_access
+def dc4fedcd09d8():
     """Get items from dict with tuple keys."""
 
     class Container(Injector):
@@ -361,38 +361,38 @@ def test_attribute_getter_arguments_validation(code):
     assert message == "You can not use 'this' directly in the 'Injector'"
 
 
-@direct_proxy  # noqa: F811
-def f():
+@direct_proxy
+def b648b6f6a712():
     """Declarative injector."""
 
     class Container(Injector):
         foo = this
 
 
-@direct_proxy  # noqa: F811
-def f():
+@direct_proxy
+def c147d398f4be():
     """Declarative injector with parent access."""
 
     class Container(Injector):
         foo = (this << 1)
 
 
-@direct_proxy  # noqa: F811
-def f():
+@direct_proxy
+def a37783b6d1ad():
     """Let notation."""
 
     Injector.let(foo=this)
 
 
-@direct_proxy  # noqa: F811
-def f():
+@direct_proxy
+def bd05271fb831():
     """Let notation with parent access."""
 
     Injector.let(foo=(this << 1))
 
 
-@direct_proxy  # noqa: F811
-def f():
+@direct_proxy
+def f44e0a7db9a2():
     """Attribute assignment."""
 
     class Container(Injector):
@@ -401,8 +401,8 @@ def f():
     Container.foo = this
 
 
-@direct_proxy  # noqa: F811
-def f():
+@direct_proxy
+def a3849bbb3105():
     """Attribute assignment with parent access."""
 
     class Container(Injector):

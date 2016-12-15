@@ -1,5 +1,4 @@
 from inspect import isclass
-from textwrap import dedent
 
 import pytest
 from helpers import CodeCollector
@@ -491,7 +490,7 @@ def test_unregister_dependency(code):
 
 
 @unregister_dependency
-def f(Foo, Bar):
+def dc41dbd58e64(Foo, Bar):
     """Declarative injector."""
 
     class Baz(Injector):
@@ -503,8 +502,8 @@ def f(Foo, Bar):
     Baz.foo
 
 
-@unregister_dependency  # noqa: F811
-def f(Foo, Bar):
+@unregister_dependency
+def b610d583a1bc(Foo, Bar):
     """Let notation."""
 
     Baz = Injector.let(foo=Foo, bar=Bar)
@@ -514,8 +513,8 @@ def f(Foo, Bar):
     Baz.foo
 
 
-@unregister_dependency  # noqa: F811
-def f(Foo, Bar):
+@unregister_dependency
+def cd66b3f0ebfb(Foo, Bar):
     """
     Throw `AttributeError` if someone tries to delete missing
     dependency.
@@ -524,8 +523,8 @@ def f(Foo, Bar):
     del Injector.bar
 
 
-@unregister_dependency  # noqa: F811
-def f(Foo, Bar):
+@unregister_dependency
+def c95a99244037(Foo, Bar):
     """
     Throw `AttributeError` if someone tries to delete missing
     dependency in the `Injector` subclass.
@@ -765,16 +764,16 @@ def test_evaluate_dependencies_once(code):
     code(Container)
 
 
-@evaluate_classes  # noqa: F811
-def f(Container):
+@evaluate_classes
+def ea4367450e47(Container):
     """Each dependency evaluated once during injection."""
 
     x = Container.a
     assert x.b.d is x.c.d
 
 
-@evaluate_classes  # noqa: F811
-def f(Container):
+@evaluate_classes
+def dd91602f3455(Container):
     """We reevaluate each dependency for different injections."""
 
     assert Container.a.b.d is not Container.a.b.d
@@ -813,8 +812,8 @@ def test_multiple_inheritance(code):
     code(Foo, FooContainer, BarContainer, BazContainer)
 
 
-@multiple_inheritance  # noqa: F811
-def f(Foo, FooContainer, BarContainer, BazContainer):
+@multiple_inheritance
+def edf946cc6077(Foo, FooContainer, BarContainer, BazContainer):
     """Inheritance."""
 
     class Container(FooContainer, BarContainer, BazContainer):
@@ -823,8 +822,8 @@ def f(Foo, FooContainer, BarContainer, BazContainer):
     assert isinstance(Container.baz.bar.foo, Foo)
 
 
-@multiple_inheritance  # noqa: F811
-def f(Foo, FooContainer, BarContainer, BazContainer):
+@multiple_inheritance
+def efdc426cd096(Foo, FooContainer, BarContainer, BazContainer):
     """Inplace creation."""
 
     assert isinstance(
@@ -855,8 +854,8 @@ def test_multiple_inheritance_injectors_order(code):
     code(Container1, Container2, Container3)
 
 
-@inheritance_order  # noqa: F811
-def f(Container1, Container2, Container3):
+@inheritance_order
+def aa10c7747a1f(Container1, Container2, Container3):
     """Inheritance."""
 
     class Foo(Container1, Container2, Container3):
@@ -865,8 +864,8 @@ def f(Container1, Container2, Container3):
     assert Foo.x == 1
 
 
-@inheritance_order  # noqa: F811
-def f(Container1, Container2, Container3):
+@inheritance_order
+def e056e22f3fd5(Container1, Container2, Container3):
     """Inheritance with own attributes."""
 
     class Foo(Container1, Container2, Container3):
@@ -875,8 +874,8 @@ def f(Container1, Container2, Container3):
     assert Foo.x == 4
 
 
-@inheritance_order  # noqa: F811
-def f(Container1, Container2, Container3):
+@inheritance_order
+def d851e0414bdf(Container1, Container2, Container3):
     """Inplace creation."""
 
     assert (Container1 & Container2 & Container3).x == 1
@@ -902,16 +901,16 @@ def test_multiple_inheritance_deny_regular_classes(code):
         'Multiple inheritance is allowed for Injector subclasses only')
 
 
-@subclasses_only  # noqa: F811
-def f(Foo):
+@subclasses_only
+def f1583394f1a6(Foo):
     """Inheritance."""
 
     class Bar(Injector, Foo):
         pass
 
 
-@subclasses_only  # noqa: F811
-def f(Foo):
+@subclasses_only
+def b51814725d07(Foo):
     """Inplace creation."""
 
     Injector & Foo
@@ -930,8 +929,8 @@ def test_deny_magic_methods_injection(code):
     assert str(exc_info.value) == 'Magic methods are not allowed'
 
 
-@deny_magic_methods  # noqa: F811
-def f():
+@deny_magic_methods
+def e78bf771747c():
     """Declarative injector."""
 
     class Bar(Injector):
@@ -940,8 +939,8 @@ def f():
             return False
 
 
-@deny_magic_methods  # noqa: F811
-def f():
+@deny_magic_methods
+def e34b88041f64():
     """Let notation."""
 
     class Foo(Injector):
@@ -950,8 +949,8 @@ def f():
     Foo.let(__eq__=lambda self, other: False)
 
 
-@deny_magic_methods  # noqa: F811
-def f():
+@deny_magic_methods
+def c8f1959a4452():
     """Attribute assignment."""
 
     class Foo(Injector):
@@ -960,8 +959,8 @@ def f():
     Foo.__eq__ = lambda self, other: False
 
 
-@deny_magic_methods  # noqa: F811
-def f():
+@deny_magic_methods
+def b6a409fd7ba7():
     """Delete attribute."""
 
     class Foo(Injector):
@@ -970,8 +969,8 @@ def f():
     del Foo.__init__
 
 
-@deny_magic_methods  # noqa: F811
-def f():
+@deny_magic_methods
+def e83853c1eb18():
     """Use decorator."""
 
     Container = Injector.let()
@@ -997,8 +996,8 @@ def test_attribute_error(code):
     ])
 
 
-@attribute_error  # noqa: F811
-def f():
+@attribute_error
+def c58b054bfcd0():
     """Declarative injector."""
 
     class Foo(Injector):
@@ -1007,8 +1006,8 @@ def f():
     Foo.test
 
 
-@attribute_error  # noqa: F811
-def f():
+@attribute_error
+def f9c50c81e8c9():
     """Let notation."""
 
     Foo = Injector.let()
@@ -1016,8 +1015,8 @@ def f():
     Foo.test
 
 
-@attribute_error  # noqa: F811
-def f():
+@attribute_error
+def e2f16596a652():
     """Let notation from subclass."""
 
     class Foo(Injector):
@@ -1026,8 +1025,8 @@ def f():
     Foo.let().test
 
 
-@attribute_error  # noqa: F811
-def f():
+@attribute_error
+def c4e7ecf75167():
     """Keyword arguments in the constructor."""
 
     class Bar(object):
@@ -1042,8 +1041,8 @@ def f():
     Foo.bar
 
 
-@attribute_error  # noqa: F811
-def f():
+@attribute_error
+def b57e0e5295e6():
     """Use decorator."""
 
     Container = Injector.let()
@@ -1080,8 +1079,8 @@ def test_circle_dependencies(code):
         "'foo' is a circle dependency in the 'Foo' constructor")
 
 
-@circle_deps  # noqa: F811
-def f(Foo):
+@circle_deps
+def a6d9c893a92e(Foo):
     """Declarative injector."""
 
     class Summator(Injector):
@@ -1090,8 +1089,8 @@ def f(Foo):
     Summator.foo
 
 
-@circle_deps  # noqa: F811
-def f(Foo):
+@circle_deps
+def e4b38a38de7e(Foo):
     """Let notation."""
 
     Summator = Injector.let(foo=Foo)
@@ -1099,8 +1098,8 @@ def f(Foo):
     Summator.foo
 
 
-@circle_deps  # noqa: F811
-def f(Foo):
+@circle_deps
+def d83d572eaa40(Foo):
     """Attribute assignment."""
 
     Summator = Injector.let()
@@ -1110,8 +1109,8 @@ def f(Foo):
     Summator.foo
 
 
-@circle_deps  # noqa: F811
-def f(Foo):
+@circle_deps
+def cfbda7f1a2b5(Foo):
     """Use decorator."""
 
     Summator = Injector.let()
@@ -1159,8 +1158,8 @@ def test_complex_circle_dependencies(code):
     ])
 
 
-@complex_circle_deps  # noqa: 811
-def f(Foo, Bar):
+@complex_circle_deps
+def dcbd4c90b473(Foo, Bar):
     """Declarative injector."""
 
     class Summator(Injector):
@@ -1170,8 +1169,8 @@ def f(Foo, Bar):
     Summator.foo
 
 
-@complex_circle_deps  # noqa: 811
-def f(Foo, Bar):
+@complex_circle_deps
+def d9c4e136c92c(Foo, Bar):
     """Declarative injector with inheritance."""
 
     class First(Injector):
@@ -1183,8 +1182,8 @@ def f(Foo, Bar):
     Second.foo
 
 
-@complex_circle_deps  # noqa: 811
-def f(Foo, Bar):
+@complex_circle_deps
+def b54832f696e9(Foo, Bar):
     """Let notation."""
 
     Summator = Injector.let(foo=Foo, bar=Bar)
@@ -1192,8 +1191,8 @@ def f(Foo, Bar):
     Summator.foo
 
 
-@complex_circle_deps  # noqa: 811
-def f(Foo, Bar):
+@complex_circle_deps
+def c039a81e8dce(Foo, Bar):
     """Let notation chain."""
 
     Summator = Injector.let(foo=Foo).let(bar=Bar)
@@ -1201,8 +1200,8 @@ def f(Foo, Bar):
     Summator.foo
 
 
-@complex_circle_deps  # noqa: 811
-def f(Foo, Bar):
+@complex_circle_deps
+def f8c4673bb2c6(Foo, Bar):
     """Attribute assignment."""
 
     Summator = Injector.let()
@@ -1213,8 +1212,8 @@ def f(Foo, Bar):
     Summator.foo
 
 
-@complex_circle_deps  # noqa: 811
-def f(Foo, Bar):
+@complex_circle_deps
+def e6529e257d1c(Foo, Bar):
     """Use decorator."""
 
     Summator = Injector.let()
@@ -1270,8 +1269,8 @@ def test_complex_circle_dependencies_long_circle(code):
     ])
 
 
-@long_circle_deps  # noqa: F811
-def f(Foo, Bar, Baz):
+@long_circle_deps
+def d2b809c03bfa(Foo, Bar, Baz):
     """Declarative injector."""
 
     class Summator(Injector):
@@ -1282,8 +1281,8 @@ def f(Foo, Bar, Baz):
     Summator.foo
 
 
-@long_circle_deps  # noqa: F811
-def f(Foo, Bar, Baz):
+@long_circle_deps
+def fc13db5b9fda(Foo, Bar, Baz):
     """Declarative injector with inheritance."""
 
     class First(Injector):
@@ -1296,8 +1295,8 @@ def f(Foo, Bar, Baz):
     Second.foo
 
 
-@long_circle_deps  # noqa: F811
-def f(Foo, Bar, Baz):
+@long_circle_deps
+def c729e6952fee(Foo, Bar, Baz):
     """Let notation."""
 
     Summator = Injector.let(foo=Foo, bar=Bar, baz=Baz)
@@ -1305,8 +1304,8 @@ def f(Foo, Bar, Baz):
     Summator.foo
 
 
-@long_circle_deps  # noqa: F811
-def f(Foo, Bar, Baz):
+@long_circle_deps
+def d701f88a5c42(Foo, Bar, Baz):
     """Let notation chain."""
 
     Summator = Injector.let(foo=Foo).let(bar=Bar).let(baz=Baz)
@@ -1314,8 +1313,8 @@ def f(Foo, Bar, Baz):
     Summator.foo
 
 
-@long_circle_deps  # noqa: F811
-def f(Foo, Bar, Baz):
+@long_circle_deps
+def c716746e74d6(Foo, Bar, Baz):
     """Attribute assignment."""
 
     Summator = Injector.let()
@@ -1327,8 +1326,8 @@ def f(Foo, Bar, Baz):
     Summator.foo
 
 
-@long_circle_deps  # noqa: F811
-def f(Foo, Bar, Baz):
+@long_circle_deps
+def c1e1c2ec8941(Foo, Bar, Baz):
     """Use decorator."""
 
     Summator = Injector.let()
@@ -1373,8 +1372,8 @@ def test_deny_arbitrary_argument_list(code):
     assert message == "Foo.__init__ have arbitrary argument list"
 
 
-@deny_varargs  # noqa: F811
-def f(Foo):
+@deny_varargs
+def dfe1c22c641e(Foo):
     """Declarative injector."""
 
     class Summator(Injector):
@@ -1382,14 +1381,14 @@ def f(Foo):
         args = (1, 2, 3)
 
 
-@deny_varargs  # noqa: F811
-def f(Foo):
+@deny_varargs
+def f7ef2aa82c18(Foo):
     """Let notation."""
     Injector.let(foo=Foo, args=(1, 2, 3))
 
 
-@deny_varargs  # noqa: F811
-def f(Foo):
+@deny_varargs
+def de077ee2e6ad(Foo):
     """Attribute assignment."""
 
     class Summator(Injector):
@@ -1398,8 +1397,8 @@ def f(Foo):
     Summator.foo = Foo
 
 
-@deny_varargs  # noqa: F811
-def f(Foo):
+@deny_varargs
+def fad7d812b63c(Foo):
     """Use decorator."""
 
     Summator = Injector.let(args=(1, 2, 3))
@@ -1430,8 +1429,8 @@ def test_deny_arbitrary_keyword_arguments(code):
     assert message == "Foo.__init__ have arbitrary keyword arguments"
 
 
-@deny_kwargs  # noqa: F811
-def f(Foo):
+@deny_kwargs
+def e281099be65d(Foo):
     """Declarative injector."""
 
     class Summator(Injector):
@@ -1439,15 +1438,15 @@ def f(Foo):
         kwargs = {'start': 5}
 
 
-@deny_kwargs  # noqa: F811
-def f(Foo):
+@deny_kwargs
+def bcf7c5881b2c(Foo):
     """Let notation."""
 
     Injector.let(foo=Foo, kwargs={'start': 5})
 
 
-@deny_kwargs  # noqa: F811
-def f(Foo):
+@deny_kwargs
+def c641f152e84d(Foo):
     """Attribute assignment."""
 
     class Summator(Injector):
@@ -1456,8 +1455,8 @@ def f(Foo):
     Summator.foo = Foo
 
 
-@deny_kwargs  # noqa: F811
-def f(Foo):
+@deny_kwargs
+def ff760d162827(Foo):
     """Use decorator."""
 
     Summator = Injector.let(kwargs={'start': 5})
@@ -1493,8 +1492,8 @@ def test_deny_arbitrary_positional_and_keyword_arguments_together(code):
         "Foo.__init__ have arbitrary argument list and keyword arguments")
 
 
-@deny_varargs_kwargs  # noqa: F811
-def f(Foo):
+@deny_varargs_kwargs
+def efbf07f8deb6(Foo):
     """Declarative injector."""
 
     class Summator(Injector):
@@ -1503,15 +1502,15 @@ def f(Foo):
         kwargs = {'start': 5}
 
 
-@deny_varargs_kwargs  # noqa: F811
-def f(Foo):
+@deny_varargs_kwargs
+def c4362558f312(Foo):
     """Let notation."""
 
     Injector.let(foo=Foo, args=(1, 2, 3), kwargs={'start': 5})
 
 
-@deny_varargs_kwargs  # noqa: F811
-def f(Foo):
+@deny_varargs_kwargs
+def ac7b245a086c(Foo):
     """Attribute assignment."""
 
     class Summator(Injector):
@@ -1521,8 +1520,8 @@ def f(Foo):
     Summator.foo = Foo
 
 
-@deny_varargs_kwargs  # noqa: F811
-def f(Foo):
+@deny_varargs_kwargs
+def ba95711532fe(Foo):
     """Use decorator."""
 
     Summator = Injector.let(args=(1, 2, 3), kwargs={'start': 5})
@@ -1548,16 +1547,16 @@ def test_deny_to_redefine_let_attribute(code):
     assert str(exc_info.value) == "'let' redefinition is not allowed"
 
 
-@deny_let_redefine  # noqa: F811
-def f():
+@deny_let_redefine
+def a2bfa842df0c():
     """Declarative injector."""
 
     class Foo(Injector):
         let = 2
 
 
-@deny_let_redefine  # noqa: F811
-def f():
+@deny_let_redefine
+def ddd392e70db6():
     """Let notation."""
 
     class Foo(Injector):
@@ -1566,8 +1565,8 @@ def f():
     Foo.let(let=1)
 
 
-@deny_let_redefine  # noqa: F811
-def f():
+@deny_let_redefine
+def b7a9fec8b30f():
     """Attribute assignment."""
 
     class Foo(Injector):
@@ -1576,15 +1575,15 @@ def f():
     Foo.let = lambda cls, **kwargs: None
 
 
-@deny_let_redefine  # noqa: F811
-def f():
+@deny_let_redefine
+def e6d54a5e4101():
     """Delete attribute."""
 
     del Injector.let
 
 
-@deny_let_redefine  # noqa: F811
-def f():
+@deny_let_redefine
+def bdbdb2e43217():
     """Use decorator."""
 
     Summator = Injector.let()
@@ -1607,16 +1606,16 @@ def test_deny_to_redefine_use_attribute(code):
     assert str(exc_info.value) == "'use' redefinition is not allowed"
 
 
-@deny_use_redefine  # noqa: F811
-def f():
+@deny_use_redefine
+def a91da8cbb9b6():
     """Declarative injector."""
 
     class Foo(Injector):
         use = 2
 
 
-@deny_use_redefine  # noqa: F811
-def f():
+@deny_use_redefine
+def a6d8c15385a8():
     """Let notation."""
 
     class Foo(Injector):
@@ -1625,8 +1624,8 @@ def f():
     Foo.let(use=1)
 
 
-@deny_use_redefine  # noqa: F811
-def f():
+@deny_use_redefine
+def d6f874adece2():
     """Attribute assignment."""
 
     class Foo(Injector):
@@ -1635,15 +1634,15 @@ def f():
     Foo.use = 2
 
 
-@deny_use_redefine  # noqa: F811
-def f():
+@deny_use_redefine
+def d3af96dd4ae3():
     """Delete attribute."""
 
     del Injector.use
 
 
-@deny_use_redefine  # noqa: F811
-def f():
+@deny_use_redefine
+def db56096f19d6():
     """Use decorator."""
 
     Summator = Injector.let()
@@ -1666,15 +1665,15 @@ def test_deny_to_instantiate_injector(code):
     assert str(exc_info.value) == 'Do not instantiate Injector'
 
 
-@deny_call  # noqa: F811
-def f():
+@deny_call
+def ce52d740af31():
     """Direct call."""
 
     Injector()
 
 
-@deny_call  # noqa: F811
-def f():
+@deny_call
+def a95940f44400():
     """Subclass call."""
 
     class Foo(Injector):
@@ -1683,15 +1682,15 @@ def f():
     Foo()
 
 
-@deny_call  # noqa: F811
-def f():
+@deny_call
+def d10b4ba474a9():
     """Ignore any arguments passed."""
 
     Injector(1)
 
 
-@deny_call  # noqa: F811
-def f():
+@deny_call
+def d665c722baae():
     """Ignore any keyword argument passed."""
 
     Injector(x=1)
@@ -1722,23 +1721,23 @@ def test_deny_classes_as_default_values(code):
     assert message == "'foo' argument can not have class as its default value"
 
 
-@cls_named_arguments  # noqa: F811
-def f(Foo, Bar):
+@cls_named_arguments
+def dad79637580d(Foo, Bar):
     """Declarative injector."""
 
     class Container(Injector):
         bar = Bar
 
 
-@cls_named_arguments  # noqa: F811
-def f(Foo, Bar):
+@cls_named_arguments
+def bccb4f621e70(Foo, Bar):
     """Let notation."""
 
     Injector.let(bar=Bar)
 
 
-@cls_named_arguments  # noqa: F811
-def f(Foo, Bar):
+@cls_named_arguments
+def a30217ae3b93(Foo, Bar):
     """Attribute assignment."""
 
     Container = Injector.let()
@@ -1746,8 +1745,8 @@ def f(Foo, Bar):
     Container.bar = Bar
 
 
-@cls_named_arguments  # noqa: F811
-def f(Foo, Bar):
+@cls_named_arguments
+def f7f8e730d2a9(Foo, Bar):
     """Use decorator."""
 
     Container = Injector.let()
@@ -1781,23 +1780,23 @@ def test_deny_non_classes_in_cls_named_arguments(code):
     assert message == "'foo_cls' default value should be a class"
 
 
-@cls_named_defaults  # noqa: F811
-def f(Bar):
+@cls_named_defaults
+def a8cd70341d3d(Bar):
     """Declarative injector."""
 
     class Container(Injector):
         bar = Bar
 
 
-@cls_named_defaults  # noqa: F811
-def f(Bar):
+@cls_named_defaults
+def b859e98f2913(Bar):
     """Let notation."""
 
     Injector.let(bar=Bar)
 
 
-@cls_named_defaults  # noqa: F811
-def f(Bar):
+@cls_named_defaults
+def f795ddb2d60f(Bar):
     """Attribute assignment."""
 
     Container = Injector.let()
@@ -1805,8 +1804,8 @@ def f(Bar):
     Container.bar = Bar
 
 
-@cls_named_defaults  # noqa: F811
-def f(Bar):
+@cls_named_defaults
+def b11a4f8ddac5(Bar):
     """Use decorator."""
 
     Container = Injector.let()
