@@ -1653,41 +1653,48 @@ def f():
         pass
 
 
-# Deny `Injector` call.
+deny_call = CodeCollector()
 
 
-@pytest.mark.parametrize(
-    'code',
-    [
-        # Direct call.
-        """
+@deny_call.parametrize
+def test_deny_to_instantiate_injector(code):
+    """Deny injector instantiation."""
+
+    with pytest.raises(DependencyError) as exc_info:
+        code()
+
+    assert str(exc_info.value) == 'Do not instantiate Injector'
+
+
+@deny_call  # noqa: F811
+def f():
+    """Direct call."""
+
     Injector()
-    """,
-        # Subclass call.
-        """
+
+
+@deny_call  # noqa: F811
+def f():
+    """Subclass call."""
+
     class Foo(Injector):
         pass
 
     Foo()
-    """,
-        # Ignore any arguments passed.
-        """
+
+
+@deny_call  # noqa: F811
+def f():
+    """Ignore any arguments passed."""
+
     Injector(1)
-    """,
-        # Ignore any keyword argument passed.
-        """
+
+
+@deny_call  # noqa: F811
+def f():
+    """Ignore any keyword argument passed."""
+
     Injector(x=1)
-    """,
-    ])
-def test_deny_to_instantiate_injector(code):
-    """Deny injector instantiation."""
-
-    scope = {'Injector': Injector}
-
-    with pytest.raises(DependencyError) as exc_info:
-        exec(dedent(code), scope)
-
-    assert str(exc_info.value) == 'Do not instantiate Injector'
 
 
 # `_cls` named arguments values.
