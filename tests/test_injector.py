@@ -456,6 +456,18 @@ def test_mutable_injector_let_expression():
     assert isinstance(Baz.foo, Foo)
 
 
+def test_mutable_injector_nested_injectors():
+    """
+    We can assign injectors to injectors and then get assigned values.
+    """
+
+    Foo = Injector.let()
+    Foo.Bar = Injector.let()
+    Foo.Bar.Baz = Injector.let()
+    Foo.Bar.Baz.qux = 1
+    assert Foo.Bar.Baz.qux == 1
+
+
 def test_mutable_injector_deny_to_modify_injector():
     """Deny to modify `Injector` itself."""
 
@@ -596,6 +608,24 @@ def test_use_decorator_inject_function():
         return first + second
 
     assert Container.foo() == 3
+
+
+def test_use_decorator_nested_injector():
+    """
+    We can register dependencies with `use` decorator in the nested
+    injectors.
+    """
+
+    class Foo(Injector):
+
+        class Bar(Injector):
+            pass
+
+    @Foo.Bar.use.func
+    def x():
+        return 1
+
+    assert Foo.Bar.func() == 1
 
 
 def test_use_decorator_keep_argument():

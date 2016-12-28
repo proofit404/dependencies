@@ -128,7 +128,6 @@ def ba9b64d1fed9():
 few_parent_attr = CodeCollector()
 
 
-@pytest.mark.xfail
 @few_parent_attr.parametrize
 def test_attribute_getter_few_parents(code):
     """We can access attribute of outer container in any nesting depth."""
@@ -228,7 +227,6 @@ def test_one_subcontainer_multiple_parents():
 item_access = CodeCollector()
 
 
-@pytest.mark.xfail
 @item_access.parametrize
 def test_item_getter(code):
     """

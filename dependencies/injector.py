@@ -34,15 +34,13 @@ class InjectorType(type):
             check_attrs_redefinition(k)
             check_proxies(v)
         dependencies = {}
-        ns['__dependencies__'] = dependencies
-        result = type.__new__(cls, class_name, bases, ns)
         for base in reversed(bases):
             dependencies.update(base.__dependencies__)
         for name, dep in namespace.items():
-            dep = maybe_insert_parent(result, dep)
             dependencies[name] = make_dependency_spec(name, dep)
         check_circles(dependencies)
-        return result
+        ns['__dependencies__'] = dependencies
+        return type.__new__(cls, class_name, bases, ns)
 
     def __getattr__(cls, attrname):
 
@@ -74,6 +72,15 @@ class InjectorType(type):
                 current_attr = attrs_stack.pop()
                 have_default = False
                 continue
+            if argspec is nested_injector:
+                subclass = type(attribute.__name__, (attribute,), {})
+                parent_spec = weakref.ref(cls), False
+                subclass.__dependencies__['__parent__'] = parent_spec
+                cache[current_attr] = subclass
+                cached.add(current_attr)
+                current_attr = attrs_stack.pop()
+                have_default = False
+                continue
             args, have_defaults = argspec
             if set(args).issubset(cached):
                 kwargs = dict((k, cache[k]) for k in args if k in cache)
@@ -97,10 +104,11 @@ class InjectorType(type):
 
         if cls.__bases__ == (object,):
             raise DependencyError("'Injector' modification is not allowed")
+        elif '__parent__' in cls.__dependencies__:
+            cls = cls.__bases__[0]
         check_dunder_name(attrname)
         check_attrs_redefinition(attrname)
         check_proxies(value)
-        value = maybe_insert_parent(cls, value)
         cls.__dependencies__[attrname] = make_dependency_spec(attrname, value)
         check_circles(cls.__dependencies__)
 
@@ -164,12 +172,15 @@ class Use(object):
 
                 def register(dependency):
 
+                    if '__parent__' in objtype.__dependencies__:
+                        _objtype = objtype.__bases__[0]
+                    else:
+                        _objtype = objtype
                     check_dunder_name(attrname)
                     check_attrs_redefinition(attrname)
-                    dependency = maybe_insert_parent(objtype, dependency)
                     spec = make_dependency_spec(attrname, dependency)
-                    objtype.__dependencies__[attrname] = spec
-                    check_circles(objtype.__dependencies__)
+                    _objtype.__dependencies__[attrname] = spec
+                    check_circles(_objtype.__dependencies__)
                     return dependency
 
                 return register
@@ -190,30 +201,31 @@ Injector = InjectorType('Injector', (), {
 })
 
 
+class Marker(object):
+
+    def __bool__(self):
+
+        return False
+
+    __nonzero__ = __bool__
+
+
+nested_injector = Marker()
+
+
 def make_dependency_spec(name, dependency):
 
     if inspect.isclass(dependency) and \
-       not name.endswith('_cls') and   \
-       not issubclass(dependency, Injector):
-        if use_object_init(dependency):
+       not name.endswith('_cls'):
+        if issubclass(dependency, Injector):
+            return dependency, nested_injector
+        elif use_object_init(dependency):
             return dependency, False
         else:
             spec = make_init_spec(dependency)
             return dependency, spec
     else:
         return dependency, None
-
-
-def maybe_insert_parent(parent, dependency):
-    """Make weak reference between Injector and nested Injector."""
-
-    if inspect.isclass(dependency) and issubclass(dependency, Injector):
-        spec = (weakref.ref(parent), False)
-        dependency_subclass = type(dependency.__name__, (dependency,), {})
-        dependency_subclass.__dependencies__['__parent__'] = spec
-        return dependency_subclass
-    else:
-        return dependency
 
 
 try:
