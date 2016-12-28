@@ -34,15 +34,14 @@ class InjectorType(type):
             check_attrs_redefinition(k)
             check_proxies(v)
         dependencies = {}
+        ns['__dependencies__'] = dependencies
+        result = type.__new__(cls, class_name, bases, ns)
         for base in reversed(bases):
             dependencies.update(base.__dependencies__)
         for name, dep in namespace.items():
+            dep = maybe_insert_parent(result, dep)
             dependencies[name] = make_dependency_spec(name, dep)
         check_circles(dependencies)
-        ns['__dependencies__'] = dependencies
-        result = type.__new__(cls, class_name, bases, ns)
-        for dep in namespace.values():
-            maybe_insert_parent(result, dep)
         return result
 
     def __getattr__(cls, attrname):
@@ -101,9 +100,9 @@ class InjectorType(type):
         check_dunder_name(attrname)
         check_attrs_redefinition(attrname)
         check_proxies(value)
+        value = maybe_insert_parent(cls, value)
         cls.__dependencies__[attrname] = make_dependency_spec(attrname, value)
         check_circles(cls.__dependencies__)
-        maybe_insert_parent(cls, value)
 
     def __delattr__(cls, attrname):
 
@@ -167,10 +166,10 @@ class Use(object):
 
                     check_dunder_name(attrname)
                     check_attrs_redefinition(attrname)
+                    dependency = maybe_insert_parent(objtype, dependency)
                     spec = make_dependency_spec(attrname, dependency)
                     objtype.__dependencies__[attrname] = spec
                     check_circles(objtype.__dependencies__)
-                    maybe_insert_parent(objtype, dependency)
                     return dependency
 
                 return register
@@ -210,7 +209,11 @@ def maybe_insert_parent(parent, dependency):
 
     if inspect.isclass(dependency) and issubclass(dependency, Injector):
         spec = (weakref.ref(parent), False)
-        dependency.__dependencies__['__parent__'] = spec
+        dependency_subclass = type(dependency.__name__, (dependency,), {})
+        dependency_subclass.__dependencies__['__parent__'] = spec
+        return dependency_subclass
+    else:
+        return dependency
 
 
 try:
