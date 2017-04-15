@@ -22,8 +22,9 @@ class Thisable(object):
 
     def __getattr__(self, attrname):
 
-        attrs = tuple(['__parent__'] * self.parents + [attrname])
-        return proxy(attrs, ())
+        expression = ['__parent__', '.'] * self.parents + [attrname]
+        scope = {}
+        return proxy(expression, scope)
 
     def __lshift__(self, num):
 
@@ -37,51 +38,46 @@ class ProxyType(type):
 
     def __getattr__(cls, attrname):
 
-        attrs = cls.__attrs__ + (attrname,)
-        return proxy(attrs, ())
+        expression = cls.__expression__ + ['.', attrname]
+        scope = dict(**cls.__scope__)
+        return proxy(expression, scope)
 
     def __getitem__(cls, item):
 
-        items = cls.__items__ + (item,)
-        return proxy(cls.__attrs__, items)
+        itemname = random_string()
+        expression = cls.__expression__ + ['[', itemname, ']']
+        scope = {itemname: item}
+        scope.update(cls.__scope__)
+        return proxy(expression, scope)
 
 
-def proxy(attrs, items):
+def proxy(expression, scope):
 
-    __new__ = injection_hook(attrs, items)
-    __init__ = make_init(attrs)
+    __new__ = make_new(expression, scope)
+    __init__ = make_init(expression)
     return ProxyType('Proxy', (object,), {
         '__new__': __new__,
         '__init__': __init__,
-        '__attrs__': attrs,
-        '__items__': items,
+        '__expression__': expression,
+        '__scope__': scope,
     })
 
 
-def injection_hook(attrs, items):
+def make_new(expression, scope):
 
-    argument = attrs[0]
-    attrs_expr = '.'.join(attrs)
-    item_names = [random_string() for each in items]
-    items_expr = ''.join('[' + name + ']' for name in item_names)
-    return_expr = attrs_expr + items_expr
-    scope = dict([(k, v) for k, v in zip(item_names, items)])
-    getter = make_new(argument, return_expr, scope)
-    return getter
-
-
-def make_new(argument, return_expr, scope):
-
+    argument = expression[0]
+    return_expr = ''.join(expression)
     template = 'def __new__(cls, {argument}): return {return_expr}'
     code = template.format(argument=argument, return_expr=return_expr)
+    scope = dict(**scope)
     exec(code, scope)
     __new__ = scope['__new__']
     return __new__
 
 
-def make_init(arguments):
+def make_init(expression):
 
-    argument = arguments[0]
+    argument = expression[0]
     template = 'def __init__(self, {argument}): pass'
     code = template.format(argument=argument)
     scope = {}

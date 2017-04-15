@@ -361,6 +361,25 @@ def test_item_getter_non_printable_key():
     assert Container.bar == 1
 
 
+def test_attribute_access_after_item_getter():
+    """
+    Check we can use attribute access notation after item getter
+    notation.
+    """
+
+    class Foo(object):
+        x = 1
+
+    class Bar(object):
+        y = {'foo': Foo}
+
+    class Container(Injector):
+        bar = Bar
+        baz = this.bar.y['foo'].x
+
+    assert Container.baz == 1
+
+
 def test_docstrings():
     """Check we can access all API entry points documentation."""
 
