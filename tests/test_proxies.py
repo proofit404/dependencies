@@ -453,18 +453,6 @@ def a3849bbb3105():
 
 # TODO: minimize test number here.
 #
-# FIXME: add deeper dict example.
-#
-# For now we use separate item and attribute access.  With this
-# approach it isn't possible to take items from attributes like that:
-#
-# class Container(Injector):
-#     class Foo(object):
-#         bar = {'baz': 1}
-#     baz = item('Foo', 'bar', 'baz')
-#
-# `Container.baz` will give us TypeError: 'Foo' object is not subscriptable
-#
 # TODO: test `this` against negative numbers and non digits
 #
 # TODO: what if we shift more that container levels available?  What
