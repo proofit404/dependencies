@@ -740,11 +740,11 @@ def test_docstrings():
     """Check we can access all API entry points documentation."""
 
     assert Injector.__doc__ == """
-    Default dependencies specification DSL.
+Default dependencies specification DSL.
 
-    Classes inherited from this class may inject dependencies into
-    classes specified in it namespace.
-    """
+Classes inherited from this class may inject dependencies into classes
+specified in it namespace.
+"""
     assert Injector.let.__doc__ == (
         'Produce new Injector with some dependencies overwritten.')
     assert Injector.use.__doc__ == use_doc
