@@ -3,8 +3,7 @@ from email.mime.text import MIMEText
 from smtplib import SMTP
 
 from dependencies import Injector
-from flask import Flask, render_template, redirect, request
-
+from flask import Flask, redirect, render_template, request
 
 settings = {
     'support_address': 'user@gmail.com',
@@ -97,5 +96,6 @@ def notify():
     recipient = request.form['email']
     AppContainer.handler.handle(recipient)
     return redirect('/')
+
 
 app.run()

@@ -1,10 +1,9 @@
 from inspect import isclass
 
 import pytest
-from helpers import CodeCollector
-
-from dependencies import Injector, DependencyError
+from dependencies import DependencyError, Injector
 from dependencies.injector import use_doc
+from helpers import CodeCollector
 
 
 def test_lambda_dependency():

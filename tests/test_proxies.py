@@ -1,7 +1,7 @@
 import pytest
+from dependencies import DependencyError, Injector, this
 from helpers import CodeCollector
 
-from dependencies import Injector, this, DependencyError
 
 # Declarative attribute access.
 

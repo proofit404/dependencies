@@ -56,8 +56,8 @@ class InjectorType(type):
                     have_default = False
                     continue
                 raise AttributeError(
-                    '{0!r} object has no attribute {1!r}'
-                    .format(cls.__name__, current_attr),
+                    '{0!r} object has no attribute {1!r}'.format(
+                        cls.__name__, current_attr),
                 )
             attribute, argspec = attribute_spec
             if argspec is None:
@@ -118,8 +118,8 @@ class InjectorType(type):
         check_attrs_redefinition(attrname)
         if attrname not in cls.__dependencies__:
             raise AttributeError(
-                '{0!r} object has no attribute {1!r}'
-                .format(cls.__name__, attrname),
+                '{0!r} object has no attribute {1!r}'.format(
+                    cls.__name__, attrname),
             )
         del cls.__dependencies__[attrname]
 
@@ -188,16 +188,18 @@ class Use(object):
         return Register()
 
 
+injector_doc = """
+Default dependencies specification DSL.
+
+Classes inherited from this class may inject dependencies into classes
+specified in it namespace.
+"""
+
 Injector = InjectorType('Injector', (), {
     '__init__': __init__,
     'let': let,
     'use': Use(),
-    '__doc__': """
-    Default dependencies specification DSL.
-
-    Classes inherited from this class may inject dependencies into
-    classes specified in it namespace.
-    """,
+    '__doc__': injector_doc,
 })
 
 
@@ -355,8 +357,8 @@ def check_circles_for(dependencies, attrname, origin):
         args = argspec[0]
         if origin in args:
             raise DependencyError(
-                '{0!r} is a circle dependency in the {1!r} constructor'
-                .format(origin, attribute.__name__),
+                '{0!r} is a circle dependency in the {1!r} constructor'.format(
+                    origin, attribute.__name__),
             )
         for name in args:
             check_circles_for(dependencies, name, origin)

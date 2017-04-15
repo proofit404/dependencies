@@ -8,9 +8,9 @@ Dependency Injection for Humans.
 :license: LGPL-3, see LICENSE for more details.
 """
 
+from .exceptions import DependencyError
 from .injector import Injector
 from .proxies import this
-from .exceptions import DependencyError
 
 __all__ = ['Injector', 'this', 'DependencyError']
 

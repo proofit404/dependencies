@@ -38,11 +38,10 @@ latex_documents = [
 
 man_pages = [
     (master_doc, 'dependencies', 'dependencies Documentation',
-     [author], 1)
+     [author], 1),
 ]
 
 texinfo_documents = [
-    (master_doc, 'dependencies', 'dependencies Documentation',
-     author, 'dependencies', 'One line description of project.',
-     'Miscellaneous'),
+    (master_doc, 'dependencies', 'dependencies Documentation', author,
+     'dependencies', 'One line description of project.', 'Miscellaneous'),
 ]
