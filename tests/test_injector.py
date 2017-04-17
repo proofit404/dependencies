@@ -476,6 +476,35 @@ def test_mutable_injector_deny_to_modify_injector():
     assert str(exc_info.value) == "'Injector' modification is not allowed"
 
 
+# TODO: parametrize?
+def test_support_parent_modification():
+    """
+    Check if we can support parent modification.
+
+    For example, we create injector subclass which holds `foo = 1`.
+    Then we create another subclass of this container which holds `bar
+    = Bar`.  `Bar` class itself depends on `foo`.  Then we modify
+    first container with assignment (now `foo = 2`).  Then we try to
+    resolve `bar` from second container.  Created instance must hold
+    the new value of `foo`.
+    """
+
+    class Bar(object):
+
+        def __init__(self, foo):
+            self.foo = foo
+
+    class ParentContainer(Injector):
+        foo = 1
+
+    class Container(ParentContainer):
+        bar = Bar
+
+    ParentContainer.foo = 2
+
+    assert Container.bar.foo == 2
+
+
 unregister_dependency = CodeCollector()
 
 
@@ -1381,6 +1410,8 @@ def c1e1c2ec8941(Foo, Bar, Baz):
 
     Summator.foo
 
+
+# TODO: Check circle deps calculation with parent container modification.
 
 deny_varargs = CodeCollector()
 
