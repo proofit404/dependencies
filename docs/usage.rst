@@ -283,29 +283,6 @@ using ``let`` notation.
 Changing scope
 --------------
 
-Attribute assignment
-++++++++++++++++++++
-
-It is possible to modify existed ``Injector`` subclasses by attribute
-assignment.  Unlike inheritance and ``let`` notation this will modify
-existed scope and can replace already specified dependencies.
-
-.. code:: python
-
-    >>> from dependencies import Injector
-    >>> class X:
-    ...     pass
-    ...
-    >>> class Y:
-    ...     pass
-    ...
-    >>> class Scope(Injector):
-    ...     foo = X
-    ...
-    >>> Scope.foo = Y
-    >>> Scope.foo
-    <__main__.Y object at 0x7f50445f2cc0>
-
 ``use`` decorator
 +++++++++++++++++
 
@@ -331,18 +308,3 @@ targets stays unchanged and can be used in a regular way.
     ...
     >>> Container.foo()
     1
-
-Dependency cancellation
-+++++++++++++++++++++++
-
-It is also possible to remove dependency from defined scope.  Simply
-remove attribute holding it.
-
-.. code:: python
-
-    >>> class Scope(Injector):
-    ...     foo = X
-    ...
-    >>> del Scope.foo
-    >>> Scope.foo
-    AttributeError: 'Scope' object has no attribute 'foo'

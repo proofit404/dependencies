@@ -410,157 +410,67 @@ def test_omit_parent_link_in_dir_listing():
     assert '__parent__' not in dir(Foo.Bar)
 
 
-# Attribute assignment.
+attribute_assignment = CodeCollector()
 
 
-def test_mutable_injector():
-    """We can extend existed `Injector` by attribute assignment."""
-
-    class Foo(object):
-
-        def __init__(self, bar):
-            self.bar = bar
-
-    class Bar(object):
-        pass
-
-    class Baz(Injector):
-        pass
-
-    Baz.foo = Foo
-    Baz.bar = Bar
-
-    assert isinstance(Baz.foo, Foo)
-
-
-def test_mutable_injector_let_expression():
-    """
-    We can extend `Injector` created with `let` expression by
-    attribute assignment.
-    """
-
-    class Foo(object):
-
-        def __init__(self, bar):
-            self.bar = bar
-
-    class Bar(object):
-        pass
-
-    Baz = Injector.let()
-
-    Baz.foo = Foo
-    Baz.bar = Bar
-
-    assert isinstance(Baz.foo, Foo)
-
-
-def test_mutable_injector_nested_injectors():
-    """
-    We can assign injectors to injectors and then get assigned values.
-    """
-
-    Foo = Injector.let()
-    Foo.Bar = Injector.let()
-    Foo.Bar.Baz = Injector.let()
-    Foo.Bar.Baz.qux = 1
-    assert Foo.Bar.Baz.qux == 1
-
-
-def test_mutable_injector_deny_to_modify_injector():
-    """Deny to modify `Injector` itself."""
+@attribute_assignment.parametrize
+def test_deny_injector_changes(code):
+    """Explicitly deny change of any kind on `Injector` and its subclasses."""
 
     with pytest.raises(DependencyError) as exc_info:
-        Injector.foo = 1
+        code()
 
     assert str(exc_info.value) == "'Injector' modification is not allowed"
 
 
-unregister_dependency = CodeCollector()
+@attribute_assignment
+def mvT9oyJdXhzh():
+    """Attribute assignment."""
 
-
-@unregister_dependency.parametrize
-def test_unregister_dependency(code):
-    """We can unregister dependency from `Injector` subclasses."""
-
-    class Foo(object):
-
-        def __init__(self, bar):
-            self.bar = bar
-
-    class Bar(object):
+    class Container(Injector):
         pass
 
-    with pytest.raises(AttributeError) as exc_info:
-        code(Foo, Bar)
-
-    assert str(exc_info.value) in set([
-        "'Baz' object has no attribute 'bar'",
-        "'Injector' object has no attribute 'bar'",
-    ])
+    Container.foo = 1
 
 
-@unregister_dependency
-def dc41dbd58e64(Foo, Bar):
-    """Declarative injector."""
+@attribute_assignment
+def fXxRX4KFUc8q():
+    """Direct assignmet to the `Injector`."""
 
-    class Baz(Injector):
-        foo = Foo
-        bar = Bar
-
-    del Baz.bar
-
-    Baz.foo
+    Injector.foo = 1
 
 
-@unregister_dependency
-def b610d583a1bc(Foo, Bar):
+@attribute_assignment
+def pHfF0rbEjCsV():
     """Let notation."""
 
-    Baz = Injector.let(foo=Foo, bar=Bar)
-
-    del Baz.bar
-
-    Baz.foo
+    Container = Injector.let()
+    Container.foo = 1
 
 
-@unregister_dependency
-def cd66b3f0ebfb(Foo, Bar):
-    """
-    Throw `AttributeError` if someone tries to delete missing
-    dependency.
-    """
+@attribute_assignment
+def xhZaIhujf34t():
+    """Delete attribute."""
 
-    del Injector.bar
+    class Container(Injector):
+        foo = 1
 
-
-@unregister_dependency
-def c95a99244037(Foo, Bar):
-    """
-    Throw `AttributeError` if someone tries to delete missing
-    dependency in the `Injector` subclass.
-    """
-
-    class Baz(Injector):
-        pass
-
-    del Baz.bar
+    del Container.foo
 
 
-def test_unregister_do_not_use_object_constructor():
-    """
-    We shouldn't touch/run object `__init__` during it unregistration.
-    """
+@attribute_assignment
+def jShuBfttg97c():
+    """Delete attribute let notation."""
 
-    class Foo(object):
+    Container = Injector.let(foo=1)
+    del Container.foo
 
-        def __init__(self):
-            raise Exception
 
-    class Bar(Injector):
-        foo = Foo
+@attribute_assignment
+def tQeRzD5ZsyTm():
+    """Delete attribute from `Injector` directly."""
 
-    del Bar.foo
+    del Injector.let
 
 
 # Register decorator.
@@ -979,26 +889,6 @@ def e34b88041f64():
 
 
 @deny_magic_methods
-def c8f1959a4452():
-    """Attribute assignment."""
-
-    class Foo(Injector):
-        pass
-
-    Foo.__eq__ = lambda self, other: False
-
-
-@deny_magic_methods
-def b6a409fd7ba7():
-    """Delete attribute."""
-
-    class Foo(Injector):
-        pass
-
-    del Foo.__init__
-
-
-@deny_magic_methods
 def e83853c1eb18():
     """Use decorator."""
 
@@ -1128,17 +1018,6 @@ def e4b38a38de7e(Foo):
 
 
 @circle_deps
-def d83d572eaa40(Foo):
-    """Attribute assignment."""
-
-    Summator = Injector.let()
-
-    Summator.foo = Foo
-
-    Summator.foo
-
-
-@circle_deps
 def cfbda7f1a2b5(Foo):
     """Use decorator."""
 
@@ -1225,18 +1104,6 @@ def c039a81e8dce(Foo, Bar):
     """Let notation chain."""
 
     Summator = Injector.let(foo=Foo).let(bar=Bar)
-
-    Summator.foo
-
-
-@complex_circle_deps
-def f8c4673bb2c6(Foo, Bar):
-    """Attribute assignment."""
-
-    Summator = Injector.let()
-
-    Summator.foo = Foo
-    Summator.bar = Bar
 
     Summator.foo
 
@@ -1343,19 +1210,6 @@ def d701f88a5c42(Foo, Bar, Baz):
 
 
 @long_circle_deps
-def c716746e74d6(Foo, Bar, Baz):
-    """Attribute assignment."""
-
-    Summator = Injector.let()
-
-    Summator.foo = Foo
-    Summator.bar = Bar
-    Summator.baz = Baz
-
-    Summator.foo
-
-
-@long_circle_deps
 def c1e1c2ec8941(Foo, Bar, Baz):
     """Use decorator."""
 
@@ -1417,16 +1271,6 @@ def f7ef2aa82c18(Foo):
 
 
 @deny_varargs
-def de077ee2e6ad(Foo):
-    """Attribute assignment."""
-
-    class Summator(Injector):
-        args = (1, 2, 3)
-
-    Summator.foo = Foo
-
-
-@deny_varargs
 def fad7d812b63c(Foo):
     """Use decorator."""
 
@@ -1472,16 +1316,6 @@ def bcf7c5881b2c(Foo):
     """Let notation."""
 
     Injector.let(foo=Foo, kwargs={'start': 5})
-
-
-@deny_kwargs
-def c641f152e84d(Foo):
-    """Attribute assignment."""
-
-    class Summator(Injector):
-        kwargs = {'start': 5}
-
-    Summator.foo = Foo
 
 
 @deny_kwargs
@@ -1539,17 +1373,6 @@ def c4362558f312(Foo):
 
 
 @deny_varargs_kwargs
-def ac7b245a086c(Foo):
-    """Attribute assignment."""
-
-    class Summator(Injector):
-        args = (1, 2, 3)
-        kwargs = {'start': 5}
-
-    Summator.foo = Foo
-
-
-@deny_varargs_kwargs
 def ba95711532fe(Foo):
     """Use decorator."""
 
@@ -1595,23 +1418,6 @@ def ddd392e70db6():
 
 
 @deny_let_redefine
-def b7a9fec8b30f():
-    """Attribute assignment."""
-
-    class Foo(Injector):
-        pass
-
-    Foo.let = lambda cls, **kwargs: None
-
-
-@deny_let_redefine
-def e6d54a5e4101():
-    """Delete attribute."""
-
-    del Injector.let
-
-
-@deny_let_redefine
 def bdbdb2e43217():
     """Use decorator."""
 
@@ -1651,23 +1457,6 @@ def a6d8c15385a8():
         pass
 
     Foo.let(use=1)
-
-
-@deny_use_redefine
-def d6f874adece2():
-    """Attribute assignment."""
-
-    class Foo(Injector):
-        pass
-
-    Foo.use = 2
-
-
-@deny_use_redefine
-def d3af96dd4ae3():
-    """Delete attribute."""
-
-    del Injector.use
 
 
 @deny_use_redefine
@@ -1766,15 +1555,6 @@ def bccb4f621e70(Foo, Bar):
 
 
 @cls_named_arguments
-def a30217ae3b93(Foo, Bar):
-    """Attribute assignment."""
-
-    Container = Injector.let()
-
-    Container.bar = Bar
-
-
-@cls_named_arguments
 def f7f8e730d2a9(Foo, Bar):
     """Use decorator."""
 
@@ -1822,15 +1602,6 @@ def b859e98f2913(Bar):
     """Let notation."""
 
     Injector.let(bar=Bar)
-
-
-@cls_named_defaults
-def f795ddb2d60f(Bar):
-    """Attribute assignment."""
-
-    Container = Injector.let()
-
-    Container.bar = Bar
 
 
 @cls_named_defaults

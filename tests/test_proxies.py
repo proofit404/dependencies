@@ -97,21 +97,6 @@ def f607abc82079():
 
 
 @parent_attr
-def f2bfa4318b60():
-    """Attribute assignment."""
-
-    class Container(Injector):
-        foo = 1
-
-    class SubContainer(Injector):
-        bar = (this << 1).foo
-
-    Container.SubContainer = SubContainer
-
-    return Container
-
-
-@parent_attr
 def ba9b64d1fed9():
     """Use decorator."""
 
@@ -164,24 +149,6 @@ def c4ed4c61e154():
             bar = (this << 2).foo
 
     Container = OuterContainer.let(SubContainer=SubContainer)
-
-    return Container
-
-
-@few_parent_attr
-def fc04e2ab714b():
-    """Attribute assignment."""
-
-    class Container(Injector):
-        foo = 1
-
-        class SubContainer(Injector):
-            pass
-
-    class SubSubContainer(Injector):
-        bar = (this << 2).foo
-
-    Container.SubContainer.SubSubContainer = SubSubContainer
 
     return Container
 
@@ -429,26 +396,6 @@ def bd05271fb831():
     """Let notation with parent access."""
 
     Injector.let(foo=(this << 1))
-
-
-@direct_proxy
-def f44e0a7db9a2():
-    """Attribute assignment."""
-
-    class Container(Injector):
-        pass
-
-    Container.foo = this
-
-
-@direct_proxy
-def a3849bbb3105():
-    """Attribute assignment with parent access."""
-
-    class Container(Injector):
-        pass
-
-    Container.foo = (this << 1)
 
 
 # TODO: minimize test number here.
