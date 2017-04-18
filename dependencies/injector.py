@@ -34,21 +34,21 @@ class InjectorType(type):
             check_attrs_redefinition(k)
             check_proxies(v)
         dependencies = {}
+        for base in reversed(bases):
+            dependencies.update(base.__dependencies__)
         for name, dep in namespace.items():
             dependencies[name] = make_dependency_spec(name, dep)
+        check_circles(dependencies)
         ns['__dependencies__'] = dependencies
-        result = type.__new__(cls, class_name, bases, ns)
-        check_circles(get_dependencies(result))
-        return result
+        return type.__new__(cls, class_name, bases, ns)
 
     def __getattr__(cls, attrname):
 
-        dependencies = get_dependencies(cls)
         cache, cached = {}, set()
         current_attr, attrs_stack = attrname, [attrname]
         have_default = False
         while attrname not in cache:
-            attribute_spec = dependencies.get(current_attr)
+            attribute_spec = cls.__dependencies__.get(current_attr)
             if attribute_spec is None:
                 if have_default:
                     cached.add(current_attr)
@@ -370,13 +370,3 @@ def check_proxies(dependency):
         raise DependencyError(
             "You can not use 'this' directly in the 'Injector'",
         )
-
-
-def get_dependencies(cls):
-
-    dependencies = {}
-    # TODO: Test resolution order.
-    for base in reversed(cls.__mro__):
-        if base is not object:
-            dependencies.update(base.__dependencies__)
-    return dependencies
