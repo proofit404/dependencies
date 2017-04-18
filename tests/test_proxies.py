@@ -96,20 +96,6 @@ def f607abc82079():
     return Container
 
 
-@parent_attr
-def ba9b64d1fed9():
-    """Use decorator."""
-
-    class Container(Injector):
-        foo = 1
-
-    @Container.use
-    class SubContainer(Injector):
-        bar = (this << 1).foo
-
-    return Container
-
-
 few_parent_attr = CodeCollector()
 
 
@@ -149,23 +135,6 @@ def c4ed4c61e154():
             bar = (this << 2).foo
 
     Container = OuterContainer.let(SubContainer=SubContainer)
-
-    return Container
-
-
-@few_parent_attr
-def ecd27596248a():
-    """Use decorator."""
-
-    class Container(Injector):
-        foo = 1
-
-        class SubContainer(Injector):
-            pass
-
-    @Container.SubContainer.use
-    class SubSubContainer(Injector):
-        bar = (this << 2).foo
 
     return Container
 

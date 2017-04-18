@@ -2,7 +2,7 @@ from inspect import isclass
 
 import pytest
 from dependencies import DependencyError, Injector
-from dependencies.injector import use_doc
+from dependencies.injector import injector_doc
 from helpers import CodeCollector
 
 
@@ -357,7 +357,7 @@ def test_show_common_class_attributes_with_dir():
     class Foo(Injector):
         pass
 
-    assert dir(Common) + ['let', 'use'] == dir(Foo)
+    assert dir(Common) + ['let'] == dir(Foo)
 
 
 def test_show_injected_dependencies_with_dir():
@@ -473,138 +473,6 @@ def tQeRzD5ZsyTm():
     del Injector.let
 
 
-# Register decorator.
-
-
-def test_use_decorator_inject_class():
-    """We must be allowed to register class with `use` decorator."""
-
-    Container = Injector.let(x=1, y=2)
-
-    @Container.use.foo
-    class Foo(object):
-
-        def __init__(self, x, y):
-            self.x = x
-            self.y = y
-
-        def __call__(self):
-            return self.x + self.y
-
-    assert Container.foo() == 3
-
-
-def test_use_decorator_inject_function():
-    """We must be allowed to register function with `use` decorator."""
-
-    class Foo(object):
-
-        def __init__(self, func, x, y):
-            self.func = func
-            self.x = x
-            self.y = y
-
-        def __call__(self):
-            return self.func(self.x, self.y)
-
-    class Container(Injector):
-        foo = Foo
-        x = 1
-        y = 2
-
-    @Container.use.func
-    def add(first, second):
-        return first + second
-
-    assert Container.foo() == 3
-
-
-def test_use_decorator_nested_injector():
-    """
-    We can register dependencies with `use` decorator in the nested
-    injectors.
-    """
-
-    class Foo(Injector):
-
-        class Bar(Injector):
-            pass
-
-    @Foo.Bar.use.func
-    def x():
-        return 1
-
-    assert Foo.Bar.func() == 1
-
-
-def test_use_decorator_keep_argument():
-    """
-    Decorated class of function remains unmodified and we can use it
-    as usual.
-    """
-
-    Container = Injector.let()
-
-    @Container.use.foo
-    def x(a, b):
-        return a + b
-
-    @Container.use.bar
-    class Y(object):
-
-        def __init__(self, a, b):
-            self.a = a
-            self.b = b
-
-        def do(self):
-            return self.a + self.b
-
-    assert x(1, 2) == 3
-    assert Y(1, 2).do() == 3
-
-
-def test_use_decorator_no_name_class():
-    """
-    We can use `use` decorator without specifying the name of the
-    class dependency explicitly.
-    """
-
-    class Foo(object):
-
-        def __init__(self, Bar):
-            self.Bar = Bar
-
-    class Container(Injector):
-        foo = Foo
-
-    @Container.use
-    class Bar(object):
-        pass
-
-    assert isinstance(Container.foo.Bar, Bar)
-
-
-def test_use_decorator_no_name_function():
-    """
-    We can use `use` decorator without specifying the name of the
-    function dependency explicitly.
-    """
-
-    class Foo(object):
-
-        def __init__(self, do):
-            self.do = do
-
-    class Container(Injector):
-        foo = Foo
-
-    @Container.use
-    def do():
-        pass
-
-    assert Container.foo.do is do
-
-
 # Nested injectors.
 
 
@@ -649,15 +517,9 @@ def test_nested_injectors():
 def test_docstrings():
     """Check we can access all API entry points documentation."""
 
-    assert Injector.__doc__ == """
-Default dependencies specification DSL.
-
-Classes inherited from this class may inject dependencies into classes
-specified in it namespace.
-"""
+    assert Injector.__doc__ == injector_doc
     assert Injector.let.__doc__ == (
         'Produce new Injector with some dependencies overwritten.')
-    assert Injector.use.__doc__ == use_doc
     assert DependencyError.__doc__ == (
         'Broken dependencies configuration error.')
 
@@ -888,17 +750,6 @@ def e34b88041f64():
     Foo.let(__eq__=lambda self, other: False)
 
 
-@deny_magic_methods
-def e83853c1eb18():
-    """Use decorator."""
-
-    Container = Injector.let()
-
-    @Container.use.__eq__
-    def eq(self, other):
-        return False
-
-
 attribute_error = CodeCollector()
 
 
@@ -960,21 +811,6 @@ def c4e7ecf75167():
     Foo.bar
 
 
-@attribute_error
-def b57e0e5295e6():
-    """Use decorator."""
-
-    Container = Injector.let()
-
-    @Container.use.bar
-    class Bar(object):
-
-        def __init__(self, test):
-            pass
-
-    Container.bar
-
-
 circle_deps = CodeCollector()
 
 
@@ -1013,21 +849,6 @@ def e4b38a38de7e(Foo):
     """Let notation."""
 
     Summator = Injector.let(foo=Foo)
-
-    Summator.foo
-
-
-@circle_deps
-def cfbda7f1a2b5(Foo):
-    """Use decorator."""
-
-    Summator = Injector.let()
-
-    @Summator.use.foo
-    class Foo(object):
-
-        def __init__(self, foo):
-            self.foo = foo
 
     Summator.foo
 
@@ -1104,27 +925,6 @@ def c039a81e8dce(Foo, Bar):
     """Let notation chain."""
 
     Summator = Injector.let(foo=Foo).let(bar=Bar)
-
-    Summator.foo
-
-
-@complex_circle_deps
-def e6529e257d1c(Foo, Bar):
-    """Use decorator."""
-
-    Summator = Injector.let()
-
-    @Summator.use.foo
-    class Foo(object):
-
-        def __init__(self, bar):
-            self.bar = bar
-
-    @Summator.use.bar
-    class Bar(object):
-
-        def __init__(self, foo):
-            self.foo = foo
 
     Summator.foo
 
@@ -1209,33 +1009,6 @@ def d701f88a5c42(Foo, Bar, Baz):
     Summator.foo
 
 
-@long_circle_deps
-def c1e1c2ec8941(Foo, Bar, Baz):
-    """Use decorator."""
-
-    Summator = Injector.let()
-
-    @Summator.use.foo
-    class Foo(object):
-
-        def __init__(self, bar):
-            self.bar = bar
-
-    @Summator.use.bar
-    class Bar(object):
-
-        def __init__(self, baz):
-            self.baz = baz
-
-    @Summator.use.baz
-    class Baz(object):
-
-        def __init__(self, foo):
-            self.foo = foo
-
-    Summator.foo
-
-
 deny_varargs = CodeCollector()
 
 
@@ -1268,19 +1041,6 @@ def dfe1c22c641e(Foo):
 def f7ef2aa82c18(Foo):
     """Let notation."""
     Injector.let(foo=Foo, args=(1, 2, 3))
-
-
-@deny_varargs
-def fad7d812b63c(Foo):
-    """Use decorator."""
-
-    Summator = Injector.let(args=(1, 2, 3))
-
-    @Summator.use.foo
-    class Foo(object):
-
-        def __init__(self, *args):
-            self.args = args
 
 
 deny_kwargs = CodeCollector()
@@ -1316,19 +1076,6 @@ def bcf7c5881b2c(Foo):
     """Let notation."""
 
     Injector.let(foo=Foo, kwargs={'start': 5})
-
-
-@deny_kwargs
-def ff760d162827(Foo):
-    """Use decorator."""
-
-    Summator = Injector.let(kwargs={'start': 5})
-
-    @Summator.use.foo
-    class Foo(object):
-
-        def __init__(self, **kwargs):
-            self.kwargs = kwargs
 
 
 deny_varargs_kwargs = CodeCollector()
@@ -1372,20 +1119,6 @@ def c4362558f312(Foo):
     Injector.let(foo=Foo, args=(1, 2, 3), kwargs={'start': 5})
 
 
-@deny_varargs_kwargs
-def ba95711532fe(Foo):
-    """Use decorator."""
-
-    Summator = Injector.let(args=(1, 2, 3), kwargs={'start': 5})
-
-    @Summator.use.foo
-    class Foo(object):
-
-        def __init__(self, *args, **kwargs):
-            self.args = args
-            self.kwargs = kwargs
-
-
 deny_let_redefine = CodeCollector()
 
 
@@ -1415,59 +1148,6 @@ def ddd392e70db6():
         pass
 
     Foo.let(let=1)
-
-
-@deny_let_redefine
-def bdbdb2e43217():
-    """Use decorator."""
-
-    Summator = Injector.let()
-
-    @Summator.use.let
-    def let(cls, **kwargs):
-        pass
-
-
-deny_use_redefine = CodeCollector()
-
-
-@deny_use_redefine.parametrize
-def test_deny_to_redefine_use_attribute(code):
-    """We can't redefine `use` attribute in the `Injector` subclasses."""
-
-    with pytest.raises(DependencyError) as exc_info:
-        code()
-
-    assert str(exc_info.value) == "'use' redefinition is not allowed"
-
-
-@deny_use_redefine
-def a91da8cbb9b6():
-    """Declarative injector."""
-
-    class Foo(Injector):
-        use = 2
-
-
-@deny_use_redefine
-def a6d8c15385a8():
-    """Let notation."""
-
-    class Foo(Injector):
-        pass
-
-    Foo.let(use=1)
-
-
-@deny_use_redefine
-def db56096f19d6():
-    """Use decorator."""
-
-    Summator = Injector.let()
-
-    @Summator.use.use
-    def use():
-        pass
 
 
 deny_call = CodeCollector()
@@ -1554,19 +1234,6 @@ def bccb4f621e70(Foo, Bar):
     Injector.let(bar=Bar)
 
 
-@cls_named_arguments
-def f7f8e730d2a9(Foo, Bar):
-    """Use decorator."""
-
-    Container = Injector.let()
-
-    @Container.use.bar
-    class Bar(object):
-
-        def __init__(self, foo=Foo):
-            self.foo = foo
-
-
 cls_named_defaults = CodeCollector()
 
 
@@ -1602,16 +1269,3 @@ def b859e98f2913(Bar):
     """Let notation."""
 
     Injector.let(bar=Bar)
-
-
-@cls_named_defaults
-def b11a4f8ddac5(Bar):
-    """Use decorator."""
-
-    Container = Injector.let()
-
-    @Container.use.bar
-    class Bar(object):
-
-        def __init__(self, foo_cls=1):
-            self.foo_cls = foo_cls

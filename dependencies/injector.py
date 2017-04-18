@@ -133,46 +133,6 @@ def let(cls, **kwargs):
     return type(cls.__name__, (cls,), kwargs)
 
 
-use_doc = """
-Decorator based injector modification.
-
-Similar to attribute assignment.
-"""
-
-
-class Use(object):
-
-    def __get__(self, obj, objtype):
-
-        class Register(object):
-
-            def __call__(self, dependency):
-
-                return getattr(self, dependency.__name__)(dependency)
-
-            def __getattribute__(self, attrname):
-
-                if attrname == '__doc__':
-                    return use_doc
-
-                def register(dependency):
-
-                    if '__parent__' in objtype.__dependencies__:
-                        _objtype = objtype.__bases__[0]
-                    else:
-                        _objtype = objtype
-                    check_dunder_name(attrname)
-                    check_attrs_redefinition(attrname)
-                    spec = make_dependency_spec(attrname, dependency)
-                    _objtype.__dependencies__[attrname] = spec
-                    check_circles(_objtype.__dependencies__)
-                    return dependency
-
-                return register
-
-        return Register()
-
-
 injector_doc = """
 Default dependencies specification DSL.
 
@@ -182,9 +142,8 @@ specified in it namespace.
 
 Injector = InjectorType('Injector', (), {
     '__init__': __init__,
-    'let': let,
-    'use': Use(),
     '__doc__': injector_doc,
+    'let': let,
 })
 
 
@@ -283,11 +242,8 @@ def check_dunder_name(name):
 
 def check_attrs_redefinition(name):
 
-    for attr in ['let', 'use']:
-        if name == attr:
-            raise DependencyError(
-                '{0!r} redefinition is not allowed'.format(attr),
-            )
+    if name == 'let':
+        raise DependencyError("'let' redefinition is not allowed")
 
 
 def check_cls_arguments(argnames, defaults):
