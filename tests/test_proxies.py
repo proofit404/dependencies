@@ -327,8 +327,11 @@ direct_proxy = CodeCollector()
 
 
 @direct_proxy.parametrize
-def test_attribute_getter_arguments_validation(code):
-    """TODO: write doc and proper test name"""
+def test_deny_this_without_attribute_access(code):
+    """
+    `Thisable` instances can't be injected without pointing to any
+    other attribute.
+    """
 
     with pytest.raises(DependencyError) as exc_info:
         code()
