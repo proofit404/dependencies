@@ -370,9 +370,25 @@ def bd05271fb831():
     Injector.let(foo=(this << 1))
 
 
+def test_this_deny_non_integers():
+    """We can't shift `this` with non number argument."""
+
+    with pytest.raises(ValueError) as exc_info:
+        this << 'boom'
+
+    assert str(exc_info.value) == 'Positive integer argument is required'
+
+
+def test_this_deny_negative_integers():
+    """We can't shift `this` with negative integer."""
+
+    with pytest.raises(ValueError) as exc_info:
+        this << -1
+
+    assert str(exc_info.value) == 'Positive integer argument is required'
+
+
 # TODO: minimize test number here.
-#
-# TODO: test `this` against negative numbers and non digits
 #
 # TODO: what if we shift more that container levels available?  What
 # we should do in this case?

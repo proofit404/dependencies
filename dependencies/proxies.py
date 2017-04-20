@@ -28,6 +28,8 @@ class Thisable(object):
 
     def __lshift__(self, num):
 
+        if not isinstance(num, int) or num <= 0:
+            raise ValueError('Positive integer argument is required')
         return Thisable(num)
 
 
