@@ -388,7 +388,33 @@ def test_this_deny_negative_integers():
     assert str(exc_info.value) == 'Positive integer argument is required'
 
 
+too_many = CodeCollector()
+
+
+@pytest.mark.xfail
+@too_many.parametrize
+def test_require_more_parents_that_injector_actually_has(code):
+    """
+    If we shift more that container levels available, we should
+    provide meaningful message to user.
+    """
+
+    with pytest.raises(DependencyError) as exc_info:
+        code()
+
+    assert str(exc_info.value) == ('You tries to access more '
+                                   'levels that Injector actually has')
+
+
+@too_many
+def s6lduD7BJpxW():
+    """Declarative Injector."""
+
+    class Container(Injector):
+
+        foo = (this << 1).foo
+
+    Container.foo
+
+
 # TODO: minimize test number here.
-#
-# TODO: what if we shift more that container levels available?  What
-# we should do in this case?
