@@ -506,3 +506,15 @@ def pG9M52ZRQr2S():
 
 
 # TODO: minimize test number here.
+#
+# FIXME: cross container loops on different levels
+#
+# class Container(Injector):
+#
+#     foo = this.SubContainer.bar
+#
+#     class SubContainer(Injector):
+#
+#         bar = (this << 1).foo
+#
+# Container.foo
