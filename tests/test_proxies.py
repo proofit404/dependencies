@@ -417,4 +417,17 @@ def s6lduD7BJpxW():
     Container.foo
 
 
+@too_many
+def bUICVObtDZ4I():
+    """Declarative Injected with nesting layer."""
+
+    class Container(Injector):
+
+        class SubContainer(Injector):
+
+            foo = (this << 2).foo
+
+    Container.SubContainer.foo
+
+
 # TODO: minimize test number here.
