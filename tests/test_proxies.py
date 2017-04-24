@@ -379,13 +379,31 @@ def test_this_deny_non_integers():
     assert str(exc_info.value) == 'Positive integer argument is required'
 
 
-def test_this_deny_negative_integers():
+negative_integers = CodeCollector()
+
+
+@negative_integers.parametrize
+def test_this_deny_negative_integers(code):
     """We can't shift `this` with negative integer."""
 
     with pytest.raises(ValueError) as exc_info:
-        this << -1
+        code()
 
     assert str(exc_info.value) == 'Positive integer argument is required'
+
+
+@negative_integers
+def xsJWb2lx6EMs():
+    """Minus one."""
+
+    this << -1
+
+
+@negative_integers
+def nvm3ybp98vGm():
+    """Zero."""
+
+    this << 0
 
 
 too_many = CodeCollector()
