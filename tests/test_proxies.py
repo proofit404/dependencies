@@ -420,8 +420,8 @@ def test_require_more_parents_that_injector_actually_has(code):
     with pytest.raises(DependencyError) as exc_info:
         code()
 
-    assert str(exc_info.value) == ('You tries to access more '
-                                   'levels that Injector actually has')
+    assert str(exc_info.value) == ('You tries to shift this more '
+                                   'times that Injector has levels')
 
 
 @too_many
