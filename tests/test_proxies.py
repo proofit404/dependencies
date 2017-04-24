@@ -409,7 +409,6 @@ def nvm3ybp98vGm():
 too_many = CodeCollector()
 
 
-@pytest.mark.xfail
 @too_many.parametrize
 def test_require_more_parents_that_injector_actually_has(code):
     """

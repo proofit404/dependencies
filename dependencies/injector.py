@@ -55,10 +55,12 @@ class InjectorType(type):
                     current_attr = attrs_stack.pop()
                     have_default = False
                     continue
-                raise AttributeError(
-                    '{0!r} object has no attribute {1!r}'.format(
-                        cls.__name__, current_attr),
-                )
+                if current_attr == '__parent__':
+                    raise DependencyError('You tries to shift this more times '
+                                          'that Injector has levels')
+                else:
+                    raise AttributeError('{0!r} object has no attribute {1!r}'
+                                         .format(cls.__name__, current_attr))
             attribute, argspec = attribute_spec
             if argspec is None:
                 cache[current_attr] = attribute
