@@ -419,7 +419,7 @@ def s6lduD7BJpxW():
 
 @too_many
 def bUICVObtDZ4I():
-    """Declarative Injected with nesting layer."""
+    """Declarative Injected with nested layer."""
 
     class Container(Injector):
 
@@ -428,6 +428,22 @@ def bUICVObtDZ4I():
             foo = (this << 2).foo
 
     Container.SubContainer.foo
+
+
+@too_many
+def ww6xNI4YrNr6():
+    """Let notation."""
+
+    Injector.let(foo=(this << 1).foo).foo
+
+
+@too_many
+def rN3suiVzhqMM():
+    """Let notation with nested layer."""
+
+    Injector.let(
+        SubContainer=Injector.let(foo=(this << 2).foo),
+    ).SubContainer.foo
 
 
 # TODO: minimize test number here.
