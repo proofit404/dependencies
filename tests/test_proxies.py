@@ -446,4 +446,63 @@ def rN3suiVzhqMM():
     ).SubContainer.foo
 
 
+attribute_error = CodeCollector()
+
+
+@attribute_error.parametrize
+def test_attribute_error_on_parent_access(code):
+    """
+    We should raise `AttributeError` if we have correct number of
+    parents but specify wrong attribute name.
+    """
+
+    with pytest.raises(AttributeError) as exc_info:
+        code()
+
+    assert str(exc_info.value) in set([
+        "'Container' object has no attribute 'bar'",
+        "'Injector' object has no attribute 'bar'",
+    ])
+
+
+@attribute_error
+def t1jn9RI9v42t():
+    """Declarative Injector."""
+
+    class Container(Injector):
+
+        foo = this.bar
+
+    Container.foo
+
+
+@attribute_error
+def yOEj1qQfsXHy():
+    """Declarative Injected with nested layer."""
+
+    class Container(Injector):
+
+        class SubContainer(Injector):
+
+            foo = (this << 1).bar
+
+    Container.SubContainer.foo
+
+
+@attribute_error
+def vnmkIELBH3MN():
+    """Let notation."""
+
+    Injector.let(foo=this.bar).foo
+
+
+@attribute_error
+def pG9M52ZRQr2S():
+    """Let notation with nested layer."""
+
+    Injector.let(
+        SubContainer=Injector.let(foo=(this << 1).bar),
+    ).SubContainer.foo
+
+
 # TODO: minimize test number here.
