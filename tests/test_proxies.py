@@ -522,16 +522,52 @@ def pG9M52ZRQr2S():
     ).SubContainer.foo
 
 
+circle_links = CodeCollector()
+
+
+@pytest.mark.xfail
+@circle_links.parametrize
+def test_circle_links(code):
+    """
+    We can detect loops in the container hierarchy which will trigger
+    recursion during injection process.  We need to raise
+    `DependencyError` the same way we do with circle dependencies.
+    """
+
+    with pytest.raises(DependencyError) as exc_info:
+        code()
+
+    assert str(exc_info.value) == set([
+        "'foo' is a circle link in the 'Container' injector",
+        "'foo' is a circle link in the 'Injector' injector",
+    ])
+
+
+@circle_links
+def eaK6IxW88SNh():
+    """Declarative injector."""
+
+    class Container(Injector):
+
+        foo = this.SubContainer.bar
+
+        class SubContainer(Injector):
+
+            bar = (this << 1).foo
+
+    Container.foo
+
+
+@circle_links
+def nWhKtJb16yg6():
+    """Let notation."""
+
+    Container = Injector.let(
+        foo=this.SubContainer.bar,
+        SubContainer=Injector.let(bar=(this << 1).foo),
+    )
+
+    Container.foo
+
+
 # TODO: minimize test number here.
-#
-# FIXME: cross container loops on different levels
-#
-# class Container(Injector):
-#
-#     foo = this.SubContainer.bar
-#
-#     class SubContainer(Injector):
-#
-#         bar = (this << 1).foo
-#
-# Container.foo
