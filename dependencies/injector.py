@@ -97,10 +97,6 @@ class InjectorType(type):
                     current_attr = arg
                     have_default = False if n < have_defaults else True
                     break
-            else:
-                # FIXME: Cover this lines with tests.
-                current_attr = attrs_stack.pop()
-                have_default = False
         return cache[attrname]
 
     def __setattr__(cls, attrname, value):
