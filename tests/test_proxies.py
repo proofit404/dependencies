@@ -554,10 +554,30 @@ def kSSnnkw6CNPx():
 
 
 @circle_links
+def ai0hNOPGX2PI():
+    """Declarative injector.  Same level.  Long loop."""
+
+    class Container(Injector):
+
+        foo = this.bar
+        bar = this.baz
+        baz = this.foo
+
+    Container.foo
+
+
+@circle_links
 def n8NHZqiZN43Q():
     """Let notation.  Same level."""
 
     Injector.let(foo=this.foo).foo
+
+
+@circle_links
+def ySnRrxW6M79T():
+    """Let notation.  Same level.  Long loop."""
+
+    Injector.let(foo=this.bar, bar=this.baz, baz=this.foo).foo
 
 
 @circle_links
