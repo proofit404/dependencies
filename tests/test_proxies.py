@@ -524,7 +524,7 @@ def pG9M52ZRQr2S():
 circle_links = CodeCollector()
 
 
-@pytest.mark.xfail
+@pytest.mark.xfail  # FIXME: Make this work.
 @circle_links.parametrize
 def test_circle_links(code):
     """
@@ -679,3 +679,29 @@ def bLRoCCj9uNOp():
             baz=(this << 1).SubContainer1.bar,
         ),
     ).SubContainer1.bar
+
+
+@circle_links
+def oClqGRmWJAkA():
+    """Declarative injector.  Over item access."""
+
+    class Container(Injector):
+
+        class SubContainer(Injector):
+
+            foo = (this << 1).bar['sub'].foo
+
+        bar = {'sub': SubContainer}
+
+    Container.SubContainer.foo
+
+
+@circle_links
+def t41yMywZuPhA():
+    """Let notation.  Over item access."""
+
+    SubContainer = Injector.let(foo=(this << 1).bar['sub'].foo)
+    Injector.let(
+        SubContainer=SubContainer,
+        bar={'sub': SubContainer},
+    ).SubContainer.foo
