@@ -284,25 +284,29 @@ def check_varargs(dependency, varargs, kwargs):
 def check_loops(class_name, dependencies):
 
     for depname in dependencies:
-        check_loops_expression(class_name, dependencies, depname, depname)
+        check_loops_for(class_name, dependencies, depname, depname)
 
 
-def check_loops_expression(class_name, dependencies, origin, attrname):
+def check_loops_for(class_name, dependencies, origin, attrname):
 
     try:
         dependency, spec = dependencies[attrname]
     except KeyError:
         return
     if type(dependency) is ProxyType:
-        exp = dependency.__expression__[0]
-        if origin == exp:
+        expr = dependency.__expression__[0]
+        if origin == expr:
             raise DependencyError(
                 '{0!r} is a circle link in the {1!r} injector'.format(
                     origin,
                     class_name,
                 ),
             )
-        check_loops_expression(class_name, dependencies, origin, exp)
+        check_loops_for(class_name, dependencies, origin, expr)
+    elif type(dependency) is InjectorType:
+        nested = dependency.__dependencies__
+        for depname in nested:
+            check_loops_for(class_name, nested, origin, depname)
 
 
 def check_circles(dependencies):
