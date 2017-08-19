@@ -145,7 +145,7 @@ def test_one_subcontainer_multiple_parents():
     """
 
     class SubContainer(Injector):
-        foo = (this << 1).foo
+        bar = (this << 1).foo
 
     class Container1(Injector):
         foo = 1
@@ -155,8 +155,8 @@ def test_one_subcontainer_multiple_parents():
         foo = 2
         sub = SubContainer
 
-    assert Container1.sub.foo == 1
-    assert Container2.sub.foo == 2
+    assert Container1.sub.bar == 1
+    assert Container2.sub.bar == 2
 
 
 item_access = CodeCollector()
@@ -428,7 +428,7 @@ def s6lduD7BJpxW():
 
     class Container(Injector):
 
-        foo = (this << 1).foo
+        foo = (this << 1).bar
 
     Container.foo
 
@@ -441,7 +441,7 @@ def bUICVObtDZ4I():
 
         class SubContainer(Injector):
 
-            foo = (this << 2).foo
+            foo = (this << 2).bar
 
     Container.SubContainer.foo
 
@@ -450,7 +450,7 @@ def bUICVObtDZ4I():
 def ww6xNI4YrNr6():
     """Let notation."""
 
-    Injector.let(foo=(this << 1).foo).foo
+    Injector.let(foo=(this << 1).bar).foo
 
 
 @too_many
@@ -458,7 +458,7 @@ def rN3suiVzhqMM():
     """Let notation with nested layer."""
 
     Injector.let(
-        SubContainer=Injector.let(foo=(this << 2).foo),
+        SubContainer=Injector.let(foo=(this << 2).bar),
     ).SubContainer.foo
 
 
@@ -725,3 +725,22 @@ def t41yMywZuPhA():
         SubContainer=SubContainer,
         bar={'sub': SubContainer},
     ).SubContainer.foo
+
+
+@pytest.mark.xfail  # FIXME: Make this work.
+def test_false_positive_loop_lookup_protection():
+    """
+    We should allow proxy to point to objects with the same name if it
+    does not create a circle link.
+    """
+
+    class Container(Injector):
+
+        foo = this.SubContainer.baz
+
+        class SubContainer(Injector):
+
+            baz = this.foo
+            foo = 1
+
+    assert Container.foo == 1
