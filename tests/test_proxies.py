@@ -2,7 +2,6 @@ import pytest
 from dependencies import DependencyError, Injector, this
 from helpers import CodeCollector
 
-
 # Declarative attribute access.
 
 
@@ -544,8 +543,26 @@ def test_circle_links(code):
 
 
 @circle_links
+def kSSnnkw6CNPx():
+    """Declarative injector.  Same level."""
+
+    class Container(Injector):
+
+        foo = this.foo
+
+    Container.foo
+
+
+@circle_links
+def n8NHZqiZN43Q():
+    """Let notation.  Same level."""
+
+    Injector.let(foo=this.foo).foo
+
+
+@circle_links
 def eaK6IxW88SNh():
-    """Declarative injector."""
+    """Declarative injector.  One level deep."""
 
     class Container(Injector):
 
@@ -560,14 +577,105 @@ def eaK6IxW88SNh():
 
 @circle_links
 def nWhKtJb16yg6():
-    """Let notation."""
+    """Let notation.  One level deep."""
 
-    Container = Injector.let(
+    Injector.let(
         foo=this.SubContainer.bar,
         SubContainer=Injector.let(bar=(this << 1).foo),
-    )
+    ).foo
+
+
+@circle_links
+def mF4akoHlg84C():
+    """Declarative injector.  Two level deep."""
+
+    class Container(Injector):
+
+        foo = this.SubContainer.SubSubContainer.bar
+
+        class SubContainer(Injector):
+
+            class SubSubContainer(Injector):
+
+                bar = (this << 2).foo
 
     Container.foo
 
 
-# TODO: minimize test number here.
+@circle_links
+def bCw8LPUeVK6J():
+    """Let notation.  Two level deep."""
+
+    Injector.let(
+        foo=this.SubContainer.SubSubContainer.bar,
+        SubContainer=Injector.let(
+            SubSubContainer=Injector.let(
+                bar=(this << 2).foo,
+            ),
+        ),
+    ).foo
+
+
+@circle_links
+def eHyErh9kExHG():
+    """Declarative injector.  Two level deep.  Each level has link."""
+
+    class Container(Injector):
+
+        foo = this.SubContainer.bar
+
+        class SubContainer(Injector):
+
+            bar = this.SubSubContainer.baz
+
+            class SubSubContainer(Injector):
+
+                baz = (this << 2).foo
+
+    Container.foo
+
+
+@circle_links
+def q0KytyVbE2XA():
+    """Let notation.  Two level deep.  Each level has link."""
+
+    Injector.let(
+        foo=this.SubContainer.bar,
+        SubContainer=Injector.let(
+            bar=this.SubSubContainer.baz,
+            SubSubContainer=Injector.let(
+                baz=(this << 2).foo,
+            ),
+        ),
+    ).foo
+
+
+@circle_links
+def vAyZepNGAUjY():
+    """Declarative injector.  Cross injector links."""
+
+    class Container(Injector):
+
+        class SubContainer1(Injector):
+
+            bar = (this << 1).SubContainer2.baz
+
+        class SubContainer2(Injector):
+
+            baz = (this << 1).SubContainer1.bar
+
+    Container.SubContainer1.bar
+
+
+@circle_links
+def bLRoCCj9uNOp():
+    """Let notation.  Cross injector links."""
+
+    Injector.let(
+        SubContainer1=Injector.let(
+            bar=(this << 1).SubContainer2.baz,
+        ),
+        SubContainer2=Injector.let(
+            baz=(this << 1).SubContainer1.bar,
+        ),
+    ).SubContainer1.bar
