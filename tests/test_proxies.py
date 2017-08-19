@@ -536,7 +536,7 @@ def test_circle_links(code):
     with pytest.raises(DependencyError) as exc_info:
         code()
 
-    assert str(exc_info.value) == set([
+    assert str(exc_info.value) in set([
         "'foo' is a circle link in the 'Container' injector",
         "'foo' is a circle link in the 'Injector' injector",
     ])

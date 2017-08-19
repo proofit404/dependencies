@@ -12,7 +12,7 @@ import inspect
 import weakref
 
 from .exceptions import DependencyError
-from .proxies import Thisable
+from .proxies import ProxyType, Thisable
 
 
 class InjectorType(type):
@@ -38,6 +38,7 @@ class InjectorType(type):
             dependencies.update(base.__dependencies__)
         for name, dep in namespace.items():
             dependencies[name] = make_dependency_spec(name, dep)
+        check_loops(class_name, dependencies)
         check_circles(dependencies)
         ns['__dependencies__'] = dependencies
         return type.__new__(cls, class_name, bases, ns)
@@ -278,6 +279,30 @@ def check_varargs(dependency, varargs, kwargs):
             '{0}.__init__ have arbitrary keyword arguments'
             .format(dependency.__name__),
         )
+
+
+def check_loops(class_name, dependencies):
+
+    for depname in dependencies:
+        check_loops_expression(class_name, dependencies, depname, depname)
+
+
+def check_loops_expression(class_name, dependencies, origin, attrname):
+
+    try:
+        dependency, spec = dependencies[attrname]
+    except KeyError:
+        return
+    if type(dependency) is ProxyType:
+        exp = dependency.__expression__[0]
+        if origin == exp:
+            raise DependencyError(
+                '{0!r} is a circle link in the {1!r} injector'.format(
+                    origin,
+                    class_name,
+                ),
+            )
+        check_loops_expression(class_name, dependencies, origin, exp)
 
 
 def check_circles(dependencies):
