@@ -12,6 +12,7 @@ class CodeCollector(object):
     def __call__(self, f):
 
         self.collected.append(f)
+        return f
 
     def __iter__(self):
 
