@@ -311,26 +311,45 @@ def check_loops_for(class_name, dependencies, origin, attrname):
 
 def check_circles(dependencies):
 
-    for depname in dependencies:
-        check_circles_for(dependencies, depname, depname)
+    for dep, depspec in dependencies.values():
+        if isinstance(dep, ProxyType):
+            check_circles_for(
+                dependencies,
+                dep,
+                filter_expression(dep.__expression__),
+            )
 
 
-def check_circles_for(dependencies, attrname, origin):
+def check_circles_for(dependencies, origin, expression):
 
     try:
-        attribute_spec = dependencies[attrname]
+        argname = next(expression)
+    except StopIteration:
+        return
+    try:
+        attribute, argspec = dependencies[argname]
     except KeyError:
         return
-    attribute, argspec = attribute_spec
-    if argspec:
-        args = argspec[0]
-        if origin in args:
-            raise DependencyError(
-                '{0!r} is a circle dependency in the {1!r} constructor'.format(
-                    origin, attribute.__name__),
-            )
-        for name in args:
-            check_circles_for(dependencies, name, origin)
+    if argspec is nested_injector:
+        check_circles_for(attribute.__dependencies__, origin, expression)
+    elif argspec and attribute is origin:
+        raise DependencyError(
+            '{0!r} is a circle dependency in the {1!r} constructor'.format(
+                origin.__name__,
+                attribute.__name__,
+            ),
+        )
+
+
+def filter_expression(expression):
+
+    for symbol in expression:
+        if symbol == '.':
+            continue
+        elif symbol == '[':
+            raise StopIteration()
+        else:
+            yield symbol
 
 
 def check_proxies(dependency):
