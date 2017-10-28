@@ -38,7 +38,7 @@ class InjectorType(type):
             dependencies.update(base.__dependencies__)
         for name, dep in namespace.items():
             dependencies[name] = make_dependency_spec(name, dep)
-        check_loops(class_name, dependencies)
+        check_loops(dependencies)
         check_circles(dependencies)
         ns['__dependencies__'] = dependencies
         return type.__new__(cls, class_name, bases, ns)
@@ -281,35 +281,7 @@ def check_varargs(dependency, varargs, kwargs):
         )
 
 
-def check_loops(class_name, dependencies):
-
-    for depname in dependencies:
-        check_loops_for(class_name, dependencies, depname, depname)
-
-
-def check_loops_for(class_name, dependencies, origin, attrname):
-
-    try:
-        dependency, spec = dependencies[attrname]
-    except KeyError:
-        return
-    if type(dependency) is ProxyType:
-        expr = dependency.__expression__[0]
-        if origin == expr:
-            raise DependencyError(
-                '{0!r} is a circle link in the {1!r} injector'.format(
-                    origin,
-                    class_name,
-                ),
-            )
-        check_loops_for(class_name, dependencies, origin, expr)
-    elif type(dependency) is InjectorType:
-        nested = dependency.__dependencies__
-        for depname in nested:
-            check_loops_for(class_name, nested, origin, depname)
-
-
-def check_circles(dependencies):
+def check_loops(dependencies):
 
     for dep, depspec in dependencies.values():
         if isinstance(dep, ProxyType):
@@ -320,7 +292,7 @@ def check_circles(dependencies):
             )
 
 
-def check_circles_for(dependencies, origin, expression):
+def check_loops_for(dependencies, origin, expression):
 
     try:
         argname = next(expression)
@@ -350,6 +322,29 @@ def filter_expression(expression):
             raise StopIteration()
         else:
             yield symbol
+
+
+def check_circles(dependencies):
+
+    for depname in dependencies:
+        check_circles_for(dependencies, depname, depname)
+
+
+def check_circles_for(dependencies, attrname, origin):
+
+    try:
+        attribute_spec = dependencies[attrname]
+    except KeyError:
+        return
+    attribute, argspec = attribute_spec
+    if argspec:
+        args = argspec[0]
+        if origin in args:
+            raise DependencyError(
+                '{0!r} is a circle dependency in the {1!r} constructor'
+                .format(origin, attribute.__name__))
+        for name in args:
+            check_circles_for(dependencies, name, origin)
 
 
 def check_proxies(dependency):
