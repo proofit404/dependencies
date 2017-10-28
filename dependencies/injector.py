@@ -38,7 +38,7 @@ class InjectorType(type):
             dependencies.update(base.__dependencies__)
         for name, dep in namespace.items():
             dependencies[name] = make_dependency_spec(name, dep)
-        check_loops(dependencies)
+        check_loops(class_name, dependencies)
         check_circles(dependencies)
         ns['__dependencies__'] = dependencies
         return type.__new__(cls, class_name, bases, ns)
@@ -281,18 +281,21 @@ def check_varargs(dependency, varargs, kwargs):
         )
 
 
-def check_loops(dependencies):
+def check_loops(class_name, dependencies):
 
-    for dep, depspec in dependencies.values():
+    for argument_name, (dep, depspec) in dependencies.items():
         if isinstance(dep, ProxyType):
-            check_circles_for(
+            check_loops_for(
+                class_name,
+                argument_name,
                 dependencies,
                 dep,
                 filter_expression(dep.__expression__),
             )
 
 
-def check_loops_for(dependencies, origin, expression):
+def check_loops_for(class_name, argument_name, dependencies, origin,
+                    expression):
 
     try:
         argname = next(expression)
@@ -303,12 +306,18 @@ def check_loops_for(dependencies, origin, expression):
     except KeyError:
         return
     if argspec is nested_injector:
-        check_circles_for(attribute.__dependencies__, origin, expression)
+        check_loops_for(
+            class_name,
+            argument_name,
+            attribute.__dependencies__,
+            origin,
+            expression,
+        )
     elif argspec and attribute is origin:
         raise DependencyError(
-            '{0!r} is a circle dependency in the {1!r} constructor'.format(
-                origin.__name__,
-                attribute.__name__,
+            '{0!r} is a circle link in the {1!r} injector'.format(
+                argument_name,
+                class_name,
             ),
         )
 
