@@ -313,12 +313,20 @@ def check_loops_for(class_name, argument_name, dependencies, origin,
             origin,
             expression,
         )
-    elif argspec and attribute is origin:
+    elif attribute is origin:
         raise DependencyError(
             '{0!r} is a circle link in the {1!r} injector'.format(
                 argument_name,
                 class_name,
             ),
+        )
+    elif isinstance(attribute, ProxyType):
+        check_loops_for(
+            class_name,
+            argument_name,
+            dependencies,
+            origin,
+            filter_expression(attribute.__expression__),
         )
 
 
