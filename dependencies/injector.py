@@ -290,7 +290,7 @@ def check_loops(class_name, dependencies):
                 argument_name,
                 dependencies,
                 dep,
-                filter_expression(dep.__expression__),
+                filter_expression(dep),
             )
 
 
@@ -306,10 +306,20 @@ def check_loops_for(class_name, argument_name, dependencies, origin,
     except KeyError:
         return
     if argspec is nested_injector:
+        nested_dependencies = {'__parent__': (dependencies, None)}
+        nested_dependencies.update(attribute.__dependencies__)
         check_loops_for(
             class_name,
             argument_name,
-            attribute.__dependencies__,
+            nested_dependencies,
+            origin,
+            expression,
+        )
+    elif argname == '__parent__':
+        check_loops_for(
+            class_name,
+            argument_name,
+            attribute,
             origin,
             expression,
         )
@@ -326,13 +336,15 @@ def check_loops_for(class_name, argument_name, dependencies, origin,
             argument_name,
             dependencies,
             origin,
-            filter_expression(attribute.__expression__),
+            filter_expression(attribute),
         )
 
 
-def filter_expression(expression):
+def filter_expression(proxy):
 
-    for symbol in expression:
+    for parent in range(proxy.__parents__):
+        yield '__parent__'
+    for symbol in proxy.__expression__:
         if symbol == '.':
             continue
         elif symbol == '[':
