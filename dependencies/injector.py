@@ -292,6 +292,10 @@ def check_loops(class_name, dependencies):
                 dep,
                 filter_expression(dep),
             )
+        elif depspec is nested_injector:
+            nested_dependencies = {'__parent__': (dependencies, None)}
+            nested_dependencies.update(dep.__dependencies__)
+            check_loops(class_name, nested_dependencies)
 
 
 def check_loops_for(class_name, argument_name, dependencies, origin,

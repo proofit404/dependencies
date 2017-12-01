@@ -1,3 +1,5 @@
+import functools
+
 import pytest
 from dependencies import DependencyError, Injector, this
 from helpers import CodeCollector
@@ -524,7 +526,6 @@ def pG9M52ZRQr2S():
 circle_links = CodeCollector()
 
 
-@pytest.mark.xfail  # FIXME: Make this work.
 @circle_links.parametrize
 def test_circle_links(code):
     """
@@ -539,6 +540,10 @@ def test_circle_links(code):
     assert str(exc_info.value) in set([
         "'foo' is a circle link in the 'Container' injector",
         "'foo' is a circle link in the 'Injector' injector",
+        "'bar' is a circle link in the 'Container' injector",
+        "'bar' is a circle link in the 'Injector' injector",
+        "'baz' is a circle link in the 'Container' injector",
+        "'baz' is a circle link in the 'Injector' injector",
     ])
 
 
@@ -701,7 +706,8 @@ def bLRoCCj9uNOp():
     ).SubContainer1.bar
 
 
-@circle_links
+@circle_links  # FIXME: Make this work.
+@functools.partial(pytest.param, marks=pytest.mark.xfail)
 def oClqGRmWJAkA():
     """Declarative injector.  Over item access."""
 
@@ -716,7 +722,8 @@ def oClqGRmWJAkA():
     Container.SubContainer.foo
 
 
-@circle_links
+@circle_links  # FIXME: Make this work.
+@functools.partial(pytest.param, marks=pytest.mark.xfail)
 def t41yMywZuPhA():
     """Let notation.  Over item access."""
 
@@ -727,7 +734,6 @@ def t41yMywZuPhA():
     ).SubContainer.foo
 
 
-@pytest.mark.xfail  # FIXME: Make this work.
 def test_false_positive_loop_lookup_protection():
     """
     We should allow proxy to point to objects with the same name if it
