@@ -11,7 +11,7 @@ setup(
     url='https://github.com/dry-python/dependencies',
     author='Artem Malyshev',
     author_email='proofit404@gmail.com',
-    packages=['dependencies'],
+    packages=['dependencies', 'dependencies.contrib'],
     classifiers=[
         'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
