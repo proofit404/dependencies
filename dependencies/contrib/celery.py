@@ -78,10 +78,7 @@ class ImmutableShortcut(Shortcut):
 
 
 class TaskMixin(Injector):
-    """
-    Inject `signature` attribute and `s` shortcut into `Injector`
-    subclass.
-    """
+
     signature = Signature
     s = Shortcut
     si = ImmutableShortcut

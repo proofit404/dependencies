@@ -187,3 +187,19 @@ def test_documentation():
     assert task.__doc__ == 'Create Celery task from injector class.'
     assert shared_task.__doc__ == \
         'Create Celery shared task from injector class.'
+
+    @shared_task
+    class Container(Injector):
+        """Foo bar baz task."""
+
+        name = 'foo.bar.baz'
+        run = lambda: None  # noqa: E731
+
+    # FIXME: assert Container.__doc__ == 'Foo bar baz task.'
+    assert Container.signature.__doc__ == """
+    Create Celery canvas signature with arguments collected from
+    `Injector` subclass.
+    """
+    assert Container.s.__doc__ == 'Create Celery canvas shortcut expression.'
+    assert Container.si.__doc__ == \
+        'Create immutable Celery canvas shortcut expression.'
