@@ -12,55 +12,10 @@ def celery_app():
     return Celery()
 
 
-register_task = CodeCollector()
-execute_task = CodeCollector()
-return_value = CodeCollector()
-make_signature = CodeCollector()
+containers = CodeCollector()
 
 
-@register_task.parametrize
-def test_register_task(celery_app, code):
-    """Register Celery task with declarative injector syntax."""
-
-    code(celery_app)
-    assert 'foo.bar.baz' in celery_app.tasks
-
-
-@execute_task.parametrize
-def test_execute_task(celery_app, code):
-    """Execute task from Celery application."""
-
-    code(celery_app)
-    assert signature('foo.bar.baz')('foo', bar='baz') == 1
-
-
-@return_value.parametrize
-def test_return_value(celery_app, code):
-    """Return `Injector` subclass from register decorator."""
-
-    ret = code(celery_app)
-    assert issubclass(ret, Injector)
-
-
-@make_signature.parametrize
-def test_make_signature(celery_app, code):
-    """Insert signature generator into injector."""
-
-    ret = code(celery_app)
-    sign = ret.signature((2, 2), {'debug': True}, immutable=True, countdown=10)
-    assert sign._app is celery_app or sign._app is None
-    assert sign.task == 'foo.bar.baz'
-    assert sign.args == (2, 2)
-    assert sign.kwargs == {'debug': True}
-    assert sign.options == {'countdown': 10}
-    assert sign.subtask_type is None  # TODO: ?
-    assert sign.immutable is True
-
-
-@register_task
-@execute_task
-@return_value
-@make_signature
+@containers
 def bAMWkT3WSTN1(_app):
     """Task decorator."""
 
@@ -78,10 +33,7 @@ def bAMWkT3WSTN1(_app):
     return Container
 
 
-@register_task
-@execute_task
-@return_value
-@make_signature
+@containers
 def xPa7isagt3Lq(app):
     """Shared task decorator."""
 
@@ -96,6 +48,61 @@ def xPa7isagt3Lq(app):
             return 1
 
     return Container
+
+
+@containers.parametrize
+def test_register_task(celery_app, code):
+    """Register Celery task with declarative injector syntax."""
+
+    code(celery_app)
+    assert 'foo.bar.baz' in celery_app.tasks
+
+
+@containers.parametrize
+def test_execute_task(celery_app, code):
+    """Execute task from Celery application."""
+
+    code(celery_app)
+    assert signature('foo.bar.baz')('foo', bar='baz') == 1
+
+
+@containers.parametrize
+def test_return_value(celery_app, code):
+    """Return `Injector` subclass from register decorator."""
+
+    ret = code(celery_app)
+    assert issubclass(ret, Injector)
+
+
+make_signature = CodeCollector('factory')
+
+
+@containers.parametrize
+@make_signature.parametrize
+def test_make_signature(celery_app, code, factory):
+    """Insert signature generator into injector."""
+
+    sign = factory(code(celery_app))
+    assert sign._app is celery_app or sign._app is None
+    assert sign.task == 'foo.bar.baz'
+    assert sign.args == (2, 2)
+    assert sign.kwargs == {'debug': True}
+    assert sign.options == {'countdown': 10}
+    assert sign.subtask_type is None  # TODO: ?
+    assert sign.immutable is True
+
+
+@make_signature
+def cgTE4xh2ZSVI(container):
+    """Verbose signature."""
+
+    sign = container.signature(
+        (2, 2),
+        {'debug': True},
+        immutable=True,
+        countdown=10,
+    )
+    return sign
 
 
 def test_documentation():
