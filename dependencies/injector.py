@@ -108,6 +108,10 @@ class InjectorType(type):
 
         raise DependencyError("'Injector' modification is not allowed")
 
+    def __contains__(cls, attrname):
+
+        return attrname in cls.__dependencies__
+
     def __and__(cls, other):
 
         return type(cls.__name__, (cls, other), {})

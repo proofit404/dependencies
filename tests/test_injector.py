@@ -811,6 +811,37 @@ def c4e7ecf75167():
     Foo.bar
 
 
+has_attribute = CodeCollector()
+
+
+@has_attribute.parametrize
+def test_has_attribute(code):
+    """`Injector` should support `hasattr` and `in` statement."""
+
+    container = code()
+    assert hasattr(container, 'foo')
+    assert not hasattr(container, 'bar')
+    assert 'foo' in container
+    assert 'bar' not in container
+
+
+@has_attribute
+def gwufxYkhURAF():
+    """Declarative injector."""
+
+    class Container(Injector):
+        foo = 1
+
+    return Container
+
+
+@has_attribute
+def zlZoLka31ndk():
+    """Let notation."""
+
+    return Injector.let(foo=1)
+
+
 circle_deps = CodeCollector()
 
 
