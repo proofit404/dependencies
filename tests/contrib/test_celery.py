@@ -203,3 +203,58 @@ def test_documentation():
     assert Container.s.__doc__ == 'Create Celery canvas shortcut expression.'
     assert Container.si.__doc__ == \
         'Create immutable Celery canvas shortcut expression.'
+
+
+def test_validation(celery_app):
+    """
+    Task and shared task decorators must check required `Injector`
+    attributes.
+    """
+
+    with pytest.raises(AttributeError) as exc_info:
+
+        @task
+        class Container1(Injector):
+            name = 'foo.bar.baz'
+            run = lambda: None  # noqa: E731
+
+    message = str(exc_info.value)
+    assert message == "'Container1' object has no attribute 'app'"
+
+    with pytest.raises(AttributeError) as exc_info:
+
+        @task
+        class Container2(Injector):
+            app = celery_app
+            run = lambda: None  # noqa: E731
+
+    message = str(exc_info.value)
+    assert message == "'Container2' object has no attribute 'name'"
+
+    with pytest.raises(AttributeError) as exc_info:
+
+        @task
+        class Container3(Injector):
+            app = celery_app
+            name = 'foo.bar.baz'
+
+    message = str(exc_info.value)
+    assert message == "'Container3' object has no attribute 'run'"
+
+    with pytest.raises(AttributeError) as exc_info:
+
+        @shared_task
+        class Container4(Injector):
+            run = lambda: None  # noqa: E731
+
+    message = str(exc_info.value)
+    assert message == "'Container4' object has no attribute 'name'"
+
+    with pytest.raises(AttributeError) as exc_info:
+
+        @shared_task
+        class Container5(Injector):
+            name = 'foo.bar.baz'
+
+    message = str(exc_info.value)
+    assert message == "'Container5' object has no attribute 'run'"

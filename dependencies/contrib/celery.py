@@ -18,6 +18,32 @@ __all__ = ['task', 'shared_task']
 undefined = object()
 
 
+def task(injector):
+    """Create Celery task from injector class."""
+
+    return decorate_with(injector.app.task, injector)
+
+
+def shared_task(injector):
+    """Create Celery shared task from injector class."""
+
+    return decorate_with(celery.shared_task, injector)
+
+
+def decorate_with(func, injector):
+
+    if 'run' not in injector:
+        raise AttributeError(
+            "{0!r} object has no attribute 'run'".format(injector.__name__),
+        )
+
+    @func(name=injector.name)
+    def __task(*args, **kwargs):
+        return injector.run(*args, **kwargs)
+
+    return TaskMixin & injector
+
+
 class Signature(object):
     """
     Create Celery canvas signature with arguments collected from
@@ -84,28 +110,4 @@ class TaskMixin(Injector):
     si = ImmutableShortcut
 
 
-def task(injector):
-    """Create Celery task from injector class."""
-
-    @injector.app.task(name=injector.name)
-    def __task(*args, **kwargs):
-        return injector.run(*args, **kwargs)
-
-    return TaskMixin & injector
-
-
-def shared_task(injector):
-    """Create Celery shared task from injector class."""
-
-    @celery.shared_task(name=injector.name)
-    def __task(*args, **kwargs):
-        return injector.run(*args, **kwargs)
-
-    return TaskMixin & injector
-
-
-# TODO:
-#
-# Assert injector has necessary attributes with custom error message.
-#
-# Support all arguments of the `task`.
+# TODO: Support all arguments of the `task`.
