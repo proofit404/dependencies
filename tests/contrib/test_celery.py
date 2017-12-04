@@ -83,13 +83,18 @@ def test_make_signature(celery_app, code, factory):
     """Insert signature generator into injector."""
 
     sign = factory(code(celery_app))
+    if isinstance(sign, tuple):
+        sign, immutable, subtask_type = sign
+    else:
+        immutable = True
+        subtask_type = None
     assert sign._app is celery_app or sign._app is None
     assert sign.task == 'foo.bar.baz'
     assert sign.args == (2, 2)
     assert sign.kwargs == {'debug': True}
     assert sign.options == {'countdown': 10}
-    assert sign.subtask_type is None  # TODO: ?
-    assert sign.immutable is True
+    assert sign.subtask_type is subtask_type
+    assert sign.immutable is immutable
 
 
 @make_signature
@@ -102,6 +107,77 @@ def cgTE4xh2ZSVI(container):
         immutable=True,
         countdown=10,
     )
+    return sign
+
+
+@make_signature
+def dUf679YyStBw(container):
+    """Verbose signature with options."""
+
+    sign = container.signature(
+        (2, 2),
+        {'debug': True},
+        immutable=True,
+        options={'countdown': 10},
+    )
+    return sign
+
+
+@make_signature
+def aTMB4bH5LwJh(container):
+    """Verbose signature with attributes from container."""
+
+    class NewContainer(container):
+        immutable = True
+        options = {'countdown': 10}
+        subtask_type = 'chain'
+
+    sign = NewContainer.signature(
+        (2, 2),
+        {'debug': True},
+    )
+    return sign, True, 'chain'
+
+
+@make_signature
+def b2Rm5nGbf27S(container):
+    """Verbose signature override attributes from container."""
+
+    class NewContainer(container):
+        immutable = False
+        options = {'countdown': 1}
+        subtask_type = 'group'
+
+    sign = NewContainer.signature(
+        (2, 2),
+        {'debug': True},
+        immutable=True,
+        countdown=10,
+        subtask_type='chain',
+    )
+    return sign, True, 'chain'
+
+
+@make_signature
+def kj4SkFAcVOYQ(container):
+    """Shortcut signature."""
+
+    class NewContainer(container):
+        options = {'countdown': 10}
+        subtask_type = 'chain'
+
+    sign = NewContainer.s(2, 2, debug=True)
+    return sign, False, 'chain'
+
+
+@make_signature
+def u4kZae2NSFhE(container):
+    """Immutable shortcut signature."""
+
+    class NewContainer(container):
+        options = {'countdown': 10}
+
+    sign = NewContainer.si(2, 2, debug=True)
     return sign
 
 

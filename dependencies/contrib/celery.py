@@ -15,6 +15,8 @@ from dependencies import Injector
 
 __all__ = ['task', 'shared_task']
 
+undefined = object()
+
 
 class Signature(object):
     """
@@ -22,20 +24,57 @@ class Signature(object):
     `Injector` subclass.
     """
 
-    def __init__(self, name, app=None):
+    def __init__(
+            self,
+            name,
+            app=None,
+            immutable=undefined,
+            options=undefined,
+            subtask_type=undefined,
+    ):
 
         self.name = name
         self.app = app
+        self.immutable = immutable
+        self.options = options
+        self.subtask_type = subtask_type
 
-    def __call__(self, args=None, kwargs=None, immutable=False, **ex):
+    def __call__(self, args=None, kwargs=None, **ex):
+
+        if 'options' not in ex and self.options is not undefined:
+            ex['options'] = self.options
+        if 'immutable' not in ex and self.immutable is not undefined:
+            ex['immutable'] = self.immutable
+        if 'subtask_type' not in ex and self.subtask_type is not undefined:
+            ex['subtask_type'] = self.subtask_type
+        return celery.canvas.Signature(
+            task=self.name, app=self.app, args=args, kwargs=kwargs, **ex)
+
+
+class Shortcut(Signature):
+    """Create Celery canvas shortcut expression."""
+
+    immutable_default = False
+
+    def __call__(self, *args, **kwargs):
 
         return celery.canvas.Signature(
             task=self.name,
             app=self.app,
             args=args,
             kwargs=kwargs,
-            immutable=immutable,
-            **ex)
+            immutable=(self.immutable_default
+                       if self.immutable is undefined else self.immutable),
+            options={} if self.options is undefined else self.options,
+            subtask_type=(None if self.subtask_type is undefined else
+                          self.subtask_type),
+        )
+
+
+class ImmutableShortcut(Shortcut):
+    """Create immutable Celery canvas shortcut expression."""
+
+    immutable_default = True
 
 
 class TaskMixin(Injector):
@@ -44,6 +83,8 @@ class TaskMixin(Injector):
     subclass.
     """
     signature = Signature
+    s = Shortcut
+    si = ImmutableShortcut
 
 
 def task(injector):
@@ -70,4 +111,4 @@ def shared_task(injector):
 #
 # Assert injector has necessary attributes with custom error message.
 #
-# Support all arguments of the `s`, `si`, `signature` and `task`.
+# Support all arguments of the `task`.
