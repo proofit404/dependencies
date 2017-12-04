@@ -37,7 +37,22 @@ def decorate_with(func, injector):
             "{0!r} object has no attribute 'run'".format(injector.__name__),
         )
 
-    @func(name=injector.name)
+    options = {'name': injector.name}
+
+    if 'base_cls' in injector:
+        options['base'] = injector.base_cls
+
+    for argument in [
+            'bind', 'typing', 'max_retries', 'default_retry_delay',
+            'rate_limit', 'ignore_result', 'trail', 'send_events',
+            'store_errors_even_if_ignored', 'serializer', 'time_limit',
+            'soft_time_limit', 'backend', 'autoregister', 'track_started',
+            'acks_late', 'reject_on_worker_lost', 'throws'
+    ]:
+        if argument in injector:
+            options[argument] = getattr(injector, argument)
+
+    @func(**options)
     def __task(*args, **kwargs):
         return injector.run(*args, **kwargs)
 
@@ -108,6 +123,3 @@ class TaskMixin(Injector):
     signature = Signature
     s = Shortcut
     si = ImmutableShortcut
-
-
-# TODO: Support all arguments of the `task`.

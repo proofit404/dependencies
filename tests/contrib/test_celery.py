@@ -1,6 +1,6 @@
 import pytest
-from celery import Celery, signature
-from dependencies import Injector
+from celery import Celery, Task, signature
+from dependencies import Injector, this
 from dependencies.contrib.celery import shared_task, task
 from helpers import CodeCollector
 
@@ -9,7 +9,9 @@ from helpers import CodeCollector
 def celery_app():
     """Simulate global Celery application instance."""
 
-    return Celery()
+    app = Celery()
+    app.tasks.clear()
+    return app
 
 
 containers = CodeCollector()
@@ -258,3 +260,102 @@ def test_validation(celery_app):
 
     message = str(exc_info.value)
     assert message == "'Container5' object has no attribute 'run'"
+
+
+task_arguments = CodeCollector()
+
+
+@task_arguments.parametrize
+def test_task_arguments(celery_app, code):
+    """
+    Allow task decorator arguments customization through `Injector`
+    subclass attributes.
+    """
+
+    class Foo(object):
+
+        def __call__(self, a, b):
+            return a + b
+
+    class Bar(object):
+
+        def __init__(self, foo):
+            self.foo = foo
+
+        def do(self, instance, one, two=None):
+            assert isinstance(instance, MyTask)
+            return self.foo(one, two)
+
+    class MyTask(Task):
+        pass
+
+    code(
+        celery_app,
+        Injector.let(
+            foo=Foo,
+            bar=Bar,
+            base_cls=MyTask,
+            bind=True,
+            typing=False,
+            max_retries=1,
+            default_retry_delay=1,
+            rate_limit='100/h',
+            ignore_result=True,
+            trail=False,
+            send_events=False,
+            store_errors_even_if_ignored=True,
+            serializer='yaml',
+            time_limit=500,
+            soft_time_limit=250,
+            backend='db+sqlite:///results.db',
+            autoregister=False,
+            track_started=True,
+            acks_late=True,
+            reject_on_worker_lost=True,
+            throws=(ValueError, AttributeError),
+        ),
+    )
+
+    task_instance = celery_app.tasks['foo.bar.baz']
+    assert task_instance(1, two=2) == 3
+    assert isinstance(task_instance, MyTask)
+    assert task_instance.typing is False
+    assert task_instance.max_retries == 1
+    assert task_instance.default_retry_delay == 1
+    assert task_instance.rate_limit == '100/h'
+    assert task_instance.ignore_result is True
+    assert task_instance.trail is False
+    assert task_instance.send_events is False
+    assert task_instance.store_errors_even_if_ignored is True
+    assert task_instance.serializer == 'yaml'
+    assert task_instance.time_limit == 500
+    assert task_instance.soft_time_limit == 250
+    assert task_instance.backend == 'db+sqlite:///results.db'
+    assert task_instance.autoregister is False
+    assert task_instance.track_started is True
+    assert task_instance.acks_late is True
+    assert task_instance.reject_on_worker_lost is True
+    assert task_instance.throws == (ValueError, AttributeError)
+
+
+@task_arguments
+def z3uG24zlPL7s(_app, container):
+    """Task decorator."""
+
+    @task
+    class Container(container):
+
+        app = _app
+        name = 'foo.bar.baz'
+        run = this.bar.do
+
+
+@task_arguments
+def pvRJsuaumvOU(app, container):
+    """Shared task decorator."""
+
+    @shared_task
+    class Container(container):
+
+        name = 'foo.bar.baz'
+        run = this.bar.do
