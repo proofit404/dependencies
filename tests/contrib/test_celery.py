@@ -307,8 +307,6 @@ def test_task_arguments(celery_app, code):
             serializer='yaml',
             time_limit=500,
             soft_time_limit=250,
-            backend='db+sqlite:///results.db',
-            autoregister=False,
             track_started=True,
             acks_late=True,
             reject_on_worker_lost=True,
@@ -330,8 +328,6 @@ def test_task_arguments(celery_app, code):
     assert task_instance.serializer == 'yaml'
     assert task_instance.time_limit == 500
     assert task_instance.soft_time_limit == 250
-    assert task_instance.backend == 'db+sqlite:///results.db'
-    assert task_instance.autoregister is False
     assert task_instance.track_started is True
     assert task_instance.acks_late is True
     assert task_instance.reject_on_worker_lost is True

@@ -46,8 +46,8 @@ def decorate_with(func, injector):
             'bind', 'typing', 'max_retries', 'default_retry_delay',
             'rate_limit', 'ignore_result', 'trail', 'send_events',
             'store_errors_even_if_ignored', 'serializer', 'time_limit',
-            'soft_time_limit', 'backend', 'autoregister', 'track_started',
-            'acks_late', 'reject_on_worker_lost', 'throws'
+            'soft_time_limit', 'track_started', 'acks_late',
+            'reject_on_worker_lost', 'throws'
     ]:
         if argument in injector:
             options[argument] = getattr(injector, argument)
