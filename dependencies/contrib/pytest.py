@@ -14,6 +14,8 @@ import pytest
 
 __all__ = ['register', 'require']
 
+# TODO: `parametrize` function.
+
 
 def register(injector):
     """Register Py.test fixture performing injection in it's scope."""
