@@ -2,7 +2,7 @@
 dependencies.contrib.celery
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This module implements injectable Celery task definition.
+This module implements injectable Celery task.
 
 :copyright: (c) 2016-2017 by Artem Malyshev.
 :license: LGPL-3, see LICENSE for more details.

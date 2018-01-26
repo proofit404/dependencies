@@ -1,1 +1,3 @@
-SECRET_KEY = '<secret>'
+INSTALLED_APPS = ['django.contrib.contenttypes']
+SECRET_KEY = '*'
+ROOT_URLCONF = '*'
