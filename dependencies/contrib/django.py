@@ -22,14 +22,18 @@ def view(injector):
 
     class Handler(View):
 
-        def get(self, request, *args, **kwargs):
+        def handle(self, request, args, kwargs):
 
-            result = injector.let(
+            return injector.let(
                 request=request,
                 args=args,
                 kwargs=kwargs,
                 user=this.request.user,
-            ).view.get()
+            ).view
+
+        def get(self, request, *args, **kwargs):
+
+            result = self.handle(request, args, kwargs).get()
             # FIXME: All http responses.
             return HttpResponse(result)
 

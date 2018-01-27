@@ -23,6 +23,5 @@ class Container(Injector):
 
 
 urlpatterns = [
-    # ?P<slug>
-    url(r'^comments/(\d+)/(\w+)/$', Container.as_view()),
+    url(r'^comments/(?P<pk>\d+)/(?P<slug>\w+)/$', Container.as_view()),
 ]
