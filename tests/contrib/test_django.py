@@ -17,3 +17,12 @@ def test_inject_user(client):
     response = client.get('/comments/1/test/')
     assert response.status_code == 200
     assert response.content == b'<h1>OK</h1>'
+
+
+@pytest.mark.urls('urlconf_pass_kwargs_to_the_service')
+def test_pass_kwargs_to_the_service(client):
+    """Pass kwargs to the nested service object."""
+
+    response = client.get('/comments/1/test/')
+    assert response.status_code == 200
+    assert response.content == b'<h1>OK</h1>'

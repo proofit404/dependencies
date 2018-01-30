@@ -9,5 +9,6 @@ setup(
     py_modules=[
         'urlconf_dispatch_request',
         'urlconf_inject_user',
+        'urlconf_pass_kwargs_to_the_service',
     ],
 )
