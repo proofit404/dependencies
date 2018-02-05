@@ -12,3 +12,10 @@ setup(
         'urlconf_pass_kwargs_to_the_service',
     ],
 )
+
+setup(
+    name='polls',
+    packages=['polls', 'polls.migrations'],
+    include_package_data=True,
+    package_data={'polls': ['templates/polls/*.html']},
+)
