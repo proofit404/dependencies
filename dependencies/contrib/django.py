@@ -12,7 +12,7 @@ from __future__ import absolute_import
 
 from dependencies import this
 from django.http import HttpResponse
-from django.views.generic import View
+from django.views.generic import CreateView, View
 
 
 def view(injector):
@@ -38,5 +38,17 @@ def view(injector):
             return HttpResponse(result)
 
         # FIXME: All http methods.
+
+    return injector.let(as_view=Handler.as_view)
+
+
+def create_view(injector):
+    """FIXME: Write docstring."""
+
+    class Handler(CreateView):
+
+        model = injector.model_cls
+        fields = injector.fields
+        success_url = injector.success_url
 
     return injector.let(as_view=Handler.as_view)
