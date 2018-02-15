@@ -265,20 +265,15 @@ def check_cls_arguments(argnames, defaults):
 def check_varargs(dependency, varargs, kwargs):
 
     if varargs and kwargs:
-        raise DependencyError(
-            '{0}.__init__ have arbitrary argument list and keyword arguments'
-            .format(dependency.__name__),
-        )
+        message = ('{0}.__init__ have arbitrary argument list '
+                   'and keyword arguments')
+        raise DependencyError(message.format(dependency.__name__))
     elif varargs:
-        raise DependencyError(
-            '{0}.__init__ have arbitrary argument list'
-            .format(dependency.__name__),
-        )
+        message = '{0}.__init__ have arbitrary argument list'
+        raise DependencyError(message.format(dependency.__name__))
     elif kwargs:
-        raise DependencyError(
-            '{0}.__init__ have arbitrary keyword arguments'
-            .format(dependency.__name__),
-        )
+        message = '{0}.__init__ have arbitrary keyword arguments'
+        raise DependencyError(message.format(dependency.__name__))
 
 
 def check_loops(class_name, dependencies):
@@ -373,9 +368,8 @@ def check_circles_for(dependencies, attrname, origin):
     if argspec:
         args = argspec[0]
         if origin in args:
-            raise DependencyError(
-                '{0!r} is a circle dependency in the {1!r} constructor'
-                .format(origin, attribute.__name__))
+            message = '{0!r} is a circle dependency in the {1!r} constructor'
+            raise DependencyError(message.format(origin, attribute.__name__))
         for name in args:
             check_circles_for(dependencies, name, origin)
 

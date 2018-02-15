@@ -59,13 +59,14 @@ def proxy(parents, expression, scope):
 
     __new__ = make_new(parents, expression, scope)
     __init__ = make_init(parents, expression)
-    return ProxyType('Proxy', (object,), {
-        '__new__': __new__,
-        '__init__': __init__,
-        '__parents__': parents,
-        '__expression__': expression,
-        '__scope__': scope,
-    })
+    return ProxyType(
+        'Proxy', (object,), {
+            '__new__': __new__,
+            '__init__': __init__,
+            '__parents__': parents,
+            '__expression__': expression,
+            '__scope__': scope,
+        })
 
 
 def make_new(parents, expression, scope):
@@ -81,8 +82,8 @@ def make_new(parents, expression, scope):
     if parents:
         expression = ['__parent__', '.'] + expression
     result_expr = ''.join(expression)
-    template = '\n'.join([def_expr] + [try_expr, except_expr] * (parents - 1) +
-                         [return_expr])
+    template = '\n'.join([def_expr] + [try_expr, except_expr] *
+                         (parents - 1) + [return_expr])
     code = template.format(argument=argument, result_expr=result_expr)
     scope = dict(DependencyError=DependencyError, **scope)
     exec(code, scope)
