@@ -5,7 +5,7 @@ dependencies.proxies
 This module provides functions for lazy attribute and item access
 during dependency injection process.
 
-:copyright: (c) 2016-2017 by Artem Malyshev.
+:copyright: (c) 2016-2018 by Artem Malyshev.
 :license: LGPL-3, see LICENSE for more details.
 """
 

@@ -4,7 +4,7 @@ dependencies.exceptions
 
 This module contains the set of dependencies' exceptions.
 
-:copyright: (c) 2016-2017 by Artem Malyshev.
+:copyright: (c) 2016-2018 by Artem Malyshev.
 :license: LGPL-3, see LICENSE for more details.
 """
 

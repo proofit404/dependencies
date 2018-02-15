@@ -9,7 +9,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 project = 'dependencies'
-copyright = '2016-2017, Artem Malyshev'
+copyright = '2016-2018, Artem Malyshev'
 author = 'Artem Malyshev'
 
 version = '0.13'
