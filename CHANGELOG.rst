@@ -4,6 +4,12 @@
 Changelog
 ---------
 
+0.14 (2018-02-00)
++++++++++++++++++
+
+- Add ``this`` proxy object for aliases and cross injector links.
+- Deprecate attribute assignment and ``use`` decorator.
+
 0.13 (2016-10-09)
 +++++++++++++++++
 
