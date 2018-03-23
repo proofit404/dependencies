@@ -1,4 +1,7 @@
 import pytest
+
+pytest.importorskip('django')
+
 from polls.models import Question
 
 
