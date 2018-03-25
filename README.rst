@@ -19,9 +19,8 @@
     :target: https://pypi.python.org/pypi/dependencies/
     :alt: Python Package Version
 
-============
-Dependencies
-============
+.. image:: docs/static/dependencies_logo.png
+    :alt: Dependencies
 
 |travis| |coveralls| |requires| |codacy| |pypi|
 
