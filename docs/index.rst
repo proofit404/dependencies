@@ -52,7 +52,6 @@ Contents
 
     installation
     why
-    tutorial
     usage
 
 Indices and tables
