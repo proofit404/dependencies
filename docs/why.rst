@@ -85,3 +85,80 @@ policies.  Let's try...
 
 Inheritance
 -----------
+
+Let's rewrite our functions in the single class so we can alter logic
+in the subclasses.
+
+.. code:: python
+
+    class Order:
+
+        def __init__(self, user, product, shipment_details):
+
+            self.user = user
+            self.product = product
+            self.shipment_details = shipment_details
+            self.final_price = None  # Set by `calculate_price`.
+            self.order_details = None  # Set by `request_payment`.
+            self.subject = None  # Set by `get_notification_subject`.
+            self.message = None  # Set by `get_notification_text`.
+            self.email = None  # Set by `get_user_email`.
+
+        def purchase(self):
+
+            self.create_order()
+            self.calculate_price()
+            self.request_payment()
+            self.notify_user()
+
+        # ...
+
+        def notify_user(self):
+
+            self.log_notification()
+            self.get_notification_subject()
+            self.get_notification_text()
+            self.send_notification()
+
+        def send_notification(self):
+
+            self.get_user_email()
+            self.send_email()
+
+At first look this class is even better solution.  Indeed, this code
+has few pros.
+
+1. At first glance high level methods even more readable.
+
+   There are no nosy arguments or variables.  Only nice named methods.
+
+2. Simple code reuse.
+
+   With inheritance we can simply override any method on any layer of
+   abstraction in the system.  We can add any number of methods or
+   attributes is the child classes.  Looks like it is very reasonable
+   approach.
+
+But this code has much more hidden cons at more precise analysis.
+
+1. God object.
+
+   One class contains methods related to every single layer of
+   abstraction in the system.  It's hard to manage two hundred methods
+   in the same class.  One will process HTTP request, another one will
+   send email, another one will write to the database.  It's hard to
+   figure out what *exactly* this class does.
+
+2. Bad state management.
+
+   During life time of the instance different methods change state of
+   the class.  When you read short method somewhere inside email
+   sender logic you have no idea *from where* attributes came from and
+   *when exactly* they were set.  Hello ``print`` statements to
+   understand the code...
+
+Let's reduce amount of logic in the class (responsibility of the
+class).  Let's try...
+
+Mixins
+------
