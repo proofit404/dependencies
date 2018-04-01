@@ -1,8 +1,9 @@
-Usage
-=====
+=======
+ Usage
+=======
 
 Preparations
-------------
+============
 
 Before we start to inject dependencies lets define code which needs
 this dependencies.
@@ -22,7 +23,7 @@ will helps us to understand the path things go in your system.
 Attributes taken from nowhere in your code aren't fun.  Believe me.
 
 Behavior
---------
+========
 
 So lets add some behavior to your robot.
 
@@ -74,7 +75,7 @@ So we are close to scream "It's alive!" and run out of the building.
 Congratulations!  We build our robot with dependency injection.
 
 Injection rules
----------------
+===============
 
 ``Container`` above is a dependency scope.  You can take any of them
 from his attribute.  Following things happens when you access an
@@ -129,7 +130,7 @@ dependency named ``x`` and find ``1``.  We build ``Baz`` instance then
 use it to build ``Foo`` instance.
 
 Calculation rules
-+++++++++++++++++
+-----------------
 
 Each dependency evaluates once during injection process.  If during
 dependency injection different classes have constructor argument with
@@ -163,7 +164,7 @@ one injection process.  New attribute access - new object.
     False
 
 Nested ``Injectors``
-++++++++++++++++++++
+--------------------
 
 It is possible to inject ``Injector`` it self.  ``Injector``
 subclasses provided as is and calculate its attributes on first use.
@@ -202,7 +203,7 @@ subclasses provided as is and calculate its attributes on first use.
     1
 
 Scope extension
----------------
+===============
 
 You need to have whole collection of dependencies only in injection
 moment i.e. on scope attribute access.  You can define scope partially
@@ -212,7 +213,7 @@ and then extend it.  There are two ways to do that:
 - ``let`` notation
 
 Inheritance
-+++++++++++
+-----------
 
 You can add additional dependencies or redefine already provided in
 the scope subclasses:
@@ -257,7 +258,7 @@ without intermediate class needed.
     >>> (Scope1 & Scope2).foo
 
 ``let`` notation
-++++++++++++++++
+----------------
 
 You can temporary redefine dependency for only one case.  This is
 extremely useful for tests.  Inject asserts instead of some dependency

@@ -1,5 +1,6 @@
-Dependencies
-============
+==============
+ Dependencies
+==============
 
 Dependency Injection for Humans.
 
@@ -18,7 +19,7 @@ This tiny library helps you to connect parts of your system i.e. to
 inject low level implementation into high level behavior.
 
 Example
--------
+=======
 
 Dependency injection without ``dependencies``
 
@@ -45,7 +46,7 @@ Dependency injection with ``dependencies``
     robot = Container.robot
 
 Contents
---------
+========
 
 .. toctree::
     :maxdepth: 2

@@ -1,5 +1,6 @@
-Why not...
-==========
+============
+ Why not...
+============
 
 Here we will try to collect pros and cons of different approaches to
 make your code extendable and reusable.
@@ -11,7 +12,7 @@ should send a request to the payment processing system, we should send
 notification to user.
 
 Simple functions
-----------------
+================
 
 Let's do it with simple functions
 
@@ -84,7 +85,7 @@ implementation details of low level code without changing high level
 policies.  Let's try...
 
 Inheritance
------------
+===========
 
 Let's rewrite our functions in the single class so we can alter logic
 in the subclasses.
@@ -161,4 +162,4 @@ Let's reduce amount of logic in the class (responsibility of the
 class).  Let's try...
 
 Mixins
-------
+======
