@@ -50,7 +50,8 @@ Dependency injection without ``dependencies``
     robot = Robot(
         servo=Servo(amplifier=Amplifier()),
         controller=Controller(),
-        settings=Settings(environment="production"))
+        settings=Settings(environment="production"),
+    )
 
 Dependency injection with ``dependencies``
 
