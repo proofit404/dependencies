@@ -31,6 +31,8 @@ Dependency injection without ``dependencies``
         settings=Settings(environment="production"),
     )
 
+    robot.work()
+
 Dependency injection with ``dependencies``
 
 .. code:: python
@@ -43,7 +45,7 @@ Dependency injection with ``dependencies``
         settings = Settings
         environment = "production"
 
-    robot = Container.robot
+    Container.robot.work()
 
 Installation
 ============
