@@ -72,8 +72,10 @@ Contents
 .. toctree::
     :maxdepth: 2
 
+    overview
     why
     usage
+    implementation
 
 Indices and tables
 ==================
