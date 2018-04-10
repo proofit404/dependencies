@@ -66,7 +66,7 @@ Development version
 You can always install last development version directly from source
 control::
 
-    pip install -U git+https://github.com/proofit404/dependencies.git
+    pip install -U git+https://github.com/dry-python/dependencies.git
 
 Contents
 ========

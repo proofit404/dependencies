@@ -1,18 +1,18 @@
 
-.. |travis| image:: https://img.shields.io/travis/proofit404/dependencies.svg?style=flat-square
-    :target: https://travis-ci.org/proofit404/dependencies
+.. |travis| image:: https://img.shields.io/travis/dry-python/dependencies.svg?style=flat-square
+    :target: https://travis-ci.org/dry-python/dependencies
     :alt: Build Status
 
-.. |coveralls| image:: https://img.shields.io/coveralls/proofit404/dependencies.svg?style=flat-square
-    :target: https://coveralls.io/r/proofit404/dependencies
+.. |coveralls| image:: https://img.shields.io/coveralls/dry-python/dependencies.svg?style=flat-square
+    :target: https://coveralls.io/r/dry-python/dependencies
     :alt: Coverage Status
 
-.. |requires| image:: https://img.shields.io/requires/github/proofit404/dependencies.svg?style=flat-square
-    :target: https://requires.io/github/proofit404/dependencies/requirements
+.. |requires| image:: https://img.shields.io/requires/github/dry-python/dependencies.svg?style=flat-square
+    :target: https://requires.io/github/dry-python/dependencies/requirements
     :alt: Requirements Status
 
 .. |codacy| image:: https://img.shields.io/codacy/907efcab21d14e9ea1d110411d5791cd.svg?style=flat-square
-    :target: https://www.codacy.com/app/proofit404/dependencies
+    :target: https://www.codacy.com/app/dry-python/dependencies
     :alt: Code Quality Status
 
 .. |pypi| image:: https://img.shields.io/pypi/v/dependencies.svg?style=flat-square
@@ -74,6 +74,6 @@ License
 
 Dependencies library is offered under LGPL license.
 
-.. _source code: https://github.com/proofit404/dependencies
-.. _issue tracker: https://github.com/proofit404/dependencies/issues
+.. _source code: https://github.com/dry-python/dependencies
+.. _issue tracker: https://github.com/dry-python/dependencies/issues
 .. _documentation: http://dependencies.readthedocs.io/en/latest/
