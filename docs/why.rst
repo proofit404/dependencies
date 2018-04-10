@@ -163,3 +163,64 @@ class).  Let's try...
 
 Mixins
 ======
+
+We can split our God object into multiple classes and join it together
+later using multiple inheritance.
+
+.. code:: python
+
+    class OrderProcessingMixin:
+
+        def create_order(self):
+
+            # ...
+
+    class PriceCalculationMixin:
+
+        def calculate_price(self):
+
+            # ...
+
+    class NotificationMixin:
+
+        def get_notification_text(self):
+
+            self.notification_text = self.notification_text_template % (
+                self.user,
+                self.order_details,
+            )
+
+    class Order(OrderProcessingMixin,
+                PriceCalculationMixin,
+                NotificationMixin):
+
+        def before_calculate(self):
+
+            self.create_order()
+
+        def after_commit(self):
+
+            self.send_email()
+
+Someone might say this is an improvement over one huge class.
+
+1. All methods grouped around classes with the same responsibility.
+
+2. Better code reuse.  We can use the same notification mechanism in
+   different classes with just one line of code.
+
+But there are a lot of problems too.  Imagine you during debugging
+session of the ``Order`` class.
+
+1. In the ``get_notification_text`` you have no idea who set up
+   ``order_details``.
+
+2. In the ``Order`` class itself you see bunch of low level methods
+   which are deep implementation details.  What public method I should
+   call?   When notification will be sent exactly?
+
+This code is much harder to understand than it should be.  Even if it
+reusable, this complexity in too big for my head.  Let's try...
+
+Composition
+===========
