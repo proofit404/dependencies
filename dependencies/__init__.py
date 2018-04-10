@@ -13,5 +13,3 @@ from .injector import Injector
 from .proxies import this
 
 __all__ = ['Injector', 'this', 'DependencyError']
-
-# TODO: write documentation for proxies module
