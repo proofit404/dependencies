@@ -224,3 +224,96 @@ reusable, this complexity in too big for my head.  Let's try...
 
 Composition
 ===========
+
+Composition is a powerful pattern of organizing code with proper
+code boundaries and clear dependency relationship.
+
+.. code:: python
+
+    class OrderProcessor:
+
+        def create(self, user, product):
+
+            # ...
+
+    class PriceCalculator:
+
+        def calculate(self, product, shipment_details):
+
+            # ...
+
+    class Notification:
+
+        def __init__(self, logger):
+
+            self.logger = logger
+
+        def notify(self, user, order_details):
+
+            self.logger.record(user, order_details)
+            subject = self.get_notification_subject(order_details)
+            message = self.get_notification_text(user, order_details)
+            self.send_notification(user, subject, message)
+
+    class Order:
+
+        def __init__(self, order_processor, price_calculator,
+                     payment_processor, notification):
+
+            self.order_processor = order_processor
+            self.price_calculator = price_calculator
+            self.payment_processor = payment_processor
+            self.notification = notification
+
+        def purchase(self, user, product, shipment_details)
+
+            self.order_processor.create(user, product)
+            final_price = self.price_calculator.calculate(product, shipment_details)
+            order_details = self.payment_processor.request(user, shipment_details)
+            self.notification.notify(user, order_details)
+
+    Order(
+        OrderProcessor(),
+        PriceCalculator(),
+        PaymentProcessor(),
+        Notification(Logger()),
+    ).purchase(user, product, shipment_details)
+
+This code has few really good characteristics.
+
+1. It's clean where things were defined.  If you try to understand
+   what's wrong with your system, you can just use traceback.  No
+   nasty code execution paths.
+
+2. You system became really configurable, you can **inject** pretty
+   much any implementation without changing high-level code.
+
+But there one unfortunate consequence of this style
+
+1. There are to much boilerplate on the initiation stage.
+
+Let's try...
+
+Dependencies
+============
+
+Here where ``dependencies`` library comes in.
+
+.. code:: python
+
+    from dependencies import Injector
+
+    class OrderContainer(Injector):
+
+        order = Order
+        oredr_processor = OrderProcessor
+        price_calculator = PriceCalculator
+        payment_processor = PaymentProcessor
+        notification = Notification
+        logger = Logger
+
+    OrderContainer.order.purchase(user, product, shipment_details)
+
+It helps you to reduce the boilerplate of the initiation stage.  It
+doesn't require you to change your code.  You still can to instantiate
+your classes your self if you don't like this library.
