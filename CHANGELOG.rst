@@ -4,7 +4,7 @@
 Changelog
 ---------
 
-0.14 (2018-02-00)
+0.14 (2018-04-13)
 +++++++++++++++++
 
 - Add ``this`` proxy object for aliases and cross injector links.
