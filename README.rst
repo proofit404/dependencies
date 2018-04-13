@@ -3,8 +3,8 @@
     :target: https://travis-ci.org/dry-python/dependencies
     :alt: Build Status
 
-.. |coveralls| image:: https://img.shields.io/coveralls/dry-python/dependencies.svg?style=flat-square
-    :target: https://coveralls.io/r/dry-python/dependencies
+.. |codecov| image:: https://img.shields.io/codecov/c/github/dry-python/dependencies.svg?style=flat-square
+    :target: https://codecov.io/gh/dry-python/dependencies
     :alt: Coverage Status
 
 .. |requires| image:: https://img.shields.io/requires/github/dry-python/dependencies.svg?style=flat-square
@@ -22,7 +22,7 @@
 .. image:: https://raw.githubusercontent.com/dry-python/dependencies/master/docs/static/dependencies_logo.png
     :alt: Dependencies
 
-|travis| |coveralls| |requires| |codacy| |pypi|
+|travis| |codecov| |requires| |codacy| |pypi|
 
 Dependency Injection for Humans.
 
