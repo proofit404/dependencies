@@ -5,7 +5,7 @@ dependencies.injector
 This module implements Injector class (general DI mechanism).
 
 :copyright: (c) 2016-2018 by Artem Malyshev.
-:license: LGPL-3, see LICENSE for more details.
+:license: BSD, see LICENSE for more details.
 """
 
 import inspect

@@ -9,6 +9,7 @@ Changelog
 
 - Add ``this`` proxy object for aliases and cross injector links.
 - Deprecate attribute assignment and ``use`` decorator.
+- Release under BSD license.
 
 0.13 (2016-10-09)
 +++++++++++++++++

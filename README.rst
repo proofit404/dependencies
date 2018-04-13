@@ -72,7 +72,7 @@ Dependency injection with ``dependencies``
 License
 -------
 
-Dependencies library is offered under LGPL license.
+Dependencies library is offered under the two clause BSD license.
 
 .. _source code: https://github.com/dry-python/dependencies
 .. _issue tracker: https://github.com/dry-python/dependencies/issues
