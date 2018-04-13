@@ -1,6 +1,5 @@
-==============
- Dependencies
-==============
+.. image:: static/dependencies_logo.png
+    :alt: Dependencies
 
 Dependency Injection for Humans.
 
