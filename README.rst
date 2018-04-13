@@ -11,7 +11,7 @@
      :target: https://pyup.io/repos/github/dry-python/dependencies/
      :alt: PyUp Status
 
-.. |codacy| image:: https://img.shields.io/codacy/907efcab21d14e9ea1d110411d5791cd.svg?style=flat-square
+.. |codacy| image:: https://img.shields.io/codacy/ac9894ac09cc41028c3eb6fbc27126ad.svg?style=flat-square
     :target: https://www.codacy.com/app/dry-python/dependencies
     :alt: Code Quality Status
 
