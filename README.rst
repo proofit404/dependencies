@@ -19,7 +19,7 @@
     :target: https://pypi.python.org/pypi/dependencies/
     :alt: Python Package Version
 
-.. image:: docs/static/dependencies_logo.png
+.. image:: https://raw.githubusercontent.com/dry-python/dependencies/master/docs/static/dependencies_logo.png
     :alt: Dependencies
 
 |travis| |coveralls| |requires| |codacy| |pypi|
