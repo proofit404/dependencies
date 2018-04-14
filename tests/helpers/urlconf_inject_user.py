@@ -13,7 +13,7 @@ class View(object):
     def get(self):
 
         assert isinstance(self.user, AnonymousUser)
-        return '<h1>OK</h1>'
+        return "<h1>OK</h1>"
 
 
 @view
@@ -22,6 +22,4 @@ class Container(Injector):
     view = View
 
 
-urlpatterns = [
-    url(r'^comments/(?P<pk>\d+)/(?P<slug>\w+)/$', Container.as_view()),
-]
+urlpatterns = [url(r"^comments/(?P<pk>\d+)/(?P<slug>\w+)/$", Container.as_view())]

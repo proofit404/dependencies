@@ -8,8 +8,7 @@ Dependency Injection for Humans.
 :license: BSD, see LICENSE for more details.
 """
 
-from .exceptions import DependencyError
-from .injector import Injector
-from .proxies import this
+from ._injector import Injector
+from ._proxies import this
 
-__all__ = ['Injector', 'this', 'DependencyError']
+__all__ = ["Injector", "this"]

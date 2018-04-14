@@ -1,8 +1,9 @@
 from inspect import isclass
 
 import pytest
-from dependencies import DependencyError, Injector
-from dependencies.injector import injector_doc
+from dependencies import Injector
+from dependencies._injector import injector_doc
+from dependencies.exceptions import DependencyError
 from helpers import CodeCollector
 
 
@@ -357,7 +358,7 @@ def test_show_common_class_attributes_with_dir():
     class Foo(Injector):
         pass
 
-    assert dir(Common) + ['let'] == dir(Foo)
+    assert dir(Common) + ["let"] == dir(Foo)
 
 
 def test_show_injected_dependencies_with_dir():
@@ -369,8 +370,8 @@ def test_show_injected_dependencies_with_dir():
     class Foo(Injector):
         x = 1
 
-    assert 'x' in dir(Foo)
-    assert '__dependencies__' not in dir(Foo)
+    assert "x" in dir(Foo)
+    assert "__dependencies__" not in dir(Foo)
 
 
 def test_show_injected_dependencies_with_dir_once():
@@ -382,18 +383,18 @@ def test_show_injected_dependencies_with_dir_once():
     class Bar(Foo):
         x = 2
 
-    assert dir(Bar).count('x') == 1
+    assert dir(Bar).count("x") == 1
 
 
 def test_show_let_dependencies_with_dir():
     """`dir` show dependencies injected with `let`."""
 
-    assert 'x' in dir(Injector.let(x=1))
+    assert "x" in dir(Injector.let(x=1))
 
     class Foo(Injector):
         pass
 
-    assert 'x' in dir(Foo.let(x=1))
+    assert "x" in dir(Foo.let(x=1))
 
 
 def test_omit_parent_link_in_dir_listing():
@@ -407,7 +408,7 @@ def test_omit_parent_link_in_dir_listing():
         class Bar(Injector):
             pass
 
-    assert '__parent__' not in dir(Foo.Bar)
+    assert "__parent__" not in dir(Foo.Bar)
 
 
 attribute_assignment = CodeCollector()
@@ -518,16 +519,17 @@ def test_docstrings():
     """Check we can access all API entry points documentation."""
 
     assert Injector.__doc__ == injector_doc
-    assert Injector.let.__doc__ == (
-        'Produce new Injector with some dependencies overwritten.')
-    assert DependencyError.__doc__ == (
-        'Broken dependencies configuration error.')
+    assert (
+        Injector.let.__doc__
+        == ("Produce new Injector with some dependencies overwritten.")
+    )
+    assert DependencyError.__doc__ == ("Broken dependencies configuration error.")
 
     class Foo(Injector):
         """New container."""
         pass
 
-    assert Foo.__doc__ == 'New container.'
+    assert Foo.__doc__ == "New container."
 
 
 evaluate_classes = CodeCollector()
@@ -627,10 +629,7 @@ def edf946cc6077(Foo, FooContainer, BarContainer, BazContainer):
 def efdc426cd096(Foo, FooContainer, BarContainer, BazContainer):
     """Inplace creation."""
 
-    assert isinstance(
-        (FooContainer & BarContainer & BazContainer).baz.bar.foo,
-        Foo,
-    )
+    assert isinstance((FooContainer & BarContainer & BazContainer).baz.bar.foo, Foo)
 
 
 inheritance_order = CodeCollector()
@@ -698,8 +697,10 @@ def test_multiple_inheritance_deny_regular_classes(code):
     with pytest.raises(DependencyError) as exc_info:
         code(Foo)
 
-    assert str(exc_info.value) == (
-        'Multiple inheritance is allowed for Injector subclasses only')
+    assert (
+        str(exc_info.value)
+        == ("Multiple inheritance is allowed for Injector subclasses only")
+    )
 
 
 @subclasses_only
@@ -727,7 +728,7 @@ def test_deny_magic_methods_injection(code):
     with pytest.raises(DependencyError) as exc_info:
         code()
 
-    assert str(exc_info.value) == 'Magic methods are not allowed'
+    assert str(exc_info.value) == "Magic methods are not allowed"
 
 
 @deny_magic_methods
@@ -760,10 +761,12 @@ def test_attribute_error(code):
     with pytest.raises(AttributeError) as exc_info:
         code()
 
-    assert str(exc_info.value) in set([
-        "'Foo' object has no attribute 'test'",
-        "'Injector' object has no attribute 'test'",
-    ])
+    assert str(exc_info.value) in set(
+        [
+            "'Foo' object has no attribute 'test'",
+            "'Injector' object has no attribute 'test'",
+        ]
+    )
 
 
 @attribute_error
@@ -819,10 +822,10 @@ def test_has_attribute(code):
     """`Injector` should support `hasattr` and `in` statement."""
 
     container = code()
-    assert hasattr(container, 'foo')
-    assert not hasattr(container, 'bar')
-    assert 'foo' in container
-    assert 'bar' not in container
+    assert hasattr(container, "foo")
+    assert not hasattr(container, "bar")
+    assert "foo" in container
+    assert "bar" not in container
 
 
 @has_attribute
@@ -861,8 +864,9 @@ def test_circle_dependencies(code):
     with pytest.raises(DependencyError) as exc_info:
         code(Foo)
 
-    assert str(exc_info.value) == (
-        "'foo' is a circle dependency in the 'Foo' constructor")
+    assert (
+        str(exc_info.value) == ("'foo' is a circle dependency in the 'Foo' constructor")
+    )
 
 
 @circle_deps
@@ -912,10 +916,12 @@ def test_complex_circle_dependencies(code):
         code(Foo, Bar)
 
     message = str(exc_info.value)
-    assert message in set([
-        "'foo' is a circle dependency in the 'Bar' constructor",
-        "'bar' is a circle dependency in the 'Foo' constructor",
-    ])
+    assert message in set(
+        [
+            "'foo' is a circle dependency in the 'Bar' constructor",
+            "'bar' is a circle dependency in the 'Foo' constructor",
+        ]
+    )
 
 
 @complex_circle_deps
@@ -989,11 +995,13 @@ def test_complex_circle_dependencies_long_circle(code):
         code(Foo, Bar, Baz)
 
     message = str(exc_info.value)
-    assert message in set([
-        "'foo' is a circle dependency in the 'Baz' constructor",
-        "'bar' is a circle dependency in the 'Foo' constructor",
-        "'baz' is a circle dependency in the 'Bar' constructor",
-    ])
+    assert message in set(
+        [
+            "'foo' is a circle dependency in the 'Baz' constructor",
+            "'bar' is a circle dependency in the 'Foo' constructor",
+            "'baz' is a circle dependency in the 'Bar' constructor",
+        ]
+    )
 
 
 @long_circle_deps
@@ -1099,14 +1107,14 @@ def e281099be65d(Foo):
 
     class Summator(Injector):
         foo = Foo
-        kwargs = {'start': 5}
+        kwargs = {"start": 5}
 
 
 @deny_kwargs
 def bcf7c5881b2c(Foo):
     """Let notation."""
 
-    Injector.let(foo=Foo, kwargs={'start': 5})
+    Injector.let(foo=Foo, kwargs={"start": 5})
 
 
 deny_varargs_kwargs = CodeCollector()
@@ -1129,8 +1137,9 @@ def test_deny_arbitrary_positional_and_keyword_arguments_together(code):
         code(Foo)
 
     message = str(exc_info.value)
-    assert message == (
-        "Foo.__init__ have arbitrary argument list and keyword arguments")
+    assert (
+        message == ("Foo.__init__ have arbitrary argument list and keyword arguments")
+    )
 
 
 @deny_varargs_kwargs
@@ -1140,14 +1149,14 @@ def efbf07f8deb6(Foo):
     class Summator(Injector):
         foo = Foo
         args = (1, 2, 3)
-        kwargs = {'start': 5}
+        kwargs = {"start": 5}
 
 
 @deny_varargs_kwargs
 def c4362558f312(Foo):
     """Let notation."""
 
-    Injector.let(foo=Foo, args=(1, 2, 3), kwargs={'start': 5})
+    Injector.let(foo=Foo, args=(1, 2, 3), kwargs={"start": 5})
 
 
 deny_let_redefine = CodeCollector()
@@ -1191,7 +1200,7 @@ def test_deny_to_instantiate_injector(code):
     with pytest.raises(DependencyError) as exc_info:
         code()
 
-    assert str(exc_info.value) == 'Do not instantiate Injector'
+    assert str(exc_info.value) == "Do not instantiate Injector"
 
 
 @deny_call

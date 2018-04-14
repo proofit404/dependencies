@@ -8,10 +8,8 @@ from polls.models import Question
 class Container(Injector):
 
     model_cls = Question
-    fields = ['question_text', 'pub_date']
-    success_url = '/polls/add/'
+    fields = ["question_text", "pub_date"]
+    success_url = "/polls/add/"
 
 
-urlpatterns = [
-    url(r'^polls/add/$', Container.as_view()),
-]
+urlpatterns = [url(r"^polls/add/$", Container.as_view())]

@@ -1,7 +1,8 @@
 import functools
 
 import pytest
-from dependencies import DependencyError, Injector, this
+from dependencies import Injector, this
+from dependencies.exceptions import DependencyError
 from helpers import CodeCollector
 
 # Declarative attribute access.
@@ -180,8 +181,8 @@ def ce642f492941():
     """Get item with string key."""
 
     class Container(Injector):
-        foo = {'one': 1}
-        one = this.foo['one']
+        foo = {"one": 1}
+        one = this.foo["one"]
 
     result = Container.one
 
@@ -193,8 +194,8 @@ def ffa208dc1130():
     """Get items as many times as we want."""
 
     class Container(Injector):
-        foo = {'one': {'two': 1}}
-        two = this.foo['one']['two']
+        foo = {"one": {"two": 1}}
+        two = this.foo["one"]["two"]
 
     result = Container.two
 
@@ -206,10 +207,10 @@ def e5c358190fef():
     """Get item from the outer container."""
 
     class Container(Injector):
-        foo = {'bar': {'baz': 1}}
+        foo = {"bar": {"baz": 1}}
 
         class SubContainer(Injector):
-            spam = (this << 1).foo['bar']['baz']
+            spam = (this << 1).foo["bar"]["baz"]
 
     result = Container.SubContainer.spam
 
@@ -221,12 +222,12 @@ def ab4cdbf60b2f():
     """Get item from the outer container of any depth level."""
 
     class Container(Injector):
-        foo = {'bar': {'baz': 1}}
+        foo = {"bar": {"baz": 1}}
 
         class SubContainer(Injector):
 
             class SubSubContainer(Injector):
-                spam = (this << 2).foo['bar']['baz']
+                spam = (this << 2).foo["bar"]["baz"]
 
     result = Container.SubContainer.SubSubContainer.spam
 
@@ -264,8 +265,8 @@ def dc4fedcd09d8():
     """Get items from dict with tuple keys."""
 
     class Container(Injector):
-        foo = {('x', 1): 1}
-        bar = this.foo[('x', 1)]
+        foo = {("x", 1): 1}
+        bar = this.foo[("x", 1)]
 
     result = Container.bar
 
@@ -289,7 +290,7 @@ def test_item_getter_non_printable_key():
         def __str__(self):
             return "<boom>"
 
-    boom = Boom('hello')
+    boom = Boom("hello")
 
     class Container(Injector):
         foo = {boom: 1}
@@ -308,11 +309,11 @@ def test_attribute_access_after_item_getter():
         x = 1
 
     class Bar(object):
-        y = {'foo': Foo}
+        y = {"foo": Foo}
 
     class Container(Injector):
         bar = Bar
-        baz = this.bar.y['foo'].x
+        baz = this.bar.y["foo"].x
 
     assert Container.baz == 1
 
@@ -320,8 +321,10 @@ def test_attribute_access_after_item_getter():
 def test_docstrings():
     """Check we can access all API entry points documentation."""
 
-    assert this.__doc__ == (
-        'Declare attribute and item access during dependency injection.')
+    assert (
+        this.__doc__
+        == ("Declare attribute and item access during dependency injection.")
+    )
 
 
 direct_proxy = CodeCollector()
@@ -375,9 +378,9 @@ def test_this_deny_non_integers():
     """We can't shift `this` with non number argument."""
 
     with pytest.raises(ValueError) as exc_info:
-        this << 'boom'
+        this << "boom"
 
-    assert str(exc_info.value) == 'Positive integer argument is required'
+    assert str(exc_info.value) == "Positive integer argument is required"
 
 
 negative_integers = CodeCollector()
@@ -390,7 +393,7 @@ def test_this_deny_negative_integers(code):
     with pytest.raises(ValueError) as exc_info:
         code()
 
-    assert str(exc_info.value) == 'Positive integer argument is required'
+    assert str(exc_info.value) == "Positive integer argument is required"
 
 
 @negative_integers
@@ -420,8 +423,10 @@ def test_require_more_parents_that_injector_actually_has(code):
     with pytest.raises(DependencyError) as exc_info:
         code()
 
-    assert str(exc_info.value) == ('You tries to shift this more '
-                                   'times that Injector has levels')
+    assert (
+        str(exc_info.value)
+        == ("You tries to shift this more " "times that Injector has levels")
+    )
 
 
 @too_many
@@ -459,9 +464,7 @@ def ww6xNI4YrNr6():
 def rN3suiVzhqMM():
     """Let notation with nested layer."""
 
-    Injector.let(
-        SubContainer=Injector.let(foo=(this << 2).bar),
-    ).SubContainer.foo
+    Injector.let(SubContainer=Injector.let(foo=(this << 2).bar)).SubContainer.foo
 
 
 attribute_error = CodeCollector()
@@ -477,10 +480,12 @@ def test_attribute_error_on_parent_access(code):
     with pytest.raises(AttributeError) as exc_info:
         code()
 
-    assert str(exc_info.value) in set([
-        "'Container' object has no attribute 'bar'",
-        "'Injector' object has no attribute 'bar'",
-    ])
+    assert str(exc_info.value) in set(
+        [
+            "'Container' object has no attribute 'bar'",
+            "'Injector' object has no attribute 'bar'",
+        ]
+    )
 
 
 @attribute_error
@@ -518,9 +523,7 @@ def vnmkIELBH3MN():
 def pG9M52ZRQr2S():
     """Let notation with nested layer."""
 
-    Injector.let(
-        SubContainer=Injector.let(foo=(this << 1).bar),
-    ).SubContainer.foo
+    Injector.let(SubContainer=Injector.let(foo=(this << 1).bar)).SubContainer.foo
 
 
 circle_links = CodeCollector()
@@ -537,14 +540,16 @@ def test_circle_links(code):
     with pytest.raises(DependencyError) as exc_info:
         code()
 
-    assert str(exc_info.value) in set([
-        "'foo' is a circle link in the 'Container' injector",
-        "'foo' is a circle link in the 'Injector' injector",
-        "'bar' is a circle link in the 'Container' injector",
-        "'bar' is a circle link in the 'Injector' injector",
-        "'baz' is a circle link in the 'Container' injector",
-        "'baz' is a circle link in the 'Injector' injector",
-    ])
+    assert str(exc_info.value) in set(
+        [
+            "'foo' is a circle link in the 'Container' injector",
+            "'foo' is a circle link in the 'Injector' injector",
+            "'bar' is a circle link in the 'Container' injector",
+            "'bar' is a circle link in the 'Injector' injector",
+            "'baz' is a circle link in the 'Container' injector",
+            "'baz' is a circle link in the 'Injector' injector",
+        ]
+    )
 
 
 @circle_links
@@ -605,8 +610,7 @@ def nWhKtJb16yg6():
     """Let notation.  One level deep."""
 
     Injector.let(
-        foo=this.SubContainer.bar,
-        SubContainer=Injector.let(bar=(this << 1).foo),
+        foo=this.SubContainer.bar, SubContainer=Injector.let(bar=(this << 1).foo)
     ).foo
 
 
@@ -633,11 +637,7 @@ def bCw8LPUeVK6J():
 
     Injector.let(
         foo=this.SubContainer.SubSubContainer.bar,
-        SubContainer=Injector.let(
-            SubSubContainer=Injector.let(
-                bar=(this << 2).foo,
-            ),
-        ),
+        SubContainer=Injector.let(SubSubContainer=Injector.let(bar=(this << 2).foo)),
     ).foo
 
 
@@ -668,9 +668,7 @@ def q0KytyVbE2XA():
         foo=this.SubContainer.bar,
         SubContainer=Injector.let(
             bar=this.SubSubContainer.baz,
-            SubSubContainer=Injector.let(
-                baz=(this << 2).foo,
-            ),
+            SubSubContainer=Injector.let(baz=(this << 2).foo),
         ),
     ).foo
 
@@ -697,12 +695,8 @@ def bLRoCCj9uNOp():
     """Let notation.  Cross injector links."""
 
     Injector.let(
-        SubContainer1=Injector.let(
-            bar=(this << 1).SubContainer2.baz,
-        ),
-        SubContainer2=Injector.let(
-            baz=(this << 1).SubContainer1.bar,
-        ),
+        SubContainer1=Injector.let(bar=(this << 1).SubContainer2.baz),
+        SubContainer2=Injector.let(baz=(this << 1).SubContainer1.bar),
     ).SubContainer1.bar
 
 
@@ -715,9 +709,9 @@ def oClqGRmWJAkA():
 
         class SubContainer(Injector):
 
-            foo = (this << 1).bar['sub'].foo
+            foo = (this << 1).bar["sub"].foo
 
-        bar = {'sub': SubContainer}
+        bar = {"sub": SubContainer}
 
     Container.SubContainer.foo
 
@@ -727,11 +721,8 @@ def oClqGRmWJAkA():
 def t41yMywZuPhA():
     """Let notation.  Over item access."""
 
-    SubContainer = Injector.let(foo=(this << 1).bar['sub'].foo)
-    Injector.let(
-        SubContainer=SubContainer,
-        bar={'sub': SubContainer},
-    ).SubContainer.foo
+    SubContainer = Injector.let(foo=(this << 1).bar["sub"].foo)
+    Injector.let(SubContainer=SubContainer, bar={"sub": SubContainer}).SubContainer.foo
 
 
 def test_false_positive_loop_lookup_protection():

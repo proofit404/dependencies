@@ -20,11 +20,11 @@ class Foo(object):
 
 @register
 class Container(Injector):
-    name = 'fixture_name'
+    name = "fixture_name"
     fixture = Foo
-    foo = require('fixture_name_1')
-    baz = require('fixture_name_2')
-    bar = require('fixture_name_3')
+    foo = require("fixture_name_1")
+    baz = require("fixture_name_2")
+    bar = require("fixture_name_3")
 
 
 @pytest.fixture
@@ -60,10 +60,11 @@ def test_documentation():
     documentation strings.
     """
 
-    assert register.__doc__ == \
-        "Register Py.test fixture performing injection in it's scope."
-    assert require.__doc__ == \
-        'Mark fixture as a dependency for injection process.'
+    assert (
+        register.__doc__
+        == "Register Py.test fixture performing injection in it's scope."
+    )
+    assert require.__doc__ == "Mark fixture as a dependency for injection process."
 
 
 def test_register_return_value():
@@ -83,7 +84,7 @@ def test_validation():
 
         @register
         class Container1(Injector):
-            name = 'fixture_name'
+            name = "fixture_name"
 
     message = str(exc_info.value)
     assert message == "'Container1' object has no attribute 'fixture'"
@@ -106,15 +107,15 @@ def test_fixture_arguments():
 
     @register
     class Container(Injector):
-        name = 'fixture_name'
+        name = "fixture_name"
         fixture = object
-        scope = 'session'
-        params = ('foo', 'bar', 'baz')
+        scope = "session"
+        params = ("foo", "bar", "baz")
         autouse = True
-        ids = ('one', 'two', 'three')
+        ids = ("one", "two", "three")
 
-    assert Container._pytestfixturefunction.name == 'fixture_name'
-    assert Container._pytestfixturefunction.scope == 'session'
-    assert Container._pytestfixturefunction.params == ('foo', 'bar', 'baz')
+    assert Container._pytestfixturefunction.name == "fixture_name"
+    assert Container._pytestfixturefunction.scope == "session"
+    assert Container._pytestfixturefunction.params == ("foo", "bar", "baz")
     assert Container._pytestfixturefunction.autouse is True
-    assert Container._pytestfixturefunction.ids == ('one', 'two', 'three')
+    assert Container._pytestfixturefunction.ids == ("one", "two", "three")

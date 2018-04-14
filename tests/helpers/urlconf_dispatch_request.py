@@ -13,10 +13,10 @@ class View(object):
 
     def get(self):
 
-        assert self.request.path == '/comments/1/test/'
-        assert self.args == ('1', 'test')
+        assert self.request.path == "/comments/1/test/"
+        assert self.args == ("1", "test")
         assert self.kwargs == {}
-        return '<h1>OK</h1>'
+        return "<h1>OK</h1>"
 
 
 @view
@@ -25,6 +25,4 @@ class Container(Injector):
     view = View
 
 
-urlpatterns = [
-    url(r'^comments/(\d+)/(\w+)/$', Container.as_view()),
-]
+urlpatterns = [url(r"^comments/(\d+)/(\w+)/$", Container.as_view())]
