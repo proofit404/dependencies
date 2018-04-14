@@ -341,3 +341,19 @@ injected from somewhere else.  When you will try to access this
 attribute, ``Injector`` will take actual instance from attribute and
 item access of the injection scope.  You can point attribute to the
 outer ``Injector`` attribute with the left shift operator.
+
+``hasattr`` alternative
+=======================
+
+``hasattr`` works by attribute access, so it triggers dependency
+injection.  If this is unnecessary side effect, ``dependencies``
+provides alternative way.
+
+.. code:: python
+
+    >>> class Container(Injector):
+    ...     foo = 1
+    ...
+    >>> 'foo' in Container
+    True
+    >>>
