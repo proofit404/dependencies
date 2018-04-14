@@ -50,7 +50,7 @@ class InjectorType(type):
 
                 if current_attr == "__parent__":
                     raise DependencyError(
-                        "You tries to shift this more times " "that Injector has levels"
+                        "You tries to shift this more times that Injector has levels"
                     )
 
                 else:
@@ -273,7 +273,7 @@ def check_cls_arguments(argnames, defaults):
 def check_varargs(dependency, varargs, kwargs):
 
     if varargs and kwargs:
-        message = ("{0}.__init__ have arbitrary argument list " "and keyword arguments")
+        message = ("{0}.__init__ have arbitrary argument list and keyword arguments")
         raise DependencyError(message.format(dependency.__name__))
 
     elif varargs:
