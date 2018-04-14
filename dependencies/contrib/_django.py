@@ -26,15 +26,3 @@ def view(injector):
 
     # FIXME: All http methods.
     return injector.let(as_view=Handler.as_view)
-
-
-def create_view(injector):
-    """FIXME: Write docstring."""
-
-    class Handler(CreateView):
-
-        model = injector.model_cls
-        fields = injector.fields
-        success_url = injector.success_url
-
-    return injector.let(as_view=Handler.as_view)
