@@ -12,6 +12,6 @@ MIDDLEWARE = [
 
 SECRET_KEY = "*"
 
-ROOT_URLCONF = "*"
+ROOT_URLCONF = "polls.urls"
 
 DATABASES = {"default": {"ENGINE": "django.db.backends.sqlite3", "NAME": ":memory:"}}

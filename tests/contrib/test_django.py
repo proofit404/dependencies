@@ -1,29 +1,22 @@
-import pytest
-from polls.models import Question
-
-
-@pytest.mark.urls("urlconf_dispatch_request")
 def test_dispatch_request(client):
     """Dispatch request to the `Injector` subclass attributes."""
 
-    response = client.get("/comments/1/test/")
+    response = client.get("/test_dispatch_request/1/test/")
     assert response.status_code == 200
     assert response.content == b"<h1>OK</h1>"
 
 
-@pytest.mark.urls("urlconf_inject_user")
 def test_inject_user(client):
     """Access request user property."""
 
-    response = client.get("/comments/1/test/")
+    response = client.get("/test_inject_user/1/test/")
     assert response.status_code == 200
     assert response.content == b"<h1>OK</h1>"
 
 
-@pytest.mark.urls("urlconf_pass_kwargs_to_the_service")
-def test_pass_kwargs_to_the_service(client):
+def test_pass_kwargs(client):
     """Pass kwargs to the nested service object."""
 
-    response = client.get("/comments/1/test/")
+    response = client.get("/test_pass_kwargs/1/test/")
     assert response.status_code == 200
     assert response.content == b"<h1>OK</h1>"

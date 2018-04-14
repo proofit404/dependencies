@@ -2,7 +2,7 @@ from __future__ import absolute_import
 
 from dependencies import this
 from django.http import HttpResponse
-from django.views.generic import CreateView, View
+from django.views.generic import View
 
 
 def view(injector):
