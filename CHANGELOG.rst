@@ -4,6 +4,12 @@
 Changelog
 ---------
 
+0.15 (2018-00-00)
++++++++++++++++++
+
+- Drop python 2.6 and 3.4 support.
+- Add django, celery and pytest contrib packages.
+
 0.14 (2018-04-13)
 +++++++++++++++++
 
