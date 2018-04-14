@@ -4,8 +4,8 @@ dependencies.contrib.django
 
 This module implements injectable Django view.
 
-:copyright: (c) 2016-2017 by Artem Malyshev.
-:license: LGPL-3, see LICENSE for more details.
+:copyright: (c) 2016-2018 by Artem Malyshev.
+:license: BSD, see LICENSE for more details.
 """
 
 from __future__ import absolute_import
