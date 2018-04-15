@@ -1,7 +1,7 @@
 from dependencies import Injector, this
 from dependencies.contrib.django import view
 
-from .commands import DispatchRequest, InjectKwargs, InjectUser
+from .commands import DispatchRequest, InjectKwargs, InjectSelf, InjectUser
 
 
 @view
@@ -38,3 +38,10 @@ class KwargsView(Injector):
     get = this.command.do
     pk = this.kwargs["pk"]  # TODO: partial(int, this...
     slug = this.kwargs["slug"]
+
+
+@view
+class SelfView(Injector):
+
+    command = InjectSelf
+    get = this.command.do

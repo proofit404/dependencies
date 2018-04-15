@@ -76,3 +76,11 @@ def test_inject_kwargs(client):
     response = client.get("/test_inject_kwargs/1/test/")
     assert response.status_code == 200
     assert response.content == b"<h1>OK</h1>"
+
+
+def test_inject_self(client):
+    """Access generated view instance."""
+
+    response = client.get("/test_inject_self/1/test/")
+    assert response.status_code == 200
+    assert response.content == b"<h1>OK</h1>"

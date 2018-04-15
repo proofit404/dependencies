@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AnonymousUser
 from django.http import HttpResponse
+from django.views.generic import View
 
 
 class DispatchRequest(object):
@@ -43,4 +44,16 @@ class InjectKwargs(object):
 
         assert self.pk == "1"
         assert self.slug == "test"
+        return HttpResponse("<h1>OK</h1>")
+
+
+class InjectSelf(object):
+
+    def __init__(self, view):
+
+        self.view = view
+
+    def do(self):
+
+        assert isinstance(self.view, View)
         return HttpResponse("<h1>OK</h1>")

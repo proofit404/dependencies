@@ -16,7 +16,11 @@ def view(injector):
             def get(self, request, *args, **kwargs):
 
                 return injector.let(
-                    request=request, args=args, kwargs=kwargs, user=this.request.user
+                    view=self,
+                    request=request,
+                    args=args,
+                    kwargs=kwargs,
+                    user=this.request.user,
                 ).get()
 
         if "post" in injector:
@@ -24,7 +28,11 @@ def view(injector):
             def post(self, request, *args, **kwargs):
 
                 return injector.let(
-                    request=request, args=args, kwargs=kwargs, user=this.request.user
+                    view=self,
+                    request=request,
+                    args=args,
+                    kwargs=kwargs,
+                    user=this.request.user,
                 ).post()
 
         if "put" in injector:
@@ -32,7 +40,11 @@ def view(injector):
             def put(self, request, *args, **kwargs):
 
                 return injector.let(
-                    request=request, args=args, kwargs=kwargs, user=this.request.user
+                    view=self,
+                    request=request,
+                    args=args,
+                    kwargs=kwargs,
+                    user=this.request.user,
                 ).put()
 
         if "patch" in injector:
@@ -40,7 +52,11 @@ def view(injector):
             def patch(self, request, *args, **kwargs):
 
                 return injector.let(
-                    request=request, args=args, kwargs=kwargs, user=this.request.user
+                    view=self,
+                    request=request,
+                    args=args,
+                    kwargs=kwargs,
+                    user=this.request.user,
                 ).patch()
 
         if "delete" in injector:
@@ -48,7 +64,11 @@ def view(injector):
             def delete(self, request, *args, **kwargs):
 
                 return injector.let(
-                    request=request, args=args, kwargs=kwargs, user=this.request.user
+                    view=self,
+                    request=request,
+                    args=args,
+                    kwargs=kwargs,
+                    user=this.request.user,
                 ).delete()
 
         if "head" in injector:
@@ -56,7 +76,11 @@ def view(injector):
             def head(self, request, *args, **kwargs):
 
                 return injector.let(
-                    request=request, args=args, kwargs=kwargs, user=this.request.user
+                    view=self,
+                    request=request,
+                    args=args,
+                    kwargs=kwargs,
+                    user=this.request.user,
                 ).head()
 
         if "options" in injector:
@@ -64,7 +88,11 @@ def view(injector):
             def options(self, request, *args, **kwargs):
 
                 return injector.let(
-                    request=request, args=args, kwargs=kwargs, user=this.request.user
+                    view=self,
+                    request=request,
+                    args=args,
+                    kwargs=kwargs,
+                    user=this.request.user,
                 ).options()
 
         if "trace" in injector:
@@ -72,7 +100,11 @@ def view(injector):
             def trace(self, request, *args, **kwargs):
 
                 return injector.let(
-                    request=request, args=args, kwargs=kwargs, user=this.request.user
+                    view=self,
+                    request=request,
+                    args=args,
+                    kwargs=kwargs,
+                    user=this.request.user,
                 ).trace()
 
     return injector.let(as_view=Handler.as_view)
