@@ -1,7 +1,6 @@
 from __future__ import absolute_import
 
 from dependencies import this
-from django.http import HttpResponse
 from django.views.generic import View
 
 
@@ -20,9 +19,7 @@ def view(injector):
 
         def get(self, request, *args, **kwargs):
 
-            result = self.handle(request, args, kwargs).get()
-            # FIXME: All http responses.
-            return HttpResponse(result)
+            return self.handle(request, args, kwargs).get()
 
     # FIXME: All http methods.
     return injector.let(as_view=Handler.as_view)

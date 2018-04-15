@@ -1,4 +1,5 @@
 from django.contrib.auth.models import AnonymousUser
+from django.http import HttpResponse
 
 
 class DispatchRequest(object):
@@ -14,7 +15,7 @@ class DispatchRequest(object):
         assert self.request.path == "/test_dispatch_request/1/test/"
         assert self.args == ("1", "test")
         assert self.kwargs == {}
-        return "<h1>OK</h1>"
+        return HttpResponse("<h1>OK</h1>")
 
 
 class InjectUser(object):
@@ -26,7 +27,7 @@ class InjectUser(object):
     def get(self):
 
         assert isinstance(self.user, AnonymousUser)
-        return "<h1>OK</h1>"
+        return HttpResponse("<h1>OK</h1>")
 
 
 class PassKwargs(object):
@@ -51,4 +52,4 @@ class Service(object):
 
         assert self.pk == "1"
         assert self.slug == "test"
-        return "<h1>OK</h1>"
+        return HttpResponse("<h1>OK</h1>")
