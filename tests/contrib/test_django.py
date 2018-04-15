@@ -51,7 +51,7 @@ def test_inject_self(client, method):
     assert response.content == b"<h1>OK</h1>"
 
 
-def test_override_method_names(client):
+def test_override_method_names():
     """Define http method names in the generated `Handler`."""
 
     @view
@@ -64,3 +64,9 @@ def test_override_method_names(client):
     viewfunc = ContainerView.as_view()
 
     assert viewfunc.view_class.http_method_names == ["head", "options", "get", "post"]
+
+
+def test_docstring():
+    """Access `view` docstring."""
+
+    assert view.__doc__ == "Create Django class-based view from injector class."

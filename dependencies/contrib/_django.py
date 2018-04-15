@@ -5,7 +5,7 @@ from django.views.generic import View
 
 
 def view(injector):
-    """FIXME: Write docstring."""
+    """Create Django class-based view from injector class."""
 
     class Handler(View):
 
