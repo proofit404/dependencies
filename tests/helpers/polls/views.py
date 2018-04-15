@@ -4,10 +4,8 @@ from dependencies.contrib.django import view
 from .commands import DispatchRequest, InjectKwargs, InjectSelf, InjectUser
 
 
-@view
-class DispatchView(Injector):
+class Methods(Injector):
 
-    command = DispatchRequest
     get = this.command.do
     post = this.command.do
     put = this.command.do
@@ -19,29 +17,32 @@ class DispatchView(Injector):
 
 
 @view
+class DispatchView(Methods):
+
+    command = DispatchRequest
+
+
+@view
 class EmptyView(Injector):
 
     pass
 
 
 @view
-class UserView(Injector):
+class UserView(Methods):
 
     command = InjectUser
-    get = this.command.do
 
 
 @view
-class KwargsView(Injector):
+class KwargsView(Methods):
 
     command = InjectKwargs
-    get = this.command.do
     pk = this.kwargs["pk"]  # TODO: partial(int, this...
     slug = this.kwargs["slug"]
 
 
 @view
-class SelfView(Injector):
+class SelfView(Methods):
 
     command = InjectSelf
-    get = this.command.do

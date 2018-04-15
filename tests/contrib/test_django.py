@@ -1,86 +1,49 @@
-def test_dispatch_request(client):
+import pytest
+from django.views.generic import View
+
+
+@pytest.mark.parametrize("method", set(View.http_method_names) - {"head"})
+def test_dispatch_request(client, method):
     """Dispatch request to the `Injector` subclass attributes."""
 
-    response = client.get("/test_dispatch_request/1/test/")
-    assert response.status_code == 200
-    assert response.content == b"<h1>OK</h1>"
-
-    response = client.post("/test_dispatch_request/1/test/")
-    assert response.status_code == 200
-    assert response.content == b"<h1>OK</h1>"
-
-    response = client.put("/test_dispatch_request/1/test/")
-    assert response.status_code == 200
-    assert response.content == b"<h1>OK</h1>"
-
-    response = client.patch("/test_dispatch_request/1/test/")
-    assert response.status_code == 200
-    assert response.content == b"<h1>OK</h1>"
-
-    response = client.delete("/test_dispatch_request/1/test/")
-    assert response.status_code == 200
-    assert response.content == b"<h1>OK</h1>"
-
-    response = client.head("/test_dispatch_request/1/test/")
-    assert response.status_code == 200
-    assert response.content == b""
-
-    response = client.options("/test_dispatch_request/1/test/")
-    assert response.status_code == 200
-    assert response.content == b"<h1>OK</h1>"
-
-    response = client.trace("/test_dispatch_request/1/test/")
+    response = getattr(client, method)("/test_dispatch_request/1/test/")
     assert response.status_code == 200
     assert response.content == b"<h1>OK</h1>"
 
 
-def test_empty_request(client):
+@pytest.mark.parametrize("method", set(View.http_method_names) - {"options"})
+def test_empty_request(client, method):
     """
     Use method not allowed, if `Injector` subclass doesn't define an
     attribute for this method.
     """
 
-    response = client.get("/test_empty_request/1/test/")
-    assert response.status_code == 405
-
-    response = client.post("/test_empty_request/1/test/")
-    assert response.status_code == 405
-
-    response = client.put("/test_empty_request/1/test/")
-    assert response.status_code == 405
-
-    response = client.patch("/test_empty_request/1/test/")
-    assert response.status_code == 405
-
-    response = client.delete("/test_empty_request/1/test/")
-    assert response.status_code == 405
-
-    response = client.head("/test_empty_request/1/test/")
-    assert response.status_code == 405
-
-    response = client.trace("/test_empty_request/1/test/")
+    response = getattr(client, method)("/test_empty_request/1/test/")
     assert response.status_code == 405
 
 
-def test_inject_user(client):
+@pytest.mark.parametrize("method", set(View.http_method_names) - {"head"})
+def test_inject_user(client, method):
     """Access request user property."""
 
-    response = client.get("/test_inject_user/1/test/")
+    response = getattr(client, method)("/test_inject_user/1/test/")
     assert response.status_code == 200
     assert response.content == b"<h1>OK</h1>"
 
 
-def test_inject_kwargs(client):
+@pytest.mark.parametrize("method", set(View.http_method_names) - {"head"})
+def test_inject_kwargs(client, method):
     """Pass kwargs to the nested service object."""
 
-    response = client.get("/test_inject_kwargs/1/test/")
+    response = getattr(client, method)("/test_inject_kwargs/1/test/")
     assert response.status_code == 200
     assert response.content == b"<h1>OK</h1>"
 
 
-def test_inject_self(client):
+@pytest.mark.parametrize("method", set(View.http_method_names) - {"head"})
+def test_inject_self(client, method):
     """Access generated view instance."""
 
-    response = client.get("/test_inject_self/1/test/")
+    response = getattr(client, method)("/test_inject_self/1/test/")
     assert response.status_code == 200
     assert response.content == b"<h1>OK</h1>"
