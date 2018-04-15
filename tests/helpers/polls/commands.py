@@ -10,7 +10,7 @@ class DispatchRequest(object):
         self.args = args
         self.kwargs = kwargs
 
-    def get(self):
+    def do(self):
 
         assert self.request.path == "/test_dispatch_request/1/test/"
         assert self.args == ("1", "test")
@@ -24,7 +24,7 @@ class InjectUser(object):
 
         self.user = user
 
-    def get(self):
+    def do(self):
 
         assert isinstance(self.user, AnonymousUser)
         return HttpResponse("<h1>OK</h1>")
@@ -32,23 +32,12 @@ class InjectUser(object):
 
 class PassKwargs(object):
 
-    def __init__(self, service):
-
-        self.service = service
-
-    def get(self):
-
-        return self.service.list()
-
-
-class Service(object):
-
     def __init__(self, pk, slug):
 
         self.pk = pk
         self.slug = slug
 
-    def list(self):
+    def do(self):
 
         assert self.pk == "1"
         assert self.slug == "test"

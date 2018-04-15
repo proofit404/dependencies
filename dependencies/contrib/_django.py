@@ -11,15 +11,11 @@ def view(injector):
 
     class Handler(View):
 
-        def handle(self, request, args, kwargs):
+        def get(self, request, *args, **kwargs):
 
             return injector.let(
                 request=request, args=args, kwargs=kwargs, user=this.request.user
-            ).view
-
-        def get(self, request, *args, **kwargs):
-
-            return self.handle(request, args, kwargs).get()
+            ).get()
 
     # FIXME: All http methods.
     return injector.let(as_view=Handler.as_view)
