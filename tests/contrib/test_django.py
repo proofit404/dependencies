@@ -70,9 +70,9 @@ def test_inject_user(client):
     assert response.content == b"<h1>OK</h1>"
 
 
-def test_pass_kwargs(client):
+def test_inject_kwargs(client):
     """Pass kwargs to the nested service object."""
 
-    response = client.get("/test_pass_kwargs/1/test/")
+    response = client.get("/test_inject_kwargs/1/test/")
     assert response.status_code == 200
     assert response.content == b"<h1>OK</h1>"

@@ -1,21 +1,21 @@
 from dependencies import Injector, this
 from dependencies.contrib.django import view
 
-from .commands import DispatchRequest, InjectUser, PassKwargs
+from .commands import DispatchRequest, InjectKwargs, InjectUser
 
 
 @view
 class DispatchView(Injector):
 
-    view = DispatchRequest
-    get = this.view.do
-    post = this.view.do
-    put = this.view.do
-    patch = this.view.do
-    delete = this.view.do
-    head = this.view.do
-    options = this.view.do
-    trace = this.view.do
+    command = DispatchRequest
+    get = this.command.do
+    post = this.command.do
+    put = this.command.do
+    patch = this.command.do
+    delete = this.command.do
+    head = this.command.do
+    options = this.command.do
+    trace = this.command.do
 
 
 @view
@@ -27,14 +27,14 @@ class EmptyView(Injector):
 @view
 class UserView(Injector):
 
-    view = InjectUser
-    get = this.view.do
+    command = InjectUser
+    get = this.command.do
 
 
 @view
 class KwargsView(Injector):
 
-    view = PassKwargs
-    get = this.view.do
+    command = InjectKwargs
+    get = this.command.do
     pk = this.kwargs["pk"]  # TODO: partial(int, this...
     slug = this.kwargs["slug"]

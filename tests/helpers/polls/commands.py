@@ -32,7 +32,7 @@ class InjectUser(object):
         return HttpResponse("<h1>OK</h1>")
 
 
-class PassKwargs(object):
+class InjectKwargs(object):
 
     def __init__(self, pk, slug):
 
