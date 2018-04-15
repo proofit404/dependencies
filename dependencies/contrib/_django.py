@@ -7,11 +7,13 @@ from django.views.generic import View
 def view(injector):
     """FIXME: Write docstring."""
 
-    # FIXME: Assert injector has view attribute.
-
     class Handler(View):
 
+        http_method_names = ["head", "options"]
+
         if "get" in injector:
+
+            http_method_names.append("get")
 
             def get(self, request, *args, **kwargs):
 
@@ -25,6 +27,8 @@ def view(injector):
 
         if "post" in injector:
 
+            http_method_names.append("post")
+
             def post(self, request, *args, **kwargs):
 
                 return injector.let(
@@ -36,6 +40,8 @@ def view(injector):
                 ).post()
 
         if "put" in injector:
+
+            http_method_names.append("put")
 
             def put(self, request, *args, **kwargs):
 
@@ -49,6 +55,8 @@ def view(injector):
 
         if "patch" in injector:
 
+            http_method_names.append("patch")
+
             def patch(self, request, *args, **kwargs):
 
                 return injector.let(
@@ -60,6 +68,8 @@ def view(injector):
                 ).patch()
 
         if "delete" in injector:
+
+            http_method_names.append("delete")
 
             def delete(self, request, *args, **kwargs):
 
@@ -96,6 +106,8 @@ def view(injector):
                 ).options()
 
         if "trace" in injector:
+
+            http_method_names.append("trace")
 
             def trace(self, request, *args, **kwargs):
 
