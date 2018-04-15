@@ -12,7 +12,9 @@ class DispatchRequest(object):
 
     def do(self):
 
-        assert self.request.path == "/test_dispatch_request/1/test/"
+        assert self.request.path in {
+            "/test_dispatch_request/1/test/", "/test_empty_request/1/test/"
+        }
         assert self.args == ("1", "test")
         assert self.kwargs == {}
         return HttpResponse("<h1>OK</h1>")

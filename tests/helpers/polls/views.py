@@ -9,6 +9,19 @@ class DispatchView(Injector):
 
     view = DispatchRequest
     get = this.view.do
+    post = this.view.do
+    put = this.view.do
+    patch = this.view.do
+    delete = this.view.do
+    head = this.view.do
+    options = this.view.do
+    trace = this.view.do
+
+
+@view
+class EmptyView(Injector):
+
+    pass
 
 
 @view
