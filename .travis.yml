@@ -25,9 +25,10 @@ cache:
   - $HOME/.cache/pip/wheels
 install:
   - pip install -U pip wheel setuptools
-  - pip install .
+  - pip install $DJANGO_VERSION
   - pip install -r requirements/qa.txt
   - pip install -r requirements/ci.txt
+  - pip install .
 script:
   - coverage run -m pytest
 after_success:
