@@ -181,7 +181,7 @@ def test_documentation():
         name = "foo.bar.baz"
         run = lambda: None  # noqa: E731
 
-    # FIXME: assert Container.__doc__ == 'Foo bar baz task.'
+    assert Container.__bases__[1].__doc__ == "Foo bar baz task."
     assert (
         Container.signature.__doc__
         == """
