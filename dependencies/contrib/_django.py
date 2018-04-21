@@ -11,8 +11,7 @@ def view(injector):
 
     handler = create_handler(View)
     apply_http_methods(handler, injector)
-    handler.http_method_names = list(handler.http_method_names.keys())
-
+    finalize_http_methods(handler)
     return injector.let(as_view=handler.as_view)
 
 
@@ -27,17 +26,23 @@ def create_handler(from_class):
 def apply_http_methods(handler, injector):
 
     for method in ["get", "post", "put", "patch", "delete", "head", "options", "trace"]:
-
         if method in injector:
 
             def __view(self, request, *args, **kwargs):
-                return injector.let(
+                ns = injector.let(
                     view=self,
                     request=request,
                     args=args,
                     kwargs=kwargs,
                     user=this.request.user,
-                ).trace()
+                )
+                return getattr(ns, __view.method)()
 
+            __view.method = method
             handler.http_method_names[method] = None
             setattr(handler, method, __view)
+
+
+def finalize_http_methods(handler):
+
+    handler.http_method_names = list(handler.http_method_names.keys())
