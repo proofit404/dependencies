@@ -1,5 +1,7 @@
 from __future__ import absolute_import
 
+from collections import OrderedDict
+
 from dependencies import this
 from django.views.generic import View
 
@@ -7,110 +9,28 @@ from django.views.generic import View
 def view(injector):
     """Create Django class-based view from injector class."""
 
-    class Handler(View):
+    handler = create_handler(View)
+    apply_http_methods(handler, injector)
+    handler.http_method_names = list(handler.http_method_names.keys())
 
-        http_method_names = ["head", "options"]
+    return injector.let(as_view=handler.as_view)
 
-        if "get" in injector:
 
-            http_method_names.append("get")
+def create_handler(from_class):
 
-            def get(self, request, *args, **kwargs):
+    class Handler(from_class):
+        http_method_names = OrderedDict.fromkeys(["head", "options"])
 
-                return injector.let(
-                    view=self,
-                    request=request,
-                    args=args,
-                    kwargs=kwargs,
-                    user=this.request.user,
-                ).get()
+    return Handler
 
-        if "post" in injector:
 
-            http_method_names.append("post")
+def apply_http_methods(handler, injector):
 
-            def post(self, request, *args, **kwargs):
+    for method in ["get", "post", "put", "patch", "delete", "head", "options", "trace"]:
 
-                return injector.let(
-                    view=self,
-                    request=request,
-                    args=args,
-                    kwargs=kwargs,
-                    user=this.request.user,
-                ).post()
+        if method in injector:
 
-        if "put" in injector:
-
-            http_method_names.append("put")
-
-            def put(self, request, *args, **kwargs):
-
-                return injector.let(
-                    view=self,
-                    request=request,
-                    args=args,
-                    kwargs=kwargs,
-                    user=this.request.user,
-                ).put()
-
-        if "patch" in injector:
-
-            http_method_names.append("patch")
-
-            def patch(self, request, *args, **kwargs):
-
-                return injector.let(
-                    view=self,
-                    request=request,
-                    args=args,
-                    kwargs=kwargs,
-                    user=this.request.user,
-                ).patch()
-
-        if "delete" in injector:
-
-            http_method_names.append("delete")
-
-            def delete(self, request, *args, **kwargs):
-
-                return injector.let(
-                    view=self,
-                    request=request,
-                    args=args,
-                    kwargs=kwargs,
-                    user=this.request.user,
-                ).delete()
-
-        if "head" in injector:
-
-            def head(self, request, *args, **kwargs):
-
-                return injector.let(
-                    view=self,
-                    request=request,
-                    args=args,
-                    kwargs=kwargs,
-                    user=this.request.user,
-                ).head()
-
-        if "options" in injector:
-
-            def options(self, request, *args, **kwargs):
-
-                return injector.let(
-                    view=self,
-                    request=request,
-                    args=args,
-                    kwargs=kwargs,
-                    user=this.request.user,
-                ).options()
-
-        if "trace" in injector:
-
-            http_method_names.append("trace")
-
-            def trace(self, request, *args, **kwargs):
-
+            def __view(self, request, *args, **kwargs):
                 return injector.let(
                     view=self,
                     request=request,
@@ -119,4 +39,5 @@ def view(injector):
                     user=this.request.user,
                 ).trace()
 
-    return injector.let(as_view=Handler.as_view)
+            handler.http_method_names[method] = None
+            setattr(handler, method, __view)
