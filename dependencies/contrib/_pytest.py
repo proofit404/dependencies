@@ -2,8 +2,6 @@ from __future__ import absolute_import
 
 import pytest
 
-# TODO: `parametrize` function.
-
 
 def register(injector):
     """Register Py.test fixture performing injection in it's scope."""
