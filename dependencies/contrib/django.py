@@ -8,6 +8,6 @@ This module implements injectable Django view.
 :license: BSD, see LICENSE for more details.
 """
 
-from ._django import view
+from ._django import form_view, view
 
-__all__ = ["view"]
+__all__ = ["form_view", "view"]

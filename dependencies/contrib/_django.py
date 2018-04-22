@@ -1,7 +1,7 @@
 from __future__ import absolute_import
 
 from dependencies import this
-from django.views.generic import View
+from django.views.generic import FormView, View
 
 
 def view(injector):
@@ -9,6 +9,14 @@ def view(injector):
 
     handler = create_handler(View)
     apply_http_methods(handler, injector)
+    return injector.let(as_view=handler.as_view)
+
+
+def form_view(injector):
+    """Create Django form processing class-based view from injector class."""
+
+    handler = create_handler(FormView)
+    apply_form_methods(handler, injector)
     return injector.let(as_view=handler.as_view)
 
 
@@ -39,4 +47,25 @@ def apply_http_methods(handler, injector):
             setattr(handler, method, __view)
 
 
+def apply_form_methods(handler, injector):
 
+    handler.form_class = injector.form_cls
+    handler.template_name = injector.template_name
+    handler.success_url = injector.success_url
+
+    for method in ["form_valid", "form_invalid"]:
+        if method in injector:
+
+            def __method(self, form):
+                ns = injector.let(
+                    view=self,
+                    form=form,
+                    request=this.view.request,
+                    args=this.view.args,
+                    kwargs=this.view.kwargs,
+                    user=this.request.user,
+                )
+                return getattr(ns, __method.method)()
+
+            __method.method = method
+            setattr(handler, method, __method)

@@ -1,7 +1,14 @@
 from dependencies import Injector, this
-from dependencies.contrib.django import view
+from dependencies.contrib.django import form_view, view
 
-from .commands import DispatchRequest, InjectKwargs, InjectSelf, InjectUser
+from .commands import (
+    DispatchRequest,
+    InjectKwargs,
+    InjectSelf,
+    InjectUser,
+    ProcessQuestion,
+)
+from .forms import QuestionForm
 
 
 class Methods(Injector):
@@ -46,3 +53,14 @@ class KwargsView(Methods):
 class SelfView(Methods):
 
     command = InjectSelf
+
+
+@form_view
+class QuestionFormView(Injector):
+
+    form_cls = QuestionForm
+    template_name = "question.html"
+    success_url = "/thanks/"
+    form_valid = this.command.handle_form
+    form_invalid = this.command.handle_error
+    command = ProcessQuestion

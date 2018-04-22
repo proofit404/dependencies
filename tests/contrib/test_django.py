@@ -1,6 +1,6 @@
 import pytest
 from dependencies import Injector
-from dependencies.contrib.django import view
+from dependencies.contrib.django import form_view, view
 from django.views.generic import View
 
 
@@ -51,12 +51,28 @@ def test_inject_self(client, method):
     assert response.content == b"<h1>OK</h1>"
 
 
+def test_form_view(client):
+    """Retrieve and submit form view created from injector."""
 
+    response = client.get("/test_form_view/")
+    assert response.status_code == 200
 
+    response = client.post(
+        "/test_form_view/", {"question_text": "foo", "pub_date": "12/23/2008 00:12"}
+    )
+    assert response.status_code == 200
+    assert response.content == b"<h1>OK</h1>"
 
+    response = client.post("/test_form_view/", {"question_text": "foo"})
+    assert response.status_code == 200
+    assert response.content == b"<h1>OK</h1>"
 
 
 def test_docstring():
     """Access `view` docstring."""
 
     assert view.__doc__ == "Create Django class-based view from injector class."
+    assert (
+        form_view.__doc__
+        == "Create Django form processing class-based view from injector class."
+    )

@@ -1,4 +1,5 @@
 from django.contrib.auth.models import AnonymousUser
+from django.forms import Form
 from django.http import HttpResponse
 from django.views.generic import View
 
@@ -57,3 +58,27 @@ class InjectSelf(object):
 
         assert isinstance(self.view, View)
         return HttpResponse("<h1>OK</h1>")
+
+
+class ProcessQuestion(object):
+
+    def __init__(self, view, form, request, args, kwargs, user):
+
+        self.view = view
+        self.form = form
+        self.request = request
+        self.args = args
+        self.kwargs = kwargs
+        self.user = user
+
+    def handle_form(self):
+
+        assert isinstance(self.view, View)
+        assert isinstance(self.form, Form)
+        assert self.request.path == "/test_form_view/"
+        assert self.args == ()
+        assert self.kwargs == {}
+        assert isinstance(self.user, AnonymousUser)
+        return HttpResponse("<h1>OK</h1>")
+
+    handle_error = handle_form
