@@ -51,19 +51,9 @@ def test_inject_self(client, method):
     assert response.content == b"<h1>OK</h1>"
 
 
-def test_override_method_names():
-    """Define http method names in the generated `Handler`."""
 
-    @view
-    class ContainerView(Injector):
 
-        get = lambda: None
-        post = lambda: None
-        head = lambda: None
 
-    viewfunc = ContainerView.as_view()
-
-    assert viewfunc.view_class.http_method_names == ["head", "options", "get", "post"]
 
 
 def test_docstring():
