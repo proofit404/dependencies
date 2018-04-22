@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 from rest_framework.views import APIView
 
 from ._django import apply_http_methods, create_handler
