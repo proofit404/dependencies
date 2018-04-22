@@ -47,6 +47,9 @@ def apply_http_methods(handler, injector):
             setattr(handler, method, __view)
 
 
+# TODO: allow to override http_method_not_allowed?
+
+
 def apply_form_methods(handler, injector):
 
     handler.form_class = injector.form_cls
@@ -69,3 +72,18 @@ def apply_form_methods(handler, injector):
 
             __method.method = method
             setattr(handler, method, __method)
+
+
+# TODO:
+#
+# TemplateResponseMixin.template_name
+# TemplateResponseMixin.template_engine
+# TemplateResponseMixin.response_class
+# TemplateResponseMixin.content_type
+#
+# FormMixin.initial
+# FormMixin.form_class
+# FormMixin.success_url
+# FormMixin.prefix
+#
+# ContextMixin.extra_context
