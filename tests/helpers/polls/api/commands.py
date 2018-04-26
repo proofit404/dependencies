@@ -12,3 +12,10 @@ class QuestionsStat(object):
     def do(self):
 
         return Response({"details": "ok"})
+
+
+class QuestionsGenericStat(object):
+
+    def do(self):
+
+        return Response({"details": "ok"})

@@ -15,3 +15,13 @@ def test_dispatch_request():
     response = client.get("/api/questions-stat/", {"last": True}, format="json")
     assert response.status_code == HTTP_200_OK
     assert response.json() == {"details": "ok"}
+
+
+def test_dispatch_request_generic_view():
+    """
+    Dispatch request to the dynamically created generic view subclass.
+    """
+
+    response = client.get("/api/questions-generic-stat/", format="json")
+    assert response.status_code == HTTP_200_OK
+    assert response.json() == {"details": "ok"}
