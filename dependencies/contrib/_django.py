@@ -50,9 +50,6 @@ def apply_http_methods(handler, injector):
             setattr(handler, method, locals_hack())
 
 
-# TODO: allow to override http_method_not_allowed?
-
-
 def apply_form_methods(handler, injector):
 
     handler.form_class = injector.form_cls
