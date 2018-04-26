@@ -81,4 +81,12 @@ class ProcessQuestion(object):
         assert isinstance(self.user, AnonymousUser)
         return HttpResponse("<h1>OK</h1>")
 
-    handle_error = handle_form
+    def handle_error(self):
+
+        assert isinstance(self.view, View)
+        assert isinstance(self.form, Form)
+        assert self.request.path == "/test_form_view/"
+        assert self.args == ()
+        assert self.kwargs == {}
+        assert isinstance(self.user, AnonymousUser)
+        return HttpResponse("<h1>ERROR</h1>")

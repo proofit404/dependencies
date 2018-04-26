@@ -1,5 +1,6 @@
 from dependencies import Injector, this
 from dependencies.contrib.django import form_view, view
+from django.template.response import TemplateResponse
 
 from .commands import (
     DispatchRequest,
@@ -55,6 +56,11 @@ class SelfView(Methods):
     command = InjectSelf
 
 
+class TestTemplateResponse(TemplateResponse):
+
+    pass
+
+
 @form_view
 class QuestionFormView(Injector):
 
@@ -64,3 +70,10 @@ class QuestionFormView(Injector):
     form_valid = this.command.handle_form
     form_invalid = this.command.handle_error
     command = ProcessQuestion
+
+    template_engine = "default"
+    response_cls = TestTemplateResponse
+    content_type = "text/html"
+    form_initial_data = {"is_testing": True}
+    form_prefix = "test"
+    extra_context = {"extra_var": "extra-var"}

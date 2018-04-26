@@ -17,5 +17,9 @@ ROOT_URLCONF = "polls.urls"
 DATABASES = {"default": {"ENGINE": "django.db.backends.sqlite3", "NAME": ":memory:"}}
 
 TEMPLATES = [
-    {"BACKEND": "django.template.backends.django.DjangoTemplates", "APP_DIRS": True}
+    {
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "APP_DIRS": True,
+        "NAME": "default",
+    }
 ]
