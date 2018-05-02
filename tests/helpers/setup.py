@@ -6,7 +6,7 @@ setup(name="django_settings_module", py_modules=["django_settings_module"])
 
 setup(
     name="polls",
-    packages=["polls", "polls.migrations", "polls.api"],
+    packages=["polls", "polls.api"],
     include_package_data=True,
     package_data={"polls": ["templates/*.html"]},
 )
