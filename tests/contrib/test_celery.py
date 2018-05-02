@@ -168,7 +168,7 @@ def u4kZae2NSFhE(container):
     return sign
 
 
-def test_documentation():
+def test_docstrings():
     """Access `task` and `shared_task` docstrings."""
 
     assert task.__doc__ == "Create Celery task from injector class."

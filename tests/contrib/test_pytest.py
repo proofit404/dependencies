@@ -54,7 +54,7 @@ def test_register_fixture(fixture_name):
     assert fixture_name.sum() == 6
 
 
-def test_documentation():
+def test_docstrings():
     """
     `register` decorator and `require` marker should have proper
     documentation strings.

@@ -85,7 +85,7 @@ def test_form_view_attributes():
     assert view_class.initial == {"is_testing": True}
 
 
-def test_documentation():
+def test_docstrings():
     """Access `view` and `form_view` docstring."""
 
     assert view.__doc__ == "Create Django class-based view from injector class."

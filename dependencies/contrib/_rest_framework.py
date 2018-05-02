@@ -15,7 +15,7 @@ def api_view(injector):
 
 
 def generic_api_view(injector):
-    """FIXME"""
+    """Create DRF generic class-based API view from injector class."""
 
     handler = create_handler(GenericAPIView)
     apply_http_methods(handler, injector)
