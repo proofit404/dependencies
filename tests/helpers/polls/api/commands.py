@@ -20,6 +20,10 @@ class UserOperations(object):
 
         self.view = view
 
+    def login(self):
+
+        raise Exception("Should not got there")
+
     def retrieve(self):
 
         instance = self.view.get_object()

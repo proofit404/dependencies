@@ -3,6 +3,7 @@ from dependencies.contrib.rest_framework import api_view, generic_api_view
 from django.contrib.auth.models import User
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.pagination import LimitOffsetPagination
+from rest_framework.permissions import IsAuthenticated
 
 from .commands import QuestionsStat, UserOperations
 from .filtersets import UserFilter
@@ -14,6 +15,15 @@ class QuestionsStatView(Injector):
 
     get = this.command.do
     command = QuestionsStat
+
+
+@api_view
+class UserLogin(Injector):
+
+    get = this.command.login
+    command = UserOperations
+
+    permission_classes = (IsAuthenticated,)
 
 
 @generic_api_view

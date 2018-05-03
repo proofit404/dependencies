@@ -11,6 +11,7 @@ def api_view(injector):
 
     handler = create_handler(APIView)
     apply_http_methods(handler, injector)
+    apply_api_view_methods(handler, injector)
     return handler
 
 
@@ -19,11 +20,18 @@ def generic_api_view(injector):
 
     handler = create_handler(GenericAPIView)
     apply_http_methods(handler, injector)
-    apply_generic_view_methods(handler, injector)
+    apply_api_view_methods(handler, injector)
+    apply_generic_api_view_methods(handler, injector)
     return handler
 
 
-def apply_generic_view_methods(handler, injector):
+def apply_api_view_methods(handler, injector):
+
+    if "permission_classes" in injector:
+        handler.permission_classes = injector.permission_classes
+
+
+def apply_generic_api_view_methods(handler, injector):
 
     handler.queryset = injector.queryset
     handler.serializer_class = injector.serializer_cls
@@ -45,7 +53,6 @@ def apply_generic_view_methods(handler, injector):
 # APIView.parser_classes
 # APIView.authentication_classes
 # APIView.throttle_classes
-# APIView.permission_classes
 # APIView.content_negotiation_class
 # APIView.metadata_class
 # APIView.versioning_class

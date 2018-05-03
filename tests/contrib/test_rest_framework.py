@@ -1,6 +1,6 @@
 from dependencies.contrib.rest_framework import api_view, generic_api_view
 from django.contrib.auth.models import User
-from rest_framework.status import HTTP_200_OK
+from rest_framework.status import HTTP_200_OK, HTTP_403_FORBIDDEN
 from rest_framework.test import APIClient
 
 client = APIClient()
@@ -17,6 +17,9 @@ def test_dispatch_request():
     response = client.get("/api/questions-stat/", {"last": True}, format="json")
     assert response.status_code == HTTP_200_OK
     assert response.json() == {"details": "ok"}
+
+    response = client.get("/api/login/")
+    assert response.status_code == HTTP_403_FORBIDDEN
 
 
 def test_dispatch_request_generic_view_retrieve(db):
