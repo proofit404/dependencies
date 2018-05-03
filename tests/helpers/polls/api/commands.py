@@ -14,8 +14,21 @@ class QuestionsStat(object):
         return Response({"details": "ok"})
 
 
-class QuestionsGenericStat(object):
+class UserOperations(object):
 
-    def do(self):
+    def __init__(self, view):
 
-        return Response({"details": "ok"})
+        self.view = view
+
+    def retrieve(self):
+
+        instance = self.view.get_object()
+        serializer = self.view.get_serializer(instance)
+        return Response(serializer.data)
+
+    def list(self):
+
+        queryset = self.view.filter_queryset(self.view.get_queryset())
+        page = self.view.paginate_queryset(queryset)
+        serializer = self.view.get_serializer(page, many=True)
+        return self.view.get_paginated_response(serializer.data)

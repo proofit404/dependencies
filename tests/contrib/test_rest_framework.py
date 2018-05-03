@@ -1,4 +1,5 @@
 from dependencies.contrib.rest_framework import api_view, generic_api_view
+from django.contrib.auth.models import User
 from rest_framework.status import HTTP_200_OK
 from rest_framework.test import APIClient
 
@@ -18,14 +19,47 @@ def test_dispatch_request():
     assert response.json() == {"details": "ok"}
 
 
-def test_dispatch_request_generic_view():
+def test_dispatch_request_generic_view_retrieve(db):
     """
-    Dispatch request to the dynamically created generic view subclass.
+    Retrieve user details through view defined with injector subclass.
     """
 
-    response = client.get("/api/questions-generic-stat/", format="json")
+    User.objects.create(pk=1, username="johndoe", first_name="John", last_name="Doe")
+
+    response = client.get("/api/users/johndoe/", format="json")
     assert response.status_code == HTTP_200_OK
-    assert response.json() == {"details": "ok"}
+    assert (
+        response.json()
+        == {"id": 1, "username": "johndoe", "first_name": "John", "last_name": "Doe"}
+    )
+
+
+def test_dispatch_request_generic_view_list(db):
+    """
+    List user details through view defined with injector subclass.
+    """
+
+    User.objects.create(pk=1, username="johndoe", first_name="John", last_name="Doe")
+    User.objects.create(pk=2, username="foo", first_name="bar", last_name="baz")
+
+    response = client.get("/api/users/?username=johndoe&limit=1", format="json")
+    assert response.status_code == HTTP_200_OK
+    assert (
+        response.json()
+        == {
+            "count": 1,
+            "next": None,
+            "previous": None,
+            "results": [
+                {
+                    "id": 1,
+                    "username": "johndoe",
+                    "first_name": "John",
+                    "last_name": "Doe",
+                }
+            ],
+        }
+    )
 
 
 def test_docstrings():

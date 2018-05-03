@@ -19,7 +19,24 @@ def generic_api_view(injector):
 
     handler = create_handler(GenericAPIView)
     apply_http_methods(handler, injector)
+    apply_generic_view_methods(handler, injector)
     return handler
+
+
+def apply_generic_view_methods(handler, injector):
+
+    handler.queryset = injector.queryset
+    handler.serializer_class = injector.serializer_cls
+    if "lookup_field" in injector:
+        handler.lookup_field = injector.lookup_field
+    if "lookup_url_kwarg" in injector:
+        handler.lookup_url_kwarg = injector.lookup_url_kwarg
+    if "filter_backends" in injector:
+        handler.filter_backends = injector.filter_backends
+    if "filter_cls" in injector:
+        handler.filter_class = injector.filter_cls
+    if "pagination_cls" in injector:
+        handler.pagination_class = injector.pagination_cls
 
 
 # TODO:
@@ -33,9 +50,5 @@ def generic_api_view(injector):
 # APIView.metadata_class
 # APIView.versioning_class
 #
-# GenericAPIView.queryset
-# GenericAPIView.serializer_class
-# GenericAPIView.lookup_field
-# GenericAPIView.lookup_url_kwarg
-# GenericAPIView.filter_backends
-# GenericAPIView.pagination_class
+# TODO: Protect from usage `pagination_class` instead of
+# `pagination_cls`.
