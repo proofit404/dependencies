@@ -14,7 +14,7 @@ def test_dispatch_request():
     should be respected.
     """
 
-    response = client.get("/api/questions-stat/", {"last": True}, format="json")
+    response = client.get("/api/action/", {"last": True}, format="json")
     assert response.status_code == HTTP_200_OK
     assert response.json() == {"details": "ok"}
 

@@ -2,23 +2,18 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 
 
-class QuestionsStat(object):
+class UserOperations(object):
 
-    def __init__(self, request):
+    def __init__(self, view, request):
 
-        assert request.query_params["last"] == "True"
-        assert isinstance(request.accepted_renderer, JSONRenderer)
+        self.view = view
+        self.request = request
 
     def do(self):
 
+        assert self.request.query_params["last"] == "True"
+        assert isinstance(self.request.accepted_renderer, JSONRenderer)
         return Response({"details": "ok"})
-
-
-class UserOperations(object):
-
-    def __init__(self, view):
-
-        self.view = view
 
     def login(self):
 

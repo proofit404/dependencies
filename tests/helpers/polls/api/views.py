@@ -5,16 +5,16 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.permissions import IsAuthenticated
 
-from .commands import QuestionsStat, UserOperations
+from .commands import UserOperations
 from .filtersets import UserFilter
 from .serializers import UserSerializer
 
 
 @api_view
-class QuestionsStatView(Injector):
+class UserAction(Injector):
 
     get = this.command.do
-    command = QuestionsStat
+    command = UserOperations
 
 
 @api_view
