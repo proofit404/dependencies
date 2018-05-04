@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.renderers import DocumentationRenderer
 
 from .commands import UserOperations
 from .filtersets import UserFilter
@@ -15,6 +16,8 @@ class UserAction(Injector):
 
     get = this.command.do
     command = UserOperations
+
+    renderer_classes = (DocumentationRenderer,)
 
 
 @api_view

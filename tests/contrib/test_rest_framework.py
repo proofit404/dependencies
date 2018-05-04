@@ -16,7 +16,7 @@ def test_dispatch_request():
 
     response = client.get("/api/action/", {"last": True}, format="json")
     assert response.status_code == HTTP_200_OK
-    assert response.json() == {"details": "ok"}
+    assert response.content.decode().lstrip().startswith("<!DOCTYPE html>")
 
     response = client.get("/api/login/")
     assert response.status_code == HTTP_403_FORBIDDEN

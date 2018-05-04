@@ -1,4 +1,4 @@
-from rest_framework.renderers import JSONRenderer
+from rest_framework.renderers import DocumentationRenderer
 from rest_framework.response import Response
 
 
@@ -12,7 +12,7 @@ class UserOperations(object):
     def do(self):
 
         assert self.request.query_params["last"] == "True"
-        assert isinstance(self.request.accepted_renderer, JSONRenderer)
+        assert isinstance(self.request.accepted_renderer, DocumentationRenderer)
         return Response({"details": "ok"})
 
     def login(self):

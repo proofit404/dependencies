@@ -27,6 +27,8 @@ def generic_api_view(injector):
 
 def apply_api_view_methods(handler, injector):
 
+    if "renderer_classes" in injector:
+        handler.renderer_classes = injector.renderer_classes
     if "permission_classes" in injector:
         handler.permission_classes = injector.permission_classes
 
@@ -49,7 +51,6 @@ def apply_generic_api_view_methods(handler, injector):
 
 # TODO:
 #
-# APIView.renderer_classes
 # APIView.parser_classes
 # APIView.authentication_classes
 # APIView.throttle_classes
