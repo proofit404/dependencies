@@ -11,7 +11,7 @@ class UserOperations(object):
 
     def do(self):
 
-        assert self.request.query_params["last"] == "True"
+        assert self.request.data == {"last": True}
         assert isinstance(self.request.accepted_renderer, DocumentationRenderer)
         return Response({"details": "ok"})
 

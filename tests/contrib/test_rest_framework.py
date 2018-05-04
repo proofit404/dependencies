@@ -1,6 +1,10 @@
 from dependencies.contrib.rest_framework import api_view, generic_api_view
 from django.contrib.auth.models import User
-from rest_framework.status import HTTP_200_OK, HTTP_403_FORBIDDEN
+from rest_framework.status import (
+    HTTP_200_OK,
+    HTTP_403_FORBIDDEN,
+    HTTP_415_UNSUPPORTED_MEDIA_TYPE,
+)
 from rest_framework.test import APIClient
 
 client = APIClient()
@@ -14,9 +18,16 @@ def test_dispatch_request():
     should be respected.
     """
 
-    response = client.get("/api/action/", {"last": True}, format="json")
+    response = client.post("/api/action/", {"last": True}, format="json")
     assert response.status_code == HTTP_200_OK
     assert response.content.decode().lstrip().startswith("<!DOCTYPE html>")
+
+    # Parser classes mismatch.
+
+    response = client.post("/api/action/", {"last": True})
+    assert response.status_code == HTTP_415_UNSUPPORTED_MEDIA_TYPE
+
+    # Permission classes applies.
 
     response = client.get("/api/login/")
     assert response.status_code == HTTP_403_FORBIDDEN

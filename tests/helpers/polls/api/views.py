@@ -3,6 +3,7 @@ from dependencies.contrib.rest_framework import api_view, generic_api_view
 from django.contrib.auth.models import User
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.pagination import LimitOffsetPagination
+from rest_framework.parsers import JSONParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.renderers import DocumentationRenderer
 
@@ -14,10 +15,11 @@ from .serializers import UserSerializer
 @api_view
 class UserAction(Injector):
 
-    get = this.command.do
+    post = this.command.do
     command = UserOperations
 
     renderer_classes = (DocumentationRenderer,)
+    parser_classes = (JSONParser,)
 
 
 @api_view
