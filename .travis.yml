@@ -20,8 +20,7 @@ cache:
 install:
   - pip install -U pip wheel setuptools
   - pip install $DJANGO_VERSION
-  - pip install -r requirements/qa.txt
-  - pip install -r requirements/ci.txt
+  - pip install -r requirements.txt
   - pip install .
 script:
   - coverage run -m pytest
