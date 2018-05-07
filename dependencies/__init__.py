@@ -9,6 +9,7 @@ Dependency Injection for Humans.
 """
 
 from ._injector import Injector
+from ._operation import operation
 from ._proxies import this
 
-__all__ = ["Injector", "this"]
+__all__ = ["Injector", "operation", "this"]
