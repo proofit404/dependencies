@@ -1,6 +1,5 @@
 import django
 import pytest
-from dependencies import Injector
 from dependencies.contrib.django import form_view, view
 from django.views.generic import View
 

@@ -13,7 +13,7 @@ class Thisable(object):
 
     def __getattr__(self, attrname):
 
-        return proxy(self.parents, [attrname], {})
+        return make_link(self.parents, [attrname], {})
 
     def __lshift__(self, num):
 
@@ -26,14 +26,14 @@ class Thisable(object):
 this = Thisable(0)
 
 
-class ProxyType(type):
+class LinkType(type):
 
     def __getattr__(cls, attrname):
 
         parents = cls.__parents__
         expression = cls.__expression__ + [".", attrname]
         scope = dict(**cls.__scope__)
-        return proxy(parents, expression, scope)
+        return make_link(parents, expression, scope)
 
     def __getitem__(cls, item):
 
@@ -42,15 +42,15 @@ class ProxyType(type):
         expression = cls.__expression__ + ["[", itemname, "]"]
         scope = {itemname: item}
         scope.update(cls.__scope__)
-        return proxy(parents, expression, scope)
+        return make_link(parents, expression, scope)
 
 
-def proxy(parents, expression, scope):
+def make_link(parents, expression, scope):
 
     __new__ = make_new(parents, expression, scope)
     __init__ = make_init(parents, expression)
-    return ProxyType(
-        "Proxy",
+    return LinkType(
+        "Link",
         (object,),
         {
             "__new__": __new__,

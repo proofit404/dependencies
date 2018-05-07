@@ -1,7 +1,10 @@
 import inspect
 import weakref
 
-from ._proxies import ProxyType, Thisable
+from ._checks.circles import check_circles
+from ._checks.links import check_links
+from ._spec import make_init_spec, nested_injector
+from ._this import Thisable
 from .exceptions import DependencyError
 
 
@@ -23,13 +26,13 @@ class InjectorType(type):
         for k, v in namespace.items():
             check_dunder_name(k)
             check_attrs_redefinition(k)
-            check_proxies(v)
+            check_thisable(v)
         dependencies = {}
         for base in reversed(bases):
             dependencies.update(base.__dependencies__)
         for name, dep in namespace.items():
             dependencies[name] = make_dependency_spec(name, dep)
-        check_loops(class_name, dependencies)
+        check_links(class_name, dependencies)
         check_circles(dependencies)
         ns["__dependencies__"] = dependencies
         return type.__new__(cls, class_name, bases, ns)
@@ -152,18 +155,6 @@ Injector = InjectorType(
 )
 
 
-class Marker(object):
-
-    def __bool__(self):
-
-        return False
-
-    __nonzero__ = __bool__
-
-
-nested_injector = Marker()
-
-
 def make_dependency_spec(name, dependency):
 
     if inspect.isclass(dependency) and not name.endswith("_cls"):
@@ -179,50 +170,6 @@ def make_dependency_spec(name, dependency):
 
     else:
         return dependency, None
-
-
-try:
-    inspect.signature
-except AttributeError:
-
-    def make_init_spec(dependency):
-
-        argspec = inspect.getargspec(dependency.__init__)
-        args, varargs, kwargs, defaults = argspec
-        check_varargs(dependency, varargs, kwargs)
-        if defaults is not None:
-            check_cls_arguments(args, defaults)
-            have_defaults = len(args) - len(defaults)
-        else:
-            have_defaults = len(args)
-        spec = args[1:], have_defaults
-        return spec
-
-
-else:
-
-    def make_init_spec(dependency):
-
-        signature = inspect.signature(dependency.__init__)
-        parameters = iter(signature.parameters.items())
-        next(parameters)
-        args, defaults = [], []
-        varargs = kwargs = None
-        have_defaults = 1
-        for name, param in parameters:
-            args.append(name)
-            if param.default is not param.empty:
-                defaults.append(param.default)
-            else:
-                have_defaults += 1
-            if param.kind is param.VAR_POSITIONAL:
-                varargs = True
-            if param.kind is param.VAR_KEYWORD:
-                kwargs = True
-        check_varargs(dependency, varargs, kwargs)
-        if defaults:
-            check_cls_arguments(args, defaults)
-        return args, have_defaults
 
 
 def use_object_init(cls):
@@ -256,126 +203,7 @@ def check_attrs_redefinition(name):
         raise DependencyError("'let' redefinition is not allowed")
 
 
-def check_cls_arguments(argnames, defaults):
-
-    for name, value in zip(reversed(argnames), reversed(defaults)):
-        expect_class = name.endswith("_cls")
-        is_class = inspect.isclass(value)
-        if expect_class and not is_class:
-            raise DependencyError("{0!r} default value should be a class".format(name))
-
-        if not expect_class and is_class:
-            raise DependencyError(
-                "{0!r} argument can not have class as its default value".format(name)
-            )
-
-
-def check_varargs(dependency, varargs, kwargs):
-
-    if varargs and kwargs:
-        message = ("{0}.__init__ have arbitrary argument list and keyword arguments")
-        raise DependencyError(message.format(dependency.__name__))
-
-    elif varargs:
-        message = "{0}.__init__ have arbitrary argument list"
-        raise DependencyError(message.format(dependency.__name__))
-
-    elif kwargs:
-        message = "{0}.__init__ have arbitrary keyword arguments"
-        raise DependencyError(message.format(dependency.__name__))
-
-
-def check_loops(class_name, dependencies):
-
-    for argument_name, (dep, depspec) in dependencies.items():
-        if isinstance(dep, ProxyType):
-            check_loops_for(
-                class_name, argument_name, dependencies, dep, filter_expression(dep)
-            )
-        elif depspec is nested_injector:
-            nested_dependencies = {"__parent__": (dependencies, None)}
-            nested_dependencies.update(dep.__dependencies__)
-            check_loops(class_name, nested_dependencies)
-
-
-def check_loops_for(class_name, argument_name, dependencies, origin, expression):
-
-    try:
-        argname = next(expression)
-    except StopIteration:
-        return
-
-    try:
-        attribute, argspec = dependencies[argname]
-    except KeyError:
-        return
-
-    if argspec is nested_injector:
-        nested_dependencies = {"__parent__": (dependencies, None)}
-        nested_dependencies.update(attribute.__dependencies__)
-        check_loops_for(
-            class_name, argument_name, nested_dependencies, origin, expression
-        )
-    elif argname == "__parent__":
-        check_loops_for(class_name, argument_name, attribute, origin, expression)
-    elif attribute is origin:
-        raise DependencyError(
-            "{0!r} is a circle link in the {1!r} injector".format(
-                argument_name, class_name
-            )
-        )
-
-    elif isinstance(attribute, ProxyType):
-        check_loops_for(
-            class_name,
-            argument_name,
-            dependencies,
-            origin,
-            filter_expression(attribute),
-        )
-
-
-def filter_expression(proxy):
-
-    for parent in range(proxy.__parents__):
-        yield "__parent__"
-
-    for symbol in proxy.__expression__:
-        if symbol == ".":
-            continue
-
-        elif symbol == "[":
-            raise StopIteration()
-
-        else:
-            yield symbol
-
-
-def check_circles(dependencies):
-
-    for depname in dependencies:
-        check_circles_for(dependencies, depname, depname)
-
-
-def check_circles_for(dependencies, attrname, origin):
-
-    try:
-        attribute_spec = dependencies[attrname]
-    except KeyError:
-        return
-
-    attribute, argspec = attribute_spec
-    if argspec:
-        args = argspec[0]
-        if origin in args:
-            message = "{0!r} is a circle dependency in the {1!r} constructor"
-            raise DependencyError(message.format(origin, attribute.__name__))
-
-        for name in args:
-            check_circles_for(dependencies, name, origin)
-
-
-def check_proxies(dependency):
+def check_thisable(dependency):
 
     if isinstance(dependency, Thisable):
         raise DependencyError("You can not use 'this' directly in the 'Injector'")
