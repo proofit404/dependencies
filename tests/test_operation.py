@@ -1,4 +1,6 @@
+import pytest
 from dependencies import Injector, operation
+from dependencies.exceptions import DependencyError
 
 
 def test_define_operation():
@@ -17,8 +19,18 @@ def test_define_operation():
     assert Container.process() == 6
 
 
-# TODO: Raise exception if `self` was found in the arguments.
-#
+def test_protect_against_self():
+    """Deny to define an operation with argument called `self`."""
+
+    with pytest.raises(DependencyError) as exc_info:
+
+        @operation
+        def method(self, foo, bar):
+            pass
+
+    assert str(exc_info.value) == "'operation' decorator can not be used on methods"
+
+
 # TODO: Raise exception if we try to decorate a class.
 #
 # TODO: Operation representation with the name of the function.

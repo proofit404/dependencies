@@ -1,5 +1,7 @@
 import inspect
 
+from .exceptions import DependencyError
+
 
 def operation(function):
     """FIXME: Write a docstring."""
@@ -10,7 +12,7 @@ def operation(function):
 
 def make_init(function):
 
-    names = get_argument_names(function)
+    names = get_arguments(function)
     arguments = ", ".join(names)
     def_expr = "def __init__(self, {arguments}):"
     func_expr = "    self.__function__ = function"
@@ -26,6 +28,14 @@ def make_init(function):
 def __call__(self):
 
     return self.__function__(*self.__arguments__)
+
+
+def get_arguments(function):
+
+    names = get_argument_names(function)
+    if "self" in names:
+        raise DependencyError("'operation' decorator can not be used on methods")
+    return names
 
 
 try:
