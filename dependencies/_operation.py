@@ -1,5 +1,7 @@
 import inspect
+import itertools
 
+from ._this import random_string
 from .exceptions import DependencyError
 
 
@@ -29,17 +31,35 @@ def operation(function):
 
 def make_init(function):
 
-    names = get_arguments(function)
-    arguments = ", ".join(names)
-    def_expr = "def __init__(self, {arguments}):"
-    func_expr = "    self.__function__ = function"
-    args_expr = "    self.__arguments__ = [{arguments}]"
-    template = "\n".join([def_expr, func_expr, args_expr])
-    code = template.format(arguments=arguments)
-    scope = {"function": function}
+    argument_names, arguments, scope = make_init_scope(function)
+    code = init_template.format(arguments=arguments, argument_names=argument_names)
     exec(code, scope)
     __init__ = scope["__init__"]
     return __init__
+
+
+init_template = """def __init__(self, {arguments}):
+    self.__function__ = function
+    self.__arguments__ = [{argument_names}]
+"""
+
+
+def make_init_scope(function):
+
+    names, defaults = get_arguments(function)
+    stubs = itertools.repeat(None, len(names) - len(defaults))
+    keys = [random_string() for each in defaults]
+
+    argument_names = ", ".join(names)
+
+    arguments = ", ".join(
+        arg + "=" + key if key is not None else arg
+        for arg, key in zip(names, itertools.chain(stubs, keys))
+    )
+
+    scope = {"function": function}
+    scope.update(zip(keys, defaults))
+    return argument_names, arguments, scope
 
 
 def __call__(self):
@@ -54,10 +74,11 @@ def __repr__(self):
 
 def get_arguments(function):
 
-    names = get_argument_names(function)
+    names, defaults = get_argument_names(function)
     if "self" in names:
         raise DependencyError("'operation' decorator can not be used on methods")
-    return names
+    defaults = defaults or []
+    return names, defaults
 
 
 try:
@@ -68,7 +89,7 @@ except AttributeError:
 
         argspec = inspect.getargspec(function)
         args, varargs, kwargs, defaults = argspec
-        return args
+        return args, defaults
 
 
 else:
@@ -76,5 +97,10 @@ else:
     def get_argument_names(function):
 
         signature = inspect.signature(function)
-        parameters = iter(signature.parameters.items())
-        return [name for name, param in parameters]
+        args = [name for name, param in signature.parameters.items()]
+        defaults = [
+            param.default
+            for name, param in signature.parameters.items()
+            if param.default is not param.empty
+        ]
+        return args, defaults

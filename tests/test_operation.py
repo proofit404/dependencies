@@ -19,6 +19,21 @@ def test_define_operation():
     assert Container.process() == 6
 
 
+def test_keyword_arguments():
+    """Preserve keyword argument defaults in the operation constructor."""
+
+    class Container(Injector):
+
+        foo = 1
+        bar = 2
+
+        @operation
+        def process(foo, bar, baz=3):
+            return foo + bar + baz
+
+    assert Container.process() == 6
+
+
 def test_protect_against_self():
     """Deny to define an operation with argument called `self`."""
 
