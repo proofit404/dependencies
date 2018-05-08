@@ -37,8 +37,10 @@ def apply_api_view_methods(handler, injector):
 
 def apply_generic_api_view_methods(handler, injector):
 
-    handler.queryset = injector.queryset
-    handler.serializer_class = injector.serializer_cls
+    if "queryset" in injector:
+        handler.queryset = injector.queryset
+    if "serializer_cls" in injector:
+        handler.serializer_class = injector.serializer_cls
     if "lookup_field" in injector:
         handler.lookup_field = injector.lookup_field
     if "lookup_url_kwarg" in injector:
