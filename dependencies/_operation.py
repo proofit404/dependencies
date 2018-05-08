@@ -1,6 +1,5 @@
 import inspect
 import itertools
-import operator
 
 from ._spec import check_varargs
 from ._this import random_string
@@ -89,7 +88,6 @@ try:
 except AttributeError:
 
     get_argument_names = inspect.getargspec
-
 
 else:
 
