@@ -4,7 +4,11 @@ from .exceptions import DependencyError
 
 
 def operation(function):
-    """FIXME: Write a docstring."""
+    """
+    Create callable class appropriated for dependency injection.
+
+    Used as function decorator.
+    """
 
     if inspect.isclass(function):
         raise DependencyError("'operation' decorator can not be used on classes")

@@ -60,4 +60,13 @@ def test_representation():
     assert repr(process(1, "test")) == "<Operation[process] object>"
 
 
-# TODO: Support default keyword arguments.
+def test_docstrings():
+    """Access `operation` documentation string."""
+
+    assert (
+        operation.__doc__ == "\n"
+        "    Create callable class appropriated for dependency injection.\n"
+        "\n"
+        "    Used as function decorator.\n"
+        "    "
+    )
