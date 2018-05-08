@@ -31,6 +31,21 @@ def test_protect_against_self():
     assert str(exc_info.value) == "'operation' decorator can not be used on methods"
 
 
+def test_protect_against_classes():
+    """
+    Deny to decorate classes with operation.  Classes are injectable
+    itself.
+    """
+
+    with pytest.raises(DependencyError) as exc_info:
+
+        @operation
+        class Foo(object):
+            pass
+
+    assert str(exc_info.value) == "'operation' decorator can not be used on classes"
+
+
 # TODO: Raise exception if we try to decorate a class.
 #
 # TODO: Operation representation with the name of the function.

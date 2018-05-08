@@ -6,6 +6,8 @@ from .exceptions import DependencyError
 def operation(function):
     """FIXME: Write a docstring."""
 
+    if inspect.isclass(function):
+        raise DependencyError("'operation' decorator can not be used on classes")
     __init__ = make_init(function)
     return type("Operation", (object,), {"__init__": __init__, "__call__": __call__})
 
