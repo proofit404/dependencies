@@ -61,6 +61,36 @@ def test_protect_against_classes():
     assert str(exc_info.value) == "'operation' decorator can not be used on classes"
 
 
+def test_protect_against_args_kwargs():
+    """Deny operation definition with varied arguments and keywords. """
+
+    with pytest.raises(DependencyError) as exc_info:
+
+        @operation
+        def func(*args):
+            pass
+
+    assert str(exc_info.value) == "func have arbitrary argument list"
+
+    with pytest.raises(DependencyError) as exc_info:
+
+        @operation
+        def func(**kwargs):
+            pass
+
+    assert str(exc_info.value) == "func have arbitrary keyword arguments"
+
+    with pytest.raises(DependencyError) as exc_info:
+
+        @operation
+        def func(*args, **kwargs):
+            pass
+
+    assert (
+        str(exc_info.value) == "func have arbitrary argument list and keyword arguments"
+    )
+
+
 def test_representation():
     """
     Operation class and instance should contain a name of the function

@@ -23,7 +23,7 @@ except AttributeError:
 
         argspec = inspect.getargspec(dependency.__init__)
         args, varargs, kwargs, defaults = argspec
-        check_varargs(dependency, varargs, kwargs)
+        check_varargs(constructor_name(dependency), varargs, kwargs)
         if defaults is not None:
             check_cls_arguments(args, defaults)
             have_defaults = len(args) - len(defaults)
@@ -53,7 +53,7 @@ else:
                 varargs = True
             if param.kind is param.VAR_KEYWORD:
                 kwargs = True
-        check_varargs(dependency, varargs, kwargs)
+        check_varargs(constructor_name(dependency), varargs, kwargs)
         if defaults:
             check_cls_arguments(args, defaults)
         return args, have_defaults
@@ -73,16 +73,19 @@ def check_cls_arguments(argnames, defaults):
             )
 
 
-def check_varargs(dependency, varargs, kwargs):
+def check_varargs(name, varargs, kwargs):
 
     if varargs and kwargs:
-        message = ("{0}.__init__ have arbitrary argument list and keyword arguments")
-        raise DependencyError(message.format(dependency.__name__))
-
+        message = "{0} have arbitrary argument list and keyword arguments"
+        raise DependencyError(message.format(name))
     elif varargs:
-        message = "{0}.__init__ have arbitrary argument list"
-        raise DependencyError(message.format(dependency.__name__))
-
+        message = "{0} have arbitrary argument list"
+        raise DependencyError(message.format(name))
     elif kwargs:
-        message = "{0}.__init__ have arbitrary keyword arguments"
-        raise DependencyError(message.format(dependency.__name__))
+        message = "{0} have arbitrary keyword arguments"
+        raise DependencyError(message.format(name))
+
+
+def constructor_name(dependency):
+
+    return dependency.__name__ + ".__init__"

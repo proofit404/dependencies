@@ -1,6 +1,8 @@
 import inspect
 import itertools
+import operator
 
+from ._spec import check_varargs
 from ._this import random_string
 from .exceptions import DependencyError
 
@@ -74,7 +76,8 @@ def __repr__(self):
 
 def get_arguments(function):
 
-    names, defaults = get_argument_names(function)
+    names, varargs, kwargs, defaults = get_argument_names(function)
+    check_varargs(function.__name__, varargs, kwargs)
     if "self" in names:
         raise DependencyError("'operation' decorator can not be used on methods")
     defaults = defaults or []
@@ -85,11 +88,7 @@ try:
     inspect.signature
 except AttributeError:
 
-    def get_argument_names(function):
-
-        argspec = inspect.getargspec(function)
-        args, varargs, kwargs, defaults = argspec
-        return args, defaults
+    get_argument_names = inspect.getargspec
 
 
 else:
@@ -98,9 +97,17 @@ else:
 
         signature = inspect.signature(function)
         args = [name for name, param in signature.parameters.items()]
+        varargs = any(
+            param.kind is param.VAR_POSITIONAL
+            for name, param in signature.parameters.items()
+        )
+        kwargs = any(
+            param.kind is param.VAR_KEYWORD
+            for name, param in signature.parameters.items()
+        )
         defaults = [
             param.default
             for name, param in signature.parameters.items()
             if param.default is not param.empty
         ]
-        return args, defaults
+        return args, varargs, kwargs, defaults
