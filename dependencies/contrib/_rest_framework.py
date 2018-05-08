@@ -12,7 +12,7 @@ def api_view(injector):
     handler = create_handler(APIView)
     apply_http_methods(handler, injector)
     apply_api_view_methods(handler, injector)
-    return handler
+    return injector.let(as_view=handler.as_view)
 
 
 def generic_api_view(injector):
@@ -22,7 +22,7 @@ def generic_api_view(injector):
     apply_http_methods(handler, injector)
     apply_api_view_methods(handler, injector)
     apply_generic_api_view_methods(handler, injector)
-    return handler
+    return injector.let(as_view=handler.as_view)
 
 
 def apply_api_view_methods(handler, injector):
