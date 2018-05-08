@@ -8,8 +8,19 @@ def operation(function):
 
     if inspect.isclass(function):
         raise DependencyError("'operation' decorator can not be used on classes")
+
+    class OperationType(type):
+
+        def __repr__(cls):
+            return "<class Operation[" + function.__name__ + "]>"
+
     __init__ = make_init(function)
-    return type("Operation", (object,), {"__init__": __init__, "__call__": __call__})
+
+    return OperationType(
+        "Operation",
+        (object,),
+        {"__init__": __init__, "__call__": __call__, "__repr__": __repr__},
+    )
 
 
 def make_init(function):
@@ -30,6 +41,11 @@ def make_init(function):
 def __call__(self):
 
     return self.__function__(*self.__arguments__)
+
+
+def __repr__(self):
+
+    return "<Operation[" + self.__function__.__name__ + "] object>"
 
 
 def get_arguments(function):
