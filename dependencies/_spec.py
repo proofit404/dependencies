@@ -62,7 +62,7 @@ else:
 def check_cls_arguments(argnames, defaults):
 
     for name, value in zip(reversed(argnames), reversed(defaults)):
-        expect_class = name.endswith("_cls")
+        expect_class = name.endswith("_class")
         is_class = inspect.isclass(value)
         if expect_class and not is_class:
             raise DependencyError("{0!r} default value should be a class".format(name))

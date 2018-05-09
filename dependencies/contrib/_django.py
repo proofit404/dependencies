@@ -52,22 +52,20 @@ def apply_http_methods(handler, injector):
 
 def apply_form_methods(handler, injector):
 
-    handler.form_class = injector.form_cls
+    handler.form_class = injector.form_class
     handler.template_name = injector.template_name
     handler.success_url = injector.success_url
 
-    if "template_engine" in injector:
-        handler.template_engine = injector.template_engine
-    if "response_cls" in injector:
-        handler.response_class = injector.response_cls
-    if "content_type" in injector:
-        handler.content_type = injector.content_type
-    if "form_initial_data" in injector:
-        handler.initial = injector.form_initial_data
-    if "form_prefix" in injector:
-        handler.prefix = injector.form_prefix
-    if "extra_context" in injector:
-        handler.extra_context = injector.extra_context
+    for attribute in [
+        "template_engine",
+        "response_class",
+        "content_type",
+        "initial",
+        "prefix",
+        "extra_context",
+    ]:
+        if attribute in injector:
+            setattr(handler, attribute, getattr(injector, attribute))
 
     for method in ["form_valid", "form_invalid"]:
         if method in injector:

@@ -280,7 +280,7 @@ def test_task_arguments(celery_app, code):
         Injector.let(
             foo=Foo,
             bar=Bar,
-            base_cls=MyTask,
+            base_class=MyTask,
             bind=True,
             typing=False,
             max_retries=1,

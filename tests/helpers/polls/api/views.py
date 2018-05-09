@@ -49,7 +49,7 @@ class UserRetrieveView(Injector):
     command = UserOperations
 
     queryset = User.objects.all()
-    serializer_cls = UserSerializer
+    serializer_class = UserSerializer
     lookup_field = "username"
     lookup_url_kwarg = "nick"
 
@@ -61,7 +61,7 @@ class UserListView(Injector):
     command = UserOperations
 
     queryset = User.objects.all()
-    serializer_cls = UserSerializer
+    serializer_class = UserSerializer
     filter_backends = (DjangoFilterBackend,)
-    filter_cls = UserFilter
-    pagination_cls = LimitOffsetPagination
+    filter_class = UserFilter
+    pagination_class = LimitOffsetPagination

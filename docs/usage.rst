@@ -84,9 +84,10 @@ argument:
 - If ``class`` stored in attributes it will be instantiated.  We will
   see what arguments it takes and search for each in the same
   dependency scope.
-- If it a ``class`` stored in the attribute named with ``_cls`` at the
-  end - then it return as is.  (For example ``Container.foo_cls`` will
-  give you class stored in it.  Not an instance).
+- If it a ``class`` stored in the attribute named with ``_class`` at
+  the end - then it return as is.  (For example
+  ``Container.foo_class`` will give you class stored in it.  Not an
+  instance).
 - Anything else returned as is.
 - If we found a class during dependency search we will instantiate it
   as well.

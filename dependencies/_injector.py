@@ -157,7 +157,7 @@ Injector = InjectorType(
 
 def make_dependency_spec(name, dependency):
 
-    if inspect.isclass(dependency) and not name.endswith("_cls"):
+    if inspect.isclass(dependency) and not name.endswith("_class"):
         if issubclass(dependency, Injector):
             return dependency, nested_injector
 

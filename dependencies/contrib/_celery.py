@@ -27,8 +27,8 @@ def decorate_with(func, injector):
 
     options = {"name": injector.name}
 
-    if "base_cls" in injector:
-        options["base"] = injector.base_cls
+    if "base_class" in injector:
+        options["base"] = injector.base_class
 
     for argument in [
         "bind",

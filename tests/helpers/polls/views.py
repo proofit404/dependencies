@@ -64,7 +64,7 @@ class TestTemplateResponse(TemplateResponse):
 @form_view
 class QuestionFormView(Injector):
 
-    form_cls = QuestionForm
+    form_class = QuestionForm
     template_name = "question.html"
     success_url = "/thanks/"
     form_valid = this.command.handle_form
@@ -72,8 +72,8 @@ class QuestionFormView(Injector):
     command = ProcessQuestion
 
     template_engine = "default"
-    response_cls = TestTemplateResponse
+    response_class = TestTemplateResponse
     content_type = "text/html"
-    form_initial_data = {"is_testing": True}
-    form_prefix = "test"
+    initial = {"is_testing": True}
+    prefix = "test"
     extra_context = {"extra_var": "extra-var"}

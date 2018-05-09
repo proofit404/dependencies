@@ -8,7 +8,9 @@ Changelog
 +++++++++++++++++
 
 - Drop python 2.6 and 3.4 support.
-- Add django, celery and pytest contrib packages.
+- Add contrib packages for Celery, Py.Test, Django and Django REST
+  Framework.
+- Class named attributes should ends with ``_class`` now.
 
 0.14 (2018-04-13)
 +++++++++++++++++

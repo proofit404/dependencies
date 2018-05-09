@@ -27,32 +27,29 @@ def generic_api_view(injector):
 
 def apply_api_view_methods(handler, injector):
 
-    if "authentication_classes" in injector:
-        handler.authentication_classes = injector.authentication_classes
-    if "renderer_classes" in injector:
-        handler.renderer_classes = injector.renderer_classes
-    if "parser_classes" in injector:
-        handler.parser_classes = injector.parser_classes
-    if "permission_classes" in injector:
-        handler.permission_classes = injector.permission_classes
+    for attribute in [
+        "authentication_classes",
+        "renderer_classes",
+        "parser_classes",
+        "permission_classes",
+    ]:
+        if attribute in injector:
+            setattr(handler, attribute, getattr(injector, attribute))
 
 
 def apply_generic_api_view_methods(handler, injector):
 
-    if "queryset" in injector:
-        handler.queryset = injector.queryset
-    if "serializer_cls" in injector:
-        handler.serializer_class = injector.serializer_cls
-    if "lookup_field" in injector:
-        handler.lookup_field = injector.lookup_field
-    if "lookup_url_kwarg" in injector:
-        handler.lookup_url_kwarg = injector.lookup_url_kwarg
-    if "filter_backends" in injector:
-        handler.filter_backends = injector.filter_backends
-    if "filter_cls" in injector:
-        handler.filter_class = injector.filter_cls
-    if "pagination_cls" in injector:
-        handler.pagination_class = injector.pagination_cls
+    for attribute in [
+        "queryset",
+        "serializer_class",
+        "lookup_field",
+        "lookup_url_kwarg",
+        "filter_backends",
+        "filter_class",
+        "pagination_class",
+    ]:
+        if attribute in injector:
+            setattr(handler, attribute, getattr(injector, attribute))
 
 
 # TODO:
@@ -61,6 +58,3 @@ def apply_generic_api_view_methods(handler, injector):
 # APIView.content_negotiation_class
 # APIView.metadata_class
 # APIView.versioning_class
-#
-# TODO: Protect from usage `pagination_class` instead of
-# `pagination_cls`.

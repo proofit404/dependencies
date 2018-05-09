@@ -99,21 +99,19 @@ def test_class_dependency():
     assert Summator.foo.do(2) == 8
 
 
-def test_do_not_instantiate_dependencies_ended_with_cls():
+def test_do_not_instantiate_dependencies_ended_with_class():
     """
     Do not call class constructor, if it stored with name ended
-    `_cls`.
-
-    For example, `logger_cls`.
+    `_class`.  For example, `logger_class`.
     """
 
     class Foo(object):
         pass
 
     class Bar(Injector):
-        foo_cls = Foo
+        foo_class = Foo
 
-    assert isclass(Bar.foo_cls)
+    assert isclass(Bar.foo_class)
 
 
 def test_redefine_dependency():
@@ -209,10 +207,10 @@ def test_preserve_missed_keyword_argument_in_the_middle():
     assert Container.foo.do() == 7
 
 
-def test_cls_named_argument_default_value():
+def test_class_named_argument_default_value():
     """
     Allow classes as default argument values if argument name ends
-    with `_cls`.
+    with `_class`.
     """
 
     class Foo(object):
@@ -220,13 +218,13 @@ def test_cls_named_argument_default_value():
 
     class Bar(object):
 
-        def __init__(self, foo_cls=Foo):
-            self.foo_cls = foo_cls
+        def __init__(self, foo_class=Foo):
+            self.foo_class = foo_class
 
     class Container(Injector):
         bar = Bar
 
-    assert Container.bar.foo_cls is Foo
+    assert Container.bar.foo_class is Foo
 
 
 def test_injectable_without_its_own_init():
@@ -1240,8 +1238,8 @@ cls_named_arguments = CodeCollector()
 @cls_named_arguments.parametrize
 def test_deny_classes_as_default_values(code):
     """
-    If argument name doesn't ends with `_cls`, its default value can't
-    be a class.
+    If argument name doesn't ends with `_class`, its default value
+    can't be a class.
     """
 
     class Foo(object):
@@ -1278,22 +1276,22 @@ cls_named_defaults = CodeCollector()
 
 
 @cls_named_defaults.parametrize
-def test_deny_non_classes_in_cls_named_arguments(code):
+def test_deny_non_classes_in_class_named_arguments(code):
     """
-    If argument name ends with `_cls`, it must have a class as it
+    If argument name ends with `_class`, it must have a class as it
     default value.
     """
 
     class Bar(object):
 
-        def __init__(self, foo_cls=1):
-            self.foo_cls = foo_cls
+        def __init__(self, foo_class=1):
+            self.foo_class = foo_class
 
     with pytest.raises(DependencyError) as exc_info:
         code(Bar)
 
     message = str(exc_info.value)
-    assert message == "'foo_cls' default value should be a class"
+    assert message == "'foo_class' default value should be a class"
 
 
 @cls_named_defaults
