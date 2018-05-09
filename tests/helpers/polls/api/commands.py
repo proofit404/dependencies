@@ -19,6 +19,10 @@ class UserOperations(object):
 
         raise Exception("Should not got there")
 
+    def respond(self):
+
+        return Response()
+
     def retrieve(self):
 
         instance = self.view.get_object()

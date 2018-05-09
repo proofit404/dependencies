@@ -10,7 +10,7 @@ from rest_framework.test import APIClient
 client = APIClient()
 
 
-def test_dispatch_request():
+def test_dispatch_request(db):
     """
     Dispatch request to the `Injector` subclass attributes.
 
@@ -31,6 +31,13 @@ def test_dispatch_request():
 
     response = client.get("/api/login/")
     assert response.status_code == HTTP_403_FORBIDDEN
+
+    # Authentication classes applies.
+
+    User.objects.create(pk=1, username="johndoe", first_name="John", last_name="Doe")
+
+    response = client.get("/api/login_all/")
+    assert response.status_code == HTTP_200_OK
 
 
 def test_dispatch_request_generic_view_retrieve(db):

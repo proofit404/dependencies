@@ -7,6 +7,7 @@ from rest_framework.parsers import JSONParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.renderers import DocumentationRenderer
 
+from .auth import AuthenticateAll
 from .commands import UserOperations
 from .filtersets import UserFilter
 from .serializers import UserSerializer
@@ -28,6 +29,16 @@ class UserLogin(Injector):
     get = this.command.login
     command = UserOperations
 
+    permission_classes = (IsAuthenticated,)
+
+
+@api_view
+class LoginAll(Injector):
+
+    get = this.command.respond
+    command = UserOperations
+
+    authentication_classes = (AuthenticateAll,)
     permission_classes = (IsAuthenticated,)
 
 
