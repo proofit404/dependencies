@@ -4,6 +4,7 @@ from rest_framework.status import (
     HTTP_200_OK,
     HTTP_403_FORBIDDEN,
     HTTP_415_UNSUPPORTED_MEDIA_TYPE,
+    HTTP_429_TOO_MANY_REQUESTS,
 )
 from rest_framework.test import APIClient
 
@@ -38,6 +39,11 @@ def test_dispatch_request(db):
 
     response = client.get("/api/login_all/")
     assert response.status_code == HTTP_200_OK
+
+    # Throttle classes applies.
+
+    response = client.get("/api/throttle_all/")
+    assert response.status_code == HTTP_429_TOO_MANY_REQUESTS
 
 
 def test_dispatch_request_generic_view_retrieve(db):

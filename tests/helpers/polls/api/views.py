@@ -11,6 +11,7 @@ from .auth import AuthenticateAll
 from .commands import UserOperations
 from .filtersets import UserFilter
 from .serializers import UserSerializer
+from .throttle import ThrottleEveryOne
 
 
 @api_view
@@ -40,6 +41,15 @@ class LoginAll(Injector):
 
     authentication_classes = (AuthenticateAll,)
     permission_classes = (IsAuthenticated,)
+
+
+@api_view
+class ThrottleAll(Injector):
+
+    get = this.command.login
+    command = UserOperations
+
+    throttle_classes = (ThrottleEveryOne,)
 
 
 @generic_api_view

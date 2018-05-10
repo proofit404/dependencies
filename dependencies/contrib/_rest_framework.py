@@ -31,6 +31,7 @@ def apply_api_view_methods(handler, injector):
         "authentication_classes",
         "renderer_classes",
         "parser_classes",
+        "throttle_classes",
         "permission_classes",
     ]:
         if attribute in injector:
@@ -54,7 +55,6 @@ def apply_generic_api_view_methods(handler, injector):
 
 # TODO:
 #
-# APIView.throttle_classes
 # APIView.content_negotiation_class
 # APIView.metadata_class
 # APIView.versioning_class
