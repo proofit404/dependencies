@@ -50,6 +50,7 @@ class AttributeType(type):
 
         if inspect.isclass(attribute):
             __new__ = make_new(attribute, namespace["__attributes__"])
+            __init__ = make_init(attribute)
         else:
 
             def __new__(cls):
@@ -58,8 +59,8 @@ class AttributeType(type):
                     value = getattr(value, attrname)
                 return value
 
-        def __init__(self):
-            pass
+            def __init__(self):
+                pass
 
         namespace.update({"__new__": __new__, "__init__": __init__})
         return type.__new__(cls, class_name, bases, namespace)
@@ -85,6 +86,17 @@ def make_new(cls, attributes):
     exec(code, scope)
     __new__ = scope["__new__"]
     return __new__
+
+
+def make_init(cls):
+
+    arguments = get_arguments(cls)
+    template = "def __init__(self, {arguments}): pass"
+    code = template.format(arguments=arguments)
+    scope = {}
+    exec(code, scope)
+    __init__ = scope["__init__"]
+    return __init__
 
 
 def get_arguments(cls):

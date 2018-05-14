@@ -6,11 +6,12 @@ class Foo(object):
 
 class Bar(object):
 
-    def __init__(self):
-        pass
+    def __init__(self, a, b):
+        self.a = a
+        self.b = b
 
     def do(self):
-        return 1
+        return self.a + self.b
 
 
 def function():

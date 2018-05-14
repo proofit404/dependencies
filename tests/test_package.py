@@ -118,4 +118,7 @@ def uHSfYcZjGSJQ():
         variable = sub.variable
         keep_class = sub.Bar
 
+        a = -1
+        b = 2
+
     return Container
