@@ -3,7 +3,7 @@ import weakref
 
 from ._checks.circles import check_circles
 from ._checks.links import check_links
-from ._spec import make_init_spec, nested_injector
+from ._spec import make_init_spec, nested_injector, use_object_init
 from ._this import Thisable
 from .exceptions import DependencyError
 
@@ -170,16 +170,6 @@ def make_dependency_spec(name, dependency):
 
     else:
         return dependency, None
-
-
-def use_object_init(cls):
-
-    for base in cls.__mro__:
-        if base is object:
-            return True
-
-        elif "__init__" in base.__dict__:
-            return False
 
 
 def check_inheritance(bases):
