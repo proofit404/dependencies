@@ -1,5 +1,7 @@
+import pytest
 from dependencies.contrib.rest_framework import api_view, generic_api_view
 from django.contrib.auth.models import User
+from polls.api.exceptions import NegotiationError
 from rest_framework.status import (
     HTTP_200_OK,
     HTTP_403_FORBIDDEN,
@@ -44,6 +46,11 @@ def test_dispatch_request(db):
 
     response = client.get("/api/throttle_all/")
     assert response.status_code == HTTP_429_TOO_MANY_REQUESTS
+
+    # Strict content negotiation.
+
+    with pytest.raises(NegotiationError):
+        client.get("/api/negotiate/")
 
 
 def test_dispatch_request_generic_view_retrieve(db):

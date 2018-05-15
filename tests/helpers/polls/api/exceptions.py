@@ -1,0 +1,2 @@
+class NegotiationError(Exception):
+    pass

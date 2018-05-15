@@ -10,6 +10,7 @@ from rest_framework.renderers import DocumentationRenderer
 from .auth import AuthenticateAll
 from .commands import UserOperations
 from .filtersets import UserFilter
+from .negotiation import DenyNegotiation
 from .serializers import UserSerializer
 from .throttle import ThrottleEveryOne
 
@@ -50,6 +51,15 @@ class ThrottleAll(Injector):
     command = UserOperations
 
     throttle_classes = (ThrottleEveryOne,)
+
+
+@api_view
+class BadNegotiation(Injector):
+
+    get = this.command.respond
+    command = UserOperations
+
+    content_negotiation_class = DenyNegotiation
 
 
 @generic_api_view
