@@ -13,6 +13,7 @@ from .filtersets import UserFilter
 from .negotiation import DenyNegotiation
 from .serializers import UserSerializer
 from .throttle import ThrottleEveryOne
+from .version import DenyVersion
 
 
 @api_view
@@ -60,6 +61,15 @@ class BadNegotiation(Injector):
     command = UserOperations
 
     content_negotiation_class = DenyNegotiation
+
+
+@api_view
+class BadVersion(Injector):
+
+    get = this.command.respond
+    command = UserOperations
+
+    versioning_class = DenyVersion
 
 
 @generic_api_view

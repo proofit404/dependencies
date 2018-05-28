@@ -1,7 +1,7 @@
 import pytest
 from dependencies.contrib.rest_framework import api_view, generic_api_view
 from django.contrib.auth.models import User
-from polls.api.exceptions import NegotiationError
+from polls.api.exceptions import NegotiationError, VersionError
 from rest_framework.status import (
     HTTP_200_OK,
     HTTP_403_FORBIDDEN,
@@ -9,6 +9,7 @@ from rest_framework.status import (
     HTTP_429_TOO_MANY_REQUESTS,
 )
 from rest_framework.test import APIClient
+
 
 client = APIClient()
 
@@ -52,6 +53,11 @@ def test_dispatch_request(db):
     with pytest.raises(NegotiationError):
         client.get("/api/negotiate/")
 
+    # Versioning classes applies.
+
+    with pytest.raises(VersionError):
+        client.get("/api/versioning/")
+
 
 def test_dispatch_request_generic_view_retrieve(db):
     """
@@ -62,10 +68,12 @@ def test_dispatch_request_generic_view_retrieve(db):
 
     response = client.get("/api/users/johndoe/", format="json")
     assert response.status_code == HTTP_200_OK
-    assert (
-        response.json()
-        == {"id": 1, "username": "johndoe", "first_name": "John", "last_name": "Doe"}
-    )
+    assert response.json() == {
+        "id": 1,
+        "username": "johndoe",
+        "first_name": "John",
+        "last_name": "Doe",
+    }
 
 
 def test_dispatch_request_generic_view_list(db):
@@ -78,22 +86,14 @@ def test_dispatch_request_generic_view_list(db):
 
     response = client.get("/api/users/?username=johndoe&limit=1", format="json")
     assert response.status_code == HTTP_200_OK
-    assert (
-        response.json()
-        == {
-            "count": 1,
-            "next": None,
-            "previous": None,
-            "results": [
-                {
-                    "id": 1,
-                    "username": "johndoe",
-                    "first_name": "John",
-                    "last_name": "Doe",
-                }
-            ],
-        }
-    )
+    assert response.json() == {
+        "count": 1,
+        "next": None,
+        "previous": None,
+        "results": [
+            {"id": 1, "username": "johndoe", "first_name": "John", "last_name": "Doe"}
+        ],
+    }
 
 
 def test_docstrings():

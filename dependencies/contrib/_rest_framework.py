@@ -34,6 +34,7 @@ def apply_api_view_methods(handler, injector):
         "throttle_classes",
         "permission_classes",
         "content_negotiation_class",
+        "versioning_class",
     ]:
         if attribute in injector:
             setattr(handler, attribute, getattr(injector, attribute))
@@ -57,4 +58,3 @@ def apply_generic_api_view_methods(handler, injector):
 # TODO:
 #
 # APIView.metadata_class
-# APIView.versioning_class
