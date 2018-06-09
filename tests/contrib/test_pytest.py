@@ -3,6 +3,7 @@ import types
 import pytest
 from dependencies import Injector
 from dependencies.contrib.pytest import register, require
+from dependencies.exceptions import DependencyError
 
 
 class Foo(object):
@@ -80,23 +81,23 @@ def test_validation():
     attribute.
     """
 
-    with pytest.raises(AttributeError) as exc_info:
+    with pytest.raises(DependencyError) as exc_info:
 
         @register
         class Container1(Injector):
             name = "fixture_name"
 
     message = str(exc_info.value)
-    assert message == "'Container1' object has no attribute 'fixture'"
+    assert message == "'Container1' can not resolve attribute 'fixture'"
 
-    with pytest.raises(AttributeError) as exc_info:
+    with pytest.raises(DependencyError) as exc_info:
 
         @register
         class Container2(Injector):
             fixture = Foo
 
     message = str(exc_info.value)
-    assert message == "'Container2' object has no attribute 'name'"
+    assert message == "'Container2' can not resolve attribute 'name'"
 
 
 def test_fixture_arguments():

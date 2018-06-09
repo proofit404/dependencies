@@ -3,6 +3,7 @@ from __future__ import absolute_import
 import celery
 from dependencies import Injector
 
+
 undefined = object()
 
 
@@ -21,9 +22,7 @@ def shared_task(injector):
 def decorate_with(func, injector):
 
     if "run" not in injector:
-        raise AttributeError(
-            "{0!r} object has no attribute 'run'".format(injector.__name__)
-        )
+        injector.run
 
     options = {"name": injector.name}
 

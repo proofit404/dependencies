@@ -477,13 +477,15 @@ def test_attribute_error_on_parent_access(code):
     parents but specify wrong attribute name.
     """
 
-    with pytest.raises(AttributeError) as exc_info:
+    with pytest.raises(DependencyError) as exc_info:
         code()
 
     assert str(exc_info.value) in set(
         [
-            "'Container' object has no attribute 'bar'",
-            "'Injector' object has no attribute 'bar'",
+            "'Container' can not resolve attribute 'bar'",
+            "'Injector' can not resolve attribute 'bar'",
+            "'Container' can not resolve attribute 'bar' while building 'Link'",
+            "'Injector' can not resolve attribute 'bar' while building 'Link'",
         ]
     )
 

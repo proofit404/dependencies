@@ -44,6 +44,8 @@ class LinkType(type):
         scope.update(cls.__scope__)
         return make_link(parents, expression, scope)
 
+    # TODO: class representation to show in `DependencyError` message.
+
 
 def make_link(parents, expression, scope):
 

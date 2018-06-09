@@ -55,13 +55,16 @@ class InjectorType(type):
                     raise DependencyError(
                         "You tries to shift this more times that Injector has levels"
                     )
-
                 else:
-                    raise AttributeError(
-                        "{0!r} object has no attribute {1!r}".format(
+                    if len(attrs_stack) > 1:
+                        message = "{0!r} can not resolve attribute {1!r} while building {2!r}".format(
+                            cls.__name__, current_attr, attribute.__name__
+                        )
+                    else:
+                        message = "{0!r} can not resolve attribute {1!r}".format(
                             cls.__name__, current_attr
                         )
-                    )
+                    raise DependencyError(message)
 
             attribute, argspec = attribute_spec
             if argspec is None:

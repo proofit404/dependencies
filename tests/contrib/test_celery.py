@@ -2,6 +2,7 @@ import pytest
 from celery import Celery, Task, signature
 from dependencies import Injector, this
 from dependencies.contrib.celery import shared_task, task
+from dependencies.exceptions import DependencyError
 from helpers import CodeCollector
 
 
@@ -199,7 +200,7 @@ def test_validation(celery_app):
     attributes.
     """
 
-    with pytest.raises(AttributeError) as exc_info:
+    with pytest.raises(DependencyError) as exc_info:
 
         @task
         class Container1(Injector):
@@ -207,9 +208,9 @@ def test_validation(celery_app):
             run = lambda: None  # noqa: E731
 
     message = str(exc_info.value)
-    assert message == "'Container1' object has no attribute 'app'"
+    assert message == "'Container1' can not resolve attribute 'app'"
 
-    with pytest.raises(AttributeError) as exc_info:
+    with pytest.raises(DependencyError) as exc_info:
 
         @task
         class Container2(Injector):
@@ -217,9 +218,9 @@ def test_validation(celery_app):
             run = lambda: None  # noqa: E731
 
     message = str(exc_info.value)
-    assert message == "'Container2' object has no attribute 'name'"
+    assert message == "'Container2' can not resolve attribute 'name'"
 
-    with pytest.raises(AttributeError) as exc_info:
+    with pytest.raises(DependencyError) as exc_info:
 
         @task
         class Container3(Injector):
@@ -227,25 +228,25 @@ def test_validation(celery_app):
             name = "foo.bar.baz"
 
     message = str(exc_info.value)
-    assert message == "'Container3' object has no attribute 'run'"
+    assert message == "'Container3' can not resolve attribute 'run'"
 
-    with pytest.raises(AttributeError) as exc_info:
+    with pytest.raises(DependencyError) as exc_info:
 
         @shared_task
         class Container4(Injector):
             run = lambda: None  # noqa: E731
 
     message = str(exc_info.value)
-    assert message == "'Container4' object has no attribute 'name'"
+    assert message == "'Container4' can not resolve attribute 'name'"
 
-    with pytest.raises(AttributeError) as exc_info:
+    with pytest.raises(DependencyError) as exc_info:
 
         @shared_task
         class Container5(Injector):
             name = "foo.bar.baz"
 
     message = str(exc_info.value)
-    assert message == "'Container5' object has no attribute 'run'"
+    assert message == "'Container5' can not resolve attribute 'run'"
 
 
 task_arguments = CodeCollector()

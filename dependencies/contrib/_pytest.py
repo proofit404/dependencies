@@ -7,9 +7,7 @@ def register(injector):
     """Register Py.test fixture performing injection in it's scope."""
 
     if "fixture" not in injector:
-        raise AttributeError(
-            "{0!r} object has no attribute 'fixture'".format(injector.__name__)
-        )
+        injector.fixture
 
     options = {"name": injector.name}
 

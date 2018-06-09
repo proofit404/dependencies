@@ -754,17 +754,15 @@ attribute_error = CodeCollector()
 
 @attribute_error.parametrize
 def test_attribute_error(code):
-    """Raise attribute error if we can't find dependency."""
+    """Raise `DependencyError` if we can't find dependency."""
 
-    with pytest.raises(AttributeError) as exc_info:
+    with pytest.raises(DependencyError) as exc_info:
         code()
 
-    assert str(exc_info.value) in set(
-        [
-            "'Foo' object has no attribute 'test'",
-            "'Injector' object has no attribute 'test'",
-        ]
-    )
+    assert str(exc_info.value) in set([
+        "'Foo' can not resolve attribute 'test'",
+        "'Injector' can not resolve attribute 'test'",
+    ])
 
 
 @attribute_error
@@ -796,7 +794,23 @@ def e2f16596a652():
     Foo.let().test
 
 
-@attribute_error
+incomplete_dependencies = CodeCollector()
+
+
+@incomplete_dependencies.parametrize
+def test_incomplete_dependencies_error(code):
+    """Raise `DependencyError` if we can't find dependency."""
+
+    with pytest.raises(DependencyError) as exc_info:
+        code()
+
+    assert str(exc_info.value) in set([
+        "'Foo' can not resolve attribute 'test' while building 'Bar'",
+        "'Injector' can not resolve attribute 'test' while building 'Bar'",
+    ])
+
+
+@incomplete_dependencies
 def c4e7ecf75167():
     """Keyword arguments in the constructor."""
 
@@ -812,16 +826,28 @@ def c4e7ecf75167():
     Foo.bar
 
 
+@incomplete_dependencies
+def dmsMgYqbsHgB():
+    """Constructor argument with let notation."""
+
+    class Bar(object):
+
+        def __init__(self, test):
+            self.test = test
+
+    Foo = Injector.let(bar=Bar)
+
+    Foo.bar
+
+
 has_attribute = CodeCollector()
 
 
 @has_attribute.parametrize
 def test_has_attribute(code):
-    """`Injector` should support `hasattr` and `in` statement."""
+    """`Injector` should support `in` statement."""
 
     container = code()
-    assert hasattr(container, "foo")
-    assert not hasattr(container, "bar")
     assert "foo" in container
     assert "bar" not in container
 
