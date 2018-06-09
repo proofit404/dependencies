@@ -58,7 +58,7 @@ class InjectorType(type):
                 else:
                     if len(attrs_stack) > 1:
                         message = "{0!r} can not resolve attribute {1!r} while building {2!r}".format(
-                            cls.__name__, current_attr, attribute.__name__
+                            cls.__name__, current_attr, attrs_stack.pop()
                         )
                     else:
                         message = "{0!r} can not resolve attribute {1!r}".format(
