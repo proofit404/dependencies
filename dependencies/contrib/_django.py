@@ -42,6 +42,7 @@ def apply_http_methods(handler, injector):
                         args=args,
                         kwargs=kwargs,
                         user=this.request.user,
+                        pk=this.kwargs["pk"],  # FIXME: Test it present.
                     )
                     return getattr(ns, method)()
 
