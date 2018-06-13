@@ -2,46 +2,31 @@
 
 extensions = []
 
-templates_path = ['_templates']
+templates_path = ["_templates"]
 
-source_suffix = '.rst'
+source_suffix = ".rst"
 
-master_doc = 'index'
+master_doc = "index"
 
-project = 'dependencies'
-copyright = '2016-2018, Artem Malyshev'
-author = 'Artem Malyshev'
+project = "dependencies"
+copyright = "2016-2018, Artem Malyshev"
+author = "Artem Malyshev"
 
-version = '0.14'
-release = '0.14'
+version = "0.14"
+release = "0.14"
 
 language = None
 
-exclude_patterns = ['_build']
+exclude_patterns = ["_build"]
 
-pygments_style = 'sphinx'
+pygments_style = "sphinx"
 
 todo_include_todos = False
 
-html_theme = 'alabaster'
+html_theme = "alabaster"
 
-html_static_path = ['static']
+html_static_path = ["static"]
 
-htmlhelp_basename = 'dependenciesdoc'
+html_sidebars = {"**": ["globaltoc.html", "relations.html", "searchbox.html"]}
 
-latex_elements = {}
-
-latex_documents = [
-    (master_doc, 'dependencies.tex', 'dependencies Documentation',
-     'Artem Malyshev', 'manual'),
-]
-
-man_pages = [
-    (master_doc, 'dependencies', 'dependencies Documentation',
-     [author], 1),
-]
-
-texinfo_documents = [
-    (master_doc, 'dependencies', 'dependencies Documentation', author,
-     'dependencies', 'One line description of project.', 'Miscellaneous'),
-]
+htmlhelp_basename = "dependenciesdoc"
