@@ -2,6 +2,7 @@
 pytest>=3.5,<4
 celery>=4.1,<5
 pytest-django>=3.1,<4
+pytest-sugar>=0.9.1
 djangorestframework>=3.8,<4
 django-filter>=1.1,<2
 coreapi>=2.3,<3
