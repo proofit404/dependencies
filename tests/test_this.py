@@ -480,14 +480,12 @@ def test_attribute_error_on_parent_access(code):
     with pytest.raises(DependencyError) as exc_info:
         code()
 
-    assert str(exc_info.value) in set(
-        [
-            "'Container' can not resolve attribute 'bar'",
-            "'Injector' can not resolve attribute 'bar'",
-            "'Container' can not resolve attribute 'bar' while building 'Link'",
-            "'Injector' can not resolve attribute 'bar' while building 'Link'",
-        ]
-    )
+    assert str(exc_info.value) in {
+        "'Container' can not resolve attribute 'bar'",
+        "'Injector' can not resolve attribute 'bar'",
+        "'Container' can not resolve attribute 'bar' while building 'foo'",
+        "'Injector' can not resolve attribute 'bar' while building 'foo'",
+    }
 
 
 @attribute_error

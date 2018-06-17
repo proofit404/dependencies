@@ -759,10 +759,10 @@ def test_attribute_error(code):
     with pytest.raises(DependencyError) as exc_info:
         code()
 
-    assert str(exc_info.value) in set([
+    assert str(exc_info.value) in {
         "'Foo' can not resolve attribute 'test'",
         "'Injector' can not resolve attribute 'test'",
-    ])
+    }
 
 
 @attribute_error
@@ -804,10 +804,10 @@ def test_incomplete_dependencies_error(code):
     with pytest.raises(DependencyError) as exc_info:
         code()
 
-    assert str(exc_info.value) in set([
-        "'Foo' can not resolve attribute 'test' while building 'Bar'",
-        "'Injector' can not resolve attribute 'test' while building 'Bar'",
-    ])
+    assert str(exc_info.value) in {
+        "'Foo' can not resolve attribute 'test' while building 'bar'",
+        "'Injector' can not resolve attribute 'test' while building 'bar'",
+    }
 
 
 @incomplete_dependencies
