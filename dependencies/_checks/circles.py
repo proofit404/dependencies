@@ -18,7 +18,7 @@ def check_circles_for(dependencies, attrname, origin):
     if argspec:
         args = argspec[0]
         if origin in args:
-            message = "{0!r} is a circle dependency in the {1!r} constructor"
+            message = "{0!r} is a circular dependency in the {1!r} constructor"
             raise DependencyError(message.format(origin, attribute.__name__))
 
         for name in args:

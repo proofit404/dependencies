@@ -519,9 +519,9 @@ def test_docstrings():
     assert Injector.__doc__ == injector_doc
     assert (
         Injector.let.__doc__
-        == ("Produce new Injector with some dependencies overwritten.")
+        == "Produce new Injector with some dependencies overwritten."
     )
-    assert DependencyError.__doc__ == ("Broken dependencies configuration error.")
+    assert DependencyError.__doc__ == "Broken dependencies configuration error."
 
     class Foo(Injector):
         """New container."""
@@ -695,10 +695,8 @@ def test_multiple_inheritance_deny_regular_classes(code):
     with pytest.raises(DependencyError) as exc_info:
         code(Foo)
 
-    assert (
-        str(exc_info.value)
-        == ("Multiple inheritance is allowed for Injector subclasses only")
-    )
+    message = str(exc_info.value)
+    assert message == "Multiple inheritance is allowed for Injector subclasses only"
 
 
 @subclasses_only
@@ -888,9 +886,8 @@ def test_circle_dependencies(code):
     with pytest.raises(DependencyError) as exc_info:
         code(Foo)
 
-    assert (
-        str(exc_info.value) == ("'foo' is a circle dependency in the 'Foo' constructor")
-    )
+    message = str(exc_info.value)
+    assert message == "'foo' is a circular dependency in the 'Foo' constructor"
 
 
 @circle_deps
@@ -940,12 +937,10 @@ def test_complex_circle_dependencies(code):
         code(Foo, Bar)
 
     message = str(exc_info.value)
-    assert message in set(
-        [
-            "'foo' is a circle dependency in the 'Bar' constructor",
-            "'bar' is a circle dependency in the 'Foo' constructor",
-        ]
-    )
+    assert message in {
+        "'foo' is a circular dependency in the 'Bar' constructor",
+        "'bar' is a circular dependency in the 'Foo' constructor",
+    }
 
 
 @complex_circle_deps
@@ -1019,13 +1014,11 @@ def test_complex_circle_dependencies_long_circle(code):
         code(Foo, Bar, Baz)
 
     message = str(exc_info.value)
-    assert message in set(
-        [
-            "'foo' is a circle dependency in the 'Baz' constructor",
-            "'bar' is a circle dependency in the 'Foo' constructor",
-            "'baz' is a circle dependency in the 'Bar' constructor",
-        ]
-    )
+    assert message in {
+        "'foo' is a circular dependency in the 'Baz' constructor",
+        "'bar' is a circular dependency in the 'Foo' constructor",
+        "'baz' is a circular dependency in the 'Bar' constructor",
+    }
 
 
 @long_circle_deps
@@ -1161,9 +1154,7 @@ def test_deny_arbitrary_positional_and_keyword_arguments_together(code):
         code(Foo)
 
     message = str(exc_info.value)
-    assert (
-        message == ("Foo.__init__ have arbitrary argument list and keyword arguments")
-    )
+    assert message == "Foo.__init__ have arbitrary argument list and keyword arguments"
 
 
 @deny_varargs_kwargs
