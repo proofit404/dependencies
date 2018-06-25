@@ -46,7 +46,6 @@ class UserView(Methods):
 class KwargsView(Methods):
 
     command = InjectKwargs
-    pk = this.kwargs["pk"]  # TODO: partial(int, this...
     slug = this.kwargs["slug"]
 
 
