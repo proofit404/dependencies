@@ -5,6 +5,7 @@ from .views import (
     BadMetadata,
     BadNegotiation,
     BadVersion,
+    EmptyViewSet,
     LoginAll,
     ThrottleAll,
     UserAction,
@@ -17,6 +18,7 @@ from .views import (
 
 router = SimpleRouter()
 router.register(r"user_set", UserViewSet.view_set_class)
+router.register(r"empty_set", EmptyViewSet.view_set_class)
 
 urlpatterns = [
     url(r"^action/$", UserAction.as_view(), name="api-action"),

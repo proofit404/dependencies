@@ -4,6 +4,7 @@ from dependencies.contrib.rest_framework import (
     generic_api_view,
     model_view_set,
 )
+from dependencies.exceptions import DependencyError
 from django.contrib.admin.models import ADDITION, CHANGE, DELETION, LogEntry
 from django.contrib.auth.models import User
 from polls.api.exceptions import MetadataError, NegotiationError, VersionError
@@ -169,6 +170,41 @@ def test_dispatch_request_model_view_set(db):
     response = client.delete("/api/user_set/2/")
     assert response.status_code == HTTP_204_NO_CONTENT
     assert LogEntry.objects.filter(action_flag=DELETION).exists()
+
+
+def test_model_view_set_undefined_method(db):
+    """
+    Throw error if corresponding model view set action method is not
+    defined in the injector.
+    """
+
+    User.objects.create(pk=1, username="admin", first_name="admin", last_name="admin")
+
+    response = client.get("/api/empty_set/1/")
+    assert response.status_code == HTTP_200_OK
+
+    response = client.get("/api/empty_set/")
+    assert response.status_code == HTTP_200_OK
+
+    with pytest.raises(DependencyError) as exc_info:
+        client.post("/api/empty_set/", {"username": "johndoe"})
+    message = str(exc_info.value)
+    assert message == "Add 'create' to the 'EmptyViewSet' injector"
+
+    with pytest.raises(DependencyError) as exc_info:
+        client.patch("/api/empty_set/1/", {"username": "jimworm"})
+    message = str(exc_info.value)
+    assert message == "Add 'update' to the 'EmptyViewSet' injector"
+
+    with pytest.raises(DependencyError) as exc_info:
+        client.put("/api/empty_set/1/", {"username": "jimworm"})
+    message = str(exc_info.value)
+    assert message == "Add 'update' to the 'EmptyViewSet' injector"
+
+    with pytest.raises(DependencyError) as exc_info:
+        client.delete("/api/empty_set/1/")
+    message = str(exc_info.value)
+    assert message == "Add 'destroy' to the 'EmptyViewSet' injector"
 
 
 def test_docstrings():

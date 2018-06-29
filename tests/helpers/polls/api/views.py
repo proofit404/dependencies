@@ -124,3 +124,10 @@ class UserViewSet(Injector):
     destroy = this.command.destroy
 
     command = UserSetOperations
+
+
+@model_view_set
+class EmptyViewSet(Injector):
+
+    queryset = User.objects.all()
+    serializer_class = UserSerializer

@@ -1,6 +1,7 @@
 from __future__ import absolute_import
 
 from dependencies import this
+from dependencies.exceptions import DependencyError
 from rest_framework.generics import GenericAPIView
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
@@ -94,4 +95,17 @@ def apply_model_view_set_methods(handler, injector):
 
                 return __method
 
-            setattr(handler, "perform_" + method, locals_hack())
+        else:
+
+            def locals_hack(method=method, ns=injector.__name__):
+
+                def __method(self, argument):
+                    raise DependencyError(
+                        "Add {method!r} to the {ns!r} injector".format(
+                            method=method, ns=ns
+                        )
+                    )
+
+                return __method
+
+        setattr(handler, "perform_" + method, locals_hack())
