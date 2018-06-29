@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-extensions = []
-
-templates_path = ["_templates"]
+templates_path = ["templates"]
 
 source_suffix = ".rst"
 
@@ -27,6 +25,6 @@ html_theme = "alabaster"
 
 html_static_path = ["static"]
 
-html_sidebars = {"**": ["globaltoc.html", "relations.html", "searchbox.html"]}
+html_sidebars = {"**": ["sidebarlogo.html", "globaltoc.html", "searchbox.html"]}
 
 htmlhelp_basename = "dependenciesdoc"
