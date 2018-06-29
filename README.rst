@@ -26,11 +26,12 @@
 .. image:: https://raw.githubusercontent.com/dry-python/dependencies/master/docs/static/dependencies_logo.png
     :alt: Dependencies
 
-----
-
 |travis| |codecov| |pyup| |codacy| |pypi| |docs|
 
-Dependency Injection for Humans.
+----
+
+Dependency Injection for Humans
+===============================
 
 - `Source Code`_
 - `Issue Tracker`_

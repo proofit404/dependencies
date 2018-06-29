@@ -26,11 +26,12 @@
 .. image:: static/dependencies_logo.png
     :alt: Dependencies
 
-----
-
 |travis| |codecov| |pyup| |codacy| |pypi| |docs|
 
-Dependency Injection for Humans.
+----
+
+Dependency Injection for Humans
+===============================
 
 Dependency Injection (or simply DI) is great technique.  By using it
 you can organize responsibilities in you code base.  Define high level
