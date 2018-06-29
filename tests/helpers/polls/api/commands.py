@@ -4,7 +4,7 @@ from rest_framework.renderers import DocumentationRenderer
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.serializers import ModelSerializer
-from rest_framework.viewsets import GenericViewSet
+from rest_framework.viewsets import ModelViewSet
 
 
 class UserOperations(object):
@@ -58,7 +58,7 @@ class UserSetOperations(object):
 
     def create(self):
 
-        assert isinstance(self.view, GenericViewSet)
+        assert isinstance(self.view, ModelViewSet)
         assert isinstance(self.request, Request)
         assert self.args == ()
         assert self.kwargs == {}
@@ -70,7 +70,7 @@ class UserSetOperations(object):
 
     def update(self):
 
-        assert isinstance(self.view, GenericViewSet)
+        assert isinstance(self.view, ModelViewSet)
         assert isinstance(self.request, Request)
         assert self.args == ()
         assert self.kwargs == {"pk": "2"}
@@ -82,7 +82,7 @@ class UserSetOperations(object):
 
     def destroy(self):
 
-        assert isinstance(self.view, GenericViewSet)
+        assert isinstance(self.view, ModelViewSet)
         assert isinstance(self.request, Request)
         assert self.args == ()
         assert self.kwargs == {"pk": "2"}

@@ -2,15 +2,8 @@ from __future__ import absolute_import
 
 from dependencies import this
 from rest_framework.generics import GenericAPIView
-from rest_framework.mixins import (
-    CreateModelMixin,
-    DestroyModelMixin,
-    ListModelMixin,
-    RetrieveModelMixin,
-    UpdateModelMixin,
-)
 from rest_framework.views import APIView
-from rest_framework.viewsets import GenericViewSet
+from rest_framework.viewsets import ModelViewSet
 
 from ._django import apply_http_methods, create_handler
 
@@ -37,7 +30,7 @@ def generic_api_view(injector):
 def model_view_set(injector):
     """Create DRF model view set from injector class."""
 
-    handler = create_model_view_set_handler(injector)
+    handler = create_handler(ModelViewSet)
     apply_api_view_methods(handler, injector)
     apply_generic_api_view_methods(handler, injector)
     apply_model_view_set_methods(handler, injector)
@@ -75,22 +68,6 @@ def apply_generic_api_view_methods(handler, injector):
             setattr(handler, attribute, getattr(injector, attribute))
 
 
-def create_model_view_set_handler(injector):
-
-    bases = [ListModelMixin, RetrieveModelMixin]
-    if "create" in injector:
-        bases.append(CreateModelMixin)
-    if "update" in injector:
-        bases.append(UpdateModelMixin)
-    if "destroy" in injector:
-        bases.append(DestroyModelMixin)
-    bases.append(GenericViewSet)
-
-    Handler = type("Handler", tuple(bases), {})
-
-    return Handler
-
-
 def apply_model_view_set_methods(handler, injector):
 
     for method, argname in [
@@ -117,4 +94,4 @@ def apply_model_view_set_methods(handler, injector):
 
                 return __method
 
-        setattr(handler, "perform_" + method, locals_hack())
+            setattr(handler, "perform_" + method, locals_hack())
