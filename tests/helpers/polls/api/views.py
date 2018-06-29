@@ -10,6 +10,7 @@ from rest_framework.renderers import DocumentationRenderer
 from .auth import AuthenticateAll
 from .commands import UserOperations
 from .filtersets import UserFilter
+from .metadata import DenyMetadata
 from .negotiation import DenyNegotiation
 from .serializers import UserSerializer
 from .throttle import ThrottleEveryOne
@@ -70,6 +71,15 @@ class BadVersion(Injector):
     command = UserOperations
 
     versioning_class = DenyVersion
+
+
+@api_view
+class BadMetadata(Injector):
+
+    get = this.command.respond
+    command = UserOperations
+
+    metadata_class = DenyMetadata
 
 
 @generic_api_view

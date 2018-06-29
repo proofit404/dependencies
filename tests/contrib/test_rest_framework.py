@@ -1,7 +1,7 @@
 import pytest
 from dependencies.contrib.rest_framework import api_view, generic_api_view
 from django.contrib.auth.models import User
-from polls.api.exceptions import NegotiationError, VersionError
+from polls.api.exceptions import NegotiationError, VersionError, MetadataError
 from rest_framework.status import (
     HTTP_200_OK,
     HTTP_403_FORBIDDEN,
@@ -57,6 +57,11 @@ def test_dispatch_request(db):
 
     with pytest.raises(VersionError):
         client.get("/api/versioning/")
+
+    # Metadata classes applies.
+
+    with pytest.raises(MetadataError):
+        client.options("/api/metadata/")
 
 
 def test_dispatch_request_generic_view_retrieve(db):
