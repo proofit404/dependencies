@@ -15,7 +15,8 @@ class DispatchRequest(object):
     def do(self):
 
         assert self.request.path in {
-            "/test_dispatch_request/1/test/", "/test_empty_request/1/test/"
+            "/test_dispatch_request/1/test/",
+            "/test_empty_request/1/test/",
         }
         assert self.args == ("1", "test")
         assert self.kwargs == {}
@@ -62,7 +63,7 @@ class InjectSelf(object):
 
 class ProcessQuestion(object):
 
-    def __init__(self, view, form, request, args, kwargs, user):
+    def __init__(self, view, form, request, args, kwargs, user, pk):
 
         self.view = view
         self.form = form
@@ -70,14 +71,16 @@ class ProcessQuestion(object):
         self.args = args
         self.kwargs = kwargs
         self.user = user
+        self.pk = pk
 
     def handle_form(self):
 
         assert isinstance(self.view, View)
         assert isinstance(self.form, Form)
-        assert self.request.path == "/test_form_view/"
+        assert self.request.path == "/test_form_view/1/"
         assert self.args == ()
-        assert self.kwargs == {}
+        assert self.kwargs == {"pk": "1"}
+        assert self.pk == "1"
         assert isinstance(self.user, AnonymousUser)
         return HttpResponse("<h1>OK</h1>")
 
@@ -85,8 +88,9 @@ class ProcessQuestion(object):
 
         assert isinstance(self.view, View)
         assert isinstance(self.form, Form)
-        assert self.request.path == "/test_form_view/"
+        assert self.request.path == "/test_form_view/1/"
         assert self.args == ()
-        assert self.kwargs == {}
+        assert self.kwargs == {"pk": "1"}
+        assert self.pk == "1"
         assert isinstance(self.user, AnonymousUser)
         return HttpResponse("<h1>ERROR</h1>")

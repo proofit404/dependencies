@@ -12,7 +12,12 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.renderers import DocumentationRenderer
 
 from .auth import AuthenticateAdmin, AuthenticateAll
-from .commands import UserOperations, UserSetOperations
+from .commands import (
+    UserCreateOperations,
+    UserDestroyOperations,
+    UserOperations,
+    UserUpdateOperations,
+)
 from .filtersets import UserFilter
 from .metadata import DenyMetadata
 from .negotiation import DenyNegotiation
@@ -119,11 +124,13 @@ class UserViewSet(Injector):
     queryset = User.objects.filter(username="johndoe")
     serializer_class = UserSerializer
 
-    create = this.command.create
-    update = this.command.update
-    destroy = this.command.destroy
+    create = this.create_command.create
+    update = this.update_command.update
+    destroy = this.destroy_command.destroy
 
-    command = UserSetOperations
+    create_command = UserCreateOperations
+    update_command = UserUpdateOperations
+    destroy_command = UserDestroyOperations
 
 
 @model_view_set

@@ -54,19 +54,19 @@ def test_inject_self(client, method):
 def test_form_view(client):
     """Retrieve and submit form view created from injector."""
 
-    response = client.get("/test_form_view/")
+    response = client.get("/test_form_view/1/")
     assert response.status_code == 200
     if django.VERSION >= (2, 0):
         assert response.content == b"extra-var"
 
     response = client.post(
-        "/test_form_view/",
+        "/test_form_view/1/",
         {"test-question_text": "foo", "test-pub_date": "12/23/2008 00:12"},
     )
     assert response.status_code == 200
     assert response.content == b"<h1>OK</h1>"
 
-    response = client.post("/test_form_view/", {"bad": "input"})
+    response = client.post("/test_form_view/1/", {"bad": "input"})
     assert response.status_code == 200
     assert response.content == b"<h1>ERROR</h1>"
 

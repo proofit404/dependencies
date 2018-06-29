@@ -81,6 +81,7 @@ def apply_form_methods(handler, injector):
                         args=this.view.args,
                         kwargs=this.view.kwargs,
                         user=this.request.user,
+                        pk=this.kwargs["pk"],  # TODO: partial(int, this...
                     )
                     return getattr(ns, method)()
 

@@ -42,11 +42,9 @@ class UserOperations(object):
         return self.view.get_paginated_response(serializer.data)
 
 
-class UserSetOperations(object):
+class UserCreateOperations(object):
 
-    def __init__(
-        self, view, request, args, kwargs, user, serializer=None, instance=None
-    ):
+    def __init__(self, view, request, args, kwargs, user, serializer):
 
         self.view = view
         self.request = request
@@ -54,7 +52,6 @@ class UserSetOperations(object):
         self.kwargs = kwargs
         self.user = user
         self.serializer = serializer
-        self.instance = instance
 
     def create(self):
 
@@ -63,10 +60,22 @@ class UserSetOperations(object):
         assert self.args == ()
         assert self.kwargs == {}
         assert isinstance(self.serializer, ModelSerializer)
-        assert self.instance is None
 
         self.serializer.save()
         LogEntry.objects.create(user=self.user, action_flag=ADDITION)
+
+
+class UserUpdateOperations(object):
+
+    def __init__(self, view, request, args, kwargs, user, pk, serializer):
+
+        self.view = view
+        self.request = request
+        self.args = args
+        self.kwargs = kwargs
+        self.user = user
+        self.pk = pk
+        self.serializer = serializer
 
     def update(self):
 
@@ -74,11 +83,24 @@ class UserSetOperations(object):
         assert isinstance(self.request, Request)
         assert self.args == ()
         assert self.kwargs == {"pk": "2"}
+        assert self.pk == "2"
         assert isinstance(self.serializer, ModelSerializer)
-        assert self.instance is None
 
         self.serializer.save()
         LogEntry.objects.create(user=self.user, action_flag=CHANGE)
+
+
+class UserDestroyOperations(object):
+
+    def __init__(self, view, request, args, kwargs, user, pk, instance):
+
+        self.view = view
+        self.request = request
+        self.args = args
+        self.kwargs = kwargs
+        self.user = user
+        self.pk = pk
+        self.instance = instance
 
     def destroy(self):
 
@@ -86,7 +108,7 @@ class UserSetOperations(object):
         assert isinstance(self.request, Request)
         assert self.args == ()
         assert self.kwargs == {"pk": "2"}
-        assert self.serializer is None
+        assert self.pk == "2"
         assert isinstance(self.instance, Model)
 
         self.instance.delete()
