@@ -1,7 +1,16 @@
 from __future__ import absolute_import
 
+from dependencies import this
 from rest_framework.generics import GenericAPIView
+from rest_framework.mixins import (
+    CreateModelMixin,
+    DestroyModelMixin,
+    ListModelMixin,
+    RetrieveModelMixin,
+    UpdateModelMixin,
+)
 from rest_framework.views import APIView
+from rest_framework.viewsets import GenericViewSet
 
 from ._django import apply_http_methods, create_handler
 
@@ -23,6 +32,16 @@ def generic_api_view(injector):
     apply_api_view_methods(handler, injector)
     apply_generic_api_view_methods(handler, injector)
     return injector.let(as_view=handler.as_view)
+
+
+def model_view_set(injector):
+    """Create DRF model view set from injector class."""
+
+    handler = create_model_view_set_handler(injector)
+    apply_api_view_methods(handler, injector)
+    apply_generic_api_view_methods(handler, injector)
+    apply_model_view_set_methods(handler, injector)
+    return injector.let(view_set_class=handler)
 
 
 def apply_api_view_methods(handler, injector):
@@ -54,3 +73,48 @@ def apply_generic_api_view_methods(handler, injector):
     ]:
         if attribute in injector:
             setattr(handler, attribute, getattr(injector, attribute))
+
+
+def create_model_view_set_handler(injector):
+
+    bases = [ListModelMixin, RetrieveModelMixin]
+    if "create" in injector:
+        bases.append(CreateModelMixin)
+    if "update" in injector:
+        bases.append(UpdateModelMixin)
+    if "destroy" in injector:
+        bases.append(DestroyModelMixin)
+    bases.append(GenericViewSet)
+
+    Handler = type("Handler", tuple(bases), {})
+
+    return Handler
+
+
+def apply_model_view_set_methods(handler, injector):
+
+    for method, argname in [
+        ("create", "serializer"),
+        ("update", "serializer"),
+        ("destroy", "instance"),
+    ]:
+        if method in injector:
+
+            def locals_hack(method=method, argname=argname):
+
+                def __method(self, argument):
+                    ns = injector.let(
+                        **{
+                            "view": self,
+                            "request": this.view.request,
+                            "args": this.view.args,
+                            "kwargs": this.view.kwargs,
+                            "user": this.request.user,
+                            argname: argument,
+                        }
+                    )
+                    return getattr(ns, method)()
+
+                return __method
+
+        setattr(handler, "perform_" + method, locals_hack())

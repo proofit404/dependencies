@@ -1,5 +1,9 @@
 from dependencies import Injector, this
-from dependencies.contrib.rest_framework import api_view, generic_api_view
+from dependencies.contrib.rest_framework import (
+    api_view,
+    generic_api_view,
+    model_view_set,
+)
 from django.contrib.auth.models import User
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.pagination import LimitOffsetPagination
@@ -7,8 +11,8 @@ from rest_framework.parsers import JSONParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.renderers import DocumentationRenderer
 
-from .auth import AuthenticateAll
-from .commands import UserOperations
+from .auth import AuthenticateAdmin, AuthenticateAll
+from .commands import UserOperations, UserSetOperations
 from .filtersets import UserFilter
 from .metadata import DenyMetadata
 from .negotiation import DenyNegotiation
@@ -105,3 +109,18 @@ class UserListView(Injector):
     filter_backends = (DjangoFilterBackend,)
     filter_class = UserFilter
     pagination_class = LimitOffsetPagination
+
+
+@model_view_set
+class UserViewSet(Injector):
+
+    authentication_classes = (AuthenticateAdmin,)
+
+    queryset = User.objects.filter(username="johndoe")
+    serializer_class = UserSerializer
+
+    create = this.command.create
+    update = this.command.update
+    destroy = this.command.destroy
+
+    command = UserSetOperations

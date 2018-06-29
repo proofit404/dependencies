@@ -2,6 +2,7 @@ INSTALLED_APPS = [
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
+    "django.contrib.admin",
     "rest_framework",
     "django_filters",
     "polls.apps.PollsConfig",

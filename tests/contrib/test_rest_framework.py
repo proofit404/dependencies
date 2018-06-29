@@ -1,9 +1,16 @@
 import pytest
-from dependencies.contrib.rest_framework import api_view, generic_api_view
+from dependencies.contrib.rest_framework import (
+    api_view,
+    generic_api_view,
+    model_view_set,
+)
+from django.contrib.admin.models import ADDITION, CHANGE, DELETION, LogEntry
 from django.contrib.auth.models import User
-from polls.api.exceptions import NegotiationError, VersionError, MetadataError
+from polls.api.exceptions import MetadataError, NegotiationError, VersionError
 from rest_framework.status import (
     HTTP_200_OK,
+    HTTP_201_CREATED,
+    HTTP_204_NO_CONTENT,
     HTTP_403_FORBIDDEN,
     HTTP_415_UNSUPPORTED_MEDIA_TYPE,
     HTTP_429_TOO_MANY_REQUESTS,
@@ -101,6 +108,69 @@ def test_dispatch_request_generic_view_list(db):
     }
 
 
+def test_dispatch_request_model_view_set(db):
+    """
+    List, retrieve, create, update & delete actions in the
+    `ModelViewSet` defined with `Injector` subclass.
+    """
+
+    User.objects.create(pk=1, username="admin", first_name="admin", last_name="admin")
+
+    response = client.post(
+        "/api/user_set/",
+        {"username": "johndoe", "first_name": "John", "last_name": "Doe"},
+    )
+    assert response.status_code == HTTP_201_CREATED
+    assert response.json() == {
+        "id": 2,
+        "username": "johndoe",
+        "first_name": "John",
+        "last_name": "Doe",
+    }
+    assert LogEntry.objects.filter(action_flag=ADDITION).exists()
+
+    response = client.get("/api/user_set/")
+    assert response.status_code == HTTP_200_OK
+    assert response.json() == [
+        {"id": 2, "username": "johndoe", "first_name": "John", "last_name": "Doe"}
+    ]
+
+    response = client.get("/api/user_set/2/")
+    assert response.status_code == HTTP_200_OK
+    assert response.json() == {
+        "id": 2,
+        "username": "johndoe",
+        "first_name": "John",
+        "last_name": "Doe",
+    }
+
+    response = client.put(
+        "/api/user_set/2/", {"username": "johndoe", "first_name": "Jim"}
+    )
+    assert response.status_code == HTTP_200_OK
+    assert response.json() == {
+        "id": 2,
+        "username": "johndoe",
+        "first_name": "Jim",
+        "last_name": "Doe",
+    }
+    assert LogEntry.objects.filter(action_flag=CHANGE).exists()
+
+    response = client.patch("/api/user_set/2/", {"last_name": "Worm"})
+    assert response.status_code == HTTP_200_OK
+    assert response.json() == {
+        "id": 2,
+        "username": "johndoe",
+        "first_name": "Jim",
+        "last_name": "Worm",
+    }
+    assert LogEntry.objects.filter(action_flag=CHANGE).count() == 2
+
+    response = client.delete("/api/user_set/2/")
+    assert response.status_code == HTTP_204_NO_CONTENT
+    assert LogEntry.objects.filter(action_flag=DELETION).exists()
+
+
 def test_docstrings():
     """Access `api_view` and `generic_api_view` docstrings."""
 
@@ -109,3 +179,4 @@ def test_docstrings():
         generic_api_view.__doc__
         == "Create DRF generic class-based API view from injector class."
     )
+    assert model_view_set.__doc__ == "Create DRF model view set from injector class."
