@@ -32,4 +32,9 @@ html_sidebars = {
     "**": ["sidebarlogo.html", "globaltoc.html", "relations.html", "searchbox.html"]
 }
 
-html_theme_options = {"show_related": True}
+html_theme_options = {
+    "show_related": True,
+    "github_user": "dry-python",
+    "github_repo": "dependencies",
+    "github_banner": True,
+}
