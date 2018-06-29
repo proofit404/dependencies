@@ -7,10 +7,13 @@ source_suffix = ".rst"
 master_doc = "index"
 
 project = "dependencies"
+
 copyright = "2016-2018, Artem Malyshev"
+
 author = "Artem Malyshev"
 
 version = "0.14"
+
 release = "0.14"
 
 language = None
@@ -25,6 +28,8 @@ html_theme = "alabaster"
 
 html_static_path = ["static"]
 
-html_sidebars = {"**": ["sidebarlogo.html", "globaltoc.html", "searchbox.html"]}
+html_sidebars = {
+    "**": ["sidebarlogo.html", "globaltoc.html", "relations.html", "searchbox.html"]
+}
 
-htmlhelp_basename = "dependenciesdoc"
+html_theme_options = {"show_related": True}
