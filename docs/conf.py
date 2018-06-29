@@ -29,7 +29,13 @@ html_theme = "alabaster"
 html_static_path = ["static"]
 
 html_sidebars = {
-    "**": ["sidebarlogo.html", "globaltoc.html", "relations.html", "searchbox.html"]
+    "**": [
+        "sidebarlogo.html",
+        "globaltoc.html",
+        "relations.html",
+        "links.html",
+        "searchbox.html",
+    ]
 }
 
 html_theme_options = {
