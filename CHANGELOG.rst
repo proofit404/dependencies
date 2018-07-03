@@ -7,10 +7,20 @@ Changelog
 0.15 (2018-00-00)
 +++++++++++++++++
 
+- Support ``in`` checks in the ``Injector`` subclasses.
+- Add ``operation`` decorator to build injectable functions.
+- Add ``Package`` proxy to reduce import boilerplate in the
+  ``Injector`` definition.
+- Add Celery contrib to define tasks from ``Injector`` subclasses.
+- Add Py.Test contrib to define fixtures from ``Injector`` subclasses.
+- Add Django contrib to define views from ``Injector`` subclasses.
+- Add Django REST Framework contrib to define API views and model view
+  sets from ``Injector`` subclasses.
+- A class named attributes should end with ``_class``.
+- Improved error messages for missing dependencies.
+- Raise ``DependencyError`` instead of ``AttributeError`` for missed
+  dependencies.
 - Drop python 2.6 and 3.4 support.
-- Add contrib packages for Celery, Py.Test, Django and Django REST
-  Framework.
-- Class named attributes should ends with ``_class`` now.
 
 0.14 (2018-04-13)
 +++++++++++++++++
