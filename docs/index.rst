@@ -106,6 +106,8 @@ Contents
     overview
     why
     usage
+    proxies/index
+    contrib/index
     implementation
 
 Indices and tables
