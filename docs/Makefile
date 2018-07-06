@@ -1,7 +1,7 @@
 SPHINXBUILD   = sphinx-build
 BUILDDIR      = _build
 
-html:
+build:
 	$(SPHINXBUILD) -b html -d $(BUILDDIR)/doctrees . $(BUILDDIR)/html
 
 serve:
