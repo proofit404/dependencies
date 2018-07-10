@@ -18,6 +18,13 @@ For example, if there is a dependency ``foo`` which contains class
 be resolved to the **bound** method ``bar`` of the ``Foo``
 **instance**.
 
+Package
+=======
+
+`package`_ gives you an ability to point injector to the classes,
+methods, functions and variables defined in the different places in
+your code base without import statements.
+
 Contents
 ========
 
@@ -29,3 +36,4 @@ Contents
     package
 
 .. _this: this.html
+.. _package: package.html
