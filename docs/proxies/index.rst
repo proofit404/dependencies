@@ -18,6 +18,14 @@ For example, if there is a dependency ``foo`` which contains class
 be resolved to the **bound** method ``bar`` of the ``Foo``
 **instance**.
 
+operation
+=========
+
+Sometimes you defined a class with two methods: ``__init__`` and
+``__call__`` just to invoke its dependencies in a certain way.  If
+this callable object doesn't accept any arguments, you can reduce this
+class to the simple function with `operation`_ decorator.
+
 Package
 =======
 
@@ -36,4 +44,5 @@ Contents
     package
 
 .. _this: this.html
+.. _operation: operation.html
 .. _package: package.html
