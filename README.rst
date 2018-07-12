@@ -23,7 +23,7 @@
     :target: http://dependencies.readthedocs.io/en/latest/?badge=latest
     :alt: Documentation Status
 
-.. image:: https://raw.githubusercontent.com/dry-python/dependencies/master/docs/static/dependencies_logo.png
+.. image:: https://raw.githubusercontent.com/dry-python/brand/master/logo/dependencies.png
     :alt: Dependencies
 
 |travis| |codecov| |pyup| |codacy| |pypi| |docs|
