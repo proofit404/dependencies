@@ -26,8 +26,6 @@ todo_include_todos = False
 
 html_theme = "alabaster"
 
-html_static_path = ["static"]
-
 html_sidebars = {
     "**": [
         "sidebarlogo.html",
