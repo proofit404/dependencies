@@ -13,6 +13,8 @@ Let's start with Django url patterns.
 
 .. code:: python
 
+    # app/urls.py
+
     from django.urls import path
 
     from .views import ShowCartWithDiscount
@@ -24,6 +26,8 @@ Let's start with Django url patterns.
 Looks familiar, right?  Now let's take a look at the views module.
 
 .. code:: python
+
+    # app/views.py
 
     from dependencies import Injector, operation, this
     from dependencies.contrib.django import view
@@ -57,6 +61,8 @@ candidate for this.
 Now let's take a look into actual business logic representation.
 
 .. code:: python
+
+    # app/commands.py
 
     class ShowCart(object):
         def __init__(self, price_calc):
@@ -98,6 +104,8 @@ Form processing views are similar to regular views in case of
 definition.
 
 .. code:: python
+
+    # app/views.py
 
     from dependencies import Injector, this
     from dependencies.contrib.django import form_view
