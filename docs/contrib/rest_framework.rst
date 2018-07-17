@@ -150,9 +150,10 @@ As with all ``view`` related decorators you can specified handlers of
 HTTP verbs.  ``get``, ``post``, ``put``, ``patch``, ``delete``,
 ``head``, ``options``, ``trace`` attributes works as usual.
 
-In addition you can set following attributes and they will be passed
-to the ``GenericAPIView`` subclass under the hood.  Everything works
-according to the rest framework documentation.
+In addition to ``api_view`` attributes you can set following
+attributes and they will be passed to the ``GenericAPIView`` subclass
+under the hood.  Everything works according to the rest framework
+documentation.
 
 * ``queryset``
 * ``serializer_class``
@@ -161,3 +162,93 @@ according to the rest framework documentation.
 * ``filter_backends``
 * ``filter_class``
 * ``pagination_class``
+
+Model View Set
+==============
+
+Also, it is possible to define complete ``ModelViewSet`` from the
+injector and add it to the rest framework router.
+
+.. code:: python
+
+    # app/urls.py
+
+    router = SimpleRouter()
+    router.register(r"users", UserViewSet.view_set_class)
+
+    urlpatterns = [
+        url(r"^", include(router.urls)),
+    ]
+
+Remember to register ``view_set_class`` attribute, no the
+``UserViewSet`` itself.  Its implementation should looks something
+like this.
+
+.. code:: python
+
+    # app/views.py
+
+    from dependencies import Injector
+    from dependencies.contrib.rest_framework import model_view_set
+
+    from .commands import CreateUser, UpdateUser, DestroyUser
+
+    @model_view_set
+    class UserViewSet(Injector):
+
+        queryset = User.objects.all()
+        serializer_class = UserSerializer
+
+        create = CreateUser
+        update = UpdateUser
+        destroy = DestroyUser
+
+``model_view_set`` decorator gives you an ability to redefine
+``perform_create``, ``perform_update`` and ``perform_destroy`` methods
+of the ``ModelViewSet``.
+
+.. code:: python
+
+    # app/commands.py
+
+    class CreateUser(object):
+
+        def __init__(self, user, serializer):
+            pass
+
+        def __call__(self):
+            # Business logic here.
+            # You should return created model instance.
+            return serializer.create()
+
+    class DestroyUser(object):
+
+        def __init__(self, user, instance):
+            pass
+
+        def __call__(self):
+            # Cleanup business logic here.
+            pass
+
+As you can see from the example above create and update actions get
+access to the ``serializer`` instance from the view.  Destroy action
+get access to the model ``instance`` to be destroyed.
+
+Customizable arguments
+----------------------
+
+Are the same to generic class based view.  Except you can not specify
+HTTP verbs handlers.  You should set ``create``, ``update`` and
+``destroy`` handlers instead.  Everything should resolve to a callable
+which takes no arguments.
+
+Available scope
+---------------
+
+In addition to the regular view extended scope (``view``, ``request``,
+ ``args``, ``kwargs``, ``user`` and ``pk``) you have access to this
+ dependencies in your action constructor.
+
+* ``serializer`` serializer instance with validation applied in the
+  create and update actions
+* ``instance`` model instance in the destroy action
