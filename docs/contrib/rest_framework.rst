@@ -95,3 +95,69 @@ Injector scope of the API view extended the same way as django
 class-based view scope.  ``view``, ``request``, ``args``, ``kwargs``,
 ``user`` and ``pk`` arguments are added and can be used as arguments
 in the constructor of the HTTP verb handler.
+
+Generic API View
+================
+
+You are free to use ``GenericAPIView`` as a base class to your views.
+This is useful if you want to have access to the to the view methods.
+For example, delegate queryset and serializer processing to the view.
+
+.. code:: python
+
+    # app/views.py
+
+    from dependencies import Injector
+    from dependencies.contrib.rest_framework import generic_api_view
+
+    from .commands import ListCartItems
+
+    @generic_api_view
+    class CartItemListView(Injector):
+
+        get = ListCartItems
+
+        queryset = Item.objects.all()
+        serializer_class = ItemSerializer
+        filter_backends = (DjangoFilterBackend,)
+        filter_class = CartFilter
+
+Business logic can use view instance.
+
+.. code:: python
+
+    # app/commands.py
+
+    class ListCartItems(object):
+
+        def __init__(self, view, request):
+            pass
+
+        def __call__(self):
+
+            items = self.view.get_queryset()
+            items = self.view.filter_queryset(items)
+            page = self.view.paginate_queryset(items)
+            # Business logic work with `page`.
+            # ...
+            serializer = self.view.get_serializer(page, many=True)
+            return self.view.get_paginated_response(serializer.data)
+
+Customizable arguments
+----------------------
+
+As with all ``view`` related decorators you can specified handlers of
+HTTP verbs.  ``get``, ``post``, ``put``, ``patch``, ``delete``,
+``head``, ``options``, ``trace`` attributes works as usual.
+
+In addition you can set following attributes and they will be passed
+to the ``GenericAPIView`` subclass under the hood.  Everything works
+according to the rest framework documentation.
+
+* ``queryset``
+* ``serializer_class``
+* ``lookup_field``
+* ``lookup_url_kwarg``
+* ``filter_backends``
+* ``filter_class``
+* ``pagination_class``
