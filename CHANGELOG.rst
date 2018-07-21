@@ -4,7 +4,7 @@
 Changelog
 ---------
 
-0.15 (2018-00-00)
+0.15 (2018-07-21)
 +++++++++++++++++
 
 - Support ``in`` checks in the ``Injector`` subclasses.

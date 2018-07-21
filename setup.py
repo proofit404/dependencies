@@ -1,10 +1,12 @@
 from setuptools import setup
 
+
 readme = open("README.rst").read() + open("CHANGELOG.rst").read()
+
 
 setup(
     name="dependencies",
-    version="0.14",
+    version="0.15",
     description="Dependency Injection for Humans",
     long_description=readme,
     license="BSD",

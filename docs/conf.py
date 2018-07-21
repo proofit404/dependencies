@@ -12,9 +12,9 @@ copyright = "2016-2018, Artem Malyshev"
 
 author = "Artem Malyshev"
 
-version = "0.14"
+version = "0.15"
 
-release = "0.14"
+release = "0.15"
 
 language = None
 
