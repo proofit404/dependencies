@@ -66,6 +66,14 @@ attributes to the injector subclass to tweak fixture behavior.
 
 * ``ids`` getter for parametrized tests in the report.
 
+Available scope
+---------------
+
+Before test run injector scope will be executed with this attributes.
+You can use them as dependencies for your classes.
+
+* ``request`` instance of the pytest ``FixtureRequest``.
+
 Depend on a fixture
 ===================
 
@@ -104,5 +112,29 @@ Your business objects can depend on values of another fixture.
 
 The value of the ``send_email`` fixture will be injected into
 ``CreateOrder`` constructor before each test.
+
+Parametrized fixture
+====================
+
+It is possible to define parametrized fixture with ``params``
+attribute set on the injector subclass.
+
+.. code:: python
+
+    # tests/app_test.py
+
+    class CreateOrder(object):
+        def __init__(self, discount):
+            pass
+
+    @register
+    class CreateOrderFixture(Injector):
+        name = 'create_order'
+        fixture = CreateOrder
+        discount = this.request.param
+        params = [20, 30, 50]
+
+In this example we create parametrized fixture and use this param in
+actual object as a dependency.
 
 .. _py.test: https://docs.pytest.org/
