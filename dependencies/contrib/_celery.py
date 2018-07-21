@@ -50,9 +50,17 @@ def decorate_with(func, injector):
         if argument in injector:
             options[argument] = getattr(injector, argument)
 
-    @func(**options)
-    def __task(*args, **kwargs):
-        return injector.let(args=args, kwargs=kwargs).run()
+    if "bind" in injector and injector.bind:
+
+        def __task(self, *args, **kwargs):
+            return injector.let(task=self, args=args, kwargs=kwargs).run()
+
+    else:
+
+        def __task(*args, **kwargs):
+            return injector.let(args=args, kwargs=kwargs).run()
+
+    func(**options)(__task)
 
     return TaskMixin & injector
 

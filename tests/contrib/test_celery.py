@@ -270,15 +270,16 @@ def test_task_arguments(celery_app, code):
 
     class Bar(object):
 
-        def __init__(self, foo, args, kwargs):
+        def __init__(self, foo, task, args, kwargs):
             self.foo = foo
+            self.task = task
             self.args = args
             self.kwargs = kwargs
 
         def do(self):
-            task, one = self.args
+            one = self.args[0]
             two = self.kwargs["two"]
-            assert isinstance(task, MyTask)
+            assert isinstance(self.task, MyTask)
             return self.foo(one, two)
 
     class MyTask(Task):
