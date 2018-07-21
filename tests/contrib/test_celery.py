@@ -11,6 +11,7 @@ def celery_app():
     """Simulate global Celery application instance."""
 
     app = Celery()
+    app.conf.update(task_always_eager=True, task_eager_propagates=True)
     app.tasks.clear()
     return app
 
@@ -71,6 +72,14 @@ def test_execute_task(celery_app, code):
 
     code(celery_app)
     assert signature("foo.bar.baz")("foo", bar="baz") == 1
+
+
+@containers.parametrize
+def test_delay_task(celery_app, code):
+    """Delay task from Celery application."""
+
+    ret = code(celery_app)
+    assert ret.delay("foo", bar="baz").get() == 1
 
 
 @containers.parametrize
@@ -186,7 +195,7 @@ def test_docstrings():
         name = "foo.bar.baz"
         run = lambda: None  # noqa: E731
 
-    assert Container.__bases__[1].__doc__ == "Foo bar baz task."
+    assert Container.__bases__[0].__doc__ == "Foo bar baz task."
     assert (
         Container.signature.__doc__
         == """
@@ -196,6 +205,10 @@ def test_docstrings():
     )
     assert Container.s.__doc__ == "Create Celery canvas shortcut expression."
     assert Container.si.__doc__ == "Create immutable Celery canvas shortcut expression."
+    assert (
+        Container.delay.__doc__
+        == "Delay execution of the task defined with `Injector` subclass."
+    )
 
 
 def test_validation(celery_app):

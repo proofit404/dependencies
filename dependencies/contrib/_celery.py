@@ -62,7 +62,7 @@ def decorate_with(func, injector):
 
     func(**options)(__task)
 
-    return TaskMixin & injector
+    return injector & TaskMixin
 
 
 class Signature(object):
@@ -129,8 +129,18 @@ class ImmutableShortcut(Shortcut):
     immutable_default = True
 
 
+class Delay(Signature):
+    """Delay execution of the task defined with `Injector` subclass."""
+
+    def __call__(self, *args, **kwargs):
+
+        signature = super(Delay, self).__call__()
+        return signature.delay(*args, **kwargs)
+
+
 class TaskMixin(Injector):
 
     signature = Signature
     s = Shortcut
     si = ImmutableShortcut
+    delay = Delay
