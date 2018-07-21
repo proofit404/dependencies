@@ -52,7 +52,7 @@ def decorate_with(func, injector):
 
     @func(**options)
     def __task(*args, **kwargs):
-        return injector.run(*args, **kwargs)
+        return injector.let(args=args, kwargs=kwargs).run()
 
     return TaskMixin & injector
 
@@ -104,7 +104,9 @@ class Shortcut(Signature):
             args=args,
             kwargs=kwargs,
             immutable=(
-                self.immutable_default if self.immutable is undefined else self.immutable
+                self.immutable_default
+                if self.immutable is undefined
+                else self.immutable
             ),
             options={} if self.options is undefined else self.options,
             subtask_type=(

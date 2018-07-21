@@ -15,6 +15,18 @@ def celery_app():
     return app
 
 
+class Run(object):
+
+    def __init__(self, args, kwargs):
+        self.args = args
+        self.kwargs = kwargs
+
+    def __call__(self):
+        assert self.args == ("foo",)
+        assert self.kwargs == {"bar": "baz"}
+        return 1
+
+
 containers = CodeCollector()
 
 
@@ -27,11 +39,7 @@ def bAMWkT3WSTN1(_app):
 
         app = _app
         name = "foo.bar.baz"
-
-        def run(*args, **kwargs):
-            assert args == ("foo",)
-            assert kwargs == {"bar": "baz"}
-            return 1
+        run = Run
 
     return Container
 
@@ -44,11 +52,7 @@ def xPa7isagt3Lq(app):
     class Container(Injector):
 
         name = "foo.bar.baz"
-
-        def run(*args, **kwargs):
-            assert args == ("foo",)
-            assert kwargs == {"bar": "baz"}
-            return 1
+        run = Run
 
     return Container
 
@@ -266,11 +270,15 @@ def test_task_arguments(celery_app, code):
 
     class Bar(object):
 
-        def __init__(self, foo):
+        def __init__(self, foo, args, kwargs):
             self.foo = foo
+            self.args = args
+            self.kwargs = kwargs
 
-        def do(self, instance, one, two=None):
-            assert isinstance(instance, MyTask)
+        def do(self):
+            task, one = self.args
+            two = self.kwargs["two"]
+            assert isinstance(task, MyTask)
             return self.foo(one, two)
 
     class MyTask(Task):
