@@ -83,4 +83,4 @@ Dependencies library is offered under the two clause BSD license.
 
 .. _source code: https://github.com/dry-python/dependencies
 .. _issue tracker: https://github.com/dry-python/dependencies/issues
-.. _documentation: http://dependencies.readthedocs.io/en/latest/
+.. _documentation: https://dependencies.readthedocs.io/en/latest/
