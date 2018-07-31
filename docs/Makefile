@@ -1,3 +1,5 @@
+.DEFAULT_GOAL := build
+
 SPHINXBUILD   = sphinx-build
 BUILDDIR      = _build
 
