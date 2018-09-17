@@ -79,7 +79,7 @@ Dependencies is available on PyPI - to install it just run::
 
     pip install -U dependencies
 
-That's it!  Ones installed, ``dependencies`` are available to use.
+That's it!  Once installed, ``dependencies`` are available to use.
 Import it and have fun.
 
 Development version
