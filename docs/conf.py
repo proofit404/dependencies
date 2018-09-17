@@ -32,6 +32,7 @@ html_sidebars = {
         "stats.html",
         "globaltoc.html",
         "relations.html",
+        "updates.html",
         "links.html",
         "searchbox.html",
     ]
