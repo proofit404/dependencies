@@ -29,6 +29,7 @@ html_static_path = ["static"]
 html_sidebars = {
     "**": [
         "sidebarlogo.html",
+        "stats.html",
         "globaltoc.html",
         "relations.html",
         "links.html",
@@ -38,7 +39,10 @@ html_sidebars = {
 
 html_theme_options = {
     "show_related": True,
+    "description": "Dependency Injection for Humans.  It provides a simple low-impact implementation of an IoC container and resolution support for your classes.",
     "github_user": "dry-python",
     "github_repo": "dependencies",
+    "github_type": "star",
+    "github_count": True,
     "github_banner": True,
 }
