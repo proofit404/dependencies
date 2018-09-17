@@ -38,6 +38,7 @@ html_sidebars = {
 }
 
 html_theme_options = {
+    "show_powered_by": False,
     "show_related": True,
     "description": "Dependency Injection for Humans.  It provides a simple low-impact implementation of an IoC container and resolution support for your classes.",
     "github_user": "dry-python",
