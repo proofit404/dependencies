@@ -10,6 +10,7 @@ dist/
 .coverage
 htmlcov/
 docs/_build/
+docs/.doctrees/
 .ipynb_checkpoints/
 *.ipynb
 .pytest_cache/
