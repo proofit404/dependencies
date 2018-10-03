@@ -77,6 +77,7 @@ def test_form_view_attributes():
     from polls.views import QuestionFormView
 
     view_class = QuestionFormView.as_view().view_class
+    assert view_class.success_url == "/thanks/"
     assert view_class.template_name == "question.html"
     assert view_class.template_engine == "default"
     assert view_class.response_class.__name__ == "TestTemplateResponse"

@@ -55,9 +55,9 @@ def apply_form_methods(handler, injector):
 
     handler.form_class = injector.form_class
     handler.template_name = injector.template_name
-    handler.success_url = injector.success_url
 
     for attribute in [
+        "success_url",
         "template_engine",
         "response_class",
         "content_type",
