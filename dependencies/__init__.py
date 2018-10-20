@@ -12,5 +12,6 @@ from ._injector import Injector
 from ._operation import operation
 from ._package import Package
 from ._this import this
+from ._value import value
 
-__all__ = ["Injector", "operation", "Package", "this"]
+__all__ = ["Injector", "operation", "Package", "this", "value"]
