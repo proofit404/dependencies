@@ -1,4 +1,4 @@
-from dependencies import Injector, this
+from dependencies import Injector, this, value
 from dependencies.contrib.rest_framework import (
     api_view,
     generic_api_view,
@@ -122,6 +122,28 @@ class UserViewSet(Injector):
     authentication_classes = (AuthenticateAdmin,)
 
     queryset = User.objects.filter(username="johndoe")
+    serializer_class = UserSerializer
+
+    create = this.create_command.create
+    update = this.update_command.update
+    destroy = this.destroy_command.destroy
+
+    create_command = UserCreateOperations
+    update_command = UserUpdateOperations
+    destroy_command = UserDestroyOperations
+
+
+@model_view_set
+class DynamicUserViewSet(Injector):
+
+    authentication_classes = (AuthenticateAdmin,)
+
+    @value
+    def queryset(user):
+
+        assert user.username == "admin"
+        return User.objects.filter(username="johndoe")
+
     serializer_class = UserSerializer
 
     create = this.create_command.create

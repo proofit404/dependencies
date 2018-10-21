@@ -5,6 +5,7 @@ from .views import (
     BadMetadata,
     BadNegotiation,
     BadVersion,
+    DynamicUserViewSet,
     EmptyViewSet,
     LoginAll,
     ThrottleAll,
@@ -17,8 +18,11 @@ from .views import (
 
 
 router = SimpleRouter()
-router.register(r"user_set", UserViewSet.view_set_class)
-router.register(r"empty_set", EmptyViewSet.view_set_class)
+# FIXME: We can not user router without `basename` because `queryset`
+# is a `property` and used as class attribute.
+router.register(r"user_set", UserViewSet.view_set_class, basename="user")
+router.register(r"dynamic_user_set", DynamicUserViewSet.view_set_class, basename="dynamic_user")
+router.register(r"empty_set", EmptyViewSet.view_set_class, basename="empty")
 
 urlpatterns = [
     url(r"^action/$", UserAction.as_view(), name="api-action"),

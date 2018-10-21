@@ -109,7 +109,8 @@ def test_dispatch_request_generic_view_list(db):
     }
 
 
-def test_dispatch_request_model_view_set(db):
+@pytest.mark.parametrize("basename", ["user_set", "dynamic_user_set"])
+def test_dispatch_request_model_view_set(db, basename):
     """
     List, retrieve, create, update & delete actions in the
     `ModelViewSet` defined with `Injector` subclass.
@@ -118,7 +119,7 @@ def test_dispatch_request_model_view_set(db):
     User.objects.create(pk=1, username="admin", first_name="admin", last_name="admin")
 
     response = client.post(
-        "/api/user_set/",
+        "/api/%s/" % (basename,),
         {"username": "johndoe", "first_name": "John", "last_name": "Doe"},
     )
     assert response.status_code == HTTP_201_CREATED
@@ -130,13 +131,13 @@ def test_dispatch_request_model_view_set(db):
     }
     assert LogEntry.objects.filter(action_flag=ADDITION).exists()
 
-    response = client.get("/api/user_set/")
+    response = client.get("/api/%s/" % (basename,))
     assert response.status_code == HTTP_200_OK
     assert response.json() == [
         {"id": 2, "username": "johndoe", "first_name": "John", "last_name": "Doe"}
     ]
 
-    response = client.get("/api/user_set/2/")
+    response = client.get("/api/%s/2/" % (basename,))
     assert response.status_code == HTTP_200_OK
     assert response.json() == {
         "id": 2,
@@ -146,7 +147,7 @@ def test_dispatch_request_model_view_set(db):
     }
 
     response = client.put(
-        "/api/user_set/2/", {"username": "johndoe", "first_name": "Jim"}
+        "/api/%s/2/" % (basename,), {"username": "johndoe", "first_name": "Jim"}
     )
     assert response.status_code == HTTP_200_OK
     assert response.json() == {
@@ -157,7 +158,7 @@ def test_dispatch_request_model_view_set(db):
     }
     assert LogEntry.objects.filter(action_flag=CHANGE).exists()
 
-    response = client.patch("/api/user_set/2/", {"last_name": "Worm"})
+    response = client.patch("/api/%s/2/" % (basename,), {"last_name": "Worm"})
     assert response.status_code == HTTP_200_OK
     assert response.json() == {
         "id": 2,
@@ -167,7 +168,7 @@ def test_dispatch_request_model_view_set(db):
     }
     assert LogEntry.objects.filter(action_flag=CHANGE).count() == 2
 
-    response = client.delete("/api/user_set/2/")
+    response = client.delete("/api/%s/2/" % (basename,))
     assert response.status_code == HTTP_204_NO_CONTENT
     assert LogEntry.objects.filter(action_flag=DELETION).exists()
 

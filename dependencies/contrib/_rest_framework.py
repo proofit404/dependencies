@@ -51,7 +51,26 @@ def apply_api_view_methods(handler, injector):
         "metadata_class",
     ]:
         if attribute in injector:
-            setattr(handler, attribute, getattr(injector, attribute))
+
+            def locals_hack(attribute=attribute):
+
+                @property
+                def __attribute(self):
+                    ns = injector.let(
+                        **{
+                            "view": self,
+                            "request": this.view.request,
+                            "args": this.view.args,
+                            "kwargs": this.view.kwargs,
+                            "user": this.request.user,
+                            "pk": this.kwargs["pk"],  # TODO: partial(int, this...
+                        }
+                    )
+                    return getattr(ns, attribute)
+
+                return __attribute
+
+            setattr(handler, attribute, locals_hack())
 
 
 def apply_generic_api_view_methods(handler, injector):
@@ -66,7 +85,26 @@ def apply_generic_api_view_methods(handler, injector):
         "pagination_class",
     ]:
         if attribute in injector:
-            setattr(handler, attribute, getattr(injector, attribute))
+
+            def locals_hack(attribute=attribute):
+
+                @property
+                def __attribute(self):
+                    ns = injector.let(
+                        **{
+                            "view": self,
+                            "request": this.view.request,
+                            "args": this.view.args,
+                            "kwargs": this.view.kwargs,
+                            "user": this.request.user,
+                            "pk": this.kwargs["pk"],  # TODO: partial(int, this...
+                        }
+                    )
+                    return getattr(ns, attribute)
+
+                return __attribute
+
+            setattr(handler, attribute, locals_hack())
 
 
 def apply_model_view_set_methods(handler, injector):
