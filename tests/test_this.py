@@ -1,9 +1,8 @@
-import functools
-
 import pytest
 from dependencies import Injector, this
 from dependencies.exceptions import DependencyError
 from helpers import CodeCollector
+
 
 # Declarative attribute access.
 
@@ -700,8 +699,7 @@ def bLRoCCj9uNOp():
     ).SubContainer1.bar
 
 
-@circle_links  # FIXME: Make this work.
-@functools.partial(pytest.param, marks=pytest.mark.xfail)
+@circle_links.xfail  # FIXME: Make this work.
 def oClqGRmWJAkA():
     """Declarative injector.  Over item access."""
 
@@ -716,8 +714,7 @@ def oClqGRmWJAkA():
     Container.SubContainer.foo
 
 
-@circle_links  # FIXME: Make this work.
-@functools.partial(pytest.param, marks=pytest.mark.xfail)
+@circle_links.xfail  # FIXME: Make this work.
 def t41yMywZuPhA():
     """Let notation.  Over item access."""
 

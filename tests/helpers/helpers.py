@@ -15,6 +15,11 @@ class CodeCollector(object):
         self.collected.append(f)
         return f
 
+    def xfail(self, f):
+
+        self(pytest.param(f, marks=pytest.mark.xfail))
+        return f
+
     def __iter__(self):
 
         return iter(self.collected)
