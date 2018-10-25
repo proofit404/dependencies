@@ -75,6 +75,16 @@ def apply_api_view_methods(handler, injector):
 
 def apply_generic_api_view_methods(handler, injector):
 
+    # FIXME: Router issue.
+    #
+    # REST Framework tries to access ViewSet.queryset.model if we add
+    # this ViewSet to the router without basename.
+    #
+    # Property itself can not be monkey patched.  I think queryset
+    # should be wrapped in custom property subclass with model
+    # attribute defined.  If dependency injection error occurs, we
+    # should say explicitly about basename attribute.
+
     for attribute in [
         "queryset",
         "serializer_class",
