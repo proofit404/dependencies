@@ -121,9 +121,19 @@ def apply_model_view_set_methods(handler, injector):
 
     def set_instance(serializer, instance):
 
+        # TODO:
+        #
+        # * Assert instance is not None. Suggest an edit to fix it.
+        #
+        # * Compare serializer.meta.model against instance type.
+
         serializer.instance = instance
 
     def ignore(instance, nothing):
+
+        # TODO:
+        #
+        # * Assert nothing is None.
 
         pass
 
