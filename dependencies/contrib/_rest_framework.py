@@ -119,14 +119,22 @@ def apply_generic_api_view_methods(handler, injector):
 
 def apply_model_view_set_methods(handler, injector):
 
-    for method, argname in [
-        ("create", "serializer"),
-        ("update", "serializer"),
-        ("destroy", "instance"),
+    def set_instance(serializer, instance):
+
+        serializer.instance = instance
+
+    def ignore(instance, nothing):
+
+        pass
+
+    for method, argname, cb in [
+        ("create", "serializer", set_instance),
+        ("update", "serializer", set_instance),
+        ("destroy", "instance", ignore),
     ]:
         if method in injector:
 
-            def locals_hack(method=method, argname=argname):
+            def locals_hack(method=method, argname=argname, cb=cb):
 
                 def __method(self, argument):
                     ns = injector.let(
@@ -140,7 +148,7 @@ def apply_model_view_set_methods(handler, injector):
                             argname: argument,
                         }
                     )
-                    return getattr(ns, method)()
+                    cb(argument, getattr(ns, method)())
 
                 return __method
 

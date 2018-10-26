@@ -1,4 +1,5 @@
 from django.contrib.admin.models import ADDITION, CHANGE, DELETION, LogEntry
+from django.contrib.auth.models import User
 from django.db.models import Model
 from rest_framework.renderers import DocumentationRenderer
 from rest_framework.request import Request
@@ -61,8 +62,15 @@ class UserCreateOperations(object):
         assert self.kwargs == {}
         assert isinstance(self.serializer, ModelSerializer)
 
-        self.serializer.save()
         LogEntry.objects.create(user=self.user, action_flag=ADDITION)
+
+        user = User.objects.create(
+            username=self.serializer.validated_data["username"],
+            first_name=self.serializer.validated_data["first_name"],
+            last_name=self.serializer.validated_data["last_name"],
+        )
+
+        return user
 
 
 class UserUpdateOperations(object):
@@ -86,8 +94,18 @@ class UserUpdateOperations(object):
         assert self.pk == "2"
         assert isinstance(self.serializer, ModelSerializer)
 
-        self.serializer.save()
         LogEntry.objects.create(user=self.user, action_flag=CHANGE)
+
+        user = User.objects.get(**self.kwargs)
+        if "username" in self.serializer.validated_data:
+            user.username = self.serializer.validated_data["username"]
+        if "first_name" in self.serializer.validated_data:
+            user.first_name = self.serializer.validated_data["first_name"]
+        if "last_name" in self.serializer.validated_data:
+            user.last_name = self.serializer.validated_data["last_name"]
+        user.save()
+
+        return user
 
 
 class UserDestroyOperations(object):
