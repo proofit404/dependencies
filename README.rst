@@ -17,9 +17,12 @@
 .. |docs| image:: https://readthedocs.org/projects/dependencies/badge/?version=latest
     :target: https://dependencies.readthedocs.io/en/latest/?badge=latest
 
+.. |gitter| image:: https://badges.gitter.im/dry-python/dependencies.svg
+    :target: https://gitter.im/dry-python/dependencies
+
 .. image:: https://raw.githubusercontent.com/dry-python/brand/master/logo/dependencies.png
 
-|travis| |codecov| |pyup| |codacy| |pypi| |docs|
+|travis| |codecov| |pyup| |codacy| |pypi| |docs| |gitter|
 
 ----
 
