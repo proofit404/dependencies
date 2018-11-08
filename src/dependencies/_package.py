@@ -1,6 +1,7 @@
 import importlib
 import inspect
 
+from ._injector import Injector
 from ._spec import make_init_spec, use_object_init
 
 
@@ -48,7 +49,7 @@ class AttributeType(type):
         module = importlib.import_module(namespace["__modulename__"])
         attribute = getattr(module, namespace["__variable__"])
 
-        if inspect.isclass(attribute):
+        if inspect.isclass(attribute) and not issubclass(attribute, Injector):
             __new__ = make_new(attribute, namespace["__attributes__"])
             __init__ = make_init(attribute)
         else:

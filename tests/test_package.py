@@ -4,6 +4,7 @@ import pytest
 from dependencies import Injector, Package
 from helpers import CodeCollector
 
+
 package_definitions = CodeCollector()
 
 
@@ -120,5 +121,46 @@ def uHSfYcZjGSJQ():
 
         a = -1
         b = 2
+
+    return Container
+
+
+injector_pointer = CodeCollector()
+
+
+@injector_pointer.parametrize
+def test_point_to_injector(code):
+    """
+    Package pointer should be able to point to `Injector` subclass
+    attribute defined in another module.
+    """
+
+    Container = code()
+
+    assert Container.foo == 1
+
+
+@injector_pointer
+def zprTYSyMkLEC():
+    """Attribute access submodule."""
+
+    pkg = Package("pkg")
+
+    class Container(Injector):
+
+        foo = pkg.injected.Container.foo
+
+    return Container
+
+
+@injector_pointer
+def dqXJgFoftQja():
+    """Constructor argument submodule."""
+
+    injected = Package("pkg.injected")
+
+    class Container(Injector):
+
+        foo = injected.Container.foo
 
     return Container
