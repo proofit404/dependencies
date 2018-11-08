@@ -128,6 +128,7 @@ def uHSfYcZjGSJQ():
 injector_pointer = CodeCollector()
 
 
+@pytest.mark.xfail
 @injector_pointer.parametrize
 def test_point_to_injector(code):
     """
@@ -138,6 +139,7 @@ def test_point_to_injector(code):
     Container = code()
 
     assert Container.foo == 1
+    assert Container.bar == 2
 
 
 @injector_pointer
@@ -149,6 +151,8 @@ def zprTYSyMkLEC():
     class Container(Injector):
 
         foo = pkg.injected.Container.foo
+        bar = pkg.injected.Container.bar
+        baz = 2
 
     return Container
 
@@ -162,5 +166,7 @@ def dqXJgFoftQja():
     class Container(Injector):
 
         foo = injected.Container.foo
+        bar = injected.Container.bar
+        baz = 2
 
     return Container
