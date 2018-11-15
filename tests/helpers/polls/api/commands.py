@@ -1,10 +1,8 @@
 from django.contrib.admin.models import ADDITION, CHANGE, DELETION, LogEntry
 from django.contrib.auth.models import User
-from django.db.models import Model
 from rest_framework.renderers import DocumentationRenderer
 from rest_framework.request import Request
 from rest_framework.response import Response
-from rest_framework.serializers import ModelSerializer
 from rest_framework.viewsets import ModelViewSet
 
 
@@ -45,14 +43,14 @@ class UserOperations(object):
 
 class UserCreateOperations(object):
 
-    def __init__(self, view, request, args, kwargs, user, serializer):
+    def __init__(self, view, request, args, kwargs, user, validated_data):
 
         self.view = view
         self.request = request
         self.args = args
         self.kwargs = kwargs
         self.user = user
-        self.serializer = serializer
+        self.validated_data = validated_data
 
     def create(self):
 
@@ -60,14 +58,14 @@ class UserCreateOperations(object):
         assert isinstance(self.request, Request)
         assert self.args == ()
         assert self.kwargs == {}
-        assert isinstance(self.serializer, ModelSerializer)
+        assert isinstance(self.validated_data, dict)
 
         LogEntry.objects.create(user=self.user, action_flag=ADDITION)
 
         user = User.objects.create(
-            username=self.serializer.validated_data["username"],
-            first_name=self.serializer.validated_data["first_name"],
-            last_name=self.serializer.validated_data["last_name"],
+            username=self.validated_data["username"],
+            first_name=self.validated_data["first_name"],
+            last_name=self.validated_data["last_name"],
         )
 
         return user
@@ -75,7 +73,7 @@ class UserCreateOperations(object):
 
 class UserUpdateOperations(object):
 
-    def __init__(self, view, request, args, kwargs, user, pk, serializer):
+    def __init__(self, view, request, args, kwargs, user, pk, validated_data, instance):
 
         self.view = view
         self.request = request
@@ -83,7 +81,8 @@ class UserUpdateOperations(object):
         self.kwargs = kwargs
         self.user = user
         self.pk = pk
-        self.serializer = serializer
+        self.validated_data = validated_data
+        self.instance = instance
 
     def update(self):
 
@@ -92,20 +91,20 @@ class UserUpdateOperations(object):
         assert self.args == ()
         assert self.kwargs == {"pk": "2"}
         assert self.pk == "2"
-        assert isinstance(self.serializer, ModelSerializer)
+        assert isinstance(self.validated_data, dict)
+        assert isinstance(self.instance, User)
 
         LogEntry.objects.create(user=self.user, action_flag=CHANGE)
 
-        user = User.objects.get(**self.kwargs)
-        if "username" in self.serializer.validated_data:
-            user.username = self.serializer.validated_data["username"]
-        if "first_name" in self.serializer.validated_data:
-            user.first_name = self.serializer.validated_data["first_name"]
-        if "last_name" in self.serializer.validated_data:
-            user.last_name = self.serializer.validated_data["last_name"]
-        user.save()
+        if "username" in self.validated_data:
+            self.instance.username = self.validated_data["username"]
+        if "first_name" in self.validated_data:
+            self.instance.first_name = self.validated_data["first_name"]
+        if "last_name" in self.validated_data:
+            self.instance.last_name = self.validated_data["last_name"]
+        self.instance.save()
 
-        return user
+        return self.instance
 
 
 class UserDestroyOperations(object):
@@ -127,7 +126,7 @@ class UserDestroyOperations(object):
         assert self.args == ()
         assert self.kwargs == {"pk": "2"}
         assert self.pk == "2"
-        assert isinstance(self.instance, Model)
+        assert isinstance(self.instance, User)
 
         self.instance.delete()
         LogEntry.objects.create(user=self.user, action_flag=DELETION)

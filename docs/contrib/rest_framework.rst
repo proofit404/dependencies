@@ -213,13 +213,13 @@ of the ``ModelViewSet``.
 
     class CreateUser(object):
 
-        def __init__(self, user, serializer):
+        def __init__(self, user, validated_data):
             pass
 
         def __call__(self):
             # Business logic here.
             # You should return created model instance.
-            return serializer.create()
+            return User.objects.create(**self.validated_data)
 
     class DestroyUser(object):
 
@@ -246,9 +246,9 @@ Available scope
 ---------------
 
 In addition to the regular view extended scope (``view``, ``request``,
- ``args``, ``kwargs``, ``user`` and ``pk``) you have access to this
- dependencies in your action constructor.
+``args``, ``kwargs``, ``user`` and ``pk``) you have access to this
+dependencies in your action constructor.
 
-* ``serializer`` serializer instance with validation applied in the
-  create and update actions
-* ``instance`` model instance in the destroy action
+* ``validated_data`` serializer instance attribute in create and
+  update actions
+* ``instance`` model instance in update and destroy actions.

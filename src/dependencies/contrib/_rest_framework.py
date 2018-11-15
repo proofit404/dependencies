@@ -119,6 +119,22 @@ def apply_generic_api_view_methods(handler, injector):
 
 def apply_model_view_set_methods(handler, injector):
 
+    def create_arguments(ns, serializer):
+
+        ns["validated_data"] = serializer.validated_data
+        return ns
+
+    def update_arguments(ns, serializer):
+
+        ns["validated_data"] = serializer.validated_data
+        ns["instance"] = serializer.instance
+        return ns
+
+    def delete_arguments(ns, instance):
+
+        ns["instance"] = instance
+        return ns
+
     def set_instance(serializer, instance):
 
         # TODO:
@@ -137,26 +153,28 @@ def apply_model_view_set_methods(handler, injector):
 
         pass
 
-    for method, argname, cb in [
-        ("create", "serializer", set_instance),
-        ("update", "serializer", set_instance),
-        ("destroy", "instance", ignore),
+    for method, set_args, cb in [
+        ("create", create_arguments, set_instance),
+        ("update", update_arguments, set_instance),
+        ("destroy", delete_arguments, ignore),
     ]:
         if method in injector:
 
-            def locals_hack(method=method, argname=argname, cb=cb):
+            def locals_hack(method=method, set_args=set_args, cb=cb):
 
                 def __method(self, argument):
                     ns = injector.let(
-                        **{
-                            "view": self,
-                            "request": this.view.request,
-                            "args": this.view.args,
-                            "kwargs": this.view.kwargs,
-                            "user": this.request.user,
-                            "pk": this.kwargs["pk"],  # TODO: partial(int, this...
-                            argname: argument,
-                        }
+                        **set_args(
+                            {
+                                "view": self,
+                                "request": this.view.request,
+                                "args": this.view.args,
+                                "kwargs": this.view.kwargs,
+                                "user": this.request.user,
+                                "pk": this.kwargs["pk"],  # TODO: partial(int, this...
+                            },
+                            argument,
+                        )
                     )
                     cb(argument, getattr(ns, method)())
 
