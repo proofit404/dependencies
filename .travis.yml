@@ -8,10 +8,13 @@ env:
     - DJANGO_VERSION="Django>=1.10,<1.11" DJANGO_FILTER_VERSION="django-filter>=1.1,<2"
     - DJANGO_VERSION="Django>=1.11,<2.0" DJANGO_FILTER_VERSION="django-filter>=1.1,<2"
     - DJANGO_VERSION="Django>=2.0,<2.1" DJANGO_FILTER_VERSION="django-filter>=2.0,<3"
+    - DJANGO_VERSION="Django>=2.1,<2.2" DJANGO_FILTER_VERSION="django-filter>=2.0,<3"
 matrix:
   exclude:
     - python: 2.7
-      env:  DJANGO_VERSION="Django>=2.0,<2.1" DJANGO_FILTER_VERSION="django-filter>=2.0,<3"
+      env: DJANGO_VERSION="Django>=2.0,<2.1" DJANGO_FILTER_VERSION="django-filter>=2.0,<3"
+    - python: 2.7
+      env: DJANGO_VERSION="Django>=2.1,<2.2" DJANGO_FILTER_VERSION="django-filter>=2.0,<3"
     - python: 3.6
       env: DJANGO_VERSION="Django>=1.10,<1.11" DJANGO_FILTER_VERSION="django-filter>=1.1,<2"
 cache:
