@@ -18,7 +18,7 @@ from .commands import (
     UserOperations,
     UserUpdateOperations,
 )
-from .filtersets import UserFilter
+from .filtersets import UserFilter, use_filterset_name
 from .metadata import DenyMetadata
 from .negotiation import DenyNegotiation
 from .serializers import UserSerializer
@@ -112,7 +112,10 @@ class UserListView(Injector):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     filter_backends = (DjangoFilterBackend,)
-    filter_class = UserFilter
+    if use_filterset_name:
+        filterset_class = UserFilter
+    else:
+        filter_class = UserFilter
     pagination_class = LimitOffsetPagination
 
 
