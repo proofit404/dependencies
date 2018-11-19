@@ -35,6 +35,7 @@ html_sidebars = {
         "updates.html",
         "links.html",
         "searchbox.html",
+        "gitter_sidecar.html",
     ]
 }
 
