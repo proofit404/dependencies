@@ -1,5 +1,8 @@
-import django
 import pytest
+
+pytest.importorskip("django")
+
+import django
 from dependencies.contrib.django import form_view, view
 from django.views.generic import View
 

@@ -1,4 +1,7 @@
 import pytest
+
+pytest.importorskip("django")
+
 from dependencies.contrib.rest_framework import (
     api_view,
     generic_api_view,

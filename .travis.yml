@@ -27,6 +27,18 @@ matrix:
       dist: xenial
       sudo: true
       env: TOXENV=py37-django21
+    - python: 3.7
+      dist: xenial
+      sudo: true
+      env: TOXENV=flake8
+    - python: 3.7
+      dist: xenial
+      sudo: true
+      env: TOXENV=black
+    - python: 3.7
+      dist: xenial
+      sudo: true
+      env: TOXENV=isort
 cache: pip
 install:
   - pip install tox codecov
