@@ -1,7 +1,7 @@
 ./tests/helpers/.
-pytest>=4.0,<5
-celery>=4.1,<5
-pytest-django>=3.1,<4
-djangorestframework>=3.8,<4
-coreapi>=2.3,<3
-codecov>=2.0,<3
+pytest~=4.0.1
+celery~=4.2.1
+pytest-django~=3.4.4
+djangorestframework~=3.9.0
+coreapi~=2.3.3
+coverage~=4.5.2

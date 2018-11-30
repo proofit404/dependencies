@@ -2,38 +2,35 @@ language: python
 matrix:
   include:
     - python: 2.7
-      env: DJANGO_VERSION="Django>=1.10,<1.11" DJANGO_FILTER_VERSION="django-filter>=1.1,<2"
+      env: TOXENV=py27-django10
     - python: 2.7
-      env: DJANGO_VERSION="Django>=1.11,<2.0" DJANGO_FILTER_VERSION="django-filter>=1.1,<2"
+      env: TOXENV=py27-django11
     - python: 3.5
-      env: DJANGO_VERSION="Django>=1.10,<1.11" DJANGO_FILTER_VERSION="django-filter>=1.1,<2"
+      env: TOXENV=py35-django10
     - python: 3.5
-      env: DJANGO_VERSION="Django>=1.11,<2.0" DJANGO_FILTER_VERSION="django-filter>=1.1,<2"
+      env: TOXENV=py35-django11
     - python: 3.5
-      env: DJANGO_VERSION="Django>=2.0,<2.1" DJANGO_FILTER_VERSION="django-filter>=2.0,<3"
+      env: TOXENV=py35-django20
     - python: 3.5
-      env: DJANGO_VERSION="Django>=2.1,<2.2" DJANGO_FILTER_VERSION="django-filter>=2.0,<3"
+      env: TOXENV=py35-django21
     - python: 3.6
-      env: DJANGO_VERSION="Django>=1.11,<2.0" DJANGO_FILTER_VERSION="django-filter>=1.1,<2"
+      env: TOXENV=py36-django11
     - python: 3.6
-      env: DJANGO_VERSION="Django>=2.0,<2.1" DJANGO_FILTER_VERSION="django-filter>=2.0,<3"
+      env: TOXENV=py36-django20
     - python: 3.6
-      env: DJANGO_VERSION="Django>=2.1,<2.2" DJANGO_FILTER_VERSION="django-filter>=2.0,<3"
+      env: TOXENV=py36-django21
     - python: 3.7
-      env: DJANGO_VERSION="Django>=2.0,<2.1" DJANGO_FILTER_VERSION="django-filter>=2.0,<3"
       dist: xenial
       sudo: true
+      env: TOXENV=py37-django20
     - python: 3.7
-      env: DJANGO_VERSION="Django>=2.1,<2.2" DJANGO_FILTER_VERSION="django-filter>=2.0,<3"
       dist: xenial
       sudo: true
+      env: TOXENV=py37-django21
 cache: pip
 install:
-  - pip install -U pip wheel setuptools
-  - pip install $DJANGO_VERSION $DJANGO_FILTER_VERSION
-  - pip install -r requirements.txt
-  - pip install .
+  - pip install tox codecov
 script:
-  - coverage run -m pytest
+  - tox
 after_success:
   - codecov
