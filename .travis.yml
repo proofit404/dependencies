@@ -2,19 +2,19 @@ language: python
 matrix:
   include:
     - python: 2.7
-      env: TOXENV=py27-django10
+      env: TOXENV=py27-django110
     - python: 2.7
-      env: TOXENV=py27-django11
+      env: TOXENV=py27-django111
     - python: 3.5
-      env: TOXENV=py35-django10
+      env: TOXENV=py35-django110
     - python: 3.5
-      env: TOXENV=py35-django11
+      env: TOXENV=py35-django111
     - python: 3.5
       env: TOXENV=py35-django20
     - python: 3.5
       env: TOXENV=py35-django21
     - python: 3.6
-      env: TOXENV=py36-django11
+      env: TOXENV=py36-django111
     - python: 3.6
       env: TOXENV=py36-django20
     - python: 3.6
