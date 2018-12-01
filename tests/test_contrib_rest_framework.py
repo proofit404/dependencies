@@ -102,7 +102,8 @@ def test_dispatch_request_generic_view_retrieve(db):
     }
 
 
-def test_dispatch_request_generic_view_list(db):
+@pytest.mark.parametrize("basename", ["users", "user_fields"])
+def test_dispatch_request_generic_view_list(db, basename):
     """
     List user details through view defined with injector subclass.
     """
@@ -110,7 +111,9 @@ def test_dispatch_request_generic_view_list(db):
     User.objects.create(pk=1, username="johndoe", first_name="John", last_name="Doe")
     User.objects.create(pk=2, username="foo", first_name="bar", last_name="baz")
 
-    response = client.get("/api/users/?username=johndoe&limit=1", format="json")
+    response = client.get(
+        "/api/%s/?username=johndoe&limit=1" % (basename,), format="json"
+    )
     assert response.status_code == HTTP_200_OK
     assert response.json() == {
         "count": 1,

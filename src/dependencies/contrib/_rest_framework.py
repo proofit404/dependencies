@@ -91,7 +91,9 @@ def apply_generic_api_view_methods(handler, injector):
         "lookup_url_kwarg",
         "filter_backends",
         "filterset_class",
+        "filterset_fields",
         "filter_class",  # Legacy name for django-filter 1.x
+        "filter_fields",  # Legacy name for django-filter 1.x
         "pagination_class",
     ]:
         if attribute in injector:

@@ -10,6 +10,7 @@ from .views import (
     LoginAll,
     ThrottleAll,
     UserAction,
+    UserListFilterFieldsView,
     UserListView,
     UserLogin,
     UserRetrieveView,
@@ -36,5 +37,10 @@ urlpatterns = [
     url(r"^metadata/$", BadMetadata.as_view(), name="api-metadata"),
     url(r"^users/$", UserListView.as_view(), name="api-user-list"),
     url(r"^users/(?P<nick>\w+)/$", UserRetrieveView.as_view(), name="api-user-detail"),
+    url(
+        r"^user_fields/$",
+        UserListFilterFieldsView.as_view(),
+        name="api-user-list-fields",
+    ),
     url(r"^", include(router.urls)),
 ]

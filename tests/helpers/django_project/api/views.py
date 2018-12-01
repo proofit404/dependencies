@@ -120,6 +120,22 @@ class UserListView(Injector):
     pagination_class = LimitOffsetPagination
 
 
+@generic_api_view
+class UserListFilterFieldsView(Injector):
+
+    get = this.command.list
+    command = UserOperations
+
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    filter_backends = (DjangoFilterBackend,)
+    if use_filterset_name:
+        filterset_fields = ["username"]
+    else:
+        filter_fields = ["username"]
+    pagination_class = LimitOffsetPagination
+
+
 @model_view_set
 class UserViewSet(Injector):
 
