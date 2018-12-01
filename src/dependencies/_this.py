@@ -27,7 +27,6 @@ this = Thisable(0)
 
 
 class LinkType(type):
-
     def __getattr__(cls, attrname):
 
         parents = cls.__parents__

@@ -17,7 +17,6 @@ def celery_app():
 
 
 class Run(object):
-
     def __init__(self, args, kwargs):
         self.args = args
         self.kwargs = kwargs
@@ -277,12 +276,10 @@ def test_task_arguments(celery_app, code):
     """
 
     class Foo(object):
-
         def __call__(self, a, b):
             return a + b
 
     class Bar(object):
-
         def __init__(self, foo, task, args, kwargs):
             self.foo = foo
             self.task = task

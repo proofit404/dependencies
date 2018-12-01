@@ -7,7 +7,6 @@ from dependencies.exceptions import DependencyError
 
 
 class Foo(object):
-
     def __init__(self, foo, bar, baz):
 
         self.foo = foo

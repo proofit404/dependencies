@@ -11,7 +11,6 @@ def test_lambda_dependency():
     """Inject lambda function."""
 
     class Foo(object):
-
         def __init__(self, add):
             self.add = add
 
@@ -29,7 +28,6 @@ def test_function_dependency():
     """Inject regular function."""
 
     class Foo(object):
-
         def __init__(self, add):
             self.add = add
 
@@ -50,7 +48,6 @@ def test_inline_dependency():
     """Inject method defined inside Injector subclass."""
 
     class Foo(object):
-
         def __init__(self, add):
             self.add = add
 
@@ -74,7 +71,6 @@ def test_class_dependency():
     """
 
     class Foo(object):
-
         def __init__(self, add, bar):
             self.add = add
             self.bar = bar
@@ -83,7 +79,6 @@ def test_class_dependency():
             return self.add(self.bar.go(x), self.bar.go(x))
 
     class Bar(object):
-
         def __init__(self, mul):
             self.mul = mul
 
@@ -121,7 +116,6 @@ def test_redefine_dependency():
     """
 
     class Foo(object):
-
         def __init__(self, add):
             self.add = add
 
@@ -145,7 +139,6 @@ def test_override_keyword_argument_if_dependency_was_specified():
     """
 
     class Foo(object):
-
         def __init__(self, add, y=1):
             self.add = add
             self.y = y
@@ -168,7 +161,6 @@ def test_preserve_keyword_argument_if_dependency_was_missed():
     """
 
     class Foo(object):
-
         def __init__(self, add, y=1):
             self.add = add
             self.y = y
@@ -190,7 +182,6 @@ def test_preserve_missed_keyword_argument_in_the_middle():
     """
 
     class Foo(object):
-
         def __init__(self, x, y=1, z=2):
             self.x = x
             self.y = y
@@ -217,7 +208,6 @@ def test_class_named_argument_default_value():
         pass
 
     class Bar(object):
-
         def __init__(self, foo_class=Foo):
             self.foo_class = foo_class
 
@@ -234,7 +224,6 @@ def test_injectable_without_its_own_init():
     """
 
     class Foo(object):
-
         def do(self):
             return 1
 
@@ -251,13 +240,11 @@ def test_injectable_with_parent_init():
     """
 
     class Foo(object):
-
         def __init__(self, x, y):
             self.x = x
             self.y = y
 
     class Bar(Foo):
-
         def add(self):
             return self.x + self.y
 
@@ -279,7 +266,6 @@ def test_injectable_with_parent_without_init():
         pass
 
     class Bar(Foo):
-
         def add(self):
             return 3
 
@@ -332,12 +318,10 @@ def test_let_factory_on_injector_directly():
     """
 
     class Foo(object):
-
         def __init__(self, bar):
             self.bar = bar
 
     class Bar(object):
-
         def __init__(self, baz):
             self.baz = baz
 
@@ -402,7 +386,6 @@ def test_omit_parent_link_in_dir_listing():
     """
 
     class Foo(Injector):
-
         class Bar(Injector):
             pass
 
@@ -488,7 +471,6 @@ def test_nested_injectors():
         return c * d
 
     class Call(object):
-
         def __init__(self, foo, bar):
             self.foo = foo
             self.bar = bar
@@ -525,6 +507,7 @@ def test_docstrings():
 
     class Foo(Injector):
         """New container."""
+
         pass
 
     assert Foo.__doc__ == "New container."
@@ -538,18 +521,15 @@ def test_evaluate_dependencies_once(code):
     """Evaluate each node in the dependencies graph once."""
 
     class A(object):
-
         def __init__(self, b, c):
             self.b = b
             self.c = c
 
     class B(object):
-
         def __init__(self, d):
             self.d = d
 
     class C(object):
-
         def __init__(self, d):
             self.d = d
 
@@ -592,12 +572,10 @@ def test_multiple_inheritance(code):
         pass
 
     class Bar(object):
-
         def __init__(self, foo):
             self.foo = foo
 
     class Baz(object):
-
         def __init__(self, bar):
             self.bar = bar
 
@@ -732,7 +710,6 @@ def e78bf771747c():
     """Declarative injector."""
 
     class Bar(Injector):
-
         def __eq__(self, other):
             return False
 
@@ -813,7 +790,6 @@ def c4e7ecf75167():
     """Keyword arguments in the constructor."""
 
     class Bar(object):
-
         def __init__(self, test, two=2):
             self.test = test
             self.two = two
@@ -829,7 +805,6 @@ def dmsMgYqbsHgB():
     """Constructor argument with let notation."""
 
     class Bar(object):
-
         def __init__(self, test):
             self.test = test
 
@@ -879,7 +854,6 @@ def test_circle_dependencies(code):
     """
 
     class Foo(object):
-
         def __init__(self, foo):
             self.foo = foo
 
@@ -924,12 +898,10 @@ def test_complex_circle_dependencies(code):
     """
 
     class Foo(object):
-
         def __init__(self, bar):
             self.bar = bar
 
     class Bar(object):
-
         def __init__(self, foo):
             self.foo = foo
 
@@ -996,17 +968,14 @@ def test_complex_circle_dependencies_long_circle(code):
     """
 
     class Foo(object):
-
         def __init__(self, bar):
             self.bar = bar
 
     class Bar(object):
-
         def __init__(self, baz):
             self.baz = baz
 
     class Baz(object):
-
         def __init__(self, foo):
             self.foo = foo
 
@@ -1073,7 +1042,6 @@ def test_deny_arbitrary_argument_list(code):
     """Raise `DependencyError` if constructor have *args argument."""
 
     class Foo(object):
-
         def __init__(self, *args):
             self.args = args
 
@@ -1107,7 +1075,6 @@ def test_deny_arbitrary_keyword_arguments(code):
     """Raise `DependencyError` if constructor have **kwargs argument."""
 
     class Foo(object):
-
         def __init__(self, **kwargs):
             self.kwargs = kwargs
 
@@ -1145,7 +1112,6 @@ def test_deny_arbitrary_positional_and_keyword_arguments_together(code):
     """
 
     class Foo(object):
-
         def __init__(self, *args, **kwargs):
             self.args = args
             self.kwargs = kwargs
@@ -1263,7 +1229,6 @@ def test_deny_classes_as_default_values(code):
         pass
 
     class Bar(object):
-
         def __init__(self, foo=Foo):
             self.foo = foo
 
@@ -1300,7 +1265,6 @@ def test_deny_non_classes_in_class_named_arguments(code):
     """
 
     class Bar(object):
-
         def __init__(self, foo_class=1):
             self.foo_class = foo_class
 

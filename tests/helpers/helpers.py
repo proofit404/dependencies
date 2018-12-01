@@ -4,7 +4,6 @@ import pytest
 
 
 class CodeCollector(object):
-
     def __init__(self, name="code"):
 
         self.name = name

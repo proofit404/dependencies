@@ -53,7 +53,6 @@ def apply_api_view_methods(handler, injector):
         if attribute in injector:
 
             def locals_hack(attribute=attribute):
-
                 @property
                 def __attribute(self):
                     ns = injector.let(
@@ -98,7 +97,6 @@ def apply_generic_api_view_methods(handler, injector):
         if attribute in injector:
 
             def locals_hack(attribute=attribute):
-
                 @property
                 def __attribute(self):
                     ns = injector.let(
@@ -119,7 +117,6 @@ def apply_generic_api_view_methods(handler, injector):
 
 
 def apply_model_view_set_methods(handler, injector):
-
     def create_arguments(ns, serializer):
 
         ns["validated_data"] = serializer.validated_data
@@ -162,7 +159,6 @@ def apply_model_view_set_methods(handler, injector):
         if method in injector:
 
             def locals_hack(method=method, set_args=set_args, cb=cb):
-
                 def __method(self, argument):
                     ns = injector.let(
                         **set_args(
@@ -184,7 +180,6 @@ def apply_model_view_set_methods(handler, injector):
         else:
 
             def locals_hack(method=method, ns=injector.__name__):
-
                 def __method(self, argument):
                     raise DependencyError(
                         "Add {method!r} to the {ns!r} injector".format(

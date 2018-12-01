@@ -21,7 +21,6 @@ def form_view(injector):
 
 
 def create_handler(from_class):
-
     class Handler(from_class):
         pass
 
@@ -34,7 +33,6 @@ def apply_http_methods(handler, injector):
         if method in injector:
 
             def locals_hack(method=method):
-
                 def __view(self, request, *args, **kwargs):
                     ns = injector.let(
                         view=self,
@@ -72,7 +70,6 @@ def apply_form_methods(handler, injector):
         if method in injector:
 
             def locals_hack(method=method):
-
                 def __method(self, form):
                     ns = injector.let(
                         view=self,

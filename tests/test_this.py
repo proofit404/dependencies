@@ -14,7 +14,6 @@ def test_attribute_getter():
     """
 
     class Foo(object):
-
         def __init__(self, one, two):
             self.one = one
             self.two = two
@@ -23,7 +22,6 @@ def test_attribute_getter():
             return self.one + self.two
 
     class Container(Injector):
-
         class SubContainer(Injector):
             foo = Foo
             one = 1
@@ -43,12 +41,10 @@ def test_attribute_getter_few_attributes():
     """
 
     class Foo(object):
-
         def __init__(self, one):
             self.one = one
 
     class Container(Injector):
-
         class SubContainer(Injector):
             foo = Foo
             one = 1
@@ -116,7 +112,6 @@ def e477afc961b6():
         foo = 1
 
         class SubContainer(Injector):
-
             class SubSubContainer(Injector):
                 bar = (this << 2).foo
 
@@ -131,7 +126,6 @@ def c4ed4c61e154():
         foo = 1
 
     class SubContainer(Injector):
-
         class SubSubContainer(Injector):
             bar = (this << 2).foo
 
@@ -224,7 +218,6 @@ def ab4cdbf60b2f():
         foo = {"bar": {"baz": 1}}
 
         class SubContainer(Injector):
-
             class SubSubContainer(Injector):
                 spam = (this << 2).foo["bar"]["baz"]
 
@@ -312,7 +305,6 @@ def test_item_getter_non_printable_key():
     """
 
     class Boom(object):
-
         def __init__(self, salt):
             self.salt = salt
 
@@ -357,9 +349,8 @@ def test_attribute_access_after_item_getter():
 def test_docstrings():
     """Check we can access all API entry points documentation."""
 
-    assert (
-        this.__doc__
-        == ("Declare attribute and item access during dependency injection.")
+    assert this.__doc__ == (
+        "Declare attribute and item access during dependency injection."
     )
 
 
@@ -393,7 +384,7 @@ def c147d398f4be():
     """Declarative injector with parent access."""
 
     class Container(Injector):
-        foo = (this << 1)
+        foo = this << 1
 
 
 @direct_proxy
@@ -459,9 +450,8 @@ def test_require_more_parents_that_injector_actually_has(code):
     with pytest.raises(DependencyError) as exc_info:
         code()
 
-    assert (
-        str(exc_info.value)
-        == ("You tries to shift this more " "times that Injector has levels")
+    assert str(exc_info.value) == (
+        "You tries to shift this more " "times that Injector has levels"
     )
 
 
@@ -481,7 +471,6 @@ def bUICVObtDZ4I():
     """Declarative Injected with nested layer."""
 
     class Container(Injector):
-
         class SubContainer(Injector):
 
             foo = (this << 2).bar
@@ -540,7 +529,6 @@ def yOEj1qQfsXHy():
     """Declarative Injected with nested layer."""
 
     class Container(Injector):
-
         class SubContainer(Injector):
 
             foo = (this << 1).bar
@@ -659,7 +647,6 @@ def mF4akoHlg84C():
         foo = this.SubContainer.SubSubContainer.bar
 
         class SubContainer(Injector):
-
             class SubSubContainer(Injector):
 
                 bar = (this << 2).foo
@@ -714,7 +701,6 @@ def vAyZepNGAUjY():
     """Declarative injector.  Cross injector links."""
 
     class Container(Injector):
-
         class SubContainer1(Injector):
 
             bar = (this << 1).SubContainer2.baz
@@ -741,7 +727,6 @@ def oClqGRmWJAkA():
     """Declarative injector.  Over item access."""
 
     class Container(Injector):
-
         class SubContainer(Injector):
 
             foo = (this << 1).bar["sub"].foo

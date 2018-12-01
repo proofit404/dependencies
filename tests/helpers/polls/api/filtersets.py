@@ -7,7 +7,6 @@ use_filterset_name = VERSION >= (2, 0)
 
 
 class UserFilter(FilterSet):
-
     class Meta(object):
 
         model = User

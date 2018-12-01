@@ -7,7 +7,6 @@ from rest_framework.viewsets import ModelViewSet
 
 
 class UserOperations(object):
-
     def __init__(self, view, request):
 
         self.view = view
@@ -42,7 +41,6 @@ class UserOperations(object):
 
 
 class UserCreateOperations(object):
-
     def __init__(self, view, request, args, kwargs, user, validated_data):
 
         self.view = view
@@ -72,7 +70,6 @@ class UserCreateOperations(object):
 
 
 class UserUpdateOperations(object):
-
     def __init__(self, view, request, args, kwargs, user, pk, validated_data, instance):
 
         self.view = view
@@ -108,7 +105,6 @@ class UserUpdateOperations(object):
 
 
 class UserDestroyOperations(object):
-
     def __init__(self, view, request, args, kwargs, user, pk, instance):
 
         self.view = view

@@ -17,7 +17,6 @@ def operation(function):
         raise DependencyError("'operation' decorator can not be used on classes")
 
     class OperationType(type):
-
         def __repr__(cls):
             return "<class Operation[" + function.__name__ + "]>"
 

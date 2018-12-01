@@ -11,7 +11,6 @@ def Package(name):
 
 
 class PackageType(type):
-
     def __new__(cls, class_name, bases, namespace):
 
         module = importlib.import_module(namespace["__modulename__"])
@@ -43,7 +42,6 @@ class PackageType(type):
 
 
 class AttributeType(type):
-
     def __new__(cls, class_name, bases, namespace):
 
         module = importlib.import_module(namespace["__modulename__"])

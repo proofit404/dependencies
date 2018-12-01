@@ -5,7 +5,6 @@ from django.views.generic import View
 
 
 class DispatchRequest(object):
-
     def __init__(self, request, args, kwargs):
 
         self.request = request
@@ -24,7 +23,6 @@ class DispatchRequest(object):
 
 
 class InjectUser(object):
-
     def __init__(self, user):
 
         self.user = user
@@ -36,7 +34,6 @@ class InjectUser(object):
 
 
 class InjectKwargs(object):
-
     def __init__(self, pk, slug):
 
         self.pk = pk
@@ -50,7 +47,6 @@ class InjectKwargs(object):
 
 
 class InjectSelf(object):
-
     def __init__(self, view):
 
         self.view = view
@@ -62,7 +58,6 @@ class InjectSelf(object):
 
 
 class ProcessQuestion(object):
-
     def __init__(self, view, form, request, args, kwargs, user, pk):
 
         self.view = view

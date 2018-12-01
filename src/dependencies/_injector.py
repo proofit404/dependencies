@@ -9,7 +9,6 @@ from .exceptions import DependencyError
 
 
 class InjectorType(type):
-
     def __new__(cls, class_name, bases, namespace):
 
         if not bases:

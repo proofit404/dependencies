@@ -4,7 +4,6 @@ from .exceptions import DependencyError
 
 
 class Marker(object):
-
     def __bool__(self):
 
         return False
