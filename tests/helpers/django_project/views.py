@@ -1,6 +1,7 @@
+from django.template.response import TemplateResponse
+
 from dependencies import Injector, this
 from dependencies.contrib.django import form_view, view
-from django.template.response import TemplateResponse
 
 from .commands import (
     DispatchRequest,

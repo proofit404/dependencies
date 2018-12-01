@@ -2,18 +2,13 @@ import pytest
 
 pytest.importorskip("django")
 
-from django.contrib.admin.models import (
+from django.contrib.admin.models import (  # noqa: E402
     ADDITION,
     CHANGE,
     DELETION,
     LogEntry,
-)  # noqa: E402
+)
 from django.contrib.auth.models import User  # noqa: E402
-from django_project.api.exceptions import (
-    MetadataError,
-    NegotiationError,
-    VersionError,
-)  # noqa: E402
 from rest_framework.status import (  # noqa: E402
     HTTP_200_OK,
     HTTP_201_CREATED,
@@ -30,6 +25,11 @@ from dependencies.contrib.rest_framework import (  # noqa: E402
     model_view_set,
 )
 from dependencies.exceptions import DependencyError  # noqa: E402
+from django_project.api.exceptions import (  # noqa: E402
+    MetadataError,
+    NegotiationError,
+    VersionError,
+)
 
 
 client = APIClient()

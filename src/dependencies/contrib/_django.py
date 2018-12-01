@@ -1,7 +1,8 @@
 from __future__ import absolute_import
 
-from dependencies import this
 from django.views.generic import FormView, View
+
+from dependencies import this
 
 
 def view(injector):

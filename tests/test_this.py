@@ -1,4 +1,5 @@
 import pytest
+
 from dependencies import Injector, this
 from dependencies.exceptions import DependencyError
 from helpers import CodeCollector
