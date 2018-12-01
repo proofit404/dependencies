@@ -1,38 +1,17 @@
 import pytest
 
-pytest.importorskip("django")
-
-from django.contrib.admin.models import (  # noqa: E402
-    ADDITION,
-    CHANGE,
-    DELETION,
-    LogEntry,
-)
-from django.contrib.auth.models import User  # noqa: E402
-from rest_framework.status import (  # noqa: E402
-    HTTP_200_OK,
-    HTTP_201_CREATED,
-    HTTP_204_NO_CONTENT,
-    HTTP_403_FORBIDDEN,
-    HTTP_415_UNSUPPORTED_MEDIA_TYPE,
-    HTTP_429_TOO_MANY_REQUESTS,
-)
-from rest_framework.test import APIClient  # noqa: E402
-
-from dependencies.contrib.rest_framework import (  # noqa: E402
-    api_view,
-    generic_api_view,
-    model_view_set,
-)
-from dependencies.exceptions import DependencyError  # noqa: E402
-from django_project.api.exceptions import (  # noqa: E402
-    MetadataError,
-    NegotiationError,
-    VersionError,
-)
+from dependencies.exceptions import DependencyError
 
 
-client = APIClient()
+admin_models = pytest.importorskip("django.contrib.admin.models")
+auth_models = pytest.importorskip("django.contrib.auth.models")
+status = pytest.importorskip("rest_framework.status")
+test_client = pytest.importorskip("rest_framework.test")
+contrib = pytest.importorskip("dependencies.contrib.rest_framework")
+project_exceptions = pytest.importorskip("django_project.api.exceptions")
+
+
+client = test_client.APIClient()
 
 
 def test_dispatch_request(db):
@@ -44,44 +23,46 @@ def test_dispatch_request(db):
     """
 
     response = client.post("/api/action/", {"last": True}, format="json")
-    assert response.status_code == HTTP_200_OK
+    assert response.status_code == status.HTTP_200_OK
     assert response.content.decode().lstrip().startswith("<!DOCTYPE html>")
 
     # Parser classes mismatch.
 
     response = client.post("/api/action/", {"last": True})
-    assert response.status_code == HTTP_415_UNSUPPORTED_MEDIA_TYPE
+    assert response.status_code == status.HTTP_415_UNSUPPORTED_MEDIA_TYPE
 
     # Permission classes applies.
 
     response = client.get("/api/login/")
-    assert response.status_code == HTTP_403_FORBIDDEN
+    assert response.status_code == status.HTTP_403_FORBIDDEN
 
     # Authentication classes applies.
 
-    User.objects.create(pk=1, username="johndoe", first_name="John", last_name="Doe")
+    auth_models.User.objects.create(
+        pk=1, username="johndoe", first_name="John", last_name="Doe"
+    )
 
     response = client.get("/api/login_all/")
-    assert response.status_code == HTTP_200_OK
+    assert response.status_code == status.HTTP_200_OK
 
     # Throttle classes applies.
 
     response = client.get("/api/throttle_all/")
-    assert response.status_code == HTTP_429_TOO_MANY_REQUESTS
+    assert response.status_code == status.HTTP_429_TOO_MANY_REQUESTS
 
     # Strict content negotiation.
 
-    with pytest.raises(NegotiationError):
+    with pytest.raises(project_exceptions.NegotiationError):
         client.get("/api/negotiate/")
 
     # Versioning classes applies.
 
-    with pytest.raises(VersionError):
+    with pytest.raises(project_exceptions.VersionError):
         client.get("/api/versioning/")
 
     # Metadata classes applies.
 
-    with pytest.raises(MetadataError):
+    with pytest.raises(project_exceptions.MetadataError):
         client.options("/api/metadata/")
 
 
@@ -90,10 +71,12 @@ def test_dispatch_request_generic_view_retrieve(db):
     Retrieve user details through view defined with injector subclass.
     """
 
-    User.objects.create(pk=1, username="johndoe", first_name="John", last_name="Doe")
+    auth_models.User.objects.create(
+        pk=1, username="johndoe", first_name="John", last_name="Doe"
+    )
 
     response = client.get("/api/users/johndoe/", format="json")
-    assert response.status_code == HTTP_200_OK
+    assert response.status_code == status.HTTP_200_OK
     assert response.json() == {
         "id": 1,
         "username": "johndoe",
@@ -108,13 +91,17 @@ def test_dispatch_request_generic_view_list(db, basename):
     List user details through view defined with injector subclass.
     """
 
-    User.objects.create(pk=1, username="johndoe", first_name="John", last_name="Doe")
-    User.objects.create(pk=2, username="foo", first_name="bar", last_name="baz")
+    auth_models.User.objects.create(
+        pk=1, username="johndoe", first_name="John", last_name="Doe"
+    )
+    auth_models.User.objects.create(
+        pk=2, username="foo", first_name="bar", last_name="baz"
+    )
 
     response = client.get(
         "/api/%s/?username=johndoe&limit=1" % (basename,), format="json"
     )
-    assert response.status_code == HTTP_200_OK
+    assert response.status_code == status.HTTP_200_OK
     assert response.json() == {
         "count": 1,
         "next": None,
@@ -132,29 +119,33 @@ def test_dispatch_request_model_view_set(db, basename):
     `ModelViewSet` defined with `Injector` subclass.
     """
 
-    User.objects.create(pk=1, username="admin", first_name="admin", last_name="admin")
+    auth_models.User.objects.create(
+        pk=1, username="admin", first_name="admin", last_name="admin"
+    )
 
     response = client.post(
         "/api/%s/" % (basename,),
         {"username": "johndoe", "first_name": "John", "last_name": "Doe"},
     )
-    assert response.status_code == HTTP_201_CREATED
+    assert response.status_code == status.HTTP_201_CREATED
     assert response.json() == {
         "id": 2,
         "username": "johndoe",
         "first_name": "John",
         "last_name": "Doe",
     }
-    assert LogEntry.objects.filter(action_flag=ADDITION).exists()
+    assert admin_models.LogEntry.objects.filter(
+        action_flag=admin_models.ADDITION
+    ).exists()
 
     response = client.get("/api/%s/" % (basename,))
-    assert response.status_code == HTTP_200_OK
+    assert response.status_code == status.HTTP_200_OK
     assert response.json() == [
         {"id": 2, "username": "johndoe", "first_name": "John", "last_name": "Doe"}
     ]
 
     response = client.get("/api/%s/2/" % (basename,))
-    assert response.status_code == HTTP_200_OK
+    assert response.status_code == status.HTTP_200_OK
     assert response.json() == {
         "id": 2,
         "username": "johndoe",
@@ -165,28 +156,35 @@ def test_dispatch_request_model_view_set(db, basename):
     response = client.put(
         "/api/%s/2/" % (basename,), {"username": "johndoe", "first_name": "Jim"}
     )
-    assert response.status_code == HTTP_200_OK
+    assert response.status_code == status.HTTP_200_OK
     assert response.json() == {
         "id": 2,
         "username": "johndoe",
         "first_name": "Jim",
         "last_name": "Doe",
     }
-    assert LogEntry.objects.filter(action_flag=CHANGE).exists()
+    assert admin_models.LogEntry.objects.filter(
+        action_flag=admin_models.CHANGE
+    ).exists()
 
     response = client.patch("/api/%s/2/" % (basename,), {"last_name": "Worm"})
-    assert response.status_code == HTTP_200_OK
+    assert response.status_code == status.HTTP_200_OK
     assert response.json() == {
         "id": 2,
         "username": "johndoe",
         "first_name": "Jim",
         "last_name": "Worm",
     }
-    assert LogEntry.objects.filter(action_flag=CHANGE).count() == 2
+    assert (
+        admin_models.LogEntry.objects.filter(action_flag=admin_models.CHANGE).count()
+        == 2
+    )
 
     response = client.delete("/api/%s/2/" % (basename,))
-    assert response.status_code == HTTP_204_NO_CONTENT
-    assert LogEntry.objects.filter(action_flag=DELETION).exists()
+    assert response.status_code == status.HTTP_204_NO_CONTENT
+    assert admin_models.LogEntry.objects.filter(
+        action_flag=admin_models.DELETION
+    ).exists()
 
 
 def test_model_view_set_undefined_method(db):
@@ -195,13 +193,15 @@ def test_model_view_set_undefined_method(db):
     defined in the injector.
     """
 
-    User.objects.create(pk=1, username="admin", first_name="admin", last_name="admin")
+    auth_models.User.objects.create(
+        pk=1, username="admin", first_name="admin", last_name="admin"
+    )
 
     response = client.get("/api/empty_set/1/")
-    assert response.status_code == HTTP_200_OK
+    assert response.status_code == status.HTTP_200_OK
 
     response = client.get("/api/empty_set/")
-    assert response.status_code == HTTP_200_OK
+    assert response.status_code == status.HTTP_200_OK
 
     with pytest.raises(DependencyError) as exc_info:
         client.post("/api/empty_set/", {"username": "johndoe"})
@@ -227,9 +227,15 @@ def test_model_view_set_undefined_method(db):
 def test_docstrings():
     """Access `api_view` and `generic_api_view` docstrings."""
 
-    assert api_view.__doc__ == "Create DRF class-based API view from injector class."
     assert (
-        generic_api_view.__doc__
+        contrib.api_view.__doc__
+        == "Create DRF class-based API view from injector class."
+    )
+    assert (
+        contrib.generic_api_view.__doc__
         == "Create DRF generic class-based API view from injector class."
     )
-    assert model_view_set.__doc__ == "Create DRF model view set from injector class."
+    assert (
+        contrib.model_view_set.__doc__
+        == "Create DRF model view set from injector class."
+    )

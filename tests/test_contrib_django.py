@@ -1,14 +1,17 @@
 import pytest
 
-pytest.importorskip("django")
 
-import django  # noqa: E402
-from django.views.generic import View  # noqa: E402
-
-from dependencies.contrib.django import form_view, view  # noqa: E402
+django = pytest.importorskip("django")
+generic_views = pytest.importorskip("django.views.generic")
+contrib = pytest.importorskip("dependencies.contrib.django")
 
 
-@pytest.mark.parametrize("method", set(View.http_method_names) - {"head"})
+http_methods = set(generic_views.View.http_method_names)
+http_methods_no_head = http_methods - {"head"}
+http_methods_no_options = http_methods - {"options"}
+
+
+@pytest.mark.parametrize("method", http_methods_no_head)
 def test_dispatch_request(client, method):
     """Dispatch request to the `Injector` subclass attributes."""
 
@@ -17,7 +20,7 @@ def test_dispatch_request(client, method):
     assert response.content == b"<h1>OK</h1>"
 
 
-@pytest.mark.parametrize("method", set(View.http_method_names) - {"options"})
+@pytest.mark.parametrize("method", http_methods_no_options)
 def test_empty_request(client, method):
     """
     Use method not allowed, if `Injector` subclass doesn't define an
@@ -28,7 +31,7 @@ def test_empty_request(client, method):
     assert response.status_code == 405
 
 
-@pytest.mark.parametrize("method", set(View.http_method_names) - {"head"})
+@pytest.mark.parametrize("method", http_methods_no_head)
 def test_inject_user(client, method):
     """Access request user property."""
 
@@ -37,7 +40,7 @@ def test_inject_user(client, method):
     assert response.content == b"<h1>OK</h1>"
 
 
-@pytest.mark.parametrize("method", set(View.http_method_names) - {"head"})
+@pytest.mark.parametrize("method", http_methods_no_head)
 def test_inject_kwargs(client, method):
     """Pass kwargs to the nested service object."""
 
@@ -46,7 +49,7 @@ def test_inject_kwargs(client, method):
     assert response.content == b"<h1>OK</h1>"
 
 
-@pytest.mark.parametrize("method", set(View.http_method_names) - {"head"})
+@pytest.mark.parametrize("method", http_methods_no_head)
 def test_inject_self(client, method):
     """Access generated view instance."""
 
@@ -92,8 +95,8 @@ def test_form_view_attributes():
 def test_docstrings():
     """Access `view` and `form_view` docstring."""
 
-    assert view.__doc__ == "Create Django class-based view from injector class."
+    assert contrib.view.__doc__ == "Create Django class-based view from injector class."
     assert (
-        form_view.__doc__
+        contrib.form_view.__doc__
         == "Create Django form processing class-based view from injector class."
     )
