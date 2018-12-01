@@ -1,5 +1,4 @@
 import pytest
-
 from dependencies import Injector, this
 from dependencies.exceptions import DependencyError
 from helpers import CodeCollector
@@ -287,7 +286,7 @@ def zVaXyVseCxYS():
     class Container(Injector):
 
         foo = this.bar()
-        bar = lambda: 1
+        bar = lambda: 1  # noqa: E731
 
     return Container
 

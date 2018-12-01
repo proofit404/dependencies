@@ -2,16 +2,19 @@ import pytest
 
 pytest.importorskip("django")
 
-from dependencies.contrib.rest_framework import (
-    api_view,
-    generic_api_view,
-    model_view_set,
-)
-from dependencies.exceptions import DependencyError
-from django.contrib.admin.models import ADDITION, CHANGE, DELETION, LogEntry
-from django.contrib.auth.models import User
-from django_project.api.exceptions import MetadataError, NegotiationError, VersionError
-from rest_framework.status import (
+from django.contrib.admin.models import (
+    ADDITION,
+    CHANGE,
+    DELETION,
+    LogEntry,
+)  # noqa: E402
+from django.contrib.auth.models import User  # noqa: E402
+from django_project.api.exceptions import (
+    MetadataError,
+    NegotiationError,
+    VersionError,
+)  # noqa: E402
+from rest_framework.status import (  # noqa: E402
     HTTP_200_OK,
     HTTP_201_CREATED,
     HTTP_204_NO_CONTENT,
@@ -19,7 +22,14 @@ from rest_framework.status import (
     HTTP_415_UNSUPPORTED_MEDIA_TYPE,
     HTTP_429_TOO_MANY_REQUESTS,
 )
-from rest_framework.test import APIClient
+from rest_framework.test import APIClient  # noqa: E402
+
+from dependencies.contrib.rest_framework import (  # noqa: E402
+    api_view,
+    generic_api_view,
+    model_view_set,
+)
+from dependencies.exceptions import DependencyError  # noqa: E402
 
 
 client = APIClient()

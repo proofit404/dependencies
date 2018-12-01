@@ -2,9 +2,9 @@ import pytest
 
 pytest.importorskip("django")
 
-import django
-from dependencies.contrib.django import form_view, view
-from django.views.generic import View
+import django  # noqa: E402
+from dependencies.contrib.django import form_view, view  # noqa: E402
+from django.views.generic import View  # noqa: E402
 
 
 @pytest.mark.parametrize("method", set(View.http_method_names) - {"head"})

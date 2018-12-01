@@ -1,5 +1,4 @@
 import pytest
-
 from dependencies import Injector, operation
 from dependencies.exceptions import DependencyError
 
@@ -68,27 +67,28 @@ def test_protect_against_args_kwargs():
     with pytest.raises(DependencyError) as exc_info:
 
         @operation
-        def func(*args):
+        def func1(*args):
             pass
 
-    assert str(exc_info.value) == "func have arbitrary argument list"
+    assert str(exc_info.value) == "func1 have arbitrary argument list"
 
     with pytest.raises(DependencyError) as exc_info:
 
         @operation
-        def func(**kwargs):
+        def func2(**kwargs):
             pass
 
-    assert str(exc_info.value) == "func have arbitrary keyword arguments"
+    assert str(exc_info.value) == "func2 have arbitrary keyword arguments"
 
     with pytest.raises(DependencyError) as exc_info:
 
         @operation
-        def func(*args, **kwargs):
+        def func3(*args, **kwargs):
             pass
 
     assert (
-        str(exc_info.value) == "func have arbitrary argument list and keyword arguments"
+        str(exc_info.value)
+        == "func3 have arbitrary argument list and keyword arguments"
     )
 
 
