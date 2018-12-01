@@ -10,4 +10,5 @@ This module implements injectable Celery task.
 
 from ._celery import shared_task, task
 
+
 __all__ = ["shared_task", "task"]

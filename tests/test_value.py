@@ -1,4 +1,5 @@
 import pytest
+
 from dependencies import Injector, value
 from dependencies.exceptions import DependencyError
 

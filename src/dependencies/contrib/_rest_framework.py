@@ -1,12 +1,12 @@
 from __future__ import absolute_import
 
-from dependencies import this
-from dependencies.exceptions import DependencyError
 from rest_framework.generics import GenericAPIView
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
-from ._django import apply_http_methods, create_handler
+from dependencies import this
+from dependencies.contrib._django import apply_http_methods, create_handler
+from dependencies.exceptions import DependencyError
 
 
 def api_view(injector):

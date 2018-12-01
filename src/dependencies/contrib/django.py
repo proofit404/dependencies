@@ -10,4 +10,5 @@ This module implements injectable Django view.
 
 from ._django import form_view, view
 
+
 __all__ = ["form_view", "view"]

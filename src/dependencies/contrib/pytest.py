@@ -10,4 +10,5 @@ This module implements injectable Py.test fixtures.
 
 from ._pytest import register, require
 
+
 __all__ = ["register", "require"]

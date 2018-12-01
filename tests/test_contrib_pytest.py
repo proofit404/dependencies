@@ -1,6 +1,7 @@
 import types
 
 import pytest
+
 from dependencies import Injector
 from dependencies.contrib.pytest import register, require
 from dependencies.exceptions import DependencyError

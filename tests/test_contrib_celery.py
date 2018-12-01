@@ -1,5 +1,6 @@
 import pytest
 from celery import Celery, Task, signature
+
 from dependencies import Injector, this
 from dependencies.contrib.celery import shared_task, task
 from dependencies.exceptions import DependencyError

@@ -1,6 +1,7 @@
 from inspect import isclass
 
 import pytest
+
 from dependencies import Injector
 from dependencies._injector import injector_doc
 from dependencies.exceptions import DependencyError

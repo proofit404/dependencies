@@ -1,6 +1,7 @@
 import inspect
 
 import pytest
+
 from dependencies import Injector, Package
 from helpers import CodeCollector
 
