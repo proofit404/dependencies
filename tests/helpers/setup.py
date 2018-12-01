@@ -5,11 +5,9 @@ setup(name="helpers", py_modules=["helpers"])
 
 setup(name="pkg", packages=["pkg"])
 
-setup(name="django_settings_module", py_modules=["django_settings_module"])
-
 setup(
-    name="polls",
-    packages=["polls", "polls.api"],
+    name="django_project",
+    packages=["django_project", "django_project.api"],
     include_package_data=True,
-    package_data={"polls": ["templates/*.html"]},
+    package_data={"django_project": ["templates/*.html"]},
 )

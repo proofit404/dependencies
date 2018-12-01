@@ -77,7 +77,7 @@ def test_form_view(client):
 def test_form_view_attributes():
     """Access attributes of generated FormView."""
 
-    from polls.views import QuestionFormView
+    from django_project.views import QuestionFormView
 
     view_class = QuestionFormView.as_view().view_class
     assert view_class.success_url == "/thanks/"

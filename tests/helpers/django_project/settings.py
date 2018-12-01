@@ -5,7 +5,7 @@ INSTALLED_APPS = [
     "django.contrib.admin",
     "rest_framework",
     "django_filters",
-    "polls.apps.PollsConfig",
+    "django_project.apps.ProjectConfig",
 ]
 
 MIDDLEWARE = [
@@ -15,7 +15,7 @@ MIDDLEWARE = [
 
 SECRET_KEY = "*"
 
-ROOT_URLCONF = "polls.urls"
+ROOT_URLCONF = "django_project.urls"
 
 DATABASES = {"default": {"ENGINE": "django.db.backends.sqlite3", "NAME": ":memory:"}}
 

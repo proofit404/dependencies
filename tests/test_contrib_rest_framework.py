@@ -10,7 +10,7 @@ from dependencies.contrib.rest_framework import (
 from dependencies.exceptions import DependencyError
 from django.contrib.admin.models import ADDITION, CHANGE, DELETION, LogEntry
 from django.contrib.auth.models import User
-from polls.api.exceptions import MetadataError, NegotiationError, VersionError
+from django_project.api.exceptions import MetadataError, NegotiationError, VersionError
 from rest_framework.status import (
     HTTP_200_OK,
     HTTP_201_CREATED,
