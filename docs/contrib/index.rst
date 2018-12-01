@@ -2,10 +2,10 @@
  Contrib
 =========
 
-This section of the documentation describes dependencies integration
-with third-party tools.  This allows to reduce boilerplate you need to
-setup each time you want to connect your business logic to the
-framework of your choice.
+This section of the documentation describes ``dependencies``
+integration with third-party tools.  This allows to reduce boilerplate
+you need to setup each time you want to connect your business logic to
+the framework of your choice.
 
 attrs
 =====
