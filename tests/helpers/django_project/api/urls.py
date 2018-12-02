@@ -21,11 +21,11 @@ from .views import (
 router = SimpleRouter()
 # FIXME: We can not user router without `basename` because `queryset`
 # is a `property` and used as class attribute.
-router.register(r"user_set", UserViewSet.view_set_class, basename="user")
+router.register(r"user_set", UserViewSet.as_viewset(), basename="user")
 router.register(
-    r"dynamic_user_set", DynamicUserViewSet.view_set_class, basename="dynamic_user"
+    r"dynamic_user_set", DynamicUserViewSet.as_viewset(), basename="dynamic_user"
 )
-router.register(r"empty_set", EmptyViewSet.view_set_class, basename="empty")
+router.register(r"empty_set", EmptyViewSet.as_viewset(), basename="empty")
 
 urlpatterns = [
     url(r"^action/$", UserAction.as_view(), name="api-action"),

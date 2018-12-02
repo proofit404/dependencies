@@ -35,7 +35,7 @@ def model_view_set(injector):
     apply_api_view_methods(handler, injector)
     apply_generic_api_view_methods(handler, injector)
     apply_model_view_set_methods(handler, injector)
-    return injector.let(view_set_class=handler)
+    return injector.let(as_viewset=lambda: handler)
 
 
 def apply_api_view_methods(handler, injector):

@@ -174,15 +174,14 @@ injector and add it to the rest framework router.
     # app/urls.py
 
     router = SimpleRouter()
-    router.register(r"users", UserViewSet.view_set_class)
+    router.register(r"users", UserViewSet.as_viewset())
 
     urlpatterns = [
         url(r"^", include(router.urls)),
     ]
 
-Remember to register ``view_set_class`` attribute, no the
-``UserViewSet`` itself.  Its implementation should looks something
-like this.
+Use ``as_viewset`` method to register the ``UserViewSet`` class in the
+router.  Its implementation should looks something like this.
 
 .. code:: python
 
