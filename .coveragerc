@@ -1,2 +1,5 @@
 [run]
-source = dependencies
+branch = True
+source =
+       dependencies
+       django_project
