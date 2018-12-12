@@ -105,3 +105,4 @@ Contents
     proxies/index
     contrib/index
     implementation
+    faq
