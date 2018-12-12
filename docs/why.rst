@@ -306,7 +306,7 @@ Here where ``dependencies`` library comes in.
     class OrderContainer(Injector):
 
         order = Order
-        oredr_processor = OrderProcessor
+        order_processor = OrderProcessor
         price_calculator = PriceCalculator
         payment_processor = PaymentProcessor
         notification = Notification

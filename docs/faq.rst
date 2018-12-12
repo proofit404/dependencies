@@ -34,7 +34,7 @@ In our opinion, this makes code less declarative.
   definition, base type of each class registered in the container.
 * Container definition can be split into different files which make it
   harder to read.
-* I hard to define multiple dependencies of the same type in one
+* It hard to define multiple dependencies of the same type in one
   container.  For example, your service needs two databases to work
   with.  You need to define two different classes for types signatures
   and then define two different database classes.
