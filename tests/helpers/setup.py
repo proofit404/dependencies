@@ -11,3 +11,5 @@ setup(
     include_package_data=True,
     package_data={"django_project": ["templates/*.html"]},
 )
+
+setup(name="flask_project", packages=["flask_project"])
