@@ -4,6 +4,4 @@ pytest-flake8~=1.0.2 ; python_version == "3.7"
 pytest-black~=0.3.2 ; python_version == "3.7"
 pytest-isort~=0.2.1 ; python_version == "3.7"
 celery~=4.2.1
-djangorestframework~=3.9.0
-coreapi~=2.3.3
 coverage~=4.5.2
