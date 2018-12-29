@@ -3,3 +3,4 @@ branch = True
 source =
        dependencies
        django_project
+       flask_project
