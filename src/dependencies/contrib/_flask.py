@@ -1,5 +1,6 @@
 from __future__ import absolute_import
 
+from flask import request
 from flask.views import MethodView
 
 
@@ -25,7 +26,8 @@ def apply_http_methods(handler, injector):
 
             def locals_hack(method=method):
                 def __view(self, *args, **kwargs):
-                    return getattr(injector, method)()
+                    ns = injector.let(request=request, args=args, kwargs=kwargs)
+                    return getattr(ns, method)()
 
                 return __view
 
