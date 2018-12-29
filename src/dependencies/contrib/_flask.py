@@ -13,7 +13,7 @@ def method_view(injector):
 
 def create_handler(from_class):
     class Handler(from_class):
-        pass
+        methods = set()
 
     return Handler
 
@@ -30,3 +30,4 @@ def apply_http_methods(handler, injector):
                 return __view
 
             setattr(handler, method, locals_hack())
+            handler.methods.add(method.upper())
