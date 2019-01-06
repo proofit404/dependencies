@@ -1,5 +1,5 @@
 ./tests/helpers/.
-pytest~=4.0.2
+pytest==4.1.0
 pytest-flake8~=1.0.2 ; python_version == "3.7"
 pytest-black~=0.3.2 ; python_version == "3.7"
 pytest-isort~=0.2.1 ; python_version == "3.7"
