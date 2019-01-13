@@ -1,6 +1,6 @@
-============================
- Frequently asked questions
-============================
+=====
+ FAQ
+=====
 
 Why do not use type annotations?
 ================================
