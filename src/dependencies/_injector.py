@@ -3,7 +3,8 @@ import weakref
 
 from ._checks.circles import check_circles
 from ._checks.links import check_links
-from ._spec import make_init_spec, nested_injector, use_object_init
+from ._package import Package, resolve_package_link
+from ._spec import make_init_spec, nested_injector, package_link, use_object_init
 from ._this import Thisable
 from .exceptions import DependencyError
 
@@ -90,6 +91,13 @@ class InjectorType(type):
                 have_default = False
                 continue
 
+            if argspec is package_link:
+                cache[current_attr] = resolve_package_link(attribute, cls)
+                cached.add(current_attr)
+                current_attr = attrs_stack.pop()
+                have_default = False
+                continue
+
             args, have_defaults = argspec
             if set(args).issubset(cached):
                 kwargs = dict((k, cache[k]) for k in args if k in cache)
@@ -152,6 +160,7 @@ Classes inherited from this class may inject dependencies into classes
 specified in it namespace.
 """
 
+
 Injector = InjectorType(
     "Injector", (), {"__init__": __init__, "__doc__": injector_doc, "let": let}
 )
@@ -162,14 +171,13 @@ def make_dependency_spec(name, dependency):
     if inspect.isclass(dependency) and not name.endswith("_class"):
         if issubclass(dependency, Injector):
             return dependency, nested_injector
-
         elif use_object_init(dependency):
             return dependency, False
-
         else:
             spec = make_init_spec(dependency)
             return dependency, spec
-
+    elif isinstance(dependency, Package):
+        return dependency, package_link
     else:
         return dependency, None
 

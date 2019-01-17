@@ -12,6 +12,7 @@ class Marker(object):
 
 
 nested_injector = Marker()
+package_link = Marker()
 
 
 def use_object_init(cls):
@@ -19,7 +20,6 @@ def use_object_init(cls):
     for base in cls.__mro__:
         if base is object:
             return True
-
         elif "__init__" in base.__dict__:
             return False
 

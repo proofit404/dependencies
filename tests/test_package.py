@@ -171,3 +171,31 @@ def dqXJgFoftQja():
         baz = 2
 
     return Container
+
+
+self_pointer = CodeCollector()
+
+
+@self_pointer.parametrize
+def test_package_provides_lazy_loading(code):
+    """
+    We can point `Package` to the same module.  If `Injector` subclass
+    tries to point to another `Injector` subclass defined *below* in
+    the same module, we should handle it as usual.
+    """
+
+    Container = code()
+
+    assert Container.foo == 1
+
+
+@self_pointer
+def dmldmoXCFIBG():
+
+    self_pointer = Package("pkg.self_pointer")
+
+    class Container(Injector):
+
+        foo = self_pointer.Container.foo
+
+    return Container
