@@ -1,6 +1,6 @@
+import importlib
 import random
 import string
-import importlib
 
 
 class Package(object):
