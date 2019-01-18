@@ -59,20 +59,15 @@ class InjectorType(type):
                     current_attr = attrs_stack.pop()
                     have_default = False
                     continue
-                if current_attr == "__parent__":
-                    raise DependencyError(
-                        "You tries to shift this more times that Injector has levels"
+                if len(attrs_stack) > 1:
+                    message = "{0!r} can not resolve attribute {1!r} while building {2!r}".format(  # noqa: E501
+                        cls.__name__, current_attr, attrs_stack.pop()
                     )
                 else:
-                    if len(attrs_stack) > 1:
-                        message = "{0!r} can not resolve attribute {1!r} while building {2!r}".format(  # noqa: E501
-                            cls.__name__, current_attr, attrs_stack.pop()
-                        )
-                    else:
-                        message = "{0!r} can not resolve attribute {1!r}".format(
-                            cls.__name__, current_attr
-                        )
-                    raise DependencyError(message)
+                    message = "{0!r} can not resolve attribute {1!r}".format(
+                        cls.__name__, current_attr
+                    )
+                raise DependencyError(message)
 
             attribute, argspec = attribute_spec
 
