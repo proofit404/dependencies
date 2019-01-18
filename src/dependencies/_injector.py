@@ -3,10 +3,12 @@ import weakref
 
 from ._checks.circles import check_circles
 from ._checks.links import check_links
+from ._operation import Operation, resolve_operation_mark
 from ._package import Package, resolve_package_link
 from ._spec import (
     make_init_spec,
     nested_injector,
+    operation_mark,
     package_link,
     this_link,
     use_object_init,
@@ -109,6 +111,13 @@ class InjectorType(type):
                 have_default = False
                 continue
 
+            if argspec is operation_mark:
+                cache[current_attr] = resolve_operation_mark(attribute, cls)
+                cached.add(current_attr)
+                current_attr = attrs_stack.pop()
+                have_default = False
+                continue
+
             args, have_defaults = argspec
 
             if set(args).issubset(cached):
@@ -192,6 +201,8 @@ def make_dependency_spec(name, dependency):
         return dependency, this_link
     elif isinstance(dependency, Package):
         return dependency, package_link
+    elif isinstance(dependency, Operation):
+        return dependency, operation_mark
     else:
         return dependency, None
 

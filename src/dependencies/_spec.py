@@ -10,6 +10,7 @@ class Marker(object):
 nested_injector = Marker()
 this_link = Marker()
 package_link = Marker()
+operation_mark = Marker()
 
 
 def use_object_init(cls):
