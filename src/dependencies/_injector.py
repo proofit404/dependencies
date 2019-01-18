@@ -4,8 +4,14 @@ import weakref
 from ._checks.circles import check_circles
 from ._checks.links import check_links
 from ._package import Package, resolve_package_link
-from ._spec import make_init_spec, nested_injector, package_link, use_object_init
-from ._this import Thisable
+from ._spec import (
+    make_init_spec,
+    nested_injector,
+    package_link,
+    this_link,
+    use_object_init,
+)
+from ._this import This, resolve_this_link
 from .exceptions import DependencyError
 
 
@@ -26,7 +32,7 @@ class InjectorType(type):
         for k, v in namespace.items():
             check_dunder_name(k)
             check_attrs_redefinition(k)
-            check_thisable(v)
+            check_this(v)
         dependencies = {}
         for base in reversed(bases):
             dependencies.update(base.__dependencies__)
@@ -42,15 +48,17 @@ class InjectorType(type):
         cache, cached = {}, set()
         current_attr, attrs_stack = attrname, [attrname]
         have_default = False
+
         while attrname not in cache:
+
             attribute_spec = cls.__dependencies__.get(current_attr)
+
             if attribute_spec is None:
                 if have_default:
                     cached.add(current_attr)
                     current_attr = attrs_stack.pop()
                     have_default = False
                     continue
-
                 if current_attr == "__parent__":
                     raise DependencyError(
                         "You tries to shift this more times that Injector has levels"
@@ -67,6 +75,7 @@ class InjectorType(type):
                     raise DependencyError(message)
 
             attribute, argspec = attribute_spec
+
             if argspec is None:
                 cache[current_attr] = attribute
                 cached.add(current_attr)
@@ -91,6 +100,13 @@ class InjectorType(type):
                 have_default = False
                 continue
 
+            if argspec is this_link:
+                cache[current_attr] = resolve_this_link(attribute, cls)
+                cached.add(current_attr)
+                current_attr = attrs_stack.pop()
+                have_default = False
+                continue
+
             if argspec is package_link:
                 cache[current_attr] = resolve_package_link(attribute, cls)
                 cached.add(current_attr)
@@ -99,6 +115,7 @@ class InjectorType(type):
                 continue
 
             args, have_defaults = argspec
+
             if set(args).issubset(cached):
                 kwargs = dict((k, cache[k]) for k in args if k in cache)
                 cache[current_attr] = attribute(**kwargs)
@@ -176,6 +193,8 @@ def make_dependency_spec(name, dependency):
         else:
             spec = make_init_spec(dependency)
             return dependency, spec
+    elif isinstance(dependency, This):
+        return dependency, this_link
     elif isinstance(dependency, Package):
         return dependency, package_link
     else:
@@ -203,7 +222,7 @@ def check_attrs_redefinition(name):
         raise DependencyError("'let' redefinition is not allowed")
 
 
-def check_thisable(dependency):
+def check_this(dependency):
 
-    if isinstance(dependency, Thisable):
+    if isinstance(dependency, This) and not dependency.__expression__:
         raise DependencyError("You can not use 'this' directly in the 'Injector'")

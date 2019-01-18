@@ -8,6 +8,7 @@ class Marker(object):
 
 
 nested_injector = Marker()
+this_link = Marker()
 package_link = Marker()
 
 

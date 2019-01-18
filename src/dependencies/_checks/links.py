@@ -1,12 +1,11 @@
-from .._spec import nested_injector
-from .._this import LinkType
+from .._spec import nested_injector, this_link
 from ..exceptions import DependencyError
 
 
 def check_links(class_name, dependencies):
 
     for argument_name, (dep, depspec) in dependencies.items():
-        if isinstance(dep, LinkType):
+        if depspec is this_link:
             check_links_for(
                 class_name, argument_name, dependencies, dep, filter_expression(dep)
             )
@@ -42,7 +41,7 @@ def check_links_for(class_name, argument_name, dependencies, origin, expression)
                 argument_name, class_name
             )
         )
-    elif isinstance(attribute, LinkType):
+    elif argspec is this_link:
         check_links_for(
             class_name,
             argument_name,
@@ -57,12 +56,8 @@ def filter_expression(link):
     for parent in range(link.__parents__):
         yield "__parent__"
 
-    for symbol in link.__expression__:
-        if symbol == ".":
-            continue
-
-        elif symbol == "[":
-            raise StopIteration()
-
-        else:
+    for kind, symbol in link.__expression__:
+        if kind == ".":
             yield symbol
+        elif kind == "[]":
+            raise StopIteration()
