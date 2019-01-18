@@ -1,6 +1,6 @@
+import random
+import string
 import importlib
-
-from ._this import random_string
 
 
 class Package(object):
@@ -31,3 +31,8 @@ def resolve_package_link(package, injector):
         result = getattr(injector.let(**{random_name: result}), random_name)
 
     return result
+
+
+def random_string():
+
+    return "".join(random.choice(string.ascii_letters) for i in range(8))

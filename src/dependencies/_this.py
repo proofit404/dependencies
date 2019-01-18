@@ -1,6 +1,3 @@
-import random
-import string
-
 from .exceptions import DependencyError
 
 
@@ -50,8 +47,3 @@ def resolve_this_link(this, injector):
 
 
 this = This(0, [])
-
-
-def random_string():
-
-    return "".join(random.choice(string.ascii_letters) for i in range(8))
