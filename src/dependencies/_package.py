@@ -5,15 +5,15 @@ from ._this import random_string
 
 class Package(object):
     def __init__(self, name):
-        self.__name = name
+        self.__name__ = name
 
     def __getattr__(self, attrname):
-        return Package(self.__name + "." + attrname)
+        return Package(self.__name__ + "." + attrname)
 
 
 def resolve_package_link(package, injector):
 
-    names = package._Package__name.split(".")
+    names = package.__name__.split(".")
     modulename, attributes = names[0], names[1:]
     result = importlib.import_module(modulename)
     do_import = True
