@@ -15,7 +15,7 @@ def check_circles_for(dependencies, attrname, origin):
         return
 
     attribute, argspec = attribute_spec
-    if argspec:
+    if type(argspec) is tuple:
         args = argspec[0]
         if origin in args:
             message = "{0!r} is a circular dependency in the {1!r} constructor"

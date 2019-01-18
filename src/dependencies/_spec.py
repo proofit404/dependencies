@@ -4,11 +4,7 @@ from .exceptions import DependencyError
 
 
 class Marker(object):
-    def __bool__(self):
-
-        return False
-
-    __nonzero__ = __bool__
+    pass
 
 
 nested_injector = Marker()
