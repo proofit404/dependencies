@@ -93,20 +93,6 @@ def test_protect_against_args_kwargs():
     )
 
 
-def test_representation():
-    """
-    Operation class and instance should contain a name of the function
-    in it.
-    """
-
-    @operation
-    def process(foo, bar):
-        pass
-
-    assert repr(process) == "<class Operation[process]>"
-    assert repr(process(1, "test")) == "<Operation[process] object>"
-
-
 def test_docstrings():
     """Access `operation` documentation string."""
 
