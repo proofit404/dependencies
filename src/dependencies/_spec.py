@@ -11,6 +11,7 @@ nested_injector = Marker()
 this_link = Marker()
 package_link = Marker()
 operation_mark = Marker()
+value_mark = Marker()
 
 
 def use_object_init(cls):

@@ -12,8 +12,10 @@ from ._spec import (
     package_link,
     this_link,
     use_object_init,
+    value_mark,
 )
 from ._this import This, resolve_this_link
+from ._value import Value, resolve_value_mark
 from .exceptions import DependencyError
 
 
@@ -118,6 +120,13 @@ class InjectorType(type):
                 have_default = False
                 continue
 
+            if argspec is value_mark:
+                cache[current_attr] = resolve_value_mark(attribute, cls)
+                cached.add(current_attr)
+                current_attr = attrs_stack.pop()
+                have_default = False
+                continue
+
             args, have_defaults = argspec
 
             if set(args).issubset(cached):
@@ -203,6 +212,8 @@ def make_dependency_spec(name, dependency):
         return dependency, package_link
     elif isinstance(dependency, Operation):
         return dependency, operation_mark
+    elif isinstance(dependency, Value):
+        return dependency, value_mark
     else:
         return dependency, None
 
