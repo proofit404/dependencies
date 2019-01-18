@@ -7,6 +7,8 @@ matrix:
       env: TOXENV=py27-django111
     - python: 2.7
       env: TOXENV=py27-flask
+    - python: 2.7
+      env: TOXENV=py27-celery
     - python: 3.5
       env: TOXENV=py35-django110
     - python: 3.5
@@ -17,6 +19,8 @@ matrix:
       env: TOXENV=py35-django21
     - python: 3.5
       env: TOXENV=py35-flask
+    - python: 3.5
+      env: TOXENV=py35-celery
     - python: 3.6
       env: TOXENV=py36-django111
     - python: 3.6
@@ -25,6 +29,8 @@ matrix:
       env: TOXENV=py36-django21
     - python: 3.6
       env: TOXENV=py36-flask
+    - python: 3.6
+      env: TOXENV=py36-celery
     - python: 3.7
       dist: xenial
       sudo: true
@@ -37,6 +43,10 @@ matrix:
       dist: xenial
       sudo: true
       env: TOXENV=py37-flask
+    - python: 3.7
+      dist: xenial
+      sudo: true
+      env: TOXENV=py37-celery
     - python: 3.7
       dist: xenial
       sudo: true

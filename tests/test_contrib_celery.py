@@ -1,17 +1,19 @@
 import pytest
-from celery import Celery, Task, signature
 
 from dependencies import Injector, this
-from dependencies.contrib.celery import shared_task, task
 from dependencies.exceptions import DependencyError
 from helpers import CodeCollector
+
+
+celery = pytest.importorskip("celery")
+contrib = pytest.importorskip("dependencies.contrib.celery")
 
 
 @pytest.fixture
 def celery_app():
     """Simulate global Celery application instance."""
 
-    app = Celery()
+    app = celery.Celery()
     app.conf.update(task_always_eager=True, task_eager_propagates=True)
     app.tasks.clear()
     return app
@@ -35,7 +37,7 @@ containers = CodeCollector()
 def bAMWkT3WSTN1(_app):
     """Task decorator."""
 
-    @task
+    @contrib.task
     class Container(Injector):
 
         app = _app
@@ -49,7 +51,7 @@ def bAMWkT3WSTN1(_app):
 def xPa7isagt3Lq(app):
     """Shared task decorator."""
 
-    @shared_task
+    @contrib.shared_task
     class Container(Injector):
 
         name = "foo.bar.baz"
@@ -71,7 +73,7 @@ def test_execute_task(celery_app, code):
     """Execute task from Celery application."""
 
     code(celery_app)
-    assert signature("foo.bar.baz")("foo", bar="baz") == 1
+    assert celery.signature("foo.bar.baz")("foo", bar="baz") == 1
 
 
 @containers.parametrize
@@ -185,10 +187,12 @@ def u4kZae2NSFhE(container):
 def test_docstrings():
     """Access `task` and `shared_task` docstrings."""
 
-    assert task.__doc__ == "Create Celery task from injector class."
-    assert shared_task.__doc__ == "Create Celery shared task from injector class."
+    assert contrib.task.__doc__ == "Create Celery task from injector class."
+    assert (
+        contrib.shared_task.__doc__ == "Create Celery shared task from injector class."
+    )
 
-    @shared_task
+    @contrib.shared_task
     class Container(Injector):
         """Foo bar baz task."""
 
@@ -219,7 +223,7 @@ def test_validation(celery_app):
 
     with pytest.raises(DependencyError) as exc_info:
 
-        @task
+        @contrib.task
         class Container1(Injector):
             name = "foo.bar.baz"
             run = lambda: None  # noqa: E731
@@ -229,7 +233,7 @@ def test_validation(celery_app):
 
     with pytest.raises(DependencyError) as exc_info:
 
-        @task
+        @contrib.task
         class Container2(Injector):
             app = celery_app
             run = lambda: None  # noqa: E731
@@ -239,7 +243,7 @@ def test_validation(celery_app):
 
     with pytest.raises(DependencyError) as exc_info:
 
-        @task
+        @contrib.task
         class Container3(Injector):
             app = celery_app
             name = "foo.bar.baz"
@@ -249,7 +253,7 @@ def test_validation(celery_app):
 
     with pytest.raises(DependencyError) as exc_info:
 
-        @shared_task
+        @contrib.shared_task
         class Container4(Injector):
             run = lambda: None  # noqa: E731
 
@@ -258,7 +262,7 @@ def test_validation(celery_app):
 
     with pytest.raises(DependencyError) as exc_info:
 
-        @shared_task
+        @contrib.shared_task
         class Container5(Injector):
             name = "foo.bar.baz"
 
@@ -293,7 +297,7 @@ def test_task_arguments(celery_app, code):
             assert isinstance(self.task, MyTask)
             return self.foo(one, two)
 
-    class MyTask(Task):
+    class MyTask(celery.Task):
         pass
 
     code(
@@ -345,7 +349,7 @@ def test_task_arguments(celery_app, code):
 def z3uG24zlPL7s(_app, container):
     """Task decorator."""
 
-    @task
+    @contrib.task
     class Container(container):
 
         app = _app
@@ -357,7 +361,7 @@ def z3uG24zlPL7s(_app, container):
 def pvRJsuaumvOU(app, container):
     """Shared task decorator."""
 
-    @shared_task
+    @contrib.shared_task
     class Container(container):
 
         name = "foo.bar.baz"
