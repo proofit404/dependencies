@@ -42,7 +42,6 @@ def check_links_for(class_name, argument_name, dependencies, origin, expression)
                 argument_name, class_name
             )
         )
-
     elif isinstance(attribute, LinkType):
         check_links_for(
             class_name,
