@@ -3,15 +3,11 @@ import inspect
 from .exceptions import DependencyError
 
 
-class Marker(object):
-    pass
-
-
-nested_injector = Marker()
-this_link = Marker()
-package_link = Marker()
-operation_mark = Marker()
-value_mark = Marker()
+nested_injector = object()
+this_link = object()
+package_link = object()
+operation_mark = object()
+value_mark = object()
 
 
 def use_object_init(cls):
