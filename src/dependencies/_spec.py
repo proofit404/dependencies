@@ -3,13 +3,6 @@ import inspect
 from .exceptions import DependencyError
 
 
-nested_injector = object()
-this_link = object()
-package_link = object()
-operation_mark = object()
-value_mark = object()
-
-
 def use_object_init(cls):
 
     for base in cls.__mro__:

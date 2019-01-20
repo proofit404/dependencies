@@ -1,15 +1,15 @@
-from .._spec import nested_injector, this_link
+from .. import _markers as markers
 from ..exceptions import DependencyError
 
 
 def check_links(class_name, dependencies):
 
     for argument_name, (dep, depspec) in dependencies.items():
-        if depspec is this_link:
+        if depspec is markers.this:
             check_links_for(
                 class_name, argument_name, dependencies, dep, filter_expression(dep)
             )
-        elif depspec is nested_injector:
+        elif depspec is markers.nested_injector:
             nested_dependencies = {"__parent__": (dependencies, None)}
             nested_dependencies.update(dep.__dependencies__)
             check_links(class_name, nested_dependencies)
@@ -27,7 +27,7 @@ def check_links_for(class_name, argument_name, dependencies, origin, expression)
     except KeyError:
         return
 
-    if argspec is nested_injector:
+    if argspec is markers.nested_injector:
         nested_dependencies = {"__parent__": (dependencies, None)}
         nested_dependencies.update(attribute.__dependencies__)
         check_links_for(
@@ -41,7 +41,7 @@ def check_links_for(class_name, argument_name, dependencies, origin, expression)
                 argument_name, class_name
             )
         )
-    elif argspec is this_link:
+    elif argspec is markers.this:
         check_links_for(
             class_name,
             argument_name,

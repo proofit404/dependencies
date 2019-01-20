@@ -1,19 +1,12 @@
 import inspect
 import weakref
 
+from . import _markers as markers
 from ._checks.circles import check_circles
 from ._checks.links import check_links
 from ._operation import Operation, resolve_operation_mark
 from ._package import Package, resolve_package_link
-from ._spec import (
-    make_init_spec,
-    nested_injector,
-    operation_mark,
-    package_link,
-    this_link,
-    use_object_init,
-    value_mark,
-)
+from ._spec import make_init_spec, use_object_init
 from ._this import This, resolve_this_link
 from ._value import Value, resolve_value_mark
 from .exceptions import DependencyError
@@ -89,7 +82,7 @@ class InjectorType(type):
                 have_default = False
                 continue
 
-            if argspec is nested_injector:
+            if argspec is markers.nested_injector:
                 subclass = type(attribute.__name__, (attribute,), {})
                 parent_spec = weakref.ref(cls), False
                 subclass.__dependencies__["__parent__"] = parent_spec
@@ -99,28 +92,28 @@ class InjectorType(type):
                 have_default = False
                 continue
 
-            if argspec is this_link:
+            if argspec is markers.this:
                 cache[current_attr] = resolve_this_link(attribute, cls)
                 cached.add(current_attr)
                 current_attr = attrs_stack.pop()
                 have_default = False
                 continue
 
-            if argspec is package_link:
+            if argspec is markers.package:
                 cache[current_attr] = resolve_package_link(attribute, cls)
                 cached.add(current_attr)
                 current_attr = attrs_stack.pop()
                 have_default = False
                 continue
 
-            if argspec is operation_mark:
+            if argspec is markers.operation:
                 cache[current_attr] = resolve_operation_mark(attribute, cls)
                 cached.add(current_attr)
                 current_attr = attrs_stack.pop()
                 have_default = False
                 continue
 
-            if argspec is value_mark:
+            if argspec is markers.value:
                 cache[current_attr] = resolve_value_mark(attribute, cls)
                 cached.add(current_attr)
                 current_attr = attrs_stack.pop()
@@ -200,20 +193,20 @@ def make_dependency_spec(name, dependency):
 
     if inspect.isclass(dependency) and not name.endswith("_class"):
         if issubclass(dependency, Injector):
-            return dependency, nested_injector
+            return dependency, markers.nested_injector
         elif use_object_init(dependency):
             return dependency, False
         else:
             spec = make_init_spec(dependency)
             return dependency, spec
     elif isinstance(dependency, This):
-        return dependency, this_link
+        return dependency, markers.this
     elif isinstance(dependency, Package):
-        return dependency, package_link
+        return dependency, markers.package
     elif isinstance(dependency, Operation):
-        return dependency, operation_mark
+        return dependency, markers.operation
     elif isinstance(dependency, Value):
-        return dependency, value_mark
+        return dependency, markers.value
     else:
         return dependency, None
 
