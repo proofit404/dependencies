@@ -40,3 +40,46 @@ In our opinion, this makes code less declarative.
   and then define two different database classes.
 
 This lead to unnecessary boilerplate.
+
+Mixins considered harmful
+=========================
+
+``dependencies`` are compared with mixins often.  In a sense that both
+solutions were made to maximize code reuse.  We already discussed this
+in the `why`_ chapter.  But let's return to it again::
+
+    Inheritance always breaks encapsulation.
+
+Consider this code snippet:
+
+.. code:: python
+
+    class RetrieveModelMixin(object):
+        """
+        Retrieve a model instance.
+        """
+        def retrieve(self, request, *args, **kwargs):
+            instance = self.get_object()
+            serializer = self.get_serializer(instance)
+            return Response(serializer.data)
+
+Where ``get_object`` and ``get_serializer`` were defined?  We have no
+idea.  We are thinking that code below is way better for understanding
+its structure.
+
+.. code:: python
+
+    class RetrieveModel(object):
+        """
+        Retrieve a model instance.
+        """
+        def __init__(self, get_object, get_serializer):
+            self.get_object = get_object
+            self.get_serializer = get_serializer
+
+        def retrieve(self, request, *args, **kwargs):
+            instance = self.get_object()
+            serializer = self.get_serializer(instance)
+            return Response(serializer.data)
+
+.. _why: why.html#mixins
