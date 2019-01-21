@@ -4,14 +4,20 @@ from ..exceptions import DependencyError
 
 def check_links(class_name, dependencies):
 
-    for argument_name, (dep, depspec) in dependencies.items():
-        if depspec is markers.this:
+    for argument_name, argspec in dependencies.items():
+        if argspec[0] is markers.this:
             check_links_for(
-                class_name, argument_name, dependencies, dep, filter_expression(dep)
+                class_name,
+                argument_name,
+                dependencies,
+                argspec[1],
+                filter_expression(argspec[1]),
             )
-        elif depspec is markers.nested_injector:
-            nested_dependencies = {"__parent__": (dependencies, None)}
-            nested_dependencies.update(dep.__dependencies__)
+        elif argspec[0] is markers.nested_injector:
+            nested_dependencies = {
+                "__parent__": (markers.injectable, dependencies, None, None)
+            }
+            nested_dependencies.update(argspec[1].__dependencies__)
             check_links(class_name, nested_dependencies)
 
 
@@ -23,31 +29,33 @@ def check_links_for(class_name, argument_name, dependencies, origin, expression)
         return
 
     try:
-        attribute, argspec = dependencies[argname]
+        argspec = dependencies[argname]
     except KeyError:
         return
 
-    if argspec is markers.nested_injector:
-        nested_dependencies = {"__parent__": (dependencies, None)}
-        nested_dependencies.update(attribute.__dependencies__)
+    if argspec[0] is markers.nested_injector:
+        nested_dependencies = {
+            "__parent__": (markers.injectable, dependencies, None, None)
+        }
+        nested_dependencies.update(argspec[1].__dependencies__)
         check_links_for(
             class_name, argument_name, nested_dependencies, origin, expression
         )
     elif argname == "__parent__":
-        check_links_for(class_name, argument_name, attribute, origin, expression)
-    elif attribute is origin:
+        check_links_for(class_name, argument_name, argspec[1], origin, expression)
+    elif argspec[1] is origin:
         raise DependencyError(
             "{0!r} is a circle link in the {1!r} injector".format(
                 argument_name, class_name
             )
         )
-    elif argspec is markers.this:
+    elif argspec[0] is markers.this:
         check_links_for(
             class_name,
             argument_name,
             dependencies,
             origin,
-            filter_expression(attribute),
+            filter_expression(argspec[1]),
         )
 
 

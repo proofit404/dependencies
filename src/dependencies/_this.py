@@ -1,3 +1,4 @@
+from . import _markers
 from .exceptions import DependencyError
 
 
@@ -23,6 +24,11 @@ class This(object):
             raise ValueError("Positive integer argument is required")
         else:
             return This(self.__parents__ + num, self.__expression__)
+
+
+def make_this_spec(dependency):
+
+    return _markers.this, dependency, [], 0
 
 
 def resolve_this_link(this, injector):

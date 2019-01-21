@@ -1,6 +1,7 @@
 import functools
 import inspect
 
+from ._markers import injectable
 from ._spec import make_func_spec
 from .exceptions import DependencyError
 
@@ -15,23 +16,30 @@ class Operation(object):
     def __init__(self, function):
 
         check_class(function)
-        arguments, have_defaults = make_func_spec(function, function.__name__)
-        check_method(arguments)
-
         self.__function__ = function
-        self.__arguments__ = arguments
-        self.__have_defaults__ = have_defaults
 
 
-def resolve_operation_mark(operation, injector):
+def make_operation_spec(dependency):
 
-    # FIXME: Reuse `Injector` cache.  Don't build arguments them self.
-    arguments = {}
-    for num, arg in enumerate(operation.__arguments__):
-        if arg not in injector and num >= operation.__have_defaults__:
-            continue
-        arguments[arg] = getattr(injector, arg)
-    return functools.partial(operation.__function__, **arguments)
+    function = dependency.__function__
+    args, have_defaults = make_func_spec(function, function.__name__)
+    check_method(args)
+    return injectable, OperationSpec(function), args, have_defaults
+
+
+class OperationSpec(object):
+    def __init__(self, func):
+
+        self.func = func
+
+    def __call__(self, **kwargs):
+
+        return functools.partial(self.func, **kwargs)
+
+    @property
+    def __name__(self):
+
+        return self.func.__name__
 
 
 def check_class(function):

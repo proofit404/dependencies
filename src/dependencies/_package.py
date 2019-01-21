@@ -2,6 +2,8 @@ import importlib
 import random
 import string
 
+from . import _markers
+
 
 class Package(object):
     def __init__(self, name):
@@ -9,6 +11,11 @@ class Package(object):
 
     def __getattr__(self, attrname):
         return Package(self.__name__ + "." + attrname)
+
+
+def make_package_spec(dependency):
+
+    return _markers.package, dependency, [], 0
 
 
 def resolve_package_link(package, injector):

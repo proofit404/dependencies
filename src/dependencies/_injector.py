@@ -4,11 +4,11 @@ import weakref
 from . import _markers as markers
 from ._checks.circles import check_circles
 from ._checks.links import check_links
-from ._operation import Operation, resolve_operation_mark
-from ._package import Package, resolve_package_link
-from ._spec import make_init_spec, use_object_init
-from ._this import This, resolve_this_link
-from ._value import Value, resolve_value_mark
+from ._operation import Operation, make_operation_spec
+from ._package import Package, make_package_spec, resolve_package_link
+from ._spec import make_init_spec, make_nested_injector_spec, make_raw_spec
+from ._this import This, make_this_spec, resolve_this_link
+from ._value import Value, make_value_spec
 from .exceptions import DependencyError
 
 
@@ -48,9 +48,9 @@ class InjectorType(type):
 
         while attrname not in cache:
 
-            attribute_spec = cls.__dependencies__.get(current_attr)
+            spec = cls.__dependencies__.get(current_attr)
 
-            if attribute_spec is None:
+            if spec is None:
                 if have_default:
                     cached.add(current_attr)
                     current_attr = attrs_stack.pop()
@@ -66,25 +66,18 @@ class InjectorType(type):
                     )
                 raise DependencyError(message)
 
-            attribute, argspec = attribute_spec
+            marker, attribute, args, have_defaults = spec
 
-            if argspec is None:
+            if marker is markers.raw:
                 cache[current_attr] = attribute
                 cached.add(current_attr)
                 current_attr = attrs_stack.pop()
                 have_default = False
                 continue
 
-            if argspec is False:
-                cache[current_attr] = attribute()
-                cached.add(current_attr)
-                current_attr = attrs_stack.pop()
-                have_default = False
-                continue
-
-            if argspec is markers.nested_injector:
+            if marker is markers.nested_injector:
                 subclass = type(attribute.__name__, (attribute,), {})
-                parent_spec = weakref.ref(cls), False
+                parent_spec = markers.injectable, weakref.ref(cls), [], 0
                 subclass.__dependencies__["__parent__"] = parent_spec
                 cache[current_attr] = subclass
                 cached.add(current_attr)
@@ -92,35 +85,19 @@ class InjectorType(type):
                 have_default = False
                 continue
 
-            if argspec is markers.this:
+            if marker is markers.this:
                 cache[current_attr] = resolve_this_link(attribute, cls)
                 cached.add(current_attr)
                 current_attr = attrs_stack.pop()
                 have_default = False
                 continue
 
-            if argspec is markers.package:
+            if marker is markers.package:
                 cache[current_attr] = resolve_package_link(attribute, cls)
                 cached.add(current_attr)
                 current_attr = attrs_stack.pop()
                 have_default = False
                 continue
-
-            if argspec is markers.operation:
-                cache[current_attr] = resolve_operation_mark(attribute, cls)
-                cached.add(current_attr)
-                current_attr = attrs_stack.pop()
-                have_default = False
-                continue
-
-            if argspec is markers.value:
-                cache[current_attr] = resolve_value_mark(attribute, cls)
-                cached.add(current_attr)
-                current_attr = attrs_stack.pop()
-                have_default = False
-                continue
-
-            args, have_defaults = argspec
 
             if set(args).issubset(cached):
                 kwargs = dict((k, cache[k]) for k in args if k in cache)
@@ -193,22 +170,19 @@ def make_dependency_spec(name, dependency):
 
     if inspect.isclass(dependency) and not name.endswith("_class"):
         if issubclass(dependency, Injector):
-            return dependency, markers.nested_injector
-        elif use_object_init(dependency):
-            return dependency, False
+            return make_nested_injector_spec(dependency)
         else:
-            spec = make_init_spec(dependency)
-            return dependency, spec
+            return make_init_spec(dependency)
     elif isinstance(dependency, This):
-        return dependency, markers.this
+        return make_this_spec(dependency)
     elif isinstance(dependency, Package):
-        return dependency, markers.package
+        return make_package_spec(dependency)
     elif isinstance(dependency, Operation):
-        return dependency, markers.operation
+        return make_operation_spec(dependency)
     elif isinstance(dependency, Value):
-        return dependency, markers.value
+        return make_value_spec(dependency)
     else:
-        return dependency, None
+        return make_raw_spec(dependency)
 
 
 def check_inheritance(bases):

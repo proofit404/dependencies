@@ -1,5 +1,5 @@
+injectable = object()
+raw = object()
 nested_injector = object()
 this = object()
 package = object()
-operation = object()
-value = object()

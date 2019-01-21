@@ -1,6 +1,27 @@
 import inspect
 
+from ._markers import injectable, nested_injector, raw
 from .exceptions import DependencyError
+
+
+def make_raw_spec(dependency):
+
+    return raw, dependency, None, None
+
+
+def make_init_spec(dependency):
+
+    if use_object_init(dependency):
+        return injectable, dependency, [], 0
+    else:
+        name = constructor_name(dependency)
+        args, have_defaults = make_func_spec(dependency.__init__, name)
+        return injectable, dependency, args[1:], have_defaults
+
+
+def make_nested_injector_spec(dependency):
+
+    return nested_injector, dependency, None, None
 
 
 def use_object_init(cls):
@@ -10,13 +31,6 @@ def use_object_init(cls):
             return True
         elif "__init__" in base.__dict__:
             return False
-
-
-def make_init_spec(dependency):
-
-    name = constructor_name(dependency)
-    args, have_defaults = make_func_spec(dependency.__init__, name)
-    return args[1:], have_defaults
 
 
 try:
