@@ -30,7 +30,6 @@ class InjectorType(type):
         for k, v in namespace.items():
             check_dunder_name(k)
             check_attrs_redefinition(k)
-            check_this(v)
         dependencies = {}
         for base in reversed(bases):
             dependencies.update(base.__dependencies__)
@@ -198,9 +197,3 @@ def check_attrs_redefinition(name):
 
     if name == "let":
         raise DependencyError("'let' redefinition is not allowed")
-
-
-def check_this(dependency):
-
-    if isinstance(dependency, This) and not dependency.__expression__:
-        raise DependencyError("You can not use 'this' directly in the 'Injector'")

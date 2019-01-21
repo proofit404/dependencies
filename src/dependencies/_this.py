@@ -16,6 +16,7 @@ class This(object):
 
     def __getitem__(self, item):
 
+        # TODO: Do we protect against `this['foo']` expression.
         return This(self.__parents__, self.__expression__ + [("[]", item)])
 
     def __lshift__(self, num):
@@ -28,7 +29,14 @@ class This(object):
 
 def make_this_spec(dependency):
 
+    check_expression(dependency)
     return _markers.this, dependency, [], 0
+
+
+def check_expression(dependency):
+
+    if not dependency.__expression__:
+        raise DependencyError("You can not use 'this' directly in the 'Injector'")
 
 
 def resolve_this_link(this, injector):
