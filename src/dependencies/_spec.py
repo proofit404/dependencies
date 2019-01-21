@@ -1,12 +1,7 @@
 import inspect
 
-from ._markers import injectable, nested_injector, raw
+from ._markers import injectable, nested_injector
 from .exceptions import DependencyError
-
-
-def make_raw_spec(dependency):
-
-    return raw, dependency, None, None
 
 
 def make_init_spec(dependency):
