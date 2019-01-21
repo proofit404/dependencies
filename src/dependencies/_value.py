@@ -5,11 +5,14 @@ from ._spec import make_func_spec
 from .exceptions import DependencyError
 
 
-# FIXME: Huge duplication with `operation` module.
-
-
 class Value(object):
-    # FIXME: Documentation string.
+    """
+    Evaluate given function during dependency injection.
+
+    Returned value is used as value of the dependency.
+
+    Used as function decorator.
+    """
 
     def __init__(self, function):
 
