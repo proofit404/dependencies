@@ -1,13 +1,13 @@
 import inspect
-import weakref
 
 from . import _markers as markers
 from ._checks.circles import check_circles
 from ._checks.links import check_links
+from ._nested import make_nested_injector_spec
 from ._operation import Operation, make_operation_spec
 from ._package import Package, make_package_spec, resolve_package_link
 from ._raw import make_raw_spec
-from ._spec import make_init_spec, make_nested_injector_spec
+from ._spec import make_init_spec
 from ._this import This, make_this_spec, resolve_this_link
 from ._value import Value, make_value_spec
 from .exceptions import DependencyError
@@ -42,7 +42,7 @@ class InjectorType(type):
 
     def __getattr__(cls, attrname):
 
-        cache, cached = {}, set()
+        cache, cached = {"__self__": cls}, set("__self__")
         current_attr, attrs_stack = attrname, [attrname]
         have_default = False
 
@@ -67,16 +67,6 @@ class InjectorType(type):
                 raise DependencyError(message)
 
             marker, attribute, args, have_defaults = spec
-
-            if marker is markers.nested_injector:
-                subclass = type(attribute.__name__, (attribute,), {})
-                parent_spec = markers.injectable, weakref.ref(cls), [], 0
-                subclass.__dependencies__["__parent__"] = parent_spec
-                cache[current_attr] = subclass
-                cached.add(current_attr)
-                current_attr = attrs_stack.pop()
-                have_default = False
-                continue
 
             if marker is markers.this:
                 cache[current_attr] = resolve_this_link(attribute, cls)
@@ -197,3 +187,7 @@ def check_attrs_redefinition(name):
 
     if name == "let":
         raise DependencyError("'let' redefinition is not allowed")
+
+
+# FIXME: Protect against classes with `__parent__` and `__self__` in
+# the arguments.
