@@ -189,5 +189,9 @@ def check_attrs_redefinition(name):
         raise DependencyError("'let' redefinition is not allowed")
 
 
-# FIXME: Protect against classes with `__parent__` and `__self__` in
-# the arguments.
+# FIXME:
+#
+# [ ] Protect against classes with `__parent__` and `__self__` in the
+#     arguments.
+#
+# [ ] Validate we reuse cache with `Package`, `value` and `operation`.
