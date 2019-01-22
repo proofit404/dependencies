@@ -5,8 +5,8 @@
 .. |codecov| image:: https://codecov.io/gh/dry-python/dependencies/branch/master/graph/badge.svg
     :target: https://codecov.io/gh/dry-python/dependencies
 
-.. |pyup| image:: https://pyup.io/repos/github/dry-python/dependencies/shield.svg
-     :target: https://pyup.io/repos/github/dry-python/dependencies/
+.. |dependabot| image:: https://api.dependabot.com/badges/status?host=github&repo=dry-python/dependencies
+    :target: https://dependabot.com
 
 .. |codacy| image:: https://api.codacy.com/project/badge/Grade/ac9894ac09cc41028c3eb6fbc27126ad
     :target: https://www.codacy.com/app/dry-python/dependencies
@@ -22,7 +22,7 @@
 
 .. image:: https://raw.githubusercontent.com/dry-python/brand/master/logo/dependencies.png
 
-|travis| |codecov| |pyup| |codacy| |pypi| |docs| |gitter|
+|travis| |codecov| |dependabot| |codacy| |pypi| |docs| |gitter|
 
 ----
 
