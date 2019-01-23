@@ -42,7 +42,7 @@ class InjectorType(type):
 
     def __getattr__(cls, attrname):
 
-        cache, cached = {"__self__": cls}, set("__self__")
+        cache, cached = {"__self__": cls}, {"__self__"}
         current_attr, attrs_stack = attrname, [attrname]
         have_default = False
 
