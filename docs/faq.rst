@@ -139,7 +139,7 @@ We prefer to use dependency injection only on boundaries we control:
         def __init__(self, get_user):
             self.get_user = get_user
 
-        def show(sefl, user_id):
+        def show(self, user_id):
             user = self.get_user(user_id=user_id)
 
     @dataclasses.dataclass
