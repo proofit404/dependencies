@@ -33,7 +33,39 @@ this = This(tuple())
 def make_this_spec(dependency):
 
     check_expression(dependency)
-    return _markers.this, dependency, [], 0
+    return _markers.this, ThisSpec(dependency), ["__self__"], 0
+
+
+class ThisSpec(object):
+    def __init__(self, dependency):
+
+        self.dependency = dependency
+
+    def __call__(self, **kwargs):
+
+        result = kwargs["__self__"]
+
+        for kind, symbol in self.dependency.__expression__:
+            if kind == ".":
+                try:
+                    result = getattr(result, symbol)
+                except DependencyError:
+                    message = (
+                        "You tries to shift this more times that Injector has levels"
+                    )
+                    if symbol == "__parent__":
+                        raise DependencyError(message)
+                    else:
+                        raise
+            elif kind == "[]":
+                result = result[symbol]
+
+        return result
+
+    @property
+    def __expression__(self):
+
+        return self.dependency.__expression__
 
 
 def check_expression(dependency):
@@ -44,24 +76,3 @@ def check_expression(dependency):
         if kind == "." and symbol != "__parent__"
     ):
         raise DependencyError("You can not use 'this' directly in the 'Injector'")
-
-
-def resolve_this_link(this, injector):
-
-    result = injector
-
-    for kind, symbol in this.__expression__:
-        if kind == ".":
-            try:
-                result = getattr(result, symbol)
-            except DependencyError:
-                if symbol == "__parent__":
-                    raise DependencyError(
-                        "You tries to shift this more times that Injector has levels"
-                    )
-                else:
-                    raise
-        elif kind == "[]":
-            result = result[symbol]
-
-    return result

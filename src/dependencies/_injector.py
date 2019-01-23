@@ -8,7 +8,7 @@ from ._operation import Operation, make_operation_spec
 from ._package import Package, make_package_spec, resolve_package_link
 from ._raw import make_raw_spec
 from ._spec import make_init_spec
-from ._this import This, make_this_spec, resolve_this_link
+from ._this import This, make_this_spec
 from ._value import Value, make_value_spec
 from .exceptions import DependencyError
 
@@ -67,13 +67,6 @@ class InjectorType(type):
                 raise DependencyError(message)
 
             marker, attribute, args, have_defaults = spec
-
-            if marker is markers.this:
-                cache[current_attr] = resolve_this_link(attribute, cls)
-                cached.add(current_attr)
-                current_attr = attrs_stack.pop()
-                have_default = False
-                continue
 
             if marker is markers.package:
                 cache[current_attr] = resolve_package_link(attribute, cls)
