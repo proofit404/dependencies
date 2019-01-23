@@ -139,8 +139,8 @@ We prefer to use dependency injection only on boundaries we control:
         def __init__(self, get_user):
             self.get_user = get_user
 
-        def show(sefl):
-            user = self.get_user(1)
+        def show(sefl, user_id):
+            user = self.get_user(user_id=user_id)
 
     @dataclasses.dataclass
     class UserStruct:
@@ -159,7 +159,7 @@ We prefer to use dependency injection only on boundaries we control:
         home_page = HomePage
         get_user = get_user
 
-    Site.home_page.show()
+    Site.home_page.show(1)
 
 .. _why: why.html#mixins
 .. _requests: http://docs.python-requests.org/
