@@ -61,9 +61,6 @@ def check_links_for(class_name, argument_name, dependencies, origin, expression)
 
 def filter_expression(link):
 
-    for parent in range(link.__parents__):
-        yield "__parent__"
-
     for kind, symbol in link.__expression__:
         if kind == ".":
             yield symbol
