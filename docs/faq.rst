@@ -15,31 +15,51 @@ this:
 
         def __init__(
             self,
-            payment_gateway: AbstractPaymentService,
-            notification_gateway: AbstractNotificationService
+            payments: AbstractPaymentService,
+            notifications: AbstractNotificationService,
         ):
-            self.payment_gateway = payment_gateway
-            self.notification_gateway = notification_gateway
+            self.payments = payments
+            self.notifications = notifications
 
     container = Injector()
-    container.register(ApplicationService)
     container.register(SMSService)
     container.register(PaypalService)
+    app = container.build(ApplicationService)
 
 In our opinion, this makes code less declarative.
 
-* It hard to tell what dependencies will be resolved based on
-  container definition.  You need to look at many different things at
-  the time: a signature of the ``__init__`` method, container
-  definition, base type of each class registered in the container.
-* Container definition can be split into different files which make it
-  harder to read.
-* It hard to define multiple dependencies of the same type in one
-  container.  For example, your service needs two databases to work
-  with.  You need to define two different classes for types signatures
-  and then define two different database classes.
+* It hard to tell how dependencies will be resolved.
 
-This lead to unnecessary boilerplate.
+  At the same time looking on container definition and a signature of
+  the ``__init__`` method can you easily say what arguments will be
+  passed to the constructor?
+
+  You can't.  You need to inspect a base class of each dependency
+  registered in the container.
+
+  With our ``Injector`` approach, you don't have this problem.  You
+  will find arguments right in the ``Injector`` subclass in one place.
+
+* It's a global mutable variable.
+
+  Container definition can be split into different files.  This will
+  make it harder to read.
+
+  It's very similar to the service locator.  Many architect people
+  consider it an anti-pattern.
+
+* It hard to define multiple dependencies of the same type.
+
+  For example, your service needs two databases to work with.  You
+  need to define two different classes for types signatures and then
+  define two different database classes.
+
+  The same is necessary for these classes arguments.  Both of them
+  needs a port to run.  How would you name it?
+  ``PrimaryDatabasePort`` and ``SecondaryDatabasePort`` instead of
+  ``int``?
+
+  This lead to unnecessary boilerplate.
 
 Mixins considered harmful
 =========================
