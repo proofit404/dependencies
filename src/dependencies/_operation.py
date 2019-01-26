@@ -1,9 +1,8 @@
 import functools
-import inspect
 
+from ._checks.operation import check_class, check_method
 from ._markers import injectable
 from ._spec import make_func_spec
-from .exceptions import DependencyError
 
 
 class Operation(object):
@@ -40,15 +39,3 @@ class OperationSpec(object):
     def __name__(self):
 
         return self.func.__name__
-
-
-def check_class(function):
-
-    if inspect.isclass(function):
-        raise DependencyError("'operation' decorator can not be used on classes")
-
-
-def check_method(arguments):
-
-    if "self" in arguments:
-        raise DependencyError("'operation' decorator can not be used on methods")

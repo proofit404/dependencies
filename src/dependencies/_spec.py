@@ -1,7 +1,7 @@
 import inspect
 
+from ._checks.spec import check_cls_arguments, check_varargs
 from ._markers import injectable
-from .exceptions import DependencyError
 
 
 def make_init_spec(dependency):
@@ -9,7 +9,7 @@ def make_init_spec(dependency):
     if use_object_init(dependency):
         return injectable, dependency, [], 0
     else:
-        name = constructor_name(dependency)
+        name = dependency.__name__ + "." + "__init__"
         args, have_defaults = make_func_spec(dependency.__init__, name)
         return injectable, dependency, args[1:], have_defaults
 
@@ -62,34 +62,3 @@ else:
         if defaults:
             check_cls_arguments(args, defaults)
         return args, have_defaults
-
-
-def check_cls_arguments(argnames, defaults):
-
-    for name, value in zip(reversed(argnames), reversed(defaults)):
-        expect_class = name.endswith("_class")
-        is_class = inspect.isclass(value)
-        if expect_class and not is_class:
-            raise DependencyError("{0!r} default value should be a class".format(name))
-        if not expect_class and is_class:
-            raise DependencyError(
-                "{0!r} argument can not have class as its default value".format(name)
-            )
-
-
-def check_varargs(name, varargs, kwargs):
-
-    if varargs and kwargs:
-        message = "{0} have arbitrary argument list and keyword arguments"
-        raise DependencyError(message.format(name))
-    elif varargs:
-        message = "{0} have arbitrary argument list"
-        raise DependencyError(message.format(name))
-    elif kwargs:
-        message = "{0} have arbitrary keyword arguments"
-        raise DependencyError(message.format(name))
-
-
-def constructor_name(dependency):
-
-    return dependency.__name__ + ".__init__"

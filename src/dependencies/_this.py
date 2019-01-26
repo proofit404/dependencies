@@ -1,4 +1,5 @@
 from . import _markers
+from ._checks.this import check_expression
 from .exceptions import DependencyError
 
 
@@ -15,12 +16,10 @@ class This(object):
 
     def __getitem__(self, item):
 
-        # TODO: Do we protect against `this['foo']` expression?
         return This(self.__expression__ + (("[]", item),))
 
     def __lshift__(self, num):
 
-        # TODO: Do we protect against `(this.foo << 2)` expression?
         if not isinstance(num, int) or num <= 0:
             raise ValueError("Positive integer argument is required")
         else:
@@ -66,13 +65,3 @@ class ThisSpec(object):
     def __expression__(self):
 
         return self.dependency.__expression__
-
-
-def check_expression(dependency):
-
-    if not any(
-        symbol
-        for kind, symbol in dependency.__expression__
-        if kind == "." and symbol != "__parent__"
-    ):
-        raise DependencyError("You can not use 'this' directly in the 'Injector'")

@@ -2,6 +2,11 @@ import inspect
 
 from . import _markers as markers
 from ._checks.circles import check_circles
+from ._checks.injector import (
+    check_attrs_redefinition,
+    check_dunder_name,
+    check_inheritance,
+)
 from ._checks.links import check_links
 from ._nested import make_nested_injector_spec
 from ._operation import Operation, make_operation_spec
@@ -20,7 +25,7 @@ class InjectorType(type):
             namespace["__dependencies__"] = {}
             return type.__new__(cls, class_name, bases, namespace)
 
-        check_inheritance(bases)
+        check_inheritance(bases, Injector)
         ns = {}
         for attr in ("__module__", "__doc__", "__weakref__", "__qualname__"):
             try:
@@ -159,32 +164,3 @@ def make_dependency_spec(name, dependency):
         return make_value_spec(dependency)
     else:
         return make_raw_spec(dependency)
-
-
-def check_inheritance(bases):
-
-    for base in bases:
-        if not issubclass(base, Injector):
-            raise DependencyError(
-                "Multiple inheritance is allowed for Injector subclasses only"
-            )
-
-
-def check_dunder_name(name):
-
-    if name.startswith("__") and name.endswith("__"):
-        raise DependencyError("Magic methods are not allowed")
-
-
-def check_attrs_redefinition(name):
-
-    if name == "let":
-        raise DependencyError("'let' redefinition is not allowed")
-
-
-# FIXME:
-#
-# [ ] Protect against classes with `__parent__` and `__self__` in the
-#     arguments.
-#
-# [ ] Validate we reuse cache with `Package`, `value` and `operation`.

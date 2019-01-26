@@ -1,8 +1,6 @@
-import inspect
-
+from ._checks.value import check_class, check_method
 from ._markers import injectable
 from ._spec import make_func_spec
-from .exceptions import DependencyError
 
 
 class Value(object):
@@ -26,15 +24,3 @@ def make_value_spec(dependency):
     args, have_defaults = make_func_spec(function, function.__name__)
     check_method(args)
     return injectable, function, args, have_defaults
-
-
-def check_class(function):
-
-    if inspect.isclass(function):
-        raise DependencyError("'value' decorator can not be used on classes")
-
-
-def check_method(arguments):
-
-    if "self" in arguments:
-        raise DependencyError("'value' decorator can not be used on methods")
