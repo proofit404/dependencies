@@ -70,6 +70,8 @@ in the `why`_ chapter.  But let's return to it again::
 
     Inheritance always breaks encapsulation.
 
+Mixin class depends on attributes set in other classes.
+
 Consider this code snippet:
 
 .. code:: python
