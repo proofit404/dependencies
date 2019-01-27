@@ -239,3 +239,27 @@ def test_docstrings():
         contrib.model_view_set.__doc__
         == "Create DRF model view set from injector class."
     )
+
+
+def test_keep_view_informanion():
+    """Generated view should point to the `Injector` subclass."""
+
+    from django_project.api.views import UserAction, UserRetrieveView, UserViewSet
+
+    api_view = UserAction.as_view()
+
+    assert api_view.__name__ == "UserAction"
+    assert api_view.__module__ == "django_project.api.views"
+    assert api_view.__doc__ == "Intentionally left blank."
+
+    generic_api_view = UserRetrieveView.as_view()
+
+    assert generic_api_view.__name__ == "UserRetrieveView"
+    assert generic_api_view.__module__ == "django_project.api.views"
+    assert generic_api_view.__doc__ == "Intentionally left blank."
+
+    model_view_set = UserViewSet.as_viewset()
+
+    assert model_view_set.__name__ == "UserViewSet"
+    assert model_view_set.__module__ == "django_project.api.views"
+    assert model_view_set.__doc__ == "Intentionally left blank."

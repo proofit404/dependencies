@@ -100,3 +100,21 @@ def test_docstrings():
         contrib.form_view.__doc__
         == "Create Django form processing class-based view from injector class."
     )
+
+
+def test_keep_view_informanion():
+    """Generated view should point to the `Injector` subclass."""
+
+    from django_project.views import DispatchView, QuestionFormView
+
+    view = DispatchView.as_view()
+
+    assert view.__name__ == "DispatchView"
+    assert view.__module__ == "django_project.views"
+    assert view.__doc__ == "Intentionally left blank."
+
+    form_view = QuestionFormView.as_view()
+
+    assert form_view.__name__ == "QuestionFormView"
+    assert form_view.__module__ == "django_project.views"
+    assert form_view.__doc__ == "Intentionally left blank."

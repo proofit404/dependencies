@@ -29,6 +29,7 @@ from .version import DenyVersion
 
 @api_view
 class UserAction(Injector):
+    """Intentionally left blank."""
 
     post = this.command.do
     command = UserOperations
@@ -94,6 +95,7 @@ class BadMetadata(Injector):
 
 @generic_api_view
 class UserRetrieveView(Injector):
+    """Intentionally left blank."""
 
     get = this.command.retrieve
     command = UserOperations
@@ -138,6 +140,7 @@ class UserListFilterFieldsView(Injector):
 
 @model_view_set
 class UserViewSet(Injector):
+    """Intentionally left blank."""
 
     authentication_classes = (AuthenticateAdmin,)
 

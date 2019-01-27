@@ -12,7 +12,7 @@ from dependencies.exceptions import DependencyError
 def api_view(injector):
     """Create DRF class-based API view from injector class."""
 
-    handler = create_handler(APIView)
+    handler = create_handler(APIView, injector)
     apply_http_methods(handler, injector)
     apply_api_view_methods(handler, injector)
     return injector.let(as_view=handler.as_view)
@@ -21,7 +21,7 @@ def api_view(injector):
 def generic_api_view(injector):
     """Create DRF generic class-based API view from injector class."""
 
-    handler = create_handler(GenericAPIView)
+    handler = create_handler(GenericAPIView, injector)
     apply_http_methods(handler, injector)
     apply_api_view_methods(handler, injector)
     apply_generic_api_view_methods(handler, injector)
@@ -31,7 +31,7 @@ def generic_api_view(injector):
 def model_view_set(injector):
     """Create DRF model view set from injector class."""
 
-    handler = create_handler(ModelViewSet)
+    handler = create_handler(ModelViewSet, injector)
     apply_api_view_methods(handler, injector)
     apply_generic_api_view_methods(handler, injector)
     apply_model_view_set_methods(handler, injector)

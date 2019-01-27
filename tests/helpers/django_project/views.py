@@ -27,6 +27,7 @@ class Methods(Injector):
 
 @view
 class DispatchView(Methods):
+    """Intentionally left blank."""
 
     command = DispatchRequest
 
@@ -63,6 +64,7 @@ class TestTemplateResponse(TemplateResponse):
 
 @form_view
 class QuestionFormView(Injector):
+    """Intentionally left blank."""
 
     form_class = QuestionForm
     template_name = "question.html"

@@ -8,7 +8,7 @@ from dependencies import this
 def view(injector):
     """Create Django class-based view from injector class."""
 
-    handler = create_handler(View)
+    handler = create_handler(View, injector)
     apply_http_methods(handler, injector)
     return injector.let(as_view=handler.as_view)
 
@@ -16,14 +16,18 @@ def view(injector):
 def form_view(injector):
     """Create Django form processing class-based view from injector class."""
 
-    handler = create_handler(FormView)
+    handler = create_handler(FormView, injector)
     apply_form_methods(handler, injector)
     return injector.let(as_view=handler.as_view)
 
 
-def create_handler(from_class):
+def create_handler(from_class, injector):
     class Handler(from_class):
         pass
+
+    Handler.__name__ = injector.__name__
+    Handler.__module__ = injector.__module__
+    Handler.__doc__ = injector.__doc__
 
     return Handler
 
