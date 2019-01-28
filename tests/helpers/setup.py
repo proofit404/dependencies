@@ -3,7 +3,7 @@ from setuptools import setup
 
 setup(name="helpers", py_modules=["helpers"])
 
-setup(name="pkg", packages=["pkg"])
+setup(name="pkg", packages=["pkg", "pkg.circles"])
 
 setup(
     name="django_project",

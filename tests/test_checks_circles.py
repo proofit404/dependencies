@@ -1,11 +1,8 @@
 import pytest
 
-from dependencies import Injector, operation, value
+from dependencies import Injector, Package, operation, value
 from dependencies.exceptions import DependencyError
 from helpers import CodeCollector
-
-
-# TODO: Test circle dependencies with `Package`.
 
 
 # Simple circle.
@@ -81,6 +78,33 @@ def kHqAxHovWKtI():
         pass
 
     return Foo
+
+
+@circle_defs
+def xoGkuXokhXpZ():
+    """Package link to class."""
+
+    pkg = Package("pkg")
+
+    return pkg.circles.simple_class.Foo
+
+
+@circle_defs
+def xdKqGtGJWEbR():
+    """Package link to operation."""
+
+    pkg = Package("pkg")
+
+    return pkg.circles.simple_operation.Foo
+
+
+@circle_defs
+def jIhFqCwKXFvv():
+    """Package link to value."""
+
+    pkg = Package("pkg")
+
+    return pkg.circles.simple_value.Foo
 
 
 # Complex circle.
@@ -189,6 +213,33 @@ def zklaYlyBZsEj():
     return Foo
 
 
+@complex_circle_defs_foo
+def xPLfwwcZNyyX():
+    """Package link to class."""
+
+    pkg = Package("pkg")
+
+    return pkg.circles.complex_class.Foo
+
+
+@complex_circle_defs_foo
+def nGROhaBTCNSO():
+    """Package link to operation."""
+
+    pkg = Package("pkg")
+
+    return pkg.circles.complex_operation.Foo
+
+
+@complex_circle_defs_foo
+def fkedDYYeueXo():
+    """Package link to value."""
+
+    pkg = Package("pkg")
+
+    return pkg.circles.complex_value.Foo
+
+
 @complex_circle_defs_bar
 def uEevbDxHVHfN():
     """Class."""
@@ -220,6 +271,33 @@ def aerRHoDXUNeV():
         pass
 
     return Bar
+
+
+@complex_circle_defs_bar
+def trvcvfPoOBEv():
+    """Package link to class."""
+
+    pkg = Package("pkg")
+
+    return pkg.circles.complex_class.Bar
+
+
+@complex_circle_defs_bar
+def sHybukyZpyjf():
+    """Package link to operation."""
+
+    pkg = Package("pkg")
+
+    return pkg.circles.complex_operation.Bar
+
+
+@complex_circle_defs_bar
+def lNsNBNCTHPFX():
+    """Package link to value."""
+
+    pkg = Package("pkg")
+
+    return pkg.circles.complex_value.Bar
 
 
 # Long circle.
@@ -329,6 +407,33 @@ def rwJmLRVuVSqm():
     return Foo
 
 
+@long_circle_defs_foo
+def zAYYjvSPmIhZ():
+    """Package link to class."""
+
+    pkg = Package("pkg")
+
+    return pkg.circles.long_class.Foo
+
+
+@long_circle_defs_foo
+def xreTaLNoZeDz():
+    """Package link to operation."""
+
+    pkg = Package("pkg")
+
+    return pkg.circles.long_operation.Foo
+
+
+@long_circle_defs_foo
+def qOKmbpOgeDhk():
+    """Package link to value."""
+
+    pkg = Package("pkg")
+
+    return pkg.circles.long_value.Foo
+
+
 @long_circle_defs_bar
 def oKtHawDksDNk():
     """Class."""
@@ -362,6 +467,33 @@ def mLsXYSzlYPRO():
     return Bar
 
 
+@long_circle_defs_bar
+def pYMumhKUCBUy():
+    """Package link to class."""
+
+    pkg = Package("pkg")
+
+    return pkg.circles.long_class.Bar
+
+
+@long_circle_defs_bar
+def lCQgCPevBZXs():
+    """Package link to operation."""
+
+    pkg = Package("pkg")
+
+    return pkg.circles.long_operation.Bar
+
+
+@long_circle_defs_bar
+def xgyyAISoreQV():
+    """Package link to value."""
+
+    pkg = Package("pkg")
+
+    return pkg.circles.long_value.Bar
+
+
 @long_circle_defs_baz
 def uaOWixpAMVma():
     """Class."""
@@ -393,3 +525,30 @@ def xjpTxDebbpnm():
         pass
 
     return Baz
+
+
+@long_circle_defs_baz
+def ydSPPkZGDwPJ():
+    """Package link to class."""
+
+    pkg = Package("pkg")
+
+    return pkg.circles.long_class.Baz
+
+
+@long_circle_defs_baz
+def rxFZQwocGmhN():
+    """Package link to operation."""
+
+    pkg = Package("pkg")
+
+    return pkg.circles.long_operation.Baz
+
+
+@long_circle_defs_baz
+def eFMMMVDBKCFU():
+    """Package link to value."""
+
+    pkg = Package("pkg")
+
+    return pkg.circles.long_value.Baz
