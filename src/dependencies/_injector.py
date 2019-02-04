@@ -5,7 +5,7 @@ from ._checks.injector import (
     check_dunder_name,
     check_inheritance,
 )
-from ._checks.links import check_links  # TODO: Rename to loops.
+from ._checks.loops import check_loops
 from ._spec import InjectorTypeType, make_dependency_spec
 from .exceptions import DependencyError
 
@@ -32,7 +32,7 @@ class InjectorType(InjectorTypeType):
             dependencies.update(base.__dependencies__)
         for name, dep in namespace.items():
             dependencies[name] = make_dependency_spec(name, dep)
-        check_links(class_name, dependencies)
+        check_loops(class_name, dependencies)
         check_circles(dependencies)
         ns["__dependencies__"] = dependencies
         return type.__new__(cls, class_name, bases, ns)
@@ -80,7 +80,7 @@ class InjectorType(InjectorTypeType):
                     attribute = Attributes(attribute, replace.attrs)
                     spec = (marker, attribute, args, have_defaults)
                     cls.__dependencies__[current_attr] = spec
-                    check_links(cls.__name__, cls.__dependencies__)
+                    check_loops(cls.__name__, cls.__dependencies__)
                     check_circles(cls.__dependencies__)
                     continue
 

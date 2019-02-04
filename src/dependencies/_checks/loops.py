@@ -2,11 +2,11 @@ from .. import _markers as markers
 from ..exceptions import DependencyError
 
 
-def check_links(class_name, dependencies):
+def check_loops(class_name, dependencies):
 
     for argument_name, argspec in dependencies.items():
         if argspec[0] is markers.this:
-            check_links_for(
+            check_loops_for(
                 class_name,
                 argument_name,
                 dependencies,
@@ -18,10 +18,10 @@ def check_links(class_name, dependencies):
                 "__parent__": (markers.injectable, dependencies, None, None)
             }
             nested_dependencies.update(argspec[1].__dependencies__)
-            check_links(class_name, nested_dependencies)
+            check_loops(class_name, nested_dependencies)
 
 
-def check_links_for(class_name, argument_name, dependencies, origin, expression):
+def check_loops_for(class_name, argument_name, dependencies, origin, expression):
 
     try:
         argname = next(expression)
@@ -38,11 +38,11 @@ def check_links_for(class_name, argument_name, dependencies, origin, expression)
             "__parent__": (markers.injectable, dependencies, None, None)
         }
         nested_dependencies.update(argspec[1].__dependencies__)
-        check_links_for(
+        check_loops_for(
             class_name, argument_name, nested_dependencies, origin, expression
         )
     elif argname == "__parent__":
-        check_links_for(class_name, argument_name, argspec[1], origin, expression)
+        check_loops_for(class_name, argument_name, argspec[1], origin, expression)
     elif argspec[1] is origin:
         raise DependencyError(
             "{0!r} is a circle link in the {1!r} injector".format(
@@ -50,7 +50,7 @@ def check_links_for(class_name, argument_name, dependencies, origin, expression)
             )
         )
     elif argspec[0] is markers.this:
-        check_links_for(
+        check_loops_for(
             class_name,
             argument_name,
             dependencies,
