@@ -18,3 +18,13 @@ class Attributes(object):
             result = getattr(result, attr)
 
         return result
+
+    @property
+    def __name__(self):
+
+        return self.spec.__name__
+
+    @property
+    def __dependencies__(self):
+
+        return self.spec.__dependencies__

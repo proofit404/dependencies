@@ -80,6 +80,8 @@ class InjectorType(InjectorTypeType):
                     attribute = Attributes(attribute, replace.attrs)
                     spec = (marker, attribute, args, have_defaults)
                     cls.__dependencies__[current_attr] = spec
+                    check_links(cls.__name__, cls.__dependencies__)
+                    check_circles(cls.__dependencies__)
                     continue
 
                 cached.add(current_attr)
