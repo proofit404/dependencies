@@ -6,6 +6,8 @@ from . import _markers
 
 
 class Package(object):
+    # FIXME: Docstring.
+
     def __init__(self, name):
         self.__name__ = name
 
