@@ -13,10 +13,10 @@ class NestedInjectorSpec(object):
 
         self.injector = injector
 
-    def __call__(self, **kwargs):
+    def __call__(self, __self__):
 
         subclass = type(self.injector.__name__, (self.injector,), {})
-        parent = injectable, weakref.ref(kwargs["__self__"]), [], 0
+        parent = injectable, weakref.ref(__self__), [], 0
         subclass.__dependencies__["__parent__"] = parent
         return subclass
 

@@ -40,9 +40,9 @@ class ThisSpec(object):
 
         self.dependency = dependency
 
-    def __call__(self, **kwargs):
+    def __call__(self, __self__):
 
-        result = kwargs["__self__"]
+        result = __self__
 
         for kind, symbol in self.dependency.__expression__:
             if kind == ".":
