@@ -1,4 +1,4 @@
 injectable = object()
 nested_injector = object()
 this = object()
-package = object()
+lazy_import = object()

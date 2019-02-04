@@ -1,4 +1,4 @@
-from . import _markers as markers
+from ._attributes import Attributes, Replace
 from ._checks.circles import check_circles
 from ._checks.injector import (
     check_attrs_redefinition,
@@ -69,16 +69,19 @@ class InjectorType(InjectorTypeType):
 
             marker, attribute, args, have_defaults = spec
 
-            if marker is markers.package:
-                cache[current_attr] = resolve_package_link(attribute, cls)
-                cached.add(current_attr)
-                current_attr = attrs_stack.pop()
-                have_default = False
-                continue
-
             if set(args).issubset(cached):
                 kwargs = dict((k, cache[k]) for k in args if k in cache)
-                cache[current_attr] = attribute(**kwargs)
+
+                try:
+                    cache[current_attr] = attribute(**kwargs)
+                except Replace as replace:
+                    spec = make_dependency_spec(current_attr, replace.dependency)
+                    marker, attribute, args, have_defaults = spec
+                    attribute = Attributes(attribute, replace.attrs)
+                    spec = (marker, attribute, args, have_defaults)
+                    cls.__dependencies__[current_attr] = spec
+                    continue
+
                 cached.add(current_attr)
                 current_attr = attrs_stack.pop()
                 have_default = False
