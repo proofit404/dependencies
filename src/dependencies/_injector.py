@@ -1,5 +1,3 @@
-import inspect
-
 from . import _markers as markers
 from ._checks.circles import check_circles
 from ._checks.injector import (
@@ -7,18 +5,12 @@ from ._checks.injector import (
     check_dunder_name,
     check_inheritance,
 )
-from ._checks.links import check_links
-from ._nested import make_nested_injector_spec
-from ._operation import Operation, make_operation_spec
-from ._package import Package, make_package_spec, resolve_package_link
-from ._raw import make_raw_spec
-from ._spec import make_init_spec
-from ._this import This, make_this_spec
-from ._value import Value, make_value_spec
+from ._checks.links import check_links  # TODO: Rename to loops.
+from ._spec import InjectorTypeType, make_dependency_spec
 from .exceptions import DependencyError
 
 
-class InjectorType(type):
+class InjectorType(InjectorTypeType):
     def __new__(cls, class_name, bases, namespace):
 
         if not bases:
@@ -149,22 +141,3 @@ specified in it namespace.
 Injector = InjectorType(
     "Injector", (), {"__init__": __init__, "__doc__": injector_doc, "let": let}
 )
-
-
-def make_dependency_spec(name, dependency):
-
-    if inspect.isclass(dependency) and not name.endswith("_class"):
-        if issubclass(dependency, Injector):
-            return make_nested_injector_spec(dependency)
-        else:
-            return make_init_spec(dependency)
-    elif isinstance(dependency, This):
-        return make_this_spec(dependency)
-    elif isinstance(dependency, Package):
-        return make_package_spec(dependency)
-    elif isinstance(dependency, Operation):
-        return make_operation_spec(dependency)
-    elif isinstance(dependency, Value):
-        return make_value_spec(dependency)
-    else:
-        return make_raw_spec(dependency)
