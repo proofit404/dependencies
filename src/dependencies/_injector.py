@@ -57,6 +57,10 @@ class InjectorType(type):
 
             if spec is None:
                 if have_default:
+                    # FIXME: If first dependency have this name as
+                    # default and the second one have this name
+                    # without default, we will see a very strange
+                    # KeyError about `cache` access.
                     cached.add(current_attr)
                     current_attr = attrs_stack.pop()
                     have_default = False
