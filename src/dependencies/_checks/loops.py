@@ -1,68 +1,61 @@
-from .. import _markers as markers
+from .._markers import injectable, nested_injector, this
 from ..exceptions import DependencyError
 
 
 def check_loops(class_name, dependencies):
 
-    for argument_name, argspec in dependencies.items():
-        if argspec[0] is markers.this:
+    for attrname, spec in dependencies.items():
+        if spec[0] is this:
             check_loops_for(
-                class_name,
-                argument_name,
-                dependencies,
-                argspec[1],
-                filter_expression(argspec[1]),
+                class_name, attrname, dependencies, spec, filter_expression(spec)
             )
-        elif argspec[0] is markers.nested_injector:
-            nested_dependencies = {
-                "__parent__": (markers.injectable, dependencies, None, None)
-            }
-            nested_dependencies.update(argspec[1].__dependencies__)
-            check_loops(class_name, nested_dependencies)
+        elif spec[0] is nested_injector:
+            check_loops(class_name, nested_dependencies(dependencies, spec))
 
 
-def check_loops_for(class_name, argument_name, dependencies, origin, expression):
+def check_loops_for(class_name, attribute_name, dependencies, origin, expression):
 
     try:
-        argname = next(expression)
+        attrname = next(expression)
     except StopIteration:
         return
 
     try:
-        argspec = dependencies[argname]
+        spec = dependencies[attrname]
     except KeyError:
         return
 
-    if argspec[0] is markers.nested_injector:
-        nested_dependencies = {
-            "__parent__": (markers.injectable, dependencies, None, None)
-        }
-        nested_dependencies.update(argspec[1].__dependencies__)
-        check_loops_for(
-            class_name, argument_name, nested_dependencies, origin, expression
-        )
-    elif argname == "__parent__":
-        check_loops_for(class_name, argument_name, argspec[1], origin, expression)
-    elif argspec[1] is origin:
-        raise DependencyError(
-            "{0!r} is a circle link in the {1!r} injector".format(
-                argument_name, class_name
-            )
-        )
-    elif argspec[0] is markers.this:
+    if spec[0] is nested_injector:
         check_loops_for(
             class_name,
-            argument_name,
-            dependencies,
+            attribute_name,
+            nested_dependencies(dependencies, spec),
             origin,
-            filter_expression(argspec[1]),
+            expression,
+        )
+    elif attrname == "__parent__":
+        check_loops_for(class_name, attribute_name, spec[1], origin, expression)
+    elif spec is origin:
+        message = "{0!r} is a circle link in the {1!r} injector"
+        raise DependencyError(message.format(attribute_name, class_name))
+    elif spec[0] is this:
+        check_loops_for(
+            class_name, attribute_name, dependencies, origin, filter_expression(spec)
         )
 
 
-def filter_expression(link):
+def filter_expression(spec):
 
-    for kind, symbol in link.__expression__:
+    for kind, symbol in spec[1].__expression__:
         if kind == ".":
             yield symbol
         elif kind == "[]":
             raise StopIteration()
+
+
+def nested_dependencies(parent, spec):
+
+    result = {}
+    result.update(spec[1].__dependencies__)
+    result.update({"__parent__": (injectable, parent, [], 0)})
+    return result
