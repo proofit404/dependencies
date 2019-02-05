@@ -80,6 +80,16 @@ class InjectorType(InjectorTypeType):
                     attribute = Attributes(attribute, replace.attrs)
                     spec = (marker, attribute, args, have_defaults)
                     cls.__dependencies__[current_attr] = spec
+                    # FIXME:
+                    #
+                    # We'll probably resolve weakref.  This happens because nested
+                    # injector decide to replace a lazy import.  This nested injector
+                    # is already resolved by its parent, so it contain a weakref in
+                    # it.  Ideally we should not have parent in the scope at all.
+                    #
+                    # Also, `Replace` doesn't change dependencies dict of its parent,
+                    # so lazy import will be evaluated again and again.  This kills
+                    # the whole point of `Replace`.
                     check_loops(cls.__name__, cls.__dependencies__)
                     check_circles(cls.__dependencies__)
                     continue
