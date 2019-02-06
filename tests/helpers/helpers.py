@@ -1,5 +1,3 @@
-from inspect import getdoc
-
 import pytest
 
 
@@ -25,4 +23,4 @@ class CodeCollector(object):
 
     def parametrize(self, test_func):
 
-        return pytest.mark.parametrize(self.name, self, ids=getdoc)(test_func)
+        return pytest.mark.parametrize(self.name, self)(test_func)
