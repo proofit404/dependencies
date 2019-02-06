@@ -55,6 +55,12 @@ def filter_expression(spec):
 
 def nested_dependencies(parent, spec):
 
+    from weakref import ReferenceType
+
+    # FIXME: This is an ad-hoc solution for the broken `Replace`
+    # problem.  See `dependencies._injector` comment for more info.
+    parent = {k: v for k, v in parent.items() if not isinstance(v[1], ReferenceType)}
+
     result = {}
     result.update(spec[1].__dependencies__)
     result.update({"__parent__": (injectable, parent, [], 0)})
