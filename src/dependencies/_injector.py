@@ -1,4 +1,5 @@
-from ._attributes import Attributes, Replace
+from ._attributes import Replace
+from ._replace import deep_replace_dependency
 from ._checks.circles import check_circles
 from ._checks.injector import (
     check_attrs_redefinition,
@@ -75,11 +76,7 @@ class InjectorType(InjectorTypeType):
                 try:
                     cache[current_attr] = attribute(**kwargs)
                 except Replace as replace:
-                    spec = make_dependency_spec(current_attr, replace.dependency)
-                    marker, attribute, args, have_defaults = spec
-                    attribute = Attributes(attribute, replace.attrs)
-                    spec = (marker, attribute, args, have_defaults)
-                    cls.__dependencies__[current_attr] = spec
+                    deep_replace_dependency(cls, current_attr, replace)
                     # FIXME:
                     #
                     # We'll probably resolve weakref.  This happens because nested

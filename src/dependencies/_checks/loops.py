@@ -34,7 +34,16 @@ def check_loops_for(class_name, attribute_name, dependencies, origin, expression
             expression,
         )
     elif attrname == "__parent__":
-        check_loops_for(class_name, attribute_name, spec[1], origin, expression)
+        from weakref import ReferenceType
+
+        if isinstance(spec[1], ReferenceType):
+            # FIXME: This is an ad-hoc solution for the broken
+            # `Replace` problem.  See `dependencies._injector` comment
+            # for more info.
+            resolved_parent = spec[1]().__dependencies__
+        else:
+            resolved_parent = spec[1]
+        check_loops_for(class_name, attribute_name, resolved_parent, origin, expression)
     elif spec is origin:
         message = "{0!r} is a circle link in the {1!r} injector"
         raise DependencyError(message.format(attribute_name, class_name))
@@ -54,12 +63,6 @@ def filter_expression(spec):
 
 
 def nested_dependencies(parent, spec):
-
-    from weakref import ReferenceType
-
-    # FIXME: This is an ad-hoc solution for the broken `Replace`
-    # problem.  See `dependencies._injector` comment for more info.
-    parent = {k: v for k, v in parent.items() if not isinstance(v[1], ReferenceType)}
 
     result = {}
     result.update(spec[1].__dependencies__)

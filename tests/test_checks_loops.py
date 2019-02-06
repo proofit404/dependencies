@@ -169,6 +169,8 @@ def test_circle_links_two_level_complex_loop(code, middle, lowest):
     assert str(exc_info.value) in {
         "'foo' is a circle link in the 'Container' injector",
         "'foo' is a circle link in the 'Injector' injector",
+        "'bar' is a circle link in the 'SubContainer' injector",
+        "'bar' is a circle link in the 'Injector' injector",
     }
 
 
@@ -256,6 +258,10 @@ def test_circle_links_two_level_long_loop(code, middle, lowest):
     assert str(exc_info.value) in {
         "'foo' is a circle link in the 'Container' injector",
         "'foo' is a circle link in the 'Injector' injector",
+        "'bar' is a circle link in the 'SubContainer' injector",
+        "'bar' is a circle link in the 'Injector' injector",
+        "'baz' is a circle link in the 'SubContainer' injector",
+        "'baz' is a circle link in the 'Injector' injector",
     }
 
 
@@ -344,6 +350,8 @@ def test_cross_injector_loops(code, sub1, sub2):
     assert str(exc_info.value) in {
         "'foo' is a circle link in the 'Container' injector",
         "'foo' is a circle link in the 'Injector' injector",
+        "'bar' is a circle link in the 'Container' injector",
+        "'bar' is a circle link in the 'Injector' injector",
     }
 
 
