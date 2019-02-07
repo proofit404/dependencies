@@ -23,11 +23,10 @@ def form_view(injector):
 
 def create_handler(from_class, injector):
     class Handler(from_class):
-        pass
+        __doc__ = injector.__doc__
 
     Handler.__name__ = injector.__name__
     Handler.__module__ = injector.__module__
-    Handler.__doc__ = injector.__doc__
 
     return Handler
 
