@@ -1,5 +1,4 @@
 from ._attributes import Replace
-from ._replace import deep_replace_dependency
 from ._checks.circles import check_circles
 from ._checks.injector import (
     check_attrs_redefinition,
@@ -7,6 +6,7 @@ from ._checks.injector import (
     check_inheritance,
 )
 from ._checks.loops import check_loops
+from ._replace import deep_replace_dependency
 from ._spec import InjectorTypeType, make_dependency_spec
 from .exceptions import DependencyError
 
