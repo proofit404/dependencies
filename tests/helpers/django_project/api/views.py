@@ -162,8 +162,9 @@ class DynamicUserViewSet(Injector):
     authentication_classes = (AuthenticateAdmin,)
 
     @value
-    def queryset(user):
+    def queryset(user, action):
 
+        assert action in {"list", "retrieve", "update", "partial_update", "destroy"}
         assert user.username == "admin"
         return User.objects.filter(username="johndoe")
 

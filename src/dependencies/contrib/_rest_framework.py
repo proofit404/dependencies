@@ -109,6 +109,7 @@ def apply_generic_api_view_methods(handler, injector):
                             "kwargs": this.view.kwargs,
                             "user": this.request.user,
                             "pk": this.kwargs["pk"],  # TODO: partial(int, this...
+                            "action": this.view.action,
                         }
                     )
                     return getattr(ns, attribute)
