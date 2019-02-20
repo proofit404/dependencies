@@ -41,7 +41,7 @@ class UserOperations(object):
 
 
 class UserCreateOperations(object):
-    def __init__(self, view, request, args, kwargs, user, validated_data):
+    def __init__(self, view, request, args, kwargs, user, validated_data, action):
 
         self.view = view
         self.request = request
@@ -49,6 +49,7 @@ class UserCreateOperations(object):
         self.kwargs = kwargs
         self.user = user
         self.validated_data = validated_data
+        self.action = action
 
     def create(self):
 
@@ -57,6 +58,7 @@ class UserCreateOperations(object):
         assert self.args == ()
         assert self.kwargs == {}
         assert isinstance(self.validated_data, dict)
+        assert self.action == "create"
 
         LogEntry.objects.create(user=self.user, action_flag=ADDITION)
 
@@ -70,7 +72,9 @@ class UserCreateOperations(object):
 
 
 class UserUpdateOperations(object):
-    def __init__(self, view, request, args, kwargs, user, pk, validated_data, instance):
+    def __init__(
+        self, view, request, args, kwargs, user, pk, validated_data, instance, action
+    ):
 
         self.view = view
         self.request = request
@@ -80,6 +84,7 @@ class UserUpdateOperations(object):
         self.pk = pk
         self.validated_data = validated_data
         self.instance = instance
+        self.action = action
 
     def update(self):
 
@@ -90,6 +95,7 @@ class UserUpdateOperations(object):
         assert self.pk == "2"
         assert isinstance(self.validated_data, dict)
         assert isinstance(self.instance, User)
+        assert self.action in {"update", "partial_update"}
 
         LogEntry.objects.create(user=self.user, action_flag=CHANGE)
 
@@ -105,7 +111,7 @@ class UserUpdateOperations(object):
 
 
 class UserDestroyOperations(object):
-    def __init__(self, view, request, args, kwargs, user, pk, instance):
+    def __init__(self, view, request, args, kwargs, user, pk, instance, action):
 
         self.view = view
         self.request = request
@@ -114,6 +120,7 @@ class UserDestroyOperations(object):
         self.user = user
         self.pk = pk
         self.instance = instance
+        self.action = action
 
     def destroy(self):
 
@@ -123,6 +130,7 @@ class UserDestroyOperations(object):
         assert self.kwargs == {"pk": "2"}
         assert self.pk == "2"
         assert isinstance(self.instance, User)
+        assert self.action == "destroy"
 
         self.instance.delete()
         LogEntry.objects.create(user=self.user, action_flag=DELETION)

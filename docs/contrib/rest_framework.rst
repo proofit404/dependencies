@@ -249,5 +249,6 @@ In addition to the regular view extended scope (``view``, ``request``,
 dependencies in your action constructor.
 
 * ``validated_data`` serializer instance attribute in create and
-  update actions
-* ``instance`` model instance in update and destroy actions.
+  update actions,
+* ``instance`` model instance in update and destroy actions,
+* ``action`` name of the action on the Resource.

@@ -171,6 +171,7 @@ def apply_model_view_set_methods(handler, injector):
                                 "kwargs": this.view.kwargs,
                                 "user": this.request.user,
                                 "pk": this.kwargs["pk"],  # TODO: partial(int, this...
+                                "action": this.view.action,
                             },
                             argument,
                         )
