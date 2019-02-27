@@ -18,6 +18,8 @@ def register(injector):
     @pytest.fixture(**options)
     def __fixture(request):
 
+        # FIXME: Rename `request` to `__request__` and protect from
+        # dependencies with the same name.
         return injector.let(request=request).fixture
 
     __fixture.injector = injector
