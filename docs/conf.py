@@ -2,7 +2,7 @@
 
 project = "dependencies"
 
-copyright = "2016-2019, Artem Malyshev"
+copyright = "2016-2019, dry-python team"
 
 author = "Artem Malyshev"
 

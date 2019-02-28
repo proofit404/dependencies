@@ -4,7 +4,7 @@ dependencies.contrib.pytest
 
 This module implements injectable Py.test fixtures.
 
-:copyright: (c) 2016-2019 by Artem Malyshev.
+:copyright: (c) 2016-2019 by dry-python team.
 :license: BSD, see LICENSE for more details.
 """
 
