@@ -103,3 +103,4 @@ Contents
     contrib/index
     implementation
     faq
+    changelog
