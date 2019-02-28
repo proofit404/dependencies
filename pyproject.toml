@@ -1,0 +1,38 @@
+[tool.poetry]
+name = "dependencies"
+version = "0.15.0"
+
+description = "Dependency Injection for Humans"
+readme = "README.rst"
+license = "BSD-2-Clause"
+
+homepage = "https://dry-python.org/"
+repository = "https://github.com/dry-python/dependencies/"
+documentation = "https://dependencies.readthedocs.io/"
+
+authors = [
+    "Artem Malyshev <proofit404@gmail.com>",
+]
+
+keywords = [
+    "di",
+    "dependency injection",
+    "ioc",
+    "inversion of control",
+    "architecture",
+    "design-patterns",
+]
+
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: BSD License",
+    "Topic :: Software Development",
+]
+
+[tool.poetry.dependencies]
+python = "~2.7 || ^3.5"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"

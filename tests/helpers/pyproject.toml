@@ -1,0 +1,14 @@
+[tool.poetry]
+name = "helpers"
+version = "0"
+authors = []
+packages = [
+    { include = "helpers.py" },
+    { include = "pkg" },
+    { include = "django_project" },
+    { include = "flask_project" },
+]
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
