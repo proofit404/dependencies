@@ -1,6 +1,6 @@
 from __future__ import absolute_import
 
-from rest_framework.generics import GenericAPIView
+from rest_framework.generics import GenericAPIView, RetrieveAPIView
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
@@ -23,6 +23,20 @@ def generic_api_view(injector):
 
     handler = create_handler(GenericAPIView, injector)
     apply_http_methods(handler, injector)
+    apply_api_view_methods(handler, injector)
+    apply_generic_api_view_methods(handler, injector)
+    return injector.let(as_view=handler.as_view)
+
+
+def retrieve_api_view(injector):
+    """Create DRF view for retrieving a model instance from injector class."""
+
+    # FIXME:
+    #
+    # [ ] Write separate test module for each public function.
+    #
+    # [ ] Test me.
+    handler = create_handler(RetrieveAPIView, injector)
     apply_api_view_methods(handler, injector)
     apply_generic_api_view_methods(handler, injector)
     return injector.let(as_view=handler.as_view)
