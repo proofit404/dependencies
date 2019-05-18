@@ -1,6 +1,6 @@
 """
 dependencies.contrib.flask
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+--------------------------
 
 This module implements injectable Flask view.
 

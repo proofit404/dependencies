@@ -1,6 +1,6 @@
 """
 dependencies
-~~~~~~~~~~~~
+------------
 
 Dependency Injection for Humans.
 

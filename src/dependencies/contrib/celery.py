@@ -1,6 +1,6 @@
 """
 dependencies.contrib.celery
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+---------------------------
 
 This module implements injectable Celery task.
 

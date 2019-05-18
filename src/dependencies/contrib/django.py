@@ -1,6 +1,6 @@
 """
 dependencies.contrib.django
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+---------------------------
 
 This module implements injectable Django view.
 

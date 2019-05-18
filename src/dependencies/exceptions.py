@@ -1,6 +1,6 @@
 """
 dependencies.exceptions
-~~~~~~~~~~~~~~~~~~~~~~~
+-----------------------
 
 This module contains the set of dependencies' exceptions.
 
