@@ -54,6 +54,10 @@ matrix:
     - python: 3.7
       dist: xenial
       sudo: true
+      env: TOXENV=mypy
+    - python: 3.7
+      dist: xenial
+      sudo: true
       env: TOXENV=black
     - python: 3.7
       dist: xenial
