@@ -52,6 +52,7 @@ matrix:
       env: TOXENV=doc8
 cache: pip
 install:
+  - pip install -U pip wheel setuptools
   - pip install tox codecov
 script:
   - tox
