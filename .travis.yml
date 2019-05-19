@@ -1,4 +1,5 @@
 language: python
+dist: xenial
 matrix:
   include:
     - python: 2.7
@@ -32,40 +33,22 @@ matrix:
     - python: 3.6
       env: TOXENV=py36-celery
     - python: 3.7
-      dist: xenial
-      sudo: true
       env: TOXENV=py37-django20
     - python: 3.7
-      dist: xenial
-      sudo: true
       env: TOXENV=py37-django21
     - python: 3.7
-      dist: xenial
-      sudo: true
       env: TOXENV=py37-flask
     - python: 3.7
-      dist: xenial
-      sudo: true
       env: TOXENV=py37-celery
     - python: 3.7
-      dist: xenial
-      sudo: true
       env: TOXENV=flake8
     - python: 3.7
-      dist: xenial
-      sudo: true
       env: TOXENV=mypy
     - python: 3.7
-      dist: xenial
-      sudo: true
       env: TOXENV=black
     - python: 3.7
-      dist: xenial
-      sudo: true
       env: TOXENV=isort
     - python: 3.7
-      dist: xenial
-      sudo: true
       env: TOXENV=doc8
 cache: pip
 install:
