@@ -64,7 +64,7 @@ def test_form_view(client):
     response = client.get("/test_form_view/1/")
     assert response.status_code == 200
     if django.VERSION >= (2, 0):
-        assert response.content == b"extra-var"
+        assert response.content == b"extra-var\n"
 
     response = client.post(
         "/test_form_view/1/",
