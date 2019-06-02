@@ -41,6 +41,8 @@ matrix:
     - python: 3.7
       env: TOXENV=py37-celery
     - python: 3.7
+      env: TOXENV=precommit
+    - python: 3.7
       env: TOXENV=flake8
     - python: 3.7
       env: TOXENV=mypy
