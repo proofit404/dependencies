@@ -38,13 +38,14 @@ def apply_http_methods(handler, injector):
 
             def locals_hack(method=method):
                 def __view(self, request, *args, **kwargs):
+                    __tracebackhide__ = True
                     ns = injector.let(
                         view=self,
                         request=request,
                         args=args,
                         kwargs=kwargs,
                         user=this.request.user,
-                        pk=this.kwargs["pk"],  # TODO: partial(int, this...
+                        pk=this.kwargs["pk"],
                     )
                     return getattr(ns, method)()
 
@@ -75,6 +76,7 @@ def apply_form_methods(handler, injector):
 
             def locals_hack(method=method):
                 def __method(self, form):
+                    __tracebackhide__ = True
                     ns = injector.let(
                         view=self,
                         form=form,
@@ -82,7 +84,7 @@ def apply_form_methods(handler, injector):
                         args=this.view.args,
                         kwargs=this.view.kwargs,
                         user=this.request.user,
-                        pk=this.kwargs["pk"],  # TODO: partial(int, this...
+                        pk=this.kwargs["pk"],
                     )
                     return getattr(ns, method)()
 

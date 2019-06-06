@@ -85,6 +85,7 @@ def apply_api_view_methods(handler, injector):
             def locals_hack(attribute=attribute):
                 @property
                 def __attribute(self):
+                    __tracebackhide__ = True
                     ns = injector.let(
                         **{
                             "view": self,
@@ -92,7 +93,7 @@ def apply_api_view_methods(handler, injector):
                             "args": this.view.args,
                             "kwargs": this.view.kwargs,
                             "user": this.request.user,
-                            "pk": this.kwargs["pk"],  # TODO: partial(int, this...
+                            "pk": this.kwargs["pk"],
                         }
                     )
                     return getattr(ns, attribute)
@@ -131,6 +132,7 @@ def apply_generic_api_view_methods(handler, injector):
             def locals_hack(attribute=attribute):
                 @property
                 def __attribute(self):
+                    __tracebackhide__ = True
                     ns = injector.let(
                         **{
                             "view": self,
@@ -138,7 +140,7 @@ def apply_generic_api_view_methods(handler, injector):
                             "args": this.view.args,
                             "kwargs": this.view.kwargs,
                             "user": this.request.user,
-                            "pk": this.kwargs["pk"],  # TODO: partial(int, this...
+                            "pk": this.kwargs["pk"],
                             "action": this.view.action,
                         }
                     )
@@ -193,6 +195,7 @@ def apply_model_view_set_methods(handler, injector):
 
             def locals_hack(method=method, set_args=set_args, cb=cb):
                 def __method(self, argument):
+                    __tracebackhide__ = True
                     ns = injector.let(
                         **set_args(
                             {
@@ -201,7 +204,7 @@ def apply_model_view_set_methods(handler, injector):
                                 "args": this.view.args,
                                 "kwargs": this.view.kwargs,
                                 "user": this.request.user,
-                                "pk": this.kwargs["pk"],  # TODO: partial(int, this...
+                                "pk": this.kwargs["pk"],
                                 "action": this.view.action,
                             },
                             argument,
