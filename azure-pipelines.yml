@@ -1,0 +1,131 @@
+jobs:
+  - job: 'Test'
+    pool:
+      vmImage: 'ubuntu-latest'
+    strategy:
+      matrix:
+        py27-django110:
+          python.version: '2.7'
+          tox.env: py27-django110
+        py35-django110:
+          python.version: '3.5'
+          tox.env: py35-django110
+        py27-django111:
+          python.version: '2.7'
+          tox.env: py27-django111
+        py35-django111:
+          python.version: '3.5'
+          tox.env: py35-django111
+        py36-django111:
+          python.version: '3.6'
+          tox.env: py36-django111
+        py35-django20:
+          python.version: '3.5'
+          tox.env: py35-django20
+        py36-django20:
+          python.version: '3.6'
+          tox.env: py36-django20
+        py37-django20:
+          python.version: '3.7'
+          tox.env: py37-django20
+        py35-django21:
+          python.version: '3.5'
+          tox.env: py35-django21
+        py36-django21:
+          python.version: '3.6'
+          tox.env: py36-django21
+        py37-django21:
+          python.version: '3.7'
+          tox.env: py37-django21
+        py35-django22:
+          python.version: '3.5'
+          tox.env: py35-django22
+        py36-django22:
+          python.version: '3.6'
+          tox.env: py36-django22
+        py37-django22:
+          python.version: '3.7'
+          tox.env: py37-django22
+        py27-flask:
+          python.version: '2.7'
+          tox.env: py27-flask
+        py35-flask:
+          python.version: '3.5'
+          tox.env: py35-flask
+        py36-flask:
+          python.version: '3.6'
+          tox.env: py36-flask
+        py37-flask:
+          python.version: '3.7'
+          tox.env: py37-flask
+        py27-celery:
+          python.version: '2.7'
+          tox.env: py27-celery
+        py35-celery:
+          python.version: '3.5'
+          tox.env: py35-celery
+        py36-celery:
+          python.version: '3.6'
+          tox.env: py36-celery
+        py37-celery:
+          python.version: '3.7'
+          tox.env: py37-celery
+        precommit:
+          python.version: '3.7'
+          tox.env: precommit
+        flake8:
+          python.version: '3.7'
+          tox.env: flake8
+        mypy:
+          python.version: '3.7'
+          tox.env: mypy
+        black:
+          python.version: '3.7'
+          tox.env: black
+        isort:
+          python.version: '3.7'
+          tox.env: isort
+        doc8:
+          python.version: '3.7'
+          tox.env: doc8
+    steps:
+      - task: UsePythonVersion@0
+        displayName: Get Python for Python tools.
+        inputs:
+          versionSpec: '3.6'
+          addToPath: false
+        name: pyTools
+      - script: $(pyTools.pythonLocation)/bin/pip install --upgrade tox
+        displayName: Install Python-based tools.
+      - task: UsePythonVersion@0
+        inputs:
+          versionSpec: '$(python.version)'
+          architecture: 'x64'
+        condition: not(in(variables['python.version'], '3.7'))
+        displayName: Use cached Python $(python.version) for tests.
+      - script: |
+          sudo add-apt-repository ppa:deadsnakes
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends python$(python.version)-dev python$(python.version)-distutils
+        condition: in(variables['python.version'], '3.7')
+        displayName: Install Python $(python.version) from the deadsnakes PPA for tests.
+      - task: NodeTool@0
+        condition: in(variables['tox.env'], 'remarklint')
+        displayName: Install NodeJS for tests.
+        inputs:
+          versionSpec: '10.x'
+        name: jsTools
+      - script: $(pyTools.pythonLocation)/bin/tox -e $(tox.env)
+        displayName: run tox -e $(tox.env)
+      - script: |
+          if [ ! -f .coverage ]; then
+            echo No coverage data found.
+            exit 0
+          fi
+          PATH=$HOME/.local/bin:$PATH
+          python$(python.version) -m pip install --user codecov
+          codecov
+        env:
+          CODECOV_TOKEN: $(codecov.token)
+        displayName: Report Coverage
+        condition: succeeded()
