@@ -2,7 +2,7 @@ from __future__ import absolute_import
 
 from rest_framework.generics import GenericAPIView, ListAPIView, RetrieveAPIView
 from rest_framework.views import APIView
-from rest_framework.viewsets import ModelViewSet, ViewSet
+from rest_framework.viewsets import GenericViewSet, ModelViewSet, ViewSet
 
 from dependencies import this
 from dependencies.contrib._django import apply_http_methods, create_handler
@@ -68,6 +68,21 @@ def view_set(injector):
     # [ ] Doc me.
     handler = create_handler(ViewSet, injector)
     apply_api_view_methods(handler, injector)
+    apply_view_set_methods(handler, injector)
+    return injector.let(as_viewset=lambda: handler)
+
+
+def generic_view_set(injector):
+    """Create DRF generic view set from injector class."""
+
+    # FIXME:
+    #
+    # [ ] Test me.
+    #
+    # [ ] Doc me.
+    handler = create_handler(GenericViewSet, injector)
+    apply_api_view_methods(handler, injector)
+    apply_generic_api_view_methods(handler, injector)
     apply_view_set_methods(handler, injector)
     return injector.let(as_viewset=lambda: handler)
 
