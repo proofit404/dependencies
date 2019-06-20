@@ -4,12 +4,17 @@ from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.parsers import JSONParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.renderers import DocumentationRenderer
+from rest_framework.request import Request
+from rest_framework.response import Response
+from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_204_NO_CONTENT
+from rest_framework.viewsets import ViewSet
 
-from dependencies import Injector, this, value
+from dependencies import Injector, operation, this, value
 from dependencies.contrib.rest_framework import (
     api_view,
     generic_api_view,
     model_view_set,
+    view_set,
 )
 
 from .auth import AuthenticateAdmin, AuthenticateAll
@@ -136,6 +141,84 @@ class UserListFilterFieldsView(Injector):
     else:
         filter_fields = ["username"]
     pagination_class = LimitOffsetPagination
+
+
+# ViewSet.
+
+
+@view_set
+class InjectedViewSet(Injector):
+    """Intentionally left blank."""
+
+    @operation
+    def list(view, request, args, kwargs, user, action):
+
+        assert isinstance(view, ViewSet)
+        assert isinstance(request, Request)
+        assert args == ()
+        assert kwargs == {}
+        assert action == "list"
+
+        return Response(status=HTTP_200_OK, data={"list": "ok"})
+
+    @operation
+    def retrieve(view, request, args, kwargs, user, pk, action):
+
+        assert isinstance(view, ViewSet)
+        assert isinstance(request, Request)
+        assert args == ()
+        assert kwargs == {"pk": "1"}
+        assert pk == "1"
+        assert action == "retrieve"
+
+        return Response(status=HTTP_200_OK, data={"retrieve": "ok"})
+
+    @operation
+    def create(view, request, args, kwargs, user, action):
+
+        assert isinstance(view, ViewSet)
+        assert isinstance(request, Request)
+        assert args == ()
+        assert kwargs == {}
+        assert action == "create"
+
+        return Response(status=HTTP_201_CREATED, data={"create": "ok"})
+
+    @operation
+    def update(view, request, args, kwargs, user, pk, action):
+
+        assert isinstance(view, ViewSet)
+        assert isinstance(request, Request)
+        assert args == ()
+        assert kwargs == {"pk": "1"}
+        assert pk == "1"
+        assert action == "update"
+
+        return Response(status=HTTP_200_OK, data={"update": "ok"})
+
+    @operation
+    def partial_update(view, request, args, kwargs, user, pk, action):
+
+        assert isinstance(view, ViewSet)
+        assert isinstance(request, Request)
+        assert args == ()
+        assert kwargs == {"pk": "1"}
+        assert pk == "1"
+        assert action == "partial_update"
+
+        return Response(status=HTTP_200_OK, data={"partial_update": "ok"})
+
+    @operation
+    def destroy(view, request, args, kwargs, user, pk, action):
+
+        assert isinstance(view, ViewSet)
+        assert isinstance(request, Request)
+        assert args == ()
+        assert kwargs == {"pk": "1"}
+        assert pk == "1"
+        assert action == "destroy"
+
+        return Response(status=HTTP_204_NO_CONTENT)
 
 
 @model_view_set

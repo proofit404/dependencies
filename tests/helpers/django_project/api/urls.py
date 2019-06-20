@@ -7,6 +7,7 @@ from .views import (
     BadVersion,
     DynamicUserViewSet,
     EmptyViewSet,
+    InjectedViewSet,
     LoginAll,
     ThrottleAll,
     UserAction,
@@ -21,6 +22,7 @@ from .views import (
 router = SimpleRouter()
 # FIXME: We can not user router without `basename` because `queryset`
 # is a `property` and used as class attribute.
+router.register(r"view_set", InjectedViewSet.as_viewset(), basename="view_set")
 router.register(r"user_set", UserViewSet.as_viewset(), basename="user")
 router.register(
     r"dynamic_user_set", DynamicUserViewSet.as_viewset(), basename="dynamic_user"

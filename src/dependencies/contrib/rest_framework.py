@@ -14,6 +14,7 @@ from ._rest_framework import (
     list_api_view,
     model_view_set,
     retrieve_api_view,
+    view_set,
 )
 
 
@@ -23,4 +24,5 @@ __all__ = [
     "list_api_view",
     "model_view_set",
     "retrieve_api_view",
+    "view_set",
 ]

@@ -2,7 +2,7 @@ from __future__ import absolute_import
 
 from rest_framework.generics import GenericAPIView, ListAPIView, RetrieveAPIView
 from rest_framework.views import APIView
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.viewsets import ModelViewSet, ViewSet
 
 from dependencies import this
 from dependencies.contrib._django import apply_http_methods, create_handler
@@ -56,6 +56,20 @@ def retrieve_api_view(injector):
     apply_api_view_methods(handler, injector)
     apply_generic_api_view_methods(handler, injector)
     return injector.let(as_view=handler.as_view)
+
+
+def view_set(injector):
+    """Create DRF view set from injector class."""
+
+    # FIXME:
+    #
+    # [ ] Test me.
+    #
+    # [ ] Doc me.
+    handler = create_handler(ViewSet, injector)
+    apply_api_view_methods(handler, injector)
+    apply_view_set_methods(handler, injector)
+    return injector.let(as_viewset=lambda: handler)
 
 
 def model_view_set(injector):
@@ -149,6 +163,50 @@ def apply_generic_api_view_methods(handler, injector):
                 return __attribute
 
             setattr(handler, attribute, locals_hack())
+
+
+def apply_view_set_methods(handler, injector):
+
+    for action in ["list", "create"]:
+        if action in injector:
+
+            def locals_hack(action=action):
+                def __action(self, request, *args, **kwargs):
+                    __tracebackhide__ = True
+                    ns = injector.let(
+                        view=self,
+                        request=this.view.request,
+                        args=this.view.args,
+                        kwargs=this.view.kwargs,
+                        user=this.request.user,
+                        action=action,
+                    )
+                    return getattr(ns, action)()
+
+                return __action
+
+            setattr(handler, action, locals_hack())
+
+    for action in ["retrieve", "update", "partial_update", "destroy"]:
+        if action in injector:
+
+            def locals_hack(action=action):
+                def __action(self, request, *args, **kwargs):
+                    __tracebackhide__ = True
+                    ns = injector.let(
+                        view=self,
+                        request=this.view.request,
+                        args=this.view.args,
+                        kwargs=this.view.kwargs,
+                        user=this.request.user,
+                        pk=this.kwargs["pk"],
+                        action=action,
+                    )
+                    return getattr(ns, action)()
+
+                return __action
+
+            setattr(handler, action, locals_hack())
 
 
 def apply_model_view_set_methods(handler, injector):
