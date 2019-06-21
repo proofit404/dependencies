@@ -1,6 +1,9 @@
 import pytest
 
 
+pytestmark = pytest.mark.django_db
+
+
 status = pytest.importorskip("rest_framework.status")
 test_client = pytest.importorskip("rest_framework.test")
 
@@ -38,7 +41,10 @@ def test_retrieve_action():
 def test_create_action():
     """Dispatch request to the `create` action of the generic view set."""
 
-    response = client.post("/api/generic_view_set/")
+    response = client.post(
+        "/api/generic_view_set/",
+        {"username": "johndoe", "first_name": "John", "last_name": "Doe"},
+    )
     assert response.status_code == status.HTTP_201_CREATED
     assert response.json() == {"create": "ok"}
 
@@ -46,7 +52,10 @@ def test_create_action():
 def test_update_action():
     """Dispatch request to the `update` action of the generic view set."""
 
-    response = client.put("/api/generic_view_set/1/")
+    response = client.put(
+        "/api/generic_view_set/1/",
+        {"username": "johndoe", "first_name": "John", "last_name": "Doe"},
+    )
     assert response.status_code == status.HTTP_200_OK
     assert response.json() == {"update": "ok"}
 
@@ -57,7 +66,7 @@ def test_partial_update_action():
     view set.
     """
 
-    response = client.patch("/api/generic_view_set/1/")
+    response = client.patch("/api/generic_view_set/1/", {"username": "jimworm"})
     assert response.status_code == status.HTTP_200_OK
     assert response.json() == {"partial_update": "ok"}
 

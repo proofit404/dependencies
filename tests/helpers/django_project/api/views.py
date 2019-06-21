@@ -227,7 +227,8 @@ class InjectedViewSet(Injector):
 
 @generic_view_set
 class InjectedGenericViewSet(Injector):
-    """Intentionally left blank."""
+
+    serializer_class = UserSerializer
 
     @operation
     def list(view, request, args, kwargs, user, action):
@@ -253,18 +254,23 @@ class InjectedGenericViewSet(Injector):
         return Response(status=HTTP_200_OK, data={"retrieve": "ok"})
 
     @operation
-    def create(view, request, args, kwargs, user, action):
+    def create(view, request, args, kwargs, user, action, validated_data):
 
         assert isinstance(view, GenericViewSet)
         assert isinstance(request, Request)
         assert args == ()
         assert kwargs == {}
         assert action == "create"
+        assert validated_data == {
+            "username": "johndoe",
+            "first_name": "John",
+            "last_name": "Doe",
+        }
 
         return Response(status=HTTP_201_CREATED, data={"create": "ok"})
 
     @operation
-    def update(view, request, args, kwargs, user, pk, action):
+    def update(view, request, args, kwargs, user, pk, action, validated_data):
 
         assert isinstance(view, GenericViewSet)
         assert isinstance(request, Request)
@@ -272,11 +278,16 @@ class InjectedGenericViewSet(Injector):
         assert kwargs == {"pk": "1"}
         assert pk == "1"
         assert action == "update"
+        assert validated_data == {
+            "username": "johndoe",
+            "first_name": "John",
+            "last_name": "Doe",
+        }
 
         return Response(status=HTTP_200_OK, data={"update": "ok"})
 
     @operation
-    def partial_update(view, request, args, kwargs, user, pk, action):
+    def partial_update(view, request, args, kwargs, user, pk, action, validated_data):
 
         assert isinstance(view, GenericViewSet)
         assert isinstance(request, Request)
@@ -284,6 +295,7 @@ class InjectedGenericViewSet(Injector):
         assert kwargs == {"pk": "1"}
         assert pk == "1"
         assert action == "partial_update"
+        assert validated_data == {"username": "jimworm"}
 
         return Response(status=HTTP_200_OK, data={"partial_update": "ok"})
 
