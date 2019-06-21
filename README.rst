@@ -1,5 +1,5 @@
-.. |travis| image:: https://travis-ci.org/dry-python/dependencies.svg?branch=master
-    :target: https://travis-ci.org/dry-python/dependencies
+.. |azure-pipeline| image:: https://dev.azure.com/dry-python/dependencies/_apis/build/status/dry-python.dependencies?branchName=master
+    :target: https://dev.azure.com/dry-python/dependencies/_build/latest?definitionId=2&branchName=master
 
 .. |codecov| image:: https://codecov.io/gh/dry-python/dependencies/branch/master/graph/badge.svg
     :target: https://codecov.io/gh/dry-python/dependencies
@@ -18,7 +18,7 @@
 
 .. image:: https://raw.githubusercontent.com/dry-python/brand/master/logo/dependencies.png
 
-|travis| |codecov| |docs| |gitter| |pypi| |black|
+|azure-pipeline| |codecov| |docs| |gitter| |pypi| |black|
 
 ----
 
