@@ -14,7 +14,7 @@ def api_view(injector):
 
     handler = create_handler(APIView, injector)
     apply_http_methods(handler, injector)
-    apply_api_view_methods(handler, injector)
+    apply_api_view_attributes(handler, injector)
     return injector.let(as_view=handler.as_view)
 
 
@@ -23,7 +23,7 @@ def generic_api_view(injector):
 
     handler = create_handler(GenericAPIView, injector)
     apply_http_methods(handler, injector)
-    apply_api_view_methods(handler, injector)
+    apply_api_view_attributes(handler, injector)
     apply_generic_api_view_methods(handler, injector)
     return injector.let(as_view=handler.as_view)
 
@@ -37,7 +37,7 @@ def list_api_view(injector):
     #
     # [ ] Doc me.
     handler = create_handler(ListAPIView, injector)
-    apply_api_view_methods(handler, injector)
+    apply_api_view_attributes(handler, injector)
     apply_generic_api_view_methods(handler, injector)
     return injector.let(as_view=handler.as_view)
 
@@ -53,7 +53,7 @@ def retrieve_api_view(injector):
     #
     # [ ] Doc me.
     handler = create_handler(RetrieveAPIView, injector)
-    apply_api_view_methods(handler, injector)
+    apply_api_view_attributes(handler, injector)
     apply_generic_api_view_methods(handler, injector)
     return injector.let(as_view=handler.as_view)
 
@@ -67,7 +67,7 @@ def view_set(injector):
     #
     # [ ] Doc me.
     handler = create_handler(ViewSet, injector)
-    apply_api_view_methods(handler, injector)
+    apply_api_view_attributes(handler, injector)
     apply_view_set_methods(handler, injector)
     return injector.let(as_viewset=lambda: handler)
 
@@ -81,7 +81,7 @@ def generic_view_set(injector):
     #
     # [ ] Doc me.
     handler = create_handler(GenericViewSet, injector)
-    apply_api_view_methods(handler, injector)
+    apply_api_view_attributes(handler, injector)
     apply_generic_api_view_methods(handler, injector)
     apply_view_set_methods(handler, injector)
     return injector.let(as_viewset=lambda: handler)
@@ -91,13 +91,13 @@ def model_view_set(injector):
     """Create DRF model view set from injector class."""
 
     handler = create_handler(ModelViewSet, injector)
-    apply_api_view_methods(handler, injector)
+    apply_api_view_attributes(handler, injector)
     apply_generic_api_view_methods(handler, injector)
     apply_model_view_set_methods(handler, injector)
     return injector.let(as_viewset=lambda: handler)
 
 
-def apply_api_view_methods(handler, injector):
+def apply_api_view_attributes(handler, injector):
 
     for attribute in [
         "authentication_classes",
