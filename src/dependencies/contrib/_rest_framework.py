@@ -116,14 +116,12 @@ def apply_api_view_attributes(handler, injector):
                 def __attribute(self):
                     __tracebackhide__ = True
                     ns = injector.let(
-                        **{
-                            "view": self,
-                            "request": this.view.request,
-                            "args": this.view.args,
-                            "kwargs": this.view.kwargs,
-                            "user": this.request.user,
-                            "pk": this.kwargs["pk"],
-                        }
+                        view=self,
+                        request=this.view.request,
+                        args=this.view.args,
+                        kwargs=this.view.kwargs,
+                        user=this.request.user,
+                        pk=this.kwargs["pk"],
                     )
                     return getattr(ns, attribute)
 
@@ -163,15 +161,13 @@ def apply_generic_api_view_attributes(handler, injector):
                 def __attribute(self):
                     __tracebackhide__ = True
                     ns = injector.let(
-                        **{
-                            "view": self,
-                            "request": this.view.request,
-                            "args": this.view.args,
-                            "kwargs": this.view.kwargs,
-                            "user": this.request.user,
-                            "pk": this.kwargs["pk"],
-                            "action": this.view.action,
-                        }
+                        view=self,
+                        request=this.view.request,
+                        args=this.view.args,
+                        kwargs=this.view.kwargs,
+                        user=this.request.user,
+                        pk=this.kwargs["pk"],
+                        action=this.view.action,
                     )
                     return getattr(ns, attribute)
 
