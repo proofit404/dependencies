@@ -85,9 +85,6 @@ jobs:
         isort:
           python.version: '3.7'
           tox.env: isort
-        doc8:
-          python.version: '3.7'
-          tox.env: doc8
     steps:
       - task: UsePythonVersion@0
         inputs:
