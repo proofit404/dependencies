@@ -85,6 +85,12 @@ jobs:
         isort:
           python.version: '3.7'
           tox.env: isort
+        mkdocs:
+          python.version: '3.7'
+          tox.env: mkdocs
+        remarklint:
+          python.version: '3.7'
+          tox.env: remarklint
     steps:
       - task: UsePythonVersion@0
         inputs:
@@ -92,6 +98,11 @@ jobs:
         displayName: Install Python.
       - script: pip install --upgrade tox
         displayName: Install Tox.
+      - task: NodeTool@0
+        inputs:
+          versionSpec: '10.x'
+        condition: in(variables['tox.env'], 'remarklint')
+        displayName: Install NodeJS.
       - script: tox -e $(tox.env)
         displayName: Run Tox.
       - script: |

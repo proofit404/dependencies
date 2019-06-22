@@ -1,0 +1,18 @@
+{
+  "name": "dependencies",
+  "author": "Artem Malyshev",
+  "private": true,
+  "devDependencies": {
+    "remark-cli": "*",
+    "remark-lint": "*",
+    "remark-preset-lint-recommended": "*"
+  },
+  "scripts": {
+    "lint:md": "remark ."
+  },
+  "remarkConfig": {
+    "plugins": [
+      "remark-preset-lint-recommended"
+    ]
+  }
+}
