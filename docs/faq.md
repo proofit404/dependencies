@@ -26,42 +26,42 @@ app = container.build(ApplicationService)
 In our opinion, this makes code less declarative.
 
   - It hard to tell how dependencies will be resolved.
-    
+
     At the same time looking on container definition and a signature of
     the `__init__` method can you easily say what arguments will be
     passed to the constructor?
-    
+
     You can't. You need to inspect a base class of each dependency
     registered in the container.
-    
+
     With our `Injector` approach, you don't have this problem. You will
     find arguments right in the `Injector` subclass in one place.
 
   - It's a global mutable variable.
-    
+
     Container definition can be split into different files. This will
     make it harder to read.
-    
+
     It's very similar to the service locator. Many architect people
     consider it an anti-pattern.
 
   - It hard to define multiple dependencies of the same type.
-    
+
     For example, your service needs two databases to work with. You need
     to define two different classes for types signatures and then define
     two different database classes.
-    
+
     The same is necessary for these classes arguments. Both of them
     needs a port to run. How would you name it? `PrimaryDatabasePort`
     and `SecondaryDatabasePort` instead of `int`?
-    
+
     This lead to unnecessary boilerplate.
 
 ## Mixins considered harmful
 
 `dependencies` are compared with mixins often. In a sense that both
 solutions were made to maximize code reuse. We already discussed this in
-the [why](why.html#mixins) chapter. But let's return to it again:
+the [why](why.md#mixins) chapter. But let's return to it again:
 
     Inheritance always breaks encapsulation.
 
