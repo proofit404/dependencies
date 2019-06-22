@@ -55,25 +55,25 @@ How we can change this code above to match new requirements?
 We have problems on all three layers of your code. All `purchase`,
 `notify_user` and `send_notification` should be changed in some way.
 
-1.  Add conditions to all parameters to all layers of the code.
-    
-    This will end up with messy code which is even harder to extend. No
-    one want `purchase` function to have 12 arguments. No one want to
-    wonder why `send_email` function accepts phone number. No one want
-    to read 7 `if` statements in the `notify_user` function when they
-    about to add eighth condition.
+1. Add conditions to all parameters to all layers of the code.
 
-2.  Add context variable instead of another argument.
-    
-    This little `ctx` argument instead of email address, phone number,
-    product price and shipment destination will save us a lot of typing
-    between function calls. But we still have bunch of `if` statements.
+   This will end up with messy code which is even harder to extend. No
+   one want `purchase` function to have 12 arguments. No one want to
+   wonder why `send_email` function accepts phone number. No one want
+   to read 7 `if` statements in the `notify_user` function when they
+   about to add eighth condition.
 
-3.  Copy-paste this module and reimplement each feature separately.
-    
-    Each feature will be readable and simple on it's own, but you will
-    regret this decision when usage of the `request_payment` or
-    `calculate_price` changed.
+2. Add context variable instead of another argument.
+
+   This little `ctx` argument instead of email address, phone number,
+   product price and shipment destination will save us a lot of typing
+   between function calls. But we still have bunch of `if` statements.
+
+3. Copy-paste this module and reimplement each feature separately.
+
+   Each feature will be readable and simple on it's own, but you will
+   regret this decision when usage of the `request_payment` or
+   `calculate_price` changed.
 
 But we still have the same problem. We can't substitute implementation
 details of low level code without changing high level policies. Let's
@@ -123,34 +123,34 @@ class Order:
 At first look this class is even better solution. Indeed, this code has
 few pros.
 
-1.  At first glance high level methods even more readable.
-    
-    There are no nosy arguments or variables. Only nice named methods.
+1. At first glance high level methods even more readable.
 
-2.  Simple code reuse.
-    
-    With inheritance we can simply override any method on any layer of
-    abstraction in the system. We can add any number of methods or
-    attributes is the child classes. Looks like it is very reasonable
-    approach.
+   There are no nosy arguments or variables. Only nice named methods.
+
+2. Simple code reuse.
+
+   With inheritance we can simply override any method on any layer of
+   abstraction in the system. We can add any number of methods or
+   attributes is the child classes. Looks like it is very reasonable
+   approach.
 
 But this code has much more hidden cons at more precise analysis.
 
-1.  God object.
-    
-    One class contains methods related to every single layer of
-    abstraction in the system. It's hard to manage two hundred methods
-    in the same class. One will process HTTP request, another one will
-    send email, another one will write to the database. It's hard to
-    figure out what *exactly* this class does.
+1. God object.
 
-2.  Bad state management.
-    
-    During life time of the instance different methods change state of
-    the class. When you read short method somewhere inside email sender
-    logic you have no idea *from where* attributes came from and *when
-    exactly* they were set. Hello `print` statements to understand the
-    code...
+   One class contains methods related to every single layer of
+   abstraction in the system. It's hard to manage two hundred methods
+   in the same class. One will process HTTP request, another one will
+   send email, another one will write to the database. It's hard to
+   figure out what *exactly* this class does.
+
+2. Bad state management.
+
+   During life time of the instance different methods change state of
+   the class. When you read short method somewhere inside email sender
+   logic you have no idea *from where* attributes came from and *when
+   exactly* they were set. Hello `print` statements to understand the
+   code...
 
 Let's reduce amount of logic in the class (responsibility of the class).
 Let's try...
@@ -197,18 +197,18 @@ class Order(OrderProcessingMixin,
 
 Someone might say this is an improvement over one huge class.
 
-1.  All methods grouped around classes with the same responsibility.
-2.  Better code reuse. We can use the same notification mechanism in
-    different classes with just one line of code.
+1. All methods grouped around classes with the same responsibility.
+2. Better code reuse. We can use the same notification mechanism in
+   different classes with just one line of code.
 
 But there are a lot of problems too. Imagine you during debugging
 session of the `Order` class.
 
-1.  In the `get_notification_text` you have no idea who set up
-    `order_details`.
-2.  In the `Order` class itself you see bunch of low level methods which
-    are deep implementation details. What public method I should call?
-    When notification will be sent exactly?
+1. In the `get_notification_text` you have no idea who set up
+   `order_details`.
+2. In the `Order` class itself you see bunch of low level methods
+   which are deep implementation details. What public method I should
+   call? When notification will be sent exactly?
 
 This code is much harder to understand than it should be. Even if it
 reusable, this complexity in too big for my head. Let's try...
@@ -271,15 +271,15 @@ Order(
 
 This code has few really good characteristics.
 
-1.  It's clean where things were defined. If you try to understand
-    what's wrong with your system, you can just use traceback. No nasty
-    code execution paths.
-2.  You system became really configurable, you can **inject** pretty
-    much any implementation without changing high-level code.
+1. It's clean where things were defined. If you try to understand
+   what's wrong with your system, you can just use traceback. No nasty
+   code execution paths.
+2. You system became really configurable, you can **inject** pretty
+   much any implementation without changing high-level code.
 
 But there one unfortunate consequence of this style
 
-1.  There are to much boilerplate on the initiation stage.
+1. There are to much boilerplate on the initiation stage.
 
 Let's try...
 

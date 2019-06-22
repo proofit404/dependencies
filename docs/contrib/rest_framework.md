@@ -64,14 +64,14 @@ class ShowCartDetails(object):
 In addition to the HTTP verb handlers, you can set up following
 arguments to customize `APIView` under the hood.
 
-  - `authentication_classes`
-  - `renderer_classes`
-  - `parser_classes`
-  - `throttle_classes`
-  - `permission_classes`
-  - `content_negotiation_class`
-  - `versioning_class`
-  - `metadata_class`
+* `authentication_classes`
+* `renderer_classes`
+* `parser_classes`
+* `throttle_classes`
+* `permission_classes`
+* `content_negotiation_class`
+* `versioning_class`
+* `metadata_class`
 
 The meaning of each attribute can be found in the REST framework
 documentation.
@@ -139,13 +139,13 @@ In addition to `api_view` attributes you can set following attributes
 and they will be passed to the `GenericAPIView` subclass under the hood.
 Everything works according to the rest framework documentation.
 
-  - `queryset`
-  - `serializer_class`
-  - `lookup_field`
-  - `lookup_url_kwarg`
-  - `filter_backends`
-  - `filter_class`
-  - `pagination_class`
+* `queryset`
+* `serializer_class`
+* `lookup_field`
+* `lookup_url_kwarg`
+* `filter_backends`
+* `filter_class`
+* `pagination_class`
 
 ## Model View Set
 
@@ -229,7 +229,7 @@ In addition to the regular view extended scope (`view`, `request`,
 `args`, `kwargs`, `user` and `pk`) you have access to this dependencies
 in your action constructor.
 
-  - `validated_data` serializer instance attribute in create and update
-    actions,
-  - `instance` model instance in update and destroy actions,
-  - `action` name of the action on the Resource.
+* `validated_data` serializer instance attribute in create and update
+  actions,
+* `instance` model instance in update and destroy actions,
+* `action` name of the action on the Resource.

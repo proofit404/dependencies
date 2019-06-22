@@ -76,16 +76,16 @@ Dependency injecting happens before request processing. `view` decorator
 takes a responsibility to populate injection scope with information
 related to the current request.
 
-  - `view` actual class-based view instance processing request.
-  - `request` current request. First view function argument.
-  - `args` view positional arguments taken from url. This is a result of
-    path converters application or regular expression non-named groups
-    taken from an actual URL.
-  - `kwargs` view keyword arguments.
-  - `user` current user is taken from request. A short cat for
-    frequently used request attribute.
-  - `pk` primary key view argument. A short cat for frequently used
-    keyword argument.
+* `view` actual class-based view instance processing request.
+* `request` current request. First view function argument.
+* `args` view positional arguments taken from url. This is a result of
+  path converters application or regular expression non-named groups
+  taken from an actual URL.
+* `kwargs` view keyword arguments.
+* `user` current user is taken from request. A short cat for
+  frequently used request attribute.
+* `pk` primary key view argument. A short cat for frequently used
+  keyword argument.
 
 ## Form processing views
 
@@ -127,23 +127,23 @@ pass them.
 You can pass following attributes to the injector subclass to customize
 actual form instance behavior.
 
-  - `form_class` actual Form class for data validation.
-  - `template_name` view template name to render form on GET.
-  - `success_url` url to be redirected after form valid callback. Can be
-    a `reverse_lazy` instance.
-  - `template_engine` alias of the configured template engine from the
-    TEMPLATES setting.
-  - `response_class` HTTP response class to use.
-  - `content_type` response content type to use.
-  - `initial` initial form data dict.
-  - `prefix` form prefix. Used in the HTML form representation in input
-    names.
-  - `extra_context` extra context dict for template render.
+* `form_class` actual Form class for data validation.
+* `template_name` view template name to render form on GET.
+* `success_url` url to be redirected after form valid callback. Can be
+  a `reverse_lazy` instance.
+* `template_engine` alias of the configured template engine from the
+  TEMPLATES setting.
+* `response_class` HTTP response class to use.
+* `content_type` response content type to use.
+* `initial` initial form data dict.
+* `prefix` form prefix. Used in the HTML form representation in input
+  names.
+* `extra_context` extra context dict for template render.
 
 ### Available scope
 
 In addition to the class based view scope extension, form processing
 callbacks can use following dependencies.
 
-  - `form` actual form instance with data and files from request.
-    `is_valid` method was already called.
+* `form` actual form instance with data and files from
+  request. `is_valid` method was already called.

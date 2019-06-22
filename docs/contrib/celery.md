@@ -46,31 +46,31 @@ When worker got it, it will build `SayHello` instance, get it bound
 This attributes can be defined on the injector subclass to tweak the
 behavior of the celery task instance.
 
-  - `app` is the actual celery instance where the task will be
-    registered. Optional for shared tasks (see below).
-  - `name` of the registered task.
-  - `run` should be resolved to the callable with takes no arguments.
-    Arguments passed to the `delay` or `apply_async` are available in
-    the injector scope. Use DI to access them.
-  - `base_class` base class of the task. Customize it in the case you
-    want to define your own `on_failure` handler.
-  - `bind` creates a bound task. Task instance will be available in the
-    scope under the `task` name.
-  - `typing`
-  - `max_retries`
-  - `default_retry_delay`
-  - `rate_limit`
-  - `ignore_result`
-  - `trail`
-  - `send_events`
-  - `store_errors_even_if_ignored`
-  - `serializer`
-  - `time_limit`
-  - `soft_time_limit`
-  - `track_started`
-  - `acks_late`
-  - `reject_on_worker_lost`
-  - `throws`
+* `app` is the actual celery instance where the task will be
+  registered. Optional for shared tasks (see below).
+* `name` of the registered task.
+* `run` should be resolved to the callable with takes no
+  arguments. Arguments passed to the `delay` or `apply_async` are
+  available in the injector scope. Use DI to access them.
+* `base_class` base class of the task. Customize it in the case you
+  want to define your own `on_failure` handler.
+* `bind` creates a bound task. Task instance will be available in the
+  scope under the `task` name.
+* `typing`
+* `max_retries`
+* `default_retry_delay`
+* `rate_limit`
+* `ignore_result`
+* `trail`
+* `send_events`
+* `store_errors_even_if_ignored`
+* `serializer`
+* `time_limit`
+* `soft_time_limit`
+* `track_started`
+* `acks_late`
+* `reject_on_worker_lost`
+* `throws`
 
 Attributes without explicit comments behave exactly as `@app.task`
 decorator arguments. See [Celery](http://www.celeryproject.org/)
@@ -81,10 +81,10 @@ documentation for more info.
 Before running task in the worker, the scope of the injector will be
 extended with this attributes.
 
-  - `task` the actual task instance in the case of bound tasks.
-    Unavailable otherwise.
-  - `args` positional arguments of the `delay` call.
-  - `kwargs` keyword arguments of the `delay` call.
+* `task` the actual task instance in the case of bound
+  tasks. Unavailable otherwise.
+* `args` positional arguments of the `delay` call.
+* `kwargs` keyword arguments of the `delay` call.
 
 ## Define shared task
 
