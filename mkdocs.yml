@@ -1,0 +1,50 @@
+site_name: dependencies
+site_description: Dependency Injection for Humans.
+theme:
+  name: 'material'
+  palette:
+    primary: 'indigo'
+    accent: 'indigo'
+  logo: 'https://raw.githubusercontent.com/dry-python/brand/master/logo/dry-python.png'
+  # FIXME: Favicon.
+  language: 'en'
+repo_name: dependencies
+repo_url: 'https://github.com/dry-python/dependencies'
+edit_uri: ''
+extra:
+  social:
+    - type: github
+      link: 'https://github.com/dry-python'
+    - type: twitter
+      link: 'https://twitter.com/dry_py'
+    - type: linkedin
+      link: 'https://www.linkedin.com/company/drylabs/'
+    - type: gitter  # FIXME: Its not `fa` its `fab` class.  Also, reorder when fixed.
+      link: 'https://gitter.im/dry-python/dependencies'
+markdown_extensions:
+  - codehilite:
+      guess_lang: false
+  - toc:
+      permalink: true
+  - pymdownx.magiclink
+  - pymdownx.superfences
+  - pymdownx.tasklist:
+      custom_checkbox: true
+nav:
+  - 'Home': index.md
+  - 'Overview': overview.md
+  - 'Why': why.md
+  - 'Usage': usage.md
+  - 'Proxies':
+      - 'This': proxies/this.md
+      - 'Operation': proxies/operation.md
+      - 'Package': proxies/package.md
+  - 'Contrib':
+      - 'Attrs': contrib/attrs.md
+      - 'Django': contrib/django.md
+      - 'REST Framework': contrib/rest_framework.md
+      - 'Celery': contrib/celery.md
+      - 'Py.test': contrib/pytest.md
+  - 'Implementation': implementation.md
+  - 'FAQ': faq.md
+  - 'Changelog': changelog.md
