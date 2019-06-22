@@ -90,33 +90,13 @@ jobs:
           tox.env: doc8
     steps:
       - task: UsePythonVersion@0
-        displayName: Get Python for Python tools.
         inputs:
-          versionSpec: '3.6'
-          addToPath: false
-        name: pyTools
-      - script: $(pyTools.pythonLocation)/bin/pip install --upgrade tox
-        displayName: Install Python-based tools.
-      - task: UsePythonVersion@0
-        inputs:
-          versionSpec: '$(python.version)'
-          architecture: 'x64'
-        condition: not(in(variables['python.version'], '3.7'))
-        displayName: Use cached Python $(python.version) for tests.
-      - script: |
-          sudo add-apt-repository ppa:deadsnakes
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends python$(python.version)-dev python$(python.version)-distutils
-        condition: in(variables['python.version'], '3.7')
-        displayName: Install Python $(python.version) from the deadsnakes PPA for tests.
-      - task: NodeTool@0
-        condition: in(variables['tox.env'], 'remarklint')
-        displayName: Install NodeJS for tests.
-        inputs:
-          versionSpec: '10.x'
-        name: jsTools
-      - script: $(pyTools.pythonLocation)/bin/tox -e $(tox.env)
-        displayName: run tox -e $(tox.env)
+          versionSpec: $(python.version)
+        displayName: Install Python.
+      - script: pip install --upgrade tox
+        displayName: Install Tox.
+      - script: tox -e $(tox.env)
+        displayName: Run Tox.
       - script: |
           if [ ! -f .coverage ]; then
             echo No coverage data found.
@@ -127,5 +107,5 @@ jobs:
           codecov
         env:
           CODECOV_TOKEN: $(codecov.token)
-        displayName: Report Coverage
         condition: succeeded()
+        displayName: Report Coverage.
