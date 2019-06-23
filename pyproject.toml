@@ -3,7 +3,7 @@ name = "dependencies"
 version = "0.15.0"
 
 description = "Dependency Injection for Humans"
-readme = "README.rst"
+readme = "README.md"
 license = "BSD-2-Clause"
 
 homepage = "https://dry-python.org/"
