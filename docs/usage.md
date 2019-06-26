@@ -54,7 +54,7 @@ Now its time to make it work in real world
 >>> production = {'max_point': 0.01}
 ```
 
-So we are close to scream "It's alive\!" and run out of the building.
+So we are close to scream "It's alive!" and run out of the building.
 
 ```python
 >>> from dependencies import Injector

@@ -140,7 +140,7 @@ code depends on the structure of third-party API response. This makes
 the situation even worth. Migration to other third-party services will
 be painful as well.
 
-We believe that HTTP protocol itself is implementation detail\!
+We believe that HTTP protocol itself is implementation detail!
 
 We prefer to use dependency injection only on boundaries we control:
 
