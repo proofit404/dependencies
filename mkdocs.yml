@@ -22,6 +22,7 @@ extra:
     - type: gitter  # FIXME: Its not `fa` its `fab` class.  Also, reorder when fixed.
       link: 'https://gitter.im/dry-python/dependencies'
 markdown_extensions:
+  - admonition
   - codehilite:
       guess_lang: false
   - toc:
