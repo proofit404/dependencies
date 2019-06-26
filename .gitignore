@@ -12,8 +12,6 @@
 __pycache__/
 build/
 dist/
-docs/.doctrees/
-docs/_build/
 htmlcov/
 node_modules/
 package-lock.json
