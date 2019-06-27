@@ -39,6 +39,7 @@ class InjectorType(InjectorTypeType):
         return type.__new__(cls, class_name, bases, ns)
 
     def __getattr__(cls, attrname):
+        __tracebackhide__ = True
 
         cache, cached = {"__self__": cls}, {"__self__"}
         current_attr, attrs_stack = attrname, [attrname]

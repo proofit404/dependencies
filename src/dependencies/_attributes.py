@@ -11,6 +11,7 @@ class Attributes(object):
         self.attrs = attrs
 
     def __call__(self, **kwargs):
+        __tracebackhide__ = True
 
         result = self.spec(**kwargs)
 
