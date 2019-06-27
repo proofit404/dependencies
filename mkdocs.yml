@@ -1,3 +1,4 @@
+strict: true
 site_name: dependencies
 site_description: Dependency Injection for Humans.
 theme:
