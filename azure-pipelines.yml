@@ -91,6 +91,9 @@ jobs:
         remarklint:
           python.version: '3.7'
           tox.env: remarklint
+        yamllint:
+          python.version: '3.7'
+          tox.env: yamllint
     steps:
       - task: UsePythonVersion@0
         inputs:
