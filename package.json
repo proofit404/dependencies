@@ -8,7 +8,7 @@
     "remark-preset-lint-recommended": "*"
   },
   "scripts": {
-    "lint:md": "remark ."
+    "lint:md": "remark --frail ."
   },
   "remarkConfig": {
     "plugins": [
