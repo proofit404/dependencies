@@ -7,7 +7,11 @@ packages = [
     { include = "pkg" },
     { include = "django_project" },
     { include = "flask_project" },
+    { include = "mddoctest.py"},
 ]
+
+[tool.poetry.scripts]
+mddoctest = "mddoctest:main"
 
 [build-system]
 requires = ["poetry>=0.12"]

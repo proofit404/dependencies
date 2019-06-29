@@ -88,6 +88,9 @@ jobs:
         mkdocs:
           python.version: '3.7'
           tox.env: mkdocs
+        doctest:
+          python.version: '3.7'
+          tox.env: doctest
         remarklint:
           python.version: '3.7'
           tox.env: remarklint
