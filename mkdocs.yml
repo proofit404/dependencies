@@ -11,7 +11,7 @@ theme:
     /dry-python/brand/master/logo/dry-python.png"
   # FIXME: Favicon.
   language: 'en'
-repo_name: dependencies
+repo_name: dry-python/dependencies
 repo_url: 'https://github.com/dry-python/dependencies'
 edit_uri: ''
 extra:
