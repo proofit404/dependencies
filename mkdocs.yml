@@ -1,3 +1,4 @@
+---
 strict: true
 site_name: dependencies
 site_description: Dependency Injection for Humans.
@@ -6,7 +7,8 @@ theme:
   palette:
     primary: 'indigo'
     accent: 'indigo'
-  logo: 'https://raw.githubusercontent.com/dry-python/brand/master/logo/dry-python.png'
+  logo: "https://raw.githubusercontent.com\
+    /dry-python/brand/master/logo/dry-python.png"
   # FIXME: Favicon.
   language: 'en'
 repo_name: dependencies
@@ -20,7 +22,8 @@ extra:
       link: 'https://twitter.com/dry_py'
     - type: linkedin
       link: 'https://www.linkedin.com/company/drylabs/'
-    - type: gitter  # FIXME: Its not `fa` its `fab` class.  Also, reorder when fixed.
+    # FIXME: Its not `fa` its `fab` class.  Also, reorder when fixed.
+    - type: gitter
       link: 'https://gitter.im/dry-python/dependencies'
 markdown_extensions:
   - admonition
