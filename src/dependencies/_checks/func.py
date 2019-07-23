@@ -12,7 +12,7 @@ def check_cls_arguments(argnames, defaults):
             message = "{0!r} default value should be a class"
             raise DependencyError(message.format(name))
         if not expect_class and is_class:
-            message = "{0!r} argument can not have class as its default value"
+            message = "{0!r} argument can not have class as its default value.\nChange its name into {0!r}_class."
             raise DependencyError(message.format(name))
 
 
