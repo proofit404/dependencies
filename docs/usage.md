@@ -80,8 +80,8 @@ his attribute. Following things happens when you access an argument:
   scope.
 * If it a `class` stored in the attribute named with `_class` at the
   end - then it return as is. (For example `Container.foo_class` will
-  give you class stored in it. Not an instance). * Anything else
-  returned as is.
+  give you class stored in it. Not an instance).
+* Anything else returned as is.
 * If we found a class during dependency search we will instantiate it
   as well.
 

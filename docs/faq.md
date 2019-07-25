@@ -63,6 +63,7 @@ In our opinion, this makes code less declarative.
 solutions were made to maximize code reuse. We already discussed this in
 the [why](why.md#mixins) chapter. But let's return to it again:
 
+!!! note
     Inheritance always breaks encapsulation.
 
 Mixin class depends on attributes set in other classes.
