@@ -13,27 +13,27 @@ user.
 
 Let's do it with simple functions
 
-```python
-def purchase(user, product, shipment_details)
+```pycon
 
-    create_order(user, product)
-    final_price = calculate_price(product, shipment_details)
-    order_details = request_payment(user, shipment_details)
-    notify_user(user, order_details)
+>>> def purchase(user, product, shipment_details):
+...
+...     order = create_order(user, product)
+...     final_price = calculate_price(order, shipment_details)
+...     payment_details = request_payment(user, shipment_details)
+...     notify_user(user, payment_details)
 
-# ...
+>>> def notify_user(user, payment_details):
+...
+...     log_notification(user, payment_details)
+...     subject = get_notification_subject(payment_details)
+...     message = get_notification_text(user, payment_details)
+...     send_notification(user, subject, message)
 
-def notify_user(user, order_details):
+>>> def send_notification(user, subject, message):
+...
+...     email = get_user_email(user)
+...     send_email(email, subject, message)
 
-    log_notification(user, order_details)
-    subject = get_notification_subject(order_details)
-    message = get_notification_text(user, order_details)
-    send_notification(user, subject, message)
-
-def send_notification(user, subject, message):
-
-    email = get_user_email(user)
-    send_email(email, subject, message)
 ```
 
 It's readable and straightforward solution. What could possible go
@@ -84,40 +84,40 @@ try...
 Let's rewrite our functions in the single class so we can alter logic in
 the subclasses.
 
-```python
-class Order:
+```pycon
 
-    def __init__(self, user, product, shipment_details):
+>>> class Order:
+...
+...     def __init__(self, user, product, shipment_details):
+...
+...         self.user = user
+...         self.product = product
+...         self.shipment_details = shipment_details
+...         self.final_price = None      # Set by `calculate_price`.
+...         self.payment_details = None  # Set by `request_payment`.
+...         self.subject = None          # Set by `get_notification_subject`.
+...         self.message = None          # Set by `get_notification_text`.
+...         self.email = None            # Set by `get_user_email`.
+...
+...     def purchase(self):
+...
+...         self.create_order()
+...         self.calculate_price()
+...         self.request_payment()
+...         self.notify_user()
+...
+...     def notify_user(self):
+...
+...         self.log_notification()
+...         self.get_notification_subject()
+...         self.get_notification_text()
+...         self.send_notification()
+...
+...     def send_notification(self):
+...
+...         self.get_user_email()
+...         self.send_email()
 
-        self.user = user
-        self.product = product
-        self.shipment_details = shipment_details
-        self.final_price = None  # Set by `calculate_price`.
-        self.order_details = None  # Set by `request_payment`.
-        self.subject = None  # Set by `get_notification_subject`.
-        self.message = None  # Set by `get_notification_text`.
-        self.email = None  # Set by `get_user_email`.
-
-    def purchase(self):
-
-        self.create_order()
-        self.calculate_price()
-        self.request_payment()
-        self.notify_user()
-
-    # ...
-
-    def notify_user(self):
-
-        self.log_notification()
-        self.get_notification_subject()
-        self.get_notification_text()
-        self.send_notification()
-
-    def send_notification(self):
-
-        self.get_user_email()
-        self.send_email()
 ```
 
 At first look this class is even better solution. Indeed, this code has
@@ -160,39 +160,41 @@ Let's try...
 We can split our God object into multiple classes and join it together
 later using multiple inheritance.
 
-```python
-class OrderProcessingMixin:
+```pycon
 
-    def create_order(self):
+>>> class OrderProcessingMixin:
+...
+...     def create_order(self):
+...
+...         pass
 
-        # ...
+>>> class PriceCalculationMixin:
+...
+...     def calculate_price(self):
+...
+...         pass
 
-class PriceCalculationMixin:
+>>> class NotificationMixin:
+...
+...     def get_notification_text(self):
+...
+...         self.notification_text = self.notification_text_template % (
+...             self.user,
+...             self.payment_details,
+...         )
 
-    def calculate_price(self):
+>>> class Order(OrderProcessingMixin,
+...             PriceCalculationMixin,
+...             NotificationMixin):
+...
+...     def before_calculate(self):
+...
+...         self.create_order()
+...
+...     def after_commit(self):
+...
+...         self.send_email()
 
-        # ...
-
-class NotificationMixin:
-
-    def get_notification_text(self):
-
-        self.notification_text = self.notification_text_template % (
-            self.user,
-            self.order_details,
-        )
-
-class Order(OrderProcessingMixin,
-            PriceCalculationMixin,
-            NotificationMixin):
-
-    def before_calculate(self):
-
-        self.create_order()
-
-    def after_commit(self):
-
-        self.send_email()
 ```
 
 Someone might say this is an improvement over one huge class.
@@ -205,7 +207,7 @@ But there are a lot of problems too. Imagine you during debugging
 session of the `Order` class.
 
 1. In the `get_notification_text` you have no idea who set up
-   `order_details`.
+   `payment_details`.
 2. In the `Order` class itself you see bunch of low level methods
    which are deep implementation details. What public method I should
    call? When notification will be sent exactly?
@@ -218,55 +220,63 @@ reusable, this complexity in too big for my head. Let's try...
 Composition is a powerful pattern of organizing code with proper code
 boundaries and clear dependency relationship.
 
-```python
-class OrderProcessor:
+```pycon
 
-    def create(self, user, product):
+>>> class OrderProcessor:
+...
+...     def create(self, user, product):
+...
+...         pass
 
-        # ...
+>>> class PriceCalculator:
+...
+...     def calculate(self, product, shipment_details):
+...
+...         pass
 
-class PriceCalculator:
+>>> class PaymentProcessor:
+...
+...     def request(user, shipment_details):
+...
+...         pass
 
-    def calculate(self, product, shipment_details):
+>>> class Notification:
+...
+...     def __init__(self, logger):
+...
+...         self.logger = logger
+...
+...     def notify(self, user, payment_details):
+...
+...         self.logger.record(user, payment_details)
+...         subject = self.get_notification_subject(payment_details)
+...         message = self.get_notification_text(user, payment_details)
+...         self.send_notification(user, subject, message)
 
-        # ...
+>>> class Order:
+...
+...     def __init__(self, order_processor, price_calculator,
+...                  payment_processor, notification):
+...
+...         self.order_processor = order_processor
+...         self.price_calculator = price_calculator
+...         self.payment_processor = payment_processor
+...         self.notification = notification
+...
+...     def purchase(self, user, product, shipment_details):
+...
+...         self.order_processor.create(user, product)
+...         final_price = self.price_calculator.calculate(product, shipment_details)
+...         payment_details = self.payment_processor.request(user, shipment_details)
+...         self.notification.notify(user, payment_details)
 
-class Notification:
+>>> Order(
+...     OrderProcessor(),
+...     PriceCalculator(),
+...     PaymentProcessor(),
+...     Notification(Logger()),
+... ).purchase(user, product, shipment_details)
 
-    def __init__(self, logger):
-
-        self.logger = logger
-
-    def notify(self, user, order_details):
-
-        self.logger.record(user, order_details)
-        subject = self.get_notification_subject(order_details)
-        message = self.get_notification_text(user, order_details)
-        self.send_notification(user, subject, message)
-
-class Order:
-
-    def __init__(self, order_processor, price_calculator,
-                 payment_processor, notification):
-
-        self.order_processor = order_processor
-        self.price_calculator = price_calculator
-        self.payment_processor = payment_processor
-        self.notification = notification
-
-    def purchase(self, user, product, shipment_details)
-
-        self.order_processor.create(user, product)
-        final_price = self.price_calculator.calculate(product, shipment_details)
-        order_details = self.payment_processor.request(user, shipment_details)
-        self.notification.notify(user, order_details)
-
-Order(
-    OrderProcessor(),
-    PriceCalculator(),
-    PaymentProcessor(),
-    Notification(Logger()),
-).purchase(user, product, shipment_details)
 ```
 
 This code has few really good characteristics.
@@ -287,19 +297,21 @@ Let's try...
 
 Here where `dependencies` library comes in.
 
-```python
-from dependencies import Injector
+```pycon
 
-class OrderContainer(Injector):
+>>> from dependencies import Injector
 
-    order = Order
-    order_processor = OrderProcessor
-    price_calculator = PriceCalculator
-    payment_processor = PaymentProcessor
-    notification = Notification
-    logger = Logger
+>>> class OrderContainer(Injector):
+...
+...     order = Order
+...     order_processor = OrderProcessor
+...     price_calculator = PriceCalculator
+...     payment_processor = PaymentProcessor
+...     notification = Notification
+...     logger = Logger
 
-OrderContainer.order.purchase(user, product, shipment_details)
+>>> OrderContainer.order.purchase(user, product, shipment_details)
+
 ```
 
 It helps you to reduce the boilerplate of the initiation stage. It
