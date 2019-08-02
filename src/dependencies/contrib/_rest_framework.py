@@ -267,7 +267,7 @@ def apply_model_view_set_methods(handler, injector):
 
         else:
 
-            def locals_hack(method=method, ns=injector.__name__):
+            def locals_hack(method=method, ns=injector.__name__):  # type: ignore
                 def __method(self, argument):
                     raise DependencyError(
                         "Add {method!r} to the {ns!r} injector".format(

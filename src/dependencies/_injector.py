@@ -136,7 +136,6 @@ def __init__(self, *args, **kwargs):
     raise DependencyError("Do not instantiate Injector")
 
 
-@classmethod
 def let(cls, **kwargs):
     """Produce new Injector with some dependencies overwritten."""
 
@@ -152,5 +151,7 @@ specified in it namespace.
 
 
 Injector = InjectorType(
-    "Injector", (), {"__init__": __init__, "__doc__": injector_doc, "let": let}
+    "Injector",
+    (),
+    {"__init__": __init__, "__doc__": injector_doc, "let": classmethod(let)},
 )

@@ -3,23 +3,7 @@ import inspect
 from ._checks.func import check_cls_arguments, check_varargs
 
 
-try:
-    inspect.signature
-except AttributeError:
-
-    def make_func_spec(func, funcname):
-
-        args, varargs, kwargs, defaults = inspect.getargspec(func)
-        check_varargs(funcname, varargs, kwargs)
-        if defaults is not None:
-            check_cls_arguments(args, defaults)
-            have_defaults = len(args) - len(defaults)
-        else:
-            have_defaults = len(args)
-        return args, have_defaults
-
-
-else:
+if getattr(inspect, "signature", None):
 
     def make_func_spec(func, funcname):
 
@@ -41,4 +25,18 @@ else:
         check_varargs(funcname, varargs, kwargs)
         if defaults:
             check_cls_arguments(args, defaults)
+        return args, have_defaults
+
+
+else:
+
+    def make_func_spec(func, funcname):
+
+        args, varargs, kwargs, defaults = inspect.getargspec(func)
+        check_varargs(funcname, varargs, kwargs)
+        if defaults is not None:
+            check_cls_arguments(args, defaults)
+            have_defaults = len(args) - len(defaults)
+        else:
+            have_defaults = len(args)
         return args, have_defaults
