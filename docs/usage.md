@@ -2,8 +2,9 @@
 
 ## Preparations
 
-Before we start to inject dependencies lets define code which needs this
-dependencies.
+Before we start to inject dependencies lets define code which needs
+this dependencies.  Also, lets add some behavior to your robot.
+
 
 ```pycon
 
@@ -13,6 +14,24 @@ dependencies.
 ...         self.controller = controller
 ...         self.settings = settings
 ...
+...     def run(self):
+...         while True:
+...             events = self.accept_events()
+...             self.process(events)
+...
+...     def accept_events(self):
+...         # We can inject methods.
+...         return self.controller()
+...
+...     def process(self, events):
+...         # We can inject dictionaries.
+...         max_point = self.settings['max_point']
+...         for event in events:
+...             if event.x > max_point:
+...                 # We can inject objects.
+...                 self.servo.reverse('x')
+...             if event.y > max_point:
+...                 self.servo.reverse('y')
 
 ```
 
@@ -21,41 +40,18 @@ arguments and store it explicitly. We do this for readability. This will
 helps us to understand the path things go in your system. Attributes
 taken from nowhere in your code aren't fun. Believe me.
 
-## Behavior
-
-So lets add some behavior to your robot.
-
-```pycon
-
->>> def run(self):
-...     while True:
-...         events = self.accept_events()
-...         self.process(events)
-...
-
->>> def accept_events(self):
-...     return self.controller()  # We can inject methods.
-
->>> def process(self, events):
-...     max_point = self.settings['max_point']  # Dictionaries.
-...     for event in events:
-...         if event.x > max_point:
-...             self.servo.reverse('x')  # And objects.
-...         if event.y > max_point:
-...             self.servo.reverse('y')
-
-```
-
 Now its time to make it work in real world
 
 ```pycon
 
 >>> class MechanicalMotor:
 ...     def reverse(self, coordinate):
-...         pass  # Hardware work goes here.
+...         # Hardware work goes here.
+...         pass
 
 >>> def read_sensor():
-...     pass  # Another hardware work goes here.
+...     # Another hardware work goes here.
+...     pass
 
 >>> production = {'max_point': 0.01}
 
