@@ -118,14 +118,14 @@ Here is a demonstration of rules above.
 ...     two = Baz
 ...     x = 1
 
->>> Scope.foo
-<__main__.Foo object at 0x7f99f4f5f080>
+>>> Scope.foo  # doctest: +ELLIPSIS
+<__main__.Foo object at 0x...>
 
->>> Scope.foo.one
-<__main__.Bar object at 0x7f99f47fd278>
+>>> Scope.foo.one  # doctest: +ELLIPSIS
+<__main__.Bar object at 0x...>
 
->>> Scope.foo.two
-<__main__.Baz object at 0x7f99f4f5f0b8>
+>>> Scope.foo.two  # doctest: +ELLIPSIS
+<__main__.Baz object at 0x...>
 
 >>> Scope.foo.two.x
 1
@@ -227,11 +227,11 @@ provided as is and calculate its attributes on first use.
 >>> Container.foo.bar
 <class '__main__.Container.Bar'>
 
->>> Container.foo.bar.baz
-<__main__.Container.Bar.Baz object at 0x7ffff610c390>
+>>> Container.foo.bar.baz  # doctest: +ELLIPSIS
+<__main__.Container.Bar.Baz object at 0x...>
 
->>> Container.foo.bar.baz.func
-<function Container.Bar.func at 0x7ffff61129d8>
+>>> Container.foo.bar.baz.func  # doctest: +ELLIPSIS
+<function Container.Bar.func at 0x...>
 
 >>> Container.foo.bar.baz.func()
 1
