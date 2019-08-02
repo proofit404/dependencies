@@ -236,7 +236,7 @@ boundaries and clear dependency relationship.
 
 >>> class PaymentProcessor:
 ...
-...     def request(user, shipment_details):
+...     def request(self, user, shipment_details):
 ...
 ...         pass
 
@@ -252,6 +252,18 @@ boundaries and clear dependency relationship.
 ...         subject = self.get_notification_subject(payment_details)
 ...         message = self.get_notification_text(user, payment_details)
 ...         self.send_notification(user, subject, message)
+...
+...     def get_notification_subject(self, payment_details):
+...
+...         pass
+...
+...     def get_notification_text(self, user, payment_details):
+...
+...         pass
+...
+...     def send_notification(self, user, subject, message):
+...
+...         pass
 
 >>> class Order:
 ...
@@ -270,12 +282,14 @@ boundaries and clear dependency relationship.
 ...         payment_details = self.payment_processor.request(user, shipment_details)
 ...         self.notification.notify(user, payment_details)
 
+>>> from examples import Logger, User, Product, ShipmentDetails
+
 >>> Order(
 ...     OrderProcessor(),
 ...     PriceCalculator(),
 ...     PaymentProcessor(),
 ...     Notification(Logger()),
-... ).purchase(user, product, shipment_details)
+... ).purchase(User(), Product(), ShipmentDetails())
 
 ```
 
@@ -310,7 +324,7 @@ Here where `dependencies` library comes in.
 ...     notification = Notification
 ...     logger = Logger
 
->>> OrderContainer.order.purchase(user, product, shipment_details)
+>>> OrderContainer.order.purchase(User(), Product(), ShipmentDetails())
 
 ```
 

@@ -225,7 +225,7 @@ provided as is and calculate its attributes on first use.
 1
 
 >>> Container.foo.bar
-<class '__main__.Container.Bar'>
+<class 'dependencies._injector.Bar'>
 
 >>> Container.foo.bar.baz  # doctest: +ELLIPSIS
 <__main__.Container.Bar.Baz object at 0x...>
@@ -254,13 +254,16 @@ scope subclasses:
 
 ```pycon
 
+>>> from examples import Foo
+
 >>> class Scope(Injector):
 ...     foo = Foo
 
 >>> class ChildScope(Scope):
 ...     bar = Bar
 
->>> ChildScope.foo
+>>> ChildScope.foo  # doctest: +ELLIPSIS
+<examples.Foo object at 0x...>
 
 ```
 
@@ -277,7 +280,8 @@ Multiple inheritance is allowed as well.
 >>> class ChildScope(Scope1, Scope2):
 ...     pass
 
->>> ChildScope.foo
+>>> ChildScope.foo  # doctest: +ELLIPSIS
+<examples.Foo object at 0x...>
 
 ```
 
@@ -293,7 +297,9 @@ intermediate class needed.
 >>> class Scope2(Injector):
 ...     bar = Bar
 
->>> (Scope1 & Scope2).foo
+>>> (Scope1 & Scope2).foo  # doctest: +ELLIPSIS
+<examples.Foo object at 0x...>
+
 
 ```
 
@@ -310,7 +316,8 @@ possible to simulate database integrity error on concurrent access.
 ...     foo = Foo
 ...     bar = Bar
 
->>> Scope.let(bar=Baz).foo
+>>> Scope.let(bar=Baz).foo  # doctest: +ELLIPSIS
+<examples.Foo object at 0x...>
 
 ```
 
@@ -318,6 +325,8 @@ It is possible to build dependency scopes directly from dictionaries
 using `let` notation.
 
 ```pycon
+
+>>> from examples import settings
 
 >>> Scope = Injector.let(foo=Foo, bar=Bar, **settings)
 
