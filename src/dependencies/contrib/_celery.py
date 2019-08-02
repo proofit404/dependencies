@@ -58,7 +58,7 @@ def decorate_with(func, injector):
 
     else:
 
-        def __task(*args, **kwargs):
+        def __task(*args, **kwargs):  # type: ignore
             return injector.let(args=args, kwargs=kwargs).run()
 
     func(**options)(__task)
@@ -139,7 +139,7 @@ class Delay(Signature):
         return signature.delay(*args, **kwargs)
 
 
-class TaskMixin(Injector):
+class TaskMixin(Injector):  # type: ignore
 
     signature = Signature
     s = Shortcut
