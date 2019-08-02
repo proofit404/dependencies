@@ -17,6 +17,8 @@ this dependencies.  Also, lets add some behavior to your robot.
 ...     def run(self):
 ...         while True:
 ...             events = self.accept_events()
+...             if not events:
+...                 break
 ...             self.process(events)
 ...
 ...     def accept_events(self):
@@ -51,7 +53,7 @@ Now its time to make it work in real world
 
 >>> def read_sensor():
 ...     # Another hardware work goes here.
-...     pass
+...     return []
 
 >>> production = {'max_point': 0.01}
 
