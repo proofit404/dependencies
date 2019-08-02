@@ -103,7 +103,7 @@ jobs:
         inputs:
           versionSpec: $(python.version)
         displayName: Install Python.
-      - script: pip install --upgrade tox
+      - script: pip install --upgrade tox codecov
         displayName: Install Tox.
       - task: NodeTool@0
         inputs:
@@ -113,14 +113,10 @@ jobs:
       - script: tox -e $(tox.env)
         displayName: Run Tox.
       - script: |
-          if [ ! -f .coverage ]; then
-            echo No coverage data found.
-            exit 0
+          if [ -f .coverage ]
+          then
+            codecov
           fi
-          PATH=$HOME/.local/bin:$PATH
-          python$(python.version) -m pip install --user codecov
-          codecov
         env:
           CODECOV_TOKEN: $(codecov.token)
-        condition: succeeded()
         displayName: Report Coverage.
