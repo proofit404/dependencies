@@ -11,22 +11,24 @@ It's an excellent library. Personally, I use it heavily in all projects.
 
 Here is an example of how to use it together with `dependencies`.
 
-```python
-from attr import attrs, attrib
-from dependencies import Injector
+```pycon
 
-@attrs
-class Order(object):
-    price = attrib()
-    items = attrib()
+>>> from attr import attrs, attrib
+>>> from dependencies import Injector
 
-class Container(Injector):
-    order = Order
-    price = (799, 99)
-    items = ["amplifier", "servo"]
+>>> @attrs
+... class Order(object):
+...     price = attrib()
+...     items = attrib()
 
-Container.order
-# Order(price=(799, 99), items=["amplifier", "servo"])
+>>> class Container(Injector):
+...     order = Order
+...     price = (799, 99)
+...     items = ["amplifier", "servo"]
+
+>>> Container.order
+Order(price=(799, 99), items=['amplifier', 'servo'])
+
 ```
 
 As you can see, instances of a class defined with `attrs` are built
