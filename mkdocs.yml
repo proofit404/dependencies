@@ -14,17 +14,6 @@ theme:
 repo_name: dry-python/dependencies
 repo_url: 'https://github.com/dry-python/dependencies'
 edit_uri: ''
-extra:
-  social:
-    - type: github
-      link: 'https://github.com/dry-python'
-    - type: twitter
-      link: 'https://twitter.com/dry_py'
-    - type: linkedin
-      link: 'https://www.linkedin.com/company/drylabs/'
-    # FIXME: Its not `fa` its `fab` class.  Also, reorder when fixed.
-    - type: gitter
-      link: 'https://gitter.im/dry-python/dependencies'
 markdown_extensions:
   - admonition
   - codehilite:
@@ -53,3 +42,13 @@ nav:
   - 'Implementation': implementation.md
   - 'FAQ': faq.md
   - 'Changelog': changelog.md
+  # A UI hack to split Table of Content into two visual parts.
+  - '': '/'
+  - '': '/'
+  - '': '/'
+  - '': '/'
+  - '': '/'
+  - 'GitHub': 'https://github.com/dry-python'
+  - 'Twitter': 'https://twitter.com/dry_py'
+  - 'Gitter': 'https://gitter.im/dry-python/dependencies'
+  - 'LinkedIn': 'https://www.linkedin.com/company/drylabs/'
