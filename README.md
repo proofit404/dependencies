@@ -29,28 +29,36 @@ pip install dependencies
 
 Dependency injection without `dependencies`
 
-```python
-robot = Robot(
-    servo=Servo(amplifier=Amplifier()),
-    controller=Controller(),
-    settings=Settings(environment="production"),
-)
+```pycon
 
-robot.work()
+>>> from examples import Robot, Servo, Amplifier, Controller, Settings
+
+>>> robot = Robot(
+...     servo=Servo(amplifier=Amplifier()),
+...     controller=Controller(),
+...     settings=Settings(environment="production"),
+... )
+
+>>> robot.work()
+
 ```
 
 Dependency injection with `dependencies`
 
-```python
-class Container(Injector):
-    robot = Robot
-    servo = Servo
-    amplifier = Amplifier
-    controller = Controller
-    settings = Settings
-    environment = "production"
+```pycon
 
-Container.robot.work()
+>>> from dependencies import Injector
+
+>>> class Container(Injector):
+...     robot = Robot
+...     servo = Servo
+...     amplifier = Amplifier
+...     controller = Controller
+...     settings = Settings
+...     environment = "production"
+
+>>> Container.robot.work()
+
 ```
 
 ## License
