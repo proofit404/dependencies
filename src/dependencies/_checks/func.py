@@ -2,6 +2,7 @@ import inspect
 
 from ..exceptions import DependencyError
 
+
 class_as_default_value_template = """
 {0!r} argument can not have class as its default value.
 Change its name into '{0}_class'.
