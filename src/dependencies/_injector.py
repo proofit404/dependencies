@@ -72,7 +72,7 @@ class InjectorType(InjectorTypeType):
             marker, attribute, args, have_defaults = spec
 
             if set(args).issubset(cached):
-                kwargs = dict((k, cache[k]) for k in args if k in cache)
+                kwargs = {k: cache[k] for k in args if k in cache}
 
                 try:
                     cache[current_attr] = attribute(**kwargs)
