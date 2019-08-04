@@ -2,6 +2,11 @@ import inspect
 
 from ..exceptions import DependencyError
 
+class_as_default_value_template = """
+{0!r} argument can not have class as its default value.
+Change its name into {0!r}_class.
+""".strip()
+
 
 def check_cls_arguments(argnames, defaults):
 
@@ -12,8 +17,7 @@ def check_cls_arguments(argnames, defaults):
             message = "{0!r} default value should be a class"
             raise DependencyError(message.format(name))
         if not expect_class and is_class:
-            message = "{0!r} argument can not have class as its default value.\nChange its name into {0!r}_class."
-            raise DependencyError(message.format(name))
+            raise DependencyError(class_as_default_value_template.format(name))
 
 
 def check_varargs(name, varargs, kwargs):
