@@ -1045,7 +1045,11 @@ def test_deny_classes_as_default_values(code):
         code(Foo, Bar)
 
     message = str(exc_info.value)
-    assert message == "'foo' argument can not have class as its default value"
+    expected_message = """
+'foo' argument can not have class as its default value.
+Change its name into 'foo_class'.
+""".strip()
+    assert message == expected_message
 
 
 @cls_named_arguments
