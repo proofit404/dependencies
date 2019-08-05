@@ -29,28 +29,36 @@ inject low level implementation into high level behavior.
 
 Dependency injection without `dependencies`
 
-```python
-robot = Robot(
-    servo=Servo(amplifier=Amplifier()),
-    controller=Controller(),
-    settings=Settings(environment="production"),
-)
+```pycon
 
-robot.work()
+>>> from examples import Robot, Servo, Amplifier, Controller, Settings
+
+>>> robot = Robot(
+...     servo=Servo(amplifier=Amplifier()),
+...     controller=Controller(),
+...     settings=Settings(environment="production"),
+... )
+
+>>> robot.work()
+
 ```
 
 Dependency injection with `dependencies`
 
-```python
-class Container(Injector):
-    robot = Robot
-    servo = Servo
-    amplifier = Amplifier
-    controller = Controller
-    settings = Settings
-    environment = "production"
+```pycon
 
-Container.robot.work()
+>>> from dependencies import Injector
+
+>>> class Container(Injector):
+...     robot = Robot
+...     servo = Servo
+...     amplifier = Amplifier
+...     controller = Controller
+...     settings = Settings
+...     environment = "production"
+
+>>> Container.robot.work()
+
 ```
 
 # Installation
@@ -59,7 +67,9 @@ Container.robot.work()
 
 Dependencies is available on PyPI - to install it just run:
 
-    pip install -U dependencies
+```bash
+pip install -U dependencies
+```
 
 That's it! Once installed, `dependencies` are available to use. Import
 it and have fun.
@@ -69,4 +79,6 @@ it and have fun.
 You can always install last development version directly from source
 control:
 
-    pip install -U git+https://github.com/dry-python/dependencies.git
+```bash
+pip install -U git+https://github.com/dry-python/dependencies.git
+```
