@@ -10,3 +10,7 @@ def main():
         failed, attempted = testfile(markdown_file, module_relative=False)
         exit_code += failed
     sys.exit(exit_code)
+
+
+if __name__ == "__main__":
+    main()
