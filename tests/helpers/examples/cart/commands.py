@@ -6,9 +6,29 @@ class ShowCart:
         pass
 
 
+class ListCartItems:
+    def __init__(self, view, request):
+        pass
+
+    def __call__(self):
+        pass
+
+
 class DiscountCalc:
     pass
 
 
 class AddItem:
+    pass
+
+
+class CreateUser:
+    pass
+
+
+class UpdateUser:
+    pass
+
+
+class DestroyUser:
     pass

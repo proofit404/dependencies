@@ -8,55 +8,60 @@ subclasses to the django url config and to DRF routers.
 
 As with Django itself, we will start from the url config.
 
-```python
-# app/urls.py
+```pycon
 
-from django.urls import path
+>>> # cart/urls.py
 
-from .views import CartAPIView
+>>> from django.urls import path
+>>> from examples.cart.views import CartAPIView
 
-urlpatterns = [
-    path('api/carts/<int:pk>/', CartAPIView.as_view())
-]
+>>> urlpatterns = [
+...     path('api/carts/<int:pk>/', CartAPIView.as_view())
+... ]
+
 ```
 
 View definition will be similar to the Django one. The difference is in
 the actual view base class. It will be `APIView` subclass. You are able
 to setup it's attributes like authentication, render and parser classes.
 
-```python
-# app/views.py
+```pycon
 
-from dependencies import Injector, this
-from dependencies.contrib.rest_framework import api_view
-from rest_framework.parsers import JSONParser
-from rest_framework.renderers import DocumentationRenderer
+>>> # cart/views.py
 
-from .commands import ShowCartDetails, AddCartItem
+>>> from dependencies import Injector, this
+>>> from dependencies.contrib.rest_framework import api_view
+>>> from rest_framework.parsers import JSONParser
+>>> from rest_framework.renderers import DocumentationRenderer
+>>> from examples.cart.commands import ShowCart, AddItem
 
-@api_view
-class CartAPIView(Injector):
+>>> @api_view
+... class CartAPIView(Injector):
+...
+...     get = ShowCart
+...     post = AddItem
+...
+...     renderer_classes = (DocumentationRenderer,)
+...     parser_classes = (JSONParser,)
 
-    get = ShowCartDetails
-    post = AddCartItem
-
-    renderer_classes = (DocumentationRenderer,)
-    parser_classes = (JSONParser,)
 ```
 
 HTTP verb handlers can be specified in the `get`, `post`, `put`,
 `patch`, `delete`, `head`, `options`, `trace` attributes. Them should be
 callables which takes no arguments.
 
-```python
-# app/commands.py
+```pycon
 
-class ShowCartDetails(object):
-    def __init__(self, pk):
-        pass
+>>> # cart/commands.py
 
-    def __call__(self):
-        pass
+>>> class ShowCart:
+...
+...     def __init__(self, pk):
+...         pass
+...
+...     def __call__(self):
+...         pass
+
 ```
 
 ### Customizable arguments
@@ -89,44 +94,51 @@ You are free to use `GenericAPIView` as a base class to your views. This
 is useful if you want to have access to the to the view methods. For
 example, delegate queryset and serializer processing to the view.
 
-```python
-# app/views.py
+```pycon
 
-from dependencies import Injector
-from dependencies.contrib.rest_framework import generic_api_view
+>>> # cart/views.py
 
-from .commands import ListCartItems
+>>> from dependencies import Injector
+>>> from dependencies.contrib.rest_framework import generic_api_view
+>>> from django_filters.rest_framework import DjangoFilterBackend
+>>> from examples.cart.commands import ListCartItems
+>>> from examples.cart.filtersets import CartFilterSet
+>>> from examples.cart.models import Item
+>>> from examples.cart.serializers import ItemSerializer
 
-@generic_api_view
-class CartItemListView(Injector):
+>>> @generic_api_view
+... class CartItemListView(Injector):
+...
+...     get = ListCartItems
+...
+...     queryset = Item.objects.all()
+...     serializer_class = ItemSerializer
+...     filter_backends = (DjangoFilterBackend,)
+...     filterset_class = CartFilterSet
 
-    get = ListCartItems
-
-    queryset = Item.objects.all()
-    serializer_class = ItemSerializer
-    filter_backends = (DjangoFilterBackend,)
-    filter_class = CartFilter
 ```
 
 Business logic can use view instance.
 
-```python
-# app/commands.py
+```pycon
 
-class ListCartItems(object):
+>>> # cart/commands.py
 
-    def __init__(self, view, request):
-        pass
+>>> class ListCartItems:
+...
+...     def __init__(self, view, request):
+...         pass
+...
+...     def __call__(self):
+...
+...         items = self.view.get_queryset()
+...         items = self.view.filter_queryset(items)
+...         page = self.view.paginate_queryset(items)
+...         # Business logic work with `page`.
+...         # ...
+...         serializer = self.view.get_serializer(page, many=True)
+...         return self.view.get_paginated_response(serializer.data)
 
-    def __call__(self):
-
-        items = self.view.get_queryset()
-        items = self.view.filter_queryset(items)
-        page = self.view.paginate_queryset(items)
-        # Business logic work with `page`.
-        # ...
-        serializer = self.view.get_serializer(page, many=True)
-        return self.view.get_paginated_response(serializer.data)
 ```
 
 ### Customizable arguments
@@ -144,72 +156,88 @@ Everything works according to the rest framework documentation.
 * `lookup_field`
 * `lookup_url_kwarg`
 * `filter_backends`
-* `filter_class`
+* `filterset_class`
+* `filterset_fields`
 * `pagination_class`
+
+!!! note
+    If you're using old Django Filter 1.x package, you should define
+    backward compatible attributes `filter_class` and `filter_fields`.
 
 ## Model View Set
 
 Also, it is possible to define complete `ModelViewSet` from the injector
 and add it to the rest framework router.
 
-```python
-# app/urls.py
+```pycon
 
-router = SimpleRouter()
-router.register(r"users", UserViewSet.as_viewset())
+>>> # cart/urls.py
 
-urlpatterns = [
-    url(r"^", include(router.urls)),
-]
+>>> from django.urls import include, path
+>>> from rest_framework.routers import SimpleRouter
+>>> from examples.cart.views import UserViewSet
+
+>>> router = SimpleRouter()
+>>> router.register('users', UserViewSet.as_viewset(), basename='users')
+
+>>> urlpatterns = [
+...     path('', include(router.urls)),
+... ]
+
 ```
 
 Use `as_viewset` method to register the `UserViewSet` class in the
 router. Its implementation should looks something like this.
 
-```python
-# app/views.py
+```pycon
 
-from dependencies import Injector
-from dependencies.contrib.rest_framework import model_view_set
+>>> # cart/views.py
 
-from .commands import CreateUser, UpdateUser, DestroyUser
+>>> from dependencies import Injector
+>>> from dependencies.contrib.rest_framework import model_view_set
+>>> from examples.cart.commands import CreateUser, UpdateUser, DestroyUser
+>>> from examples.cart.models import User
+>>> from examples.cart.serializers import UserSerializer
 
-@model_view_set
-class UserViewSet(Injector):
+>>> @model_view_set
+... class UserViewSet(Injector):
+...
+...     queryset = User.objects.all()
+...     serializer_class = UserSerializer
+...
+...     create = CreateUser
+...     update = UpdateUser
+...     destroy = DestroyUser
 
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-
-    create = CreateUser
-    update = UpdateUser
-    destroy = DestroyUser
 ```
 
 `model_view_set` decorator gives you an ability to redefine
 `perform_create`, `perform_update` and `perform_destroy` methods of the
 `ModelViewSet`.
 
-```python
-# app/commands.py
+```pycon
 
-class CreateUser(object):
+>>> # cart/commands.py
 
-    def __init__(self, user, validated_data):
-        pass
+>>> class CreateUser:
+...
+...     def __init__(self, user, validated_data):
+...         pass
+...
+...     def __call__(self):
+...         # Business logic here.
+...         # You should return created model instance.
+...         return User.objects.create(**self.validated_data)
 
-    def __call__(self):
-        # Business logic here.
-        # You should return created model instance.
-        return User.objects.create(**self.validated_data)
+>>> class DestroyUser:
+...
+...     def __init__(self, user, instance):
+...         pass
+...
+...     def __call__(self):
+...         # Cleanup business logic here.
+...         pass
 
-class DestroyUser(object):
-
-    def __init__(self, user, instance):
-        pass
-
-    def __call__(self):
-        # Cleanup business logic here.
-        pass
 ```
 
 As you can see from the example above create and update actions get
