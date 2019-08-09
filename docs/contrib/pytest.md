@@ -17,24 +17,25 @@ substitute external interactions with well-defined stubs.
 To define pytest fixture directly from the injector subclass you should
 do the following
 
-```python
-# tests/order_creation_test.py
+```pycon
 
-from dependencies import Injector
-from dependencies.contrib.pytest import register
+>>> # tests/order_creation_test.py
 
-from app.commands import CreateOrder
-from stubs import send_email_stub
+>>> from dependencies import Injector
+>>> from dependencies.contrib.pytest import register
+>>> from examples.order.commands import CreateOrder
+>>> from examples.stubs import send_email_stub
 
-@register
-class CreateOrderFixture(Injector):
-    name = 'create_order'
-    fixture = CreateOrder
-    send_email = send_email_stub
+>>> @register
+... class CreateOrderFixture(Injector):
+...     name = 'create_order'
+...     fixture = CreateOrder
+...     send_email = send_email_stub
 
-def test_create_order(create_order):
-    create_order.create()
-    assert create_order.send_email.called
+>>> def test_create_order(create_order):
+...     create_order.create()
+...     assert create_order.send_email.called
+
 ```
 
 Dependency injection will take place during the test preparation process
@@ -69,35 +70,38 @@ You can use them as dependencies for your classes.
 
 Let's imagine your stubs are defined in other fixtures, not in modules.
 
-```python
-# tests/smtp_fixtures.py
+```pycon
 
-import pytest
+>>> # tests/smtp_fixtures.py
 
-from stubs import send_email_stub
+>>> import pytest
+>>> from examples.stubs import send_email_stub
 
-@pytest.fixture
-def send_email():
-    return send_email_stub
+>>> @pytest.fixture
+... def send_email():
+...     return send_email_stub
+
 ```
 
 Your business objects can depend on values of another fixture.
 
-```python
+```pycon
+
 # tests/order_creation_test.py
 
-from dependencies import Injector
-from dependencies.contrib.pytest import register, require
+>>> from dependencies import Injector
+>>> from dependencies.contrib.pytest import register, require
 
-@register
-class CreateOrderFixture(Injector):
-    name = 'create_order'
-    fixture = CreateOrder
-    send_email = require('send_email')
+>>> @register
+... class CreateOrderFixture(Injector):
+...     name = 'create_order'
+...     fixture = CreateOrder
+...     send_email = require('send_email')
 
-def test_create_order(create_order, send_email):
-    create_order.create()
-    assert send_email.called
+>>> def test_create_order(create_order, send_email):
+...     create_order.create()
+...     assert send_email.called
+
 ```
 
 The value of the `send_email` fixture will be injected into
@@ -108,19 +112,23 @@ The value of the `send_email` fixture will be injected into
 It is possible to define parametrized fixture with `params` attribute
 set on the injector subclass.
 
-```python
-# tests/app_test.py
+```pycon
 
-class CreateOrder(object):
-    def __init__(self, discount):
-        pass
+>>> # tests/app_test.py
 
-@register
-class CreateOrderFixture(Injector):
-    name = 'create_order'
-    fixture = CreateOrder
-    discount = this.request.param
-    params = [20, 30, 50]
+>>> from dependencies import Injector, this
+
+>>> class CreateOrder(object):
+...     def __init__(self, discount):
+...         pass
+
+>>> @register
+... class CreateOrderFixture(Injector):
+...     name = 'create_order'
+...     fixture = CreateOrder
+...     discount = this.request.param
+...     params = [20, 30, 50]
+
 ```
 
 In this example we create parametrized fixture and use this param in

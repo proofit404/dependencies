@@ -4,3 +4,7 @@ class ProcessOrder:
 
     def __call__(self):
         pass
+
+
+class CreateOrder:
+    pass
