@@ -10,30 +10,33 @@ tasks.
 
 To define a task from the injector use `task` decorator.
 
-```python
-from celery import Celery
-from dependencies import Injector
-from dependencies.contrib.celery import task
+```pycon
 
-class SayHello(object):
+>>> from celery import Celery
+>>> from dependencies import Injector
+>>> from dependencies.contrib.celery import task
 
-    def __init__(self, args):
-        self.args = args
+>>> class SayHello:
+...
+...     def __init__(self, args):
+...         self.args = args
+...
+...     def __call__(self):
+...         return 'Hello %s.' % self.args[0]
 
-    def __call__(self):
-        return 'Hello %s.' % self.args[0]
+>>> celery = Celery('hello')
+>>> celery.conf.update({'task_always_eager': True})
 
-celery = Celery('hello', broker='amqp://guest@localhost//')
+>>> @task
+... class HelloTask(Injector):
+...
+...     app = celery
+...     name = 'hello'
+...     run = SayHello
 
-@task
-class HelloTask(Injector):
-    app = celery
-    name = 'hello'
-    run = SayHello
+>>> HelloTask.delay('world').get()
+'Hello world.'
 
-
-HelloTask.delay('world')
-# Hello world.
 ```
 
 In this example, we define a regular
@@ -92,21 +95,23 @@ It is also possible to define shared tasks if you don't have access to
 the instance of the celery application. For example, you are using
 Celery together with Django.
 
-```python
-# app/tasks.py
+```pycon
 
-from celery import canvas
-from dependencies.contrib.celery import shared_task
+>>> # order/tasks.py
 
-from .commands import ProcessOrder
+>>> from celery import canvas
+>>> from dependencies.contrib.celery import shared_task
+>>> from examples.order.commands import ProcessOrder
 
-@shared_task
-class ProcessOrderTask(Injector):
+>>> @shared_task
+... class ProcessOrderTask(Injector):
+...
+...     name = 'process_order'
+...     run = ProcessOrder
 
-    name = 'process_order'
-    run = ProcessOrder
+>>> ProcessOrderTask.delay()  # doctest: +ELLIPSIS
+<EagerResult: ...>
 
-ProcessOrderTask.delay()
 ```
 
 As you can see, there is no need for the actual application instance.
@@ -122,32 +127,33 @@ etc.
 But with `dependencies`, you can use the bound task in a clean way
 without abusing your business logic with implementation details.
 
-```python
-# app/commands.py
+```pycon
 
-class ProcessOrder(object):
+>>> # order/commands.py
 
-    def __init__(self, retry):
-        self.retry = retry
+>>> class ProcessOrder:
+...
+...     def __init__(self, retry):
+...         self.retry = retry
+...
+...     def __call__(self):
+...         self.retry()
 
-    def __call__(self):
-        self.retry()
+>>> # order/tasks.py
 
-# app/tasks.py
+>>> from dependencies import Injector, this
+>>> from dependencies.contrib.celery import shared_task
+>>> from examples.order.commands import ProcessOrder
 
-from dependencies import Inject, this
-from dependencies.contrib.celery import shared_task
+>>> @shared_task
+... class ProcessOrderTask(Injector):
+...
+...     name = 'process_order'
+...     run = ProcessOrder
+...
+...     bind = True
+...     retry = this.task.retry
 
-from .commands import ProcessOrder
-
-@shared_task
-class ProcessOrderTask(Injector):
-
-    name = 'process_order'
-    run = ProcessOrder
-
-    bind = True
-    retry = this.task.retry
 ```
 
 ## Using Canvas
@@ -156,43 +162,52 @@ Usually, you schedule tasks somewhere in your own code. Calling
 `task.delay()` method is the most common way to do that. It is also
 available for tasks defined with dependencies contrib.
 
-```python
-from .tasks import ProcessOrderTask
+```pycon
 
-# Delay injector.
-ProcessOrderTask.delay(1, 2)
+>>> from examples.order.tasks import ProcessOrderTask
+
+>>> # Delay injector.
+>>> ProcessOrderTask.delay(1, 2)  # doctest: +ELLIPSIS
+<EagerResult: ...>
+
 ```
 
 So dependencies contrib comes with an easy way to define canvas using
 injector attributes.
 
-```python
-from .tasks import ProcessOrderTask
+```pycon
 
-# Shortcut using star arguments.
-ProcessOrderTask.s(1, 2).delay()
+>>> from examples.order.tasks import ProcessOrderTask
 
-# Immutable shortcut using star arguments.
-ProcessOrderTask.si(1, 2).delay()
+>>> # Shortcut using star arguments.
+>>> ProcessOrderTask.s(1, 2).delay()  # doctest: +ELLIPSIS
+<EagerResult: ...>
 
-# Complete signature.
-ProcessOrderTask.signature(args=(1, 2)).delay()
+>>> # Immutable shortcut using star arguments.
+>>> ProcessOrderTask.si(1, 2).delay()  # doctest: +ELLIPSIS
+<EagerResult: ...>
+
+>>> # Complete signature.
+>>> ProcessOrderTask.signature(args=(1, 2)).delay()  # doctest: +ELLIPSIS
+<EagerResult: ...>
+
 ```
 
 It is also possible to decouple business logic which should delay a task
 from knowing this is a task.
 
-```python
-# app/views.py
+```pycon
 
-from dependencies import Injector, this
+>>> # order/views.py
 
-from .tasks import ProcessOrderTask
+>>> from dependencies import Injector, this
+>>> from examples.order.tasks import ProcessOrderTask
 
-class SubmitOrderView(Injector):
+>>> class SubmitOrderView(Injector):
+...
+...     schedule_payment = this.payment.delay
+...     payment = ProcessOrderTask
 
-    schedule_payment = this.payment.delay
-    payment = ProcessOrderTask
 ```
 
 In this case, your business logic can use `schedule_payment` as a
