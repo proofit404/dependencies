@@ -3,14 +3,19 @@
 `dependencies` library provides a nice DSL for specifying relations of
 your classes and make instantiation as simple as attribute access.
 
-```python
-class Container(Injector):
-    logger = Logger
-    controller = Controller # Constructor of this class needs `logger` argument.
-    robot = Robot # Constructor of this class needs `controller` argument.
+```pycon
 
-Container.robot.run()
-#          `---> This attribute access creates three instances in
-#                the proper order and call each constructor with
-#                proper arguments.
+>>> from dependencies import Injector
+>>> from examples.overview import Logger, Servo, Robot
+
+>>> class Container(Injector):
+...     logger = Logger
+...     servo = Servo # Constructor of this class needs `logger` argument.
+...     robot = Robot # Constructor of this class needs `servo` argument.
+
+>>> Container.robot.run()
+>>> #         `---> This attribute access creates instances of `Logger`,
+>>> #               `Servo`, and `Robot` classes in the proper order and
+>>> #               call each constructor with proper arguments.
+
 ```

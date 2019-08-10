@@ -8,7 +8,7 @@ packages = [
     { include = "django_project" },
     { include = "flask_project" },
     { include = "mddoctest.py"},
-    { include = "examples.py" },
+    { include = "examples" },
 ]
 
 [tool.poetry.scripts]

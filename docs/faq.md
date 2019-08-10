@@ -6,21 +6,28 @@ It is possible to look for types of `__init__` arguments instead of
 names. Obviously, code written in this style will look something like
 this:
 
-```python
-class ApplicationService:
+```pycon
 
-    def __init__(
-        self,
-        payments: AbstractPaymentService,
-        notifications: AbstractNotificationService,
-    ):
-        self.payments = payments
-        self.notifications = notifications
+>>> from examples.faq import AbstractNotificationService, \
+...                          AbstractPaymentService, \
+...                          TypedInjector, SMSService, PaypalService
 
-container = Injector()
-container.register(SMSService)
-container.register(PaypalService)
-app = container.build(ApplicationService)
+>>> class ApplicationService:
+...
+...     def __init__(
+...         self,
+...         payments: AbstractPaymentService,
+...         notifications: AbstractNotificationService,
+...     ):
+...         self.payments = payments
+...         self.notifications = notifications
+
+>>> container = TypedInjector()
+>>> container.register(SMSService)
+>>> container.register(PaypalService)
+>>> container.build(ApplicationService)  # doctest: +ELLIPSIS
+<__main__.ApplicationService object at 0x...>
+
 ```
 
 In our opinion, this makes code less declarative.
@@ -70,34 +77,38 @@ Mixin class depends on attributes set in other classes.
 
 Consider this code snippet:
 
-```python
-class RetrieveModelMixin(object):
-    """
-    Retrieve a model instance.
-    """
-    def retrieve(self, request, *args, **kwargs):
-        instance = self.get_object()
-        serializer = self.get_serializer(instance)
-        return Response(serializer.data)
+```pycon
+
+>>> class RetrieveModelMixin(object):
+...     """
+...     Retrieve a model instance.
+...     """
+...     def retrieve(self, request, *args, **kwargs):
+...         instance = self.get_object()
+...         serializer = self.get_serializer(instance)
+...         return Response(serializer.data)
+
 ```
 
 Where `get_object` and `get_serializer` were defined? We have no idea.
 We are thinking that code below is way better for understanding its
 structure.
 
-```python
-class RetrieveModel(object):
-    """
-    Retrieve a model instance.
-    """
-    def __init__(self, get_object, get_serializer):
-        self.get_object = get_object
-        self.get_serializer = get_serializer
+```pycon
 
-    def retrieve(self, request, *args, **kwargs):
-        instance = self.get_object()
-        serializer = self.get_serializer(instance)
-        return Response(serializer.data)
+>>> class RetrieveModel(object):
+...     """
+...     Retrieve a model instance.
+...     """
+...     def __init__(self, get_object, get_serializer):
+...         self.get_object = get_object
+...         self.get_serializer = get_serializer
+...
+...     def retrieve(self, request, *args, **kwargs):
+...         instance = self.get_object()
+...         serializer = self.get_serializer(instance)
+...         return Response(serializer.data)
+
 ```
 
 ## What inject and what not inject
@@ -105,25 +116,27 @@ class RetrieveModel(object):
 It can be hard to draw the border between what should be injectable and
 what not. Let's consider this typical example.
 
-```python
-import requests
-import dependencies
+```pycon
 
-class UserGetter:
+>>> import requests
+>>> import dependencies
 
-    def __init__(self, http):
-        self.http = http
+>>> class UserGetter:
+...
+...     def __init__(self, http):
+...         self.http = http
+...
+...     def __call__(self, user_id):
+...         return self.http.get("http://api.com/users/%d/" % (user_id,)).json()
 
-    def __call__(self, user_id):
-        return self.http.get("http://api.com/users/%d" % (user_id,))
+>>> class Users(dependencies.Injector):
+...
+...     get = UserGetter
+...     http = requests
 
-class Users(dependencies.Injector):
+>>> Users.get(1)
+{'id': 1, 'name': 'John', 'surname': 'Doe'}
 
-    get = UserGetter
-    http = requests
-
-Users.get(1)
-# {'id': 1, 'name': 'John', 'surname': 'Doe'}
 ```
 
 * Should I write code like this?
@@ -145,35 +158,37 @@ We believe that HTTP protocol itself is implementation detail!
 
 We prefer to use dependency injection only on boundaries we control:
 
-```python
-import dataclasses
-import dependencies
-import requests
+```pycon
 
-class HomePage:
+>>> import dataclasses
+>>> import dependencies
+>>> import requests
 
-    def __init__(self, get_user):
-        self.get_user = get_user
+>>> class HomePage:
+...
+...     def __init__(self, get_user):
+...         self.get_user = get_user
+...
+...     def show(self, user_id):
+...         user = self.get_user(user_id=user_id)
 
-    def show(self, user_id):
-        user = self.get_user(user_id=user_id)
+>>> @dataclasses.dataclass
+... class UserStruct:
+...
+...     id: int
+...     name: str
+...     surname: str
 
-@dataclasses.dataclass
-class UserStruct:
+>>> def get_user(user_id):
+...
+...     response = requests.get("http://api.com/users/%d/" % (user_id,))
+...     return UserStruct(**response.json())
 
-    id: int
-    name: str
-    surname: str
+>>> class Site(dependencies.Injector):
+...
+...     home_page = HomePage
+...     get_user = get_user
 
-def get_user(user_id):
+>>> Site.home_page.show(1)
 
-    response = requests.get(user_id)
-    return UserStruct(**response)
-
-class Site(dependencies.Injector):
-
-    home_page = HomePage
-    get_user = get_user
-
-Site.home_page.show(1)
 ```

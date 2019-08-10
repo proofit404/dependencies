@@ -8,37 +8,40 @@ directly to the url config.
 
 Let's start with Django url patterns.
 
-```python
-# app/urls.py
+```pycon
 
-from django.urls import path
+>>> # cart/urls.py
 
-from .views import ShowCartWithDiscount
+>>> from django.urls import path
+>>> from examples.cart.views import ShowCartWithDiscount
 
-urlpatterns = [
-    path('cart/<int:pk>/items/', ShowCartWithDiscount.as_view()),
-]
+>>> urlpatterns = [
+...     path('cart/<int:pk>/items/', ShowCartWithDiscount.as_view()),
+... ]
+
 ```
 
 Looks familiar, right? Now let's take a look at the views module.
 
-```python
-# app/views.py
+```pycon
 
-from dependencies import Injector, operation, this
-from dependencies.contrib.django import view
+>>> # cart/views.py
 
-from .commands import ShowCart, DiscountCalc
+>>> from dependencies import Injector, operation, this
+>>> from dependencies.contrib.django import view
 
-@view
-class ShowCartWithDiscount(Injector):
+>>> from examples.cart.commands import ShowCart, DiscountCalc
 
-    @operation
-    def get(show_cart, pk):
-        return show_cart.show(cart_id=pk)
+>>> @view
+... class ShowCartWithDiscount(Injector):
+...
+...     show_cart = ShowCart
+...     price_calc = DiscountCalc
+...
+...     @operation
+...     def get(show_cart, pk):
+...         return show_cart.show(cart_id=pk)
 
-    show_cart = ShowCart
-    price_calc = DiscountCalc
 ```
 
 You can see that instead of classic Django class-based view we found
@@ -56,18 +59,20 @@ parameters. Everything it needs to work should be its dependency.
 
 Now let's take a look into actual business logic representation.
 
-```python
-# app/commands.py
+```pycon
 
-class ShowCart(object):
-    def __init__(self, price_calc):
-        pass
+>>> # cart/commands.py
 
-    def show(self, cart_id):
-        pass
+>>> class ShowCart:
+...     def __init__(self, price_calc):
+...         pass
+...
+...     def show(self, cart_id):
+...         pass
 
-class DiscountCalc(object):
-    pass
+>>> class DiscountCalc:
+...     pass
+
 ```
 
 ### Available scope
@@ -92,31 +97,32 @@ related to the current request.
 Form processing views are similar to regular views in case of
 definition.
 
-```python
-# app/views.py
+```pycon
 
-from dependencies import Injector, this
-from dependencies.contrib.django import form_view
+>>> # cart/views.py
 
-from .commands import AddItem
-from .forms import CartForm
+>>> from dependencies import Injector, this
+>>> from dependencies.contrib.django import form_view
+>>> from examples.cart.commands import AddItem
+>>> from examples.cart.forms import CartForm
 
-@form_view
-class AddCartItem(Injector):
+>>> @form_view
+... class AddCartItem(Injector):
+...
+...     # Attributes usual to the FormView to setup view behavior.
+...     form_class = CartForm
+...     template_name = 'carts/add_item.html'
+...     success_url = '/purchase_complete/'
+...
+...     # Form Handling callbacks.
+...     form_valid = this.command.process
+...     form_invalid = this.command.show_error
+...     command = AddItem
+...
+...     # Optional data decomposition.
+...     item_name = this.form.cleaned_data['item_name']
+...     order_id = this.form.cleaned_data['order_id']
 
-    # Attributes usual to the FormView to setup view behavior.
-    form_class = CartForm
-    template_name = 'carts/add_item.html'
-    success_url = '/purchase_complete/'
-
-    # Form Handling callbacks.
-    form_valid = this.command.process
-    form_invalid = this.command.show_error
-    command = AddItem
-
-    # Optional data decomposition.
-    item_name = this.form.cleaned_data['item_name']
-    order_id = this.form.cleaned_data['order_id']
 ```
 
 `form_valid` and `form_valid` are two entry points for processing data.

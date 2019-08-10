@@ -21,6 +21,6 @@ class Value(object):
 def make_value_spec(dependency):
 
     function = dependency.__function__
-    args, have_defaults = make_func_spec(function, function.__name__)
+    args, have_defaults = make_func_spec(function, function.__name__, "FIXME!")
     check_method(args)
     return injectable, function, args, have_defaults
