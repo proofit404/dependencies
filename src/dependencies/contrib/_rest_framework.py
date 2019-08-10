@@ -28,6 +28,15 @@ def generic_api_view(injector):
     return injector.let(as_view=handler.as_view)
 
 
+# FIXME:
+#
+# [ ] create_api_view
+#
+# [ ] destroy_api_view
+#
+# [ ] update_api_view
+
+
 def list_api_view(injector):
     """Create DRF view for listing a queryset from injector class."""
 
