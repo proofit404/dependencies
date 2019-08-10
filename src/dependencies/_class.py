@@ -8,7 +8,8 @@ def make_init_spec(dependency):
         return injectable, dependency, [], 0
     else:
         name = dependency.__name__ + "." + "__init__"
-        args, have_defaults = make_func_spec(dependency.__init__, name)
+        owner_message = "{cls!r} class".format(cls=dependency.__name__)
+        args, have_defaults = make_func_spec(dependency.__init__, name, owner_message)
         return injectable, dependency, args[1:], have_defaults
 
 

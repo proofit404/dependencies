@@ -3,7 +3,7 @@ import inspect
 from ..exceptions import DependencyError
 
 
-def check_cls_arguments(argnames, defaults):
+def check_cls_arguments(argnames, defaults, owner_message):
 
     for argument, value in zip(reversed(argnames), reversed(defaults)):
         expect_class = argument.endswith("_class")
@@ -13,7 +13,7 @@ def check_cls_arguments(argnames, defaults):
             raise DependencyError(message.format(argument))
         if not expect_class and is_class:
             message = default_class_value_template.format(
-                argument=argument, value=value
+                owner_message=owner_message, argument=argument, value=value.__name__
             )
             raise DependencyError(message)
 
@@ -35,7 +35,7 @@ def check_varargs(name, varargs, kwargs):
 
 
 default_class_value_template = """
-{cls!r} class has a default value of {argument!r} argument set to {value!r} class.
+{owner_message} has a default value of {argument!r} argument set to {value!r} class.
 
 You should either change the name of the argument into '{argument}_class'
 or set the default value to an instance of that class.
