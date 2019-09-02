@@ -91,6 +91,9 @@ jobs:
         mkdocs:
           python.version: '3.7'
           tox.env: mkdocs
+        vale:
+          python.version: '3.7'
+          tox.env: vale
         doctest:
           python.version: '3.7'
           tox.env: doctest
@@ -112,6 +115,9 @@ jobs:
           versionSpec: '10.x'
         condition: in(variables['tox.env'], 'remarklint')
         displayName: Install NodeJS.
+      - script: go get github.com/errata-ai/vale
+        condition: in(variables['tox.env'], 'vale')
+        displayName: Install GO.
       - script: tox -e $(tox.env)
         displayName: Run Tox.
       - script: |
