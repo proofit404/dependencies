@@ -41,6 +41,7 @@ nav:
       - 'Py.test': contrib/pytest.md
   - 'Implementation': implementation.md
   - 'FAQ': faq.md
+  - 'Development': development.md
   - 'Changelog': changelog.md
   # A UI hack to split Table of Content into two visual parts.
   - '': '/'
