@@ -103,6 +103,8 @@ jobs:
         yamllint:
           python.version: '3.7'
           tox.env: yamllint
+    variables:
+      GOBIN: '$(system.defaultWorkingDirectory)/gopath/bin'
     steps:
       - task: UsePythonVersion@0
         inputs:
@@ -118,6 +120,9 @@ jobs:
       - script: go get github.com/errata-ai/vale
         condition: in(variables['tox.env'], 'vale')
         displayName: Install GO.
+      - script: echo '##vso[task.prependpath]$(GOBIN)'
+        condition: in(variables['tox.env'], 'vale')
+        displayName: Setup GO Path.
       - script: tox -e $(tox.env)
         displayName: Run Tox.
       - script: |
