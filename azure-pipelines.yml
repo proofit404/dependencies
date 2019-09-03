@@ -103,8 +103,6 @@ jobs:
         yamllint:
           python.version: '3.7'
           tox.env: yamllint
-    variables:
-      GOBIN: '$(system.defaultWorkingDirectory)/gopath/bin'
     steps:
       - task: UsePythonVersion@0
         inputs:
@@ -117,12 +115,9 @@ jobs:
           versionSpec: '10.x'
         condition: in(variables['tox.env'], 'remarklint')
         displayName: Install NodeJS.
-      - script: go get github.com/errata-ai/vale
+      - script: curl -sfL https://install.goreleaser.com/github.com/ValeLint/vale.sh | sh
         condition: in(variables['tox.env'], 'vale')
-        displayName: Install GO.
-      - script: echo '##vso[task.prependpath]$(GOBIN)'
-        condition: in(variables['tox.env'], 'vale')
-        displayName: Setup GO Path.
+        displayName: Install Vale.
       - script: tox -e $(tox.env)
         displayName: Run Tox.
       - script: |
