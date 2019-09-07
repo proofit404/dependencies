@@ -116,7 +116,7 @@ jobs:
         condition: in(variables['tox.env'], 'remarklint')
         displayName: Install NodeJS.
       - script: |
-          curl -sfL https://install.goreleaser.com/github.com/ValeLint/vale.sh | sh
+          curl https://install.goreleaser.com/github.com/ValeLint/vale.sh | sh
           echo '##vso[task.prependpath]$(system.defaultWorkingDirectory)/bin'
         condition: in(variables['tox.env'], 'vale')
         displayName: Install Vale.
