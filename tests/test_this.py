@@ -354,7 +354,7 @@ def test_require_more_parents_that_injector_actually_has(code):
         code()
 
     assert str(exc_info.value) == (
-        "You tries to shift this more times that Injector has levels"
+        "You tried to shift this more times than Injector has levels"
     )
 
 
