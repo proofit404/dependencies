@@ -50,7 +50,7 @@ class ThisSpec(object):
                     result = getattr(result, symbol)
                 except DependencyError:
                     message = (
-                        "You tries to shift this more times that Injector has levels"
+                        "You tried to shift this more times than Injector has levels"
                     )
                     if symbol == "__parent__":
                         raise DependencyError(message)
