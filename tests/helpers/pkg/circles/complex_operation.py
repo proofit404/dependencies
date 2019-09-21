@@ -3,9 +3,9 @@ from dependencies import operation
 
 @operation
 def Foo(bar):
-    pass
+    pass  # pragma: no cover
 
 
 @operation
 def Bar(foo):
-    pass
+    pass  # pragma: no cover

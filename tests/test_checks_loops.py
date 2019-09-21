@@ -37,7 +37,7 @@ def kSSnnkw6CNPx():
     class Container(Injector):
         foo = this.foo
 
-    Container.foo
+    Container.foo  # pragma: no cover
 
 
 @flat_injector
@@ -55,7 +55,7 @@ def ai0hNOPGX2PI():
         foo = this.bar
         bar = this.foo
 
-    Container.foo
+    Container.foo  # pragma: no cover
 
 
 @flat_injector
@@ -74,7 +74,7 @@ def yfTnHHhvBmrQ():
         bar = this.baz
         baz = this.foo
 
-    Container.foo
+    Container.foo  # pragma: no cover
 
 
 @flat_injector
