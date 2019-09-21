@@ -5,8 +5,9 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet, ModelViewSet, ViewSet
 
 from _dependencies.contrib.django import apply_http_methods, create_handler
-from dependencies import this, value
-from dependencies.exceptions import DependencyError
+from _dependencies.exceptions import DependencyError
+from _dependencies.this import this
+from _dependencies.value import Value
 
 
 def api_view(injector):
@@ -289,7 +290,7 @@ def apply_model_view_set_methods(handler, injector):
         setattr(handler, "perform_" + method, locals_hack())
 
 
-@value
+@Value
 def get_validated_data(view, request):
 
     serializer = view.get_serializer(data=request.data)
