@@ -1,6 +1,6 @@
 import weakref
 
-from ._markers import injectable, nested_injector
+from _dependencies.markers import injectable, nested_injector
 
 
 def make_nested_injector_spec(dependency):

@@ -3,7 +3,6 @@ from inspect import isclass
 import pytest
 
 from dependencies import Injector
-from dependencies._injector import injector_doc
 from dependencies.exceptions import DependencyError
 from helpers import CodeCollector
 
@@ -499,7 +498,11 @@ def test_nested_injectors():
 def test_docstrings():
     """Check we can access all API entry points documentation."""
 
-    assert Injector.__doc__ == injector_doc
+    assert (
+        Injector.__doc__ == "\nDefault dependencies specification "
+        "DSL.\n\nClasses inherited from this class may inject "
+        "dependencies into classes\nspecified in it namespace.\n"
+    )
     assert (
         Injector.let.__doc__
         == "Produce new Injector with some dependencies overwritten."

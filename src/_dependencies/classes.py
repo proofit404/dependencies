@@ -1,5 +1,5 @@
-from ._func import make_func_spec
-from ._markers import injectable
+from _dependencies.func import make_func_spec
+from _dependencies.markers import injectable
 
 
 def make_init_spec(dependency):

@@ -4,8 +4,8 @@ from rest_framework.generics import GenericAPIView, ListAPIView, RetrieveAPIView
 from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet, ModelViewSet, ViewSet
 
+from _dependencies.contrib.django import apply_http_methods, create_handler
 from dependencies import this, value
-from dependencies.contrib._django import apply_http_methods, create_handler
 from dependencies.exceptions import DependencyError
 
 

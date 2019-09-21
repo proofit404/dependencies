@@ -1,8 +1,8 @@
 import functools
 
-from ._checks.operation import check_class, check_method
-from ._func import make_func_spec
-from ._markers import injectable
+from _dependencies.checks.operation import check_class, check_method
+from _dependencies.func import make_func_spec
+from _dependencies.markers import injectable
 
 
 class Operation(object):

@@ -5,7 +5,7 @@
 #
 # [ ] Validate we reuse cache with `Package`, `value` and `operation`.
 
-from ..exceptions import DependencyError
+from _dependencies.exceptions import DependencyError
 
 
 def check_inheritance(bases, injector):

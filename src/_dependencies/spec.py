@@ -1,12 +1,12 @@
 import inspect
 
-from ._class import make_init_spec
-from ._nested import make_nested_injector_spec
-from ._operation import Operation, make_operation_spec
-from ._package import Package, make_package_spec
-from ._raw import make_raw_spec
-from ._this import This, make_this_spec
-from ._value import Value, make_value_spec
+from _dependencies.classes import make_init_spec
+from _dependencies.nested import make_nested_injector_spec
+from _dependencies.operation import Operation, make_operation_spec
+from _dependencies.package import Package, make_package_spec
+from _dependencies.raw import make_raw_spec
+from _dependencies.this import This, make_this_spec
+from _dependencies.value import Value, make_value_spec
 
 
 class InjectorTypeType(type):
