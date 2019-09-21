@@ -499,9 +499,11 @@ def test_docstrings():
     """Check we can access all API entry points documentation."""
 
     assert (
-        Injector.__doc__ == "\nDefault dependencies specification "
-        "DSL.\n\nClasses inherited from this class may inject "
-        "dependencies into classes\nspecified in it namespace.\n"
+        Injector.__doc__ == "\n"
+        "Default dependencies specification DSL.\n"
+        "\n"
+        "Classes inherited from this class may inject dependencies into classes\n"
+        "specified in it namespace.\n"
     )
     assert (
         Injector.let.__doc__
