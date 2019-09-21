@@ -3,7 +3,7 @@ from __future__ import absolute_import
 import celery
 import celery.canvas
 
-from dependencies import Injector
+from _dependencies.injector import Injector
 
 
 undefined = object()
