@@ -168,39 +168,6 @@ def dc4fedcd09d8():
     return result
 
 
-call = CodeCollector()
-
-
-@call.parametrize
-def test_call(code):
-    """
-    We can describe call to the `Injector` attribute in the
-    declarative manner.
-    """
-
-    Container = code()
-    assert Container.foo == 1
-
-
-@call.xfail
-def zVaXyVseCxYS():
-    """Attribute call."""
-
-    class Container(Injector):
-
-        foo = this.bar()
-        bar = lambda: 1  # noqa: E731
-
-    return Container
-
-
-@call.xfail
-def pKanncCIsUww():
-    """Let notation."""
-
-    return Injector.let(foo=this.bar(), bar=lambda: 1)
-
-
 def test_item_getter_non_printable_key():
     """
     We can describe item access for keys which can't be presented as
@@ -215,7 +182,7 @@ def test_item_getter_non_printable_key():
             return hash(self.salt)
 
         def __str__(self):
-            return "<boom>"
+            return "<boom>"  # pragma: no cover
 
     boom = Boom("hello")
 

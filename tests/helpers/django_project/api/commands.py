@@ -20,7 +20,7 @@ class UserOperations(object):
 
     def login(self):
 
-        raise Exception("Should not got there")
+        raise Exception("Should not got there")  # pragma: no cover
 
     def respond(self):
 

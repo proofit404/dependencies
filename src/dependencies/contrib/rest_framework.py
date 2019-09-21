@@ -8,7 +8,7 @@ This module implements injectable Django Rest Framework API view.
 :license: BSD, see LICENSE for more details.
 """
 
-from ._rest_framework import (
+from _dependencies.contrib.rest_framework import (
     api_view,
     generic_api_view,
     generic_view_set,

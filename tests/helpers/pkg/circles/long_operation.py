@@ -3,14 +3,14 @@ from dependencies import operation
 
 @operation
 def Foo(bar):
-    pass
+    pass  # pragma: no cover
 
 
 @operation
 def Bar(baz):
-    pass
+    pass  # pragma: no cover
 
 
 @operation
 def Baz(foo):
-    pass
+    pass  # pragma: no cover
