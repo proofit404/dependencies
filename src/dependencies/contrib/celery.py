@@ -8,7 +8,7 @@ This module implements injectable Celery task.
 :license: BSD, see LICENSE for more details.
 """
 
-from ._celery import shared_task, task
+from _dependencies.contrib.celery import shared_task, task
 
 
 __all__ = ["shared_task", "task"]

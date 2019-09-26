@@ -3,14 +3,14 @@ from dependencies import value
 
 @value
 def Foo(bar):
-    pass
+    pass  # pragma: no cover
 
 
 @value
 def Bar(baz):
-    pass
+    pass  # pragma: no cover
 
 
 @value
 def Baz(foo):
-    pass
+    pass  # pragma: no cover

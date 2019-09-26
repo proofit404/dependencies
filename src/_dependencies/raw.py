@@ -1,4 +1,4 @@
-from ._markers import injectable
+from _dependencies.markers import injectable
 
 
 def make_raw_spec(dependency):

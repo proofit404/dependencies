@@ -1,5 +1,5 @@
-from .._markers import injectable
-from ..exceptions import DependencyError
+from _dependencies.exceptions import DependencyError
+from _dependencies.markers import injectable
 
 
 def check_circles(dependencies):

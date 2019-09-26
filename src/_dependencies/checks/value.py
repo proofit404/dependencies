@@ -1,6 +1,6 @@
 import inspect
 
-from ..exceptions import DependencyError
+from _dependencies.exceptions import DependencyError
 
 
 def check_class(function):

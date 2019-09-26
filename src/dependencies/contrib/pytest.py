@@ -8,7 +8,7 @@ This module implements injectable Py.Test fixtures.
 :license: BSD, see LICENSE for more details.
 """
 
-from ._pytest import register, require
+from _dependencies.contrib.pytest import register, require
 
 
 __all__ = ["register", "require"]

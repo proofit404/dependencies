@@ -1,6 +1,6 @@
-from . import _markers
-from ._checks.this import check_expression
-from .exceptions import DependencyError
+from _dependencies import markers
+from _dependencies.checks.this import check_expression
+from _dependencies.exceptions import DependencyError
 
 
 class This(object):
@@ -32,7 +32,7 @@ this = This(tuple())
 def make_this_spec(dependency):
 
     check_expression(dependency)
-    return _markers.this, ThisSpec(dependency), ["__self__"], 0
+    return markers.this, ThisSpec(dependency), ["__self__"], 0
 
 
 class ThisSpec(object):
@@ -50,7 +50,7 @@ class ThisSpec(object):
                     result = getattr(result, symbol)
                 except DependencyError:
                     message = (
-                        "You tries to shift this more times that Injector has levels"
+                        "You tried to shift this more times than Injector has levels"
                     )
                     if symbol == "__parent__":
                         raise DependencyError(message)

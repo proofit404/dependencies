@@ -88,6 +88,9 @@ jobs:
         isort:
           python.version: '3.7'
           tox.env: isort
+        importlint:
+          python.version: '3.7'
+          tox.env: importlint
         mkdocs:
           python.version: '3.7'
           tox.env: mkdocs

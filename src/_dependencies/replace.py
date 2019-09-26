@@ -1,5 +1,5 @@
-from ._attributes import Attributes
-from ._spec import make_dependency_spec
+from _dependencies.attributes import Attributes
+from _dependencies.spec import make_dependency_spec
 
 
 def deep_replace_dependency(injector, current_attr, replace):

@@ -41,7 +41,7 @@ def test_protect_against_self(code):
 
     @value
     def method(self, foo, bar):
-        pass
+        pass  # pragma: no cover
 
     with pytest.raises(DependencyError) as exc_info:
         code(method)
@@ -70,7 +70,7 @@ def test_protect_against_classes():
 
         @value
         class Foo(object):
-            pass
+            pass  # pragma: no cover
 
     assert str(exc_info.value) == "'value' decorator can not be used on classes"
 
@@ -84,7 +84,7 @@ def test_protect_against_args_kwargs(code):
 
     @value
     def func1(*args):
-        pass
+        pass  # pragma: no cover
 
     with pytest.raises(DependencyError) as exc_info:
         code(func1)
@@ -93,7 +93,7 @@ def test_protect_against_args_kwargs(code):
 
     @value
     def func2(**kwargs):
-        pass
+        pass  # pragma: no cover
 
     with pytest.raises(DependencyError) as exc_info:
         code(func2)
@@ -102,7 +102,7 @@ def test_protect_against_args_kwargs(code):
 
     @value
     def func3(*args, **kwargs):
-        pass
+        pass  # pragma: no cover
 
     with pytest.raises(DependencyError) as exc_info:
         code(func3)

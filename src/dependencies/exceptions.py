@@ -8,8 +8,7 @@ This module contains the set of dependencies' exceptions.
 :license: BSD, see LICENSE for more details.
 """
 
+from _dependencies.exceptions import DependencyError
 
-class DependencyError(Exception):
-    """Broken dependencies configuration error."""
 
-    pass
+__all__ = ["DependencyError"]

@@ -1,8 +1,8 @@
 class Foo(object):
     def __init__(self, bar):
-        pass
+        pass  # pragma: no cover
 
 
 class Bar(object):
     def __init__(self, foo):
-        pass
+        pass  # pragma: no cover
