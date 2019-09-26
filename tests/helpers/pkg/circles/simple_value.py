@@ -3,4 +3,4 @@ from dependencies import value
 
 @value
 def Foo(foo):
-    pass
+    pass  # pragma: no cover

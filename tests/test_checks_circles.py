@@ -53,7 +53,7 @@ def nQpangWPMths():
 
     class Foo(object):
         def __init__(self, foo):
-            self.foo = foo
+            pass  # pragma: no cover
 
     return Foo
 
@@ -64,7 +64,7 @@ def gjhRaqkLmRmy():
 
     @operation
     def Foo(foo):
-        pass
+        pass  # pragma: no cover
 
     return Foo
 
@@ -75,7 +75,7 @@ def kHqAxHovWKtI():
 
     @value
     def Foo(foo):
-        pass
+        pass  # pragma: no cover
 
     return Foo
 
@@ -186,7 +186,7 @@ def kodOTZfScpDc():
 
     class Foo(object):
         def __init__(self, bar):
-            pass
+            pass  # pragma: no cover
 
     return Foo
 
@@ -197,7 +197,7 @@ def tYEhWPObJRXZ():
 
     @operation
     def Foo(bar):
-        pass
+        pass  # pragma: no cover
 
     return Foo
 
@@ -208,7 +208,7 @@ def zklaYlyBZsEj():
 
     @value
     def Foo(bar):
-        pass
+        pass  # pragma: no cover
 
     return Foo
 
@@ -246,7 +246,7 @@ def uEevbDxHVHfN():
 
     class Bar(object):
         def __init__(self, foo):
-            pass
+            pass  # pragma: no cover
 
     return Bar
 
@@ -257,7 +257,7 @@ def emGmGzXrbaZe():
 
     @operation
     def Bar(foo):
-        pass
+        pass  # pragma: no cover
 
     return Bar
 
@@ -268,7 +268,7 @@ def aerRHoDXUNeV():
 
     @value
     def Bar(foo):
-        pass
+        pass  # pragma: no cover
 
     return Bar
 
@@ -380,7 +380,7 @@ def uVWBksfNYEDw():
 
     class Foo(object):
         def __init__(self, bar):
-            pass
+            pass  # pragma: no cover
 
     return Foo
 
@@ -391,7 +391,7 @@ def yOscCQpEPstE():
 
     @operation
     def Foo(bar):
-        pass
+        pass  # pragma: no cover
 
     return Foo
 
@@ -402,7 +402,7 @@ def rwJmLRVuVSqm():
 
     @value
     def Foo(bar):
-        pass
+        pass  # pragma: no cover
 
     return Foo
 
@@ -440,7 +440,7 @@ def oKtHawDksDNk():
 
     class Bar(object):
         def __init__(self, baz):
-            pass
+            pass  # pragma: no cover
 
     return Bar
 
@@ -451,7 +451,7 @@ def hpRbxUtEWyGJ():
 
     @operation
     def Bar(baz):
-        pass
+        pass  # pragma: no cover
 
     return Bar
 
@@ -462,7 +462,7 @@ def mLsXYSzlYPRO():
 
     @value
     def Bar(baz):
-        pass
+        pass  # pragma: no cover
 
     return Bar
 
@@ -500,7 +500,7 @@ def uaOWixpAMVma():
 
     class Baz(object):
         def __init__(self, foo):
-            pass
+            pass  # pragma: no cover
 
     return Baz
 
@@ -511,7 +511,7 @@ def fvMICnYvGZlw():
 
     @operation
     def Baz(foo):
-        pass
+        pass  # pragma: no cover
 
     return Baz
 
@@ -522,7 +522,7 @@ def xjpTxDebbpnm():
 
     @value
     def Baz(foo):
-        pass
+        pass  # pragma: no cover
 
     return Baz
 

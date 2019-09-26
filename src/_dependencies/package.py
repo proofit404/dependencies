@@ -1,7 +1,7 @@
 import importlib
 
-from ._attributes import Replace
-from ._markers import lazy_import
+from _dependencies.attributes import Replace
+from _dependencies.markers import lazy_import
 
 
 class Package(object):

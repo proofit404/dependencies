@@ -3,7 +3,6 @@ from inspect import isclass
 import pytest
 
 from dependencies import Injector
-from dependencies._injector import injector_doc
 from dependencies.exceptions import DependencyError
 from helpers import CodeCollector
 
@@ -499,7 +498,13 @@ def test_nested_injectors():
 def test_docstrings():
     """Check we can access all API entry points documentation."""
 
-    assert Injector.__doc__ == injector_doc
+    assert (
+        Injector.__doc__ == "\n"
+        "Default dependencies specification DSL.\n"
+        "\n"
+        "Classes inherited from this class may inject dependencies into classes\n"
+        "specified in it namespace.\n"
+    )
     assert (
         Injector.let.__doc__
         == "Produce new Injector with some dependencies overwritten."
@@ -712,7 +717,7 @@ def e78bf771747c():
 
     class Bar(Injector):
         def __eq__(self, other):
-            return False
+            pass  # pragma: no cover
 
 
 @deny_magic_methods
@@ -722,7 +727,10 @@ def e34b88041f64():
     class Foo(Injector):
         pass
 
-    Foo.let(__eq__=lambda self, other: False)
+    def eq(self, other):
+        pass  # pragma: no cover
+
+    Foo.let(__eq__=eq)
 
 
 attribute_error = CodeCollector()
@@ -792,8 +800,7 @@ def c4e7ecf75167():
 
     class Bar(object):
         def __init__(self, test, two=2):
-            self.test = test
-            self.two = two
+            pass  # pragma: no cover
 
     class Foo(Injector):
         bar = Bar
@@ -807,7 +814,7 @@ def dmsMgYqbsHgB():
 
     class Bar(object):
         def __init__(self, test):
-            self.test = test
+            pass  # pragma: no cover
 
     Foo = Injector.let(bar=Bar)
 
@@ -852,7 +859,7 @@ def test_deny_arbitrary_argument_list(code):
 
     class Foo(object):
         def __init__(self, *args):
-            self.args = args
+            pass  # pragma: no cover
 
     with pytest.raises(DependencyError) as exc_info:
         code(Foo)
@@ -885,7 +892,7 @@ def test_deny_arbitrary_keyword_arguments(code):
 
     class Foo(object):
         def __init__(self, **kwargs):
-            self.kwargs = kwargs
+            pass  # pragma: no cover
 
     with pytest.raises(DependencyError) as exc_info:
         code(Foo)
@@ -922,8 +929,7 @@ def test_deny_arbitrary_positional_and_keyword_arguments_together(code):
 
     class Foo(object):
         def __init__(self, *args, **kwargs):
-            self.args = args
-            self.kwargs = kwargs
+            pass  # pragma: no cover
 
     with pytest.raises(DependencyError) as exc_info:
         code(Foo)
@@ -1039,7 +1045,7 @@ def test_deny_classes_as_default_values(code):
 
     class Bar(object):
         def __init__(self, foo=Foo):
-            self.foo = foo
+            pass  # pragma: no cover
 
     with pytest.raises(DependencyError) as exc_info:
         code(Foo, Bar)
