@@ -8,3 +8,8 @@ repos:
       - id: debug-statements
       - id: file-contents-sorter
         files: .gitignore
+  - repo: https://github.com/asottile/pyupgrade
+    rev: v1.24.0
+    hooks:
+      - id: pyupgrade
+        args: [--keep-percent-format]
