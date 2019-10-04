@@ -60,11 +60,11 @@ class InjectorType(InjectorTypeType):
                     have_default = False
                     continue
                 if len(attrs_stack) > 1:
-                    message = "{0!r} can not resolve attribute {1!r} while building {2!r}".format(  # noqa: E501
+                    message = "{!r} can not resolve attribute {!r} while building {!r}".format(  # noqa: E501
                         cls.__name__, current_attr, attrs_stack.pop()
                     )
                 else:
-                    message = "{0!r} can not resolve attribute {1!r}".format(
+                    message = "{!r} can not resolve attribute {!r}".format(
                         cls.__name__, current_attr
                     )
                 raise DependencyError(message)
@@ -125,8 +125,8 @@ class InjectorType(InjectorTypeType):
     def __dir__(cls):
 
         parent = set(dir(cls.__base__))
-        current = set(cls.__dict__) - set(["__dependencies__"])
-        dependencies = set(cls.__dependencies__) - set(["__parent__"])
+        current = set(cls.__dict__) - {"__dependencies__"}
+        dependencies = set(cls.__dependencies__) - {"__parent__"}
         attributes = sorted(parent | current | dependencies)
         return attributes
 
