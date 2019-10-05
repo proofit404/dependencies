@@ -14,7 +14,7 @@ class Foo(object):
         self.bar = bar
         self.baz = baz
 
-    def sum(self):
+    def do(self):
 
         return self.foo + self.bar + self.baz
 
@@ -52,7 +52,7 @@ def test_register_fixture(fixture_name):
     """
 
     assert isinstance(fixture_name, Foo)
-    assert fixture_name.sum() == 6
+    assert fixture_name.do() == 6
 
 
 def test_docstrings():
