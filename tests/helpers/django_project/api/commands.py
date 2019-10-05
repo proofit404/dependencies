@@ -32,7 +32,7 @@ class UserOperations(object):
         serializer = self.view.get_serializer(instance)
         return Response(serializer.data)
 
-    def list(self):
+    def collection(self):
 
         queryset = self.view.filter_queryset(self.view.get_queryset())
         page = self.view.paginate_queryset(queryset)
