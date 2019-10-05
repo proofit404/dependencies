@@ -28,19 +28,19 @@ class Container(Injector):
     bar = require("fixture_name_3")
 
 
-@pytest.fixture
+@pytest.fixture()
 def fixture_name_1():
 
     return 1
 
 
-@pytest.fixture
+@pytest.fixture()
 def fixture_name_2():
 
     return 2
 
 
-@pytest.fixture
+@pytest.fixture()
 def fixture_name_3():
 
     return 3
