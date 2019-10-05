@@ -82,6 +82,9 @@ jobs:
         bandit:
           python.version: '3.7'
           tox.env: bandit
+        xenon:
+          python.version: '3.7'
+          tox.env: xenon
         mypy:
           python.version: '3.7'
           tox.env: mypy
