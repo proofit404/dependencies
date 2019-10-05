@@ -115,7 +115,7 @@ class UserRetrieveView(Injector):
 @generic_api_view
 class UserListView(Injector):
 
-    get = this.command.list
+    get = this.command.collection
     command = UserOperations
 
     queryset = User.objects.all()
@@ -131,7 +131,7 @@ class UserListView(Injector):
 @generic_api_view
 class UserListFilterFieldsView(Injector):
 
-    get = this.command.list
+    get = this.command.collection
     command = UserOperations
 
     queryset = User.objects.all()
@@ -151,7 +151,7 @@ class UserListFilterFieldsView(Injector):
 class InjectedViewSet(Injector):
     """Intentionally left blank."""
 
-    @operation
+    @operation  # noqa: A003
     def list(view, request, args, kwargs, user, action):
 
         assert isinstance(view, ViewSet)
@@ -230,7 +230,7 @@ class InjectedGenericViewSet(Injector):
 
     serializer_class = UserSerializer
 
-    @operation
+    @operation  # noqa: A003
     def list(view, request, args, kwargs, user, action):
 
         assert isinstance(view, GenericViewSet)

@@ -25,9 +25,9 @@ class InjectorType(InjectorTypeType):
                 ns[attr] = namespace.pop(attr)
             except KeyError:
                 pass
-        for k, v in namespace.items():
-            check_dunder_name(k)
-            check_attrs_redefinition(k)
+        for name in namespace:
+            check_dunder_name(name)
+            check_attrs_redefinition(name)
         dependencies = {}
         for base in reversed(bases):
             dependencies.update(base.__dependencies__)

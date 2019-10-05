@@ -9,7 +9,7 @@ celery = pytest.importorskip("celery")
 contrib = pytest.importorskip("dependencies.contrib.celery")
 
 
-@pytest.fixture
+@pytest.fixture()
 def celery_app():
     """Simulate global Celery application instance."""
 

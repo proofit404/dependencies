@@ -10,7 +10,7 @@ http_methods = views.http_method_funcs
 http_methods_no_head = http_methods - {"head"}
 
 
-@pytest.fixture
+@pytest.fixture()
 def app():
     from flask_project.app import create_app
 

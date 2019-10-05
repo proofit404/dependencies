@@ -15,7 +15,6 @@ def register(injector):
         if option in injector:
             options[option] = getattr(injector, option)
 
-    @pytest.fixture(**options)
     def __fixture(request):
 
         # FIXME: Rename `request` to `__request__` and protect from
@@ -23,7 +22,7 @@ def register(injector):
         return injector.let(request=request).fixture
 
     __fixture.injector = injector
-    return __fixture
+    return pytest.fixture(**options)(__fixture)
 
 
 def require(fixturename):
