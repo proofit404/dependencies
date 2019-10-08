@@ -1,4 +1,5 @@
-from dependencies import Injector, this
+from dependencies import Injector
+from dependencies import this
 
 
 class Container(Injector):

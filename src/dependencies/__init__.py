@@ -7,7 +7,6 @@ Dependency Injection for Humans.
 :copyright: (c) 2016-2019 by dry-python team.
 :license: BSD, see LICENSE for more details.
 """
-
 from _dependencies.injector import Injector
 from _dependencies.operation import Operation as operation
 from _dependencies.package import Package

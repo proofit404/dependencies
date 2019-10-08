@@ -6,31 +6,34 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.renderers import DocumentationRenderer
 from rest_framework.request import Request
 from rest_framework.response import Response
-from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_204_NO_CONTENT
-from rest_framework.viewsets import GenericViewSet, ViewSet
+from rest_framework.status import HTTP_200_OK
+from rest_framework.status import HTTP_201_CREATED
+from rest_framework.status import HTTP_204_NO_CONTENT
+from rest_framework.viewsets import GenericViewSet
+from rest_framework.viewsets import ViewSet
 
-from dependencies import Injector, operation, this, value
-from dependencies.contrib.rest_framework import (
-    api_view,
-    generic_api_view,
-    generic_view_set,
-    model_view_set,
-    view_set,
-)
-
-from .auth import AuthenticateAdmin, AuthenticateAll
-from .commands import (
-    UserCreateOperations,
-    UserDestroyOperations,
-    UserOperations,
-    UserUpdateOperations,
-)
-from .filtersets import UserFilter, use_filterset_name
+from .auth import AuthenticateAdmin
+from .auth import AuthenticateAll
+from .commands import UserCreateOperations
+from .commands import UserDestroyOperations
+from .commands import UserOperations
+from .commands import UserUpdateOperations
+from .filtersets import use_filterset_name
+from .filtersets import UserFilter
 from .metadata import DenyMetadata
 from .negotiation import DenyNegotiation
 from .serializers import UserSerializer
 from .throttle import ThrottleEveryOne
 from .version import DenyVersion
+from dependencies import Injector
+from dependencies import operation
+from dependencies import this
+from dependencies import value
+from dependencies.contrib.rest_framework import api_view
+from dependencies.contrib.rest_framework import generic_api_view
+from dependencies.contrib.rest_framework import generic_view_set
+from dependencies.contrib.rest_framework import model_view_set
+from dependencies.contrib.rest_framework import view_set
 
 
 @api_view
