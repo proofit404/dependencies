@@ -1,10 +1,26 @@
 ---
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v2.3.0
+    rev: ''
     hooks:
       - id: trailing-whitespace
       - id: end-of-file-fixer
       - id: debug-statements
       - id: file-contents-sorter
         files: .gitignore
+  - repo: https://github.com/asottile/pyupgrade
+    rev: ''
+    hooks:
+      - id: pyupgrade
+        args: [--keep-percent-format]
+  - repo: https://github.com/asottile/reorder_python_imports
+    rev: ''
+    hooks:
+      - id: reorder-python-imports
+        args: [--application-directories=.:src:tests/helpers]
+        exclude: migrations
+  - repo: https://github.com/psf/black
+    rev: ''
+    hooks:
+      - id: black
+        exclude: migrations

@@ -1,14 +1,13 @@
 from _dependencies.attributes import Replace
 from _dependencies.checks.circles import check_circles
-from _dependencies.checks.injector import (
-    check_attrs_redefinition,
-    check_dunder_name,
-    check_inheritance,
-)
+from _dependencies.checks.injector import check_attrs_redefinition
+from _dependencies.checks.injector import check_dunder_name
+from _dependencies.checks.injector import check_inheritance
 from _dependencies.checks.loops import check_loops
 from _dependencies.exceptions import DependencyError
 from _dependencies.replace import deep_replace_dependency
-from _dependencies.spec import InjectorTypeType, make_dependency_spec
+from _dependencies.spec import InjectorTypeType
+from _dependencies.spec import make_dependency_spec
 
 
 class InjectorType(InjectorTypeType):
@@ -25,9 +24,9 @@ class InjectorType(InjectorTypeType):
                 ns[attr] = namespace.pop(attr)
             except KeyError:
                 pass
-        for k, v in namespace.items():
-            check_dunder_name(k)
-            check_attrs_redefinition(k)
+        for name in namespace:
+            check_dunder_name(name)
+            check_attrs_redefinition(name)
         dependencies = {}
         for base in reversed(bases):
             dependencies.update(base.__dependencies__)
@@ -60,11 +59,11 @@ class InjectorType(InjectorTypeType):
                     have_default = False
                     continue
                 if len(attrs_stack) > 1:
-                    message = "{0!r} can not resolve attribute {1!r} while building {2!r}".format(  # noqa: E501
+                    message = "{!r} can not resolve attribute {!r} while building {!r}".format(  # noqa: E501
                         cls.__name__, current_attr, attrs_stack.pop()
                     )
                 else:
-                    message = "{0!r} can not resolve attribute {1!r}".format(
+                    message = "{!r} can not resolve attribute {!r}".format(
                         cls.__name__, current_attr
                     )
                 raise DependencyError(message)
@@ -125,8 +124,8 @@ class InjectorType(InjectorTypeType):
     def __dir__(cls):
 
         parent = set(dir(cls.__base__))
-        current = set(cls.__dict__) - set(["__dependencies__"])
-        dependencies = set(cls.__dependencies__) - set(["__parent__"])
+        current = set(cls.__dict__) - {"__dependencies__"}
+        dependencies = set(cls.__dependencies__) - {"__parent__"}
         attributes = sorted(parent | current | dependencies)
         return attributes
 

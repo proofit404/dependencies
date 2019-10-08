@@ -1,23 +1,22 @@
-from django.conf.urls import include, url
+from django.conf.urls import include
+from django.conf.urls import url
 from rest_framework.routers import SimpleRouter
 
-from .views import (
-    BadMetadata,
-    BadNegotiation,
-    BadVersion,
-    DynamicUserViewSet,
-    EmptyViewSet,
-    InjectedGenericViewSet,
-    InjectedViewSet,
-    LoginAll,
-    ThrottleAll,
-    UserAction,
-    UserListFilterFieldsView,
-    UserListView,
-    UserLogin,
-    UserRetrieveView,
-    UserViewSet,
-)
+from .views import BadMetadata
+from .views import BadNegotiation
+from .views import BadVersion
+from .views import DynamicUserViewSet
+from .views import EmptyViewSet
+from .views import InjectedGenericViewSet
+from .views import InjectedViewSet
+from .views import LoginAll
+from .views import ThrottleAll
+from .views import UserAction
+from .views import UserListFilterFieldsView
+from .views import UserListView
+from .views import UserLogin
+from .views import UserRetrieveView
+from .views import UserViewSet
 
 
 router = SimpleRouter()
