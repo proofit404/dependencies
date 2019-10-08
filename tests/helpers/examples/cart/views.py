@@ -1,6 +1,7 @@
 from dependencies import Injector
 from dependencies.contrib.django import view
-from dependencies.contrib.rest_framework import api_view, model_view_set
+from dependencies.contrib.rest_framework import api_view
+from dependencies.contrib.rest_framework import model_view_set
 
 
 @view

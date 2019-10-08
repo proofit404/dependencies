@@ -1,6 +1,7 @@
 import inspect
 
-from _dependencies.checks.func import check_cls_arguments, check_varargs
+from _dependencies.checks.func import check_cls_arguments
+from _dependencies.checks.func import check_varargs
 
 
 if getattr(inspect, "signature", None):

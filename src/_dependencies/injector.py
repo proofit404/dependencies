@@ -1,14 +1,13 @@
 from _dependencies.attributes import Replace
 from _dependencies.checks.circles import check_circles
-from _dependencies.checks.injector import (
-    check_attrs_redefinition,
-    check_dunder_name,
-    check_inheritance,
-)
+from _dependencies.checks.injector import check_attrs_redefinition
+from _dependencies.checks.injector import check_dunder_name
+from _dependencies.checks.injector import check_inheritance
 from _dependencies.checks.loops import check_loops
 from _dependencies.exceptions import DependencyError
 from _dependencies.replace import deep_replace_dependency
-from _dependencies.spec import InjectorTypeType, make_dependency_spec
+from _dependencies.spec import InjectorTypeType
+from _dependencies.spec import make_dependency_spec
 
 
 class InjectorType(InjectorTypeType):

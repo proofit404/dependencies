@@ -1,10 +1,15 @@
 from __future__ import absolute_import
 
-from rest_framework.generics import GenericAPIView, ListAPIView, RetrieveAPIView
+from rest_framework.generics import GenericAPIView
+from rest_framework.generics import ListAPIView
+from rest_framework.generics import RetrieveAPIView
 from rest_framework.views import APIView
-from rest_framework.viewsets import GenericViewSet, ModelViewSet, ViewSet
+from rest_framework.viewsets import GenericViewSet
+from rest_framework.viewsets import ModelViewSet
+from rest_framework.viewsets import ViewSet
 
-from _dependencies.contrib.django import apply_http_methods, create_handler
+from _dependencies.contrib.django import apply_http_methods
+from _dependencies.contrib.django import create_handler
 from _dependencies.exceptions import DependencyError
 from _dependencies.this import this
 from _dependencies.value import Value

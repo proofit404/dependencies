@@ -1,16 +1,15 @@
 from django.template.response import TemplateResponse
 
-from dependencies import Injector, this
-from dependencies.contrib.django import form_view, view
-
-from .commands import (
-    DispatchRequest,
-    InjectKwargs,
-    InjectSelf,
-    InjectUser,
-    ProcessQuestion,
-)
+from .commands import DispatchRequest
+from .commands import InjectKwargs
+from .commands import InjectSelf
+from .commands import InjectUser
+from .commands import ProcessQuestion
 from .forms import QuestionForm
+from dependencies import Injector
+from dependencies import this
+from dependencies.contrib.django import form_view
+from dependencies.contrib.django import view
 
 
 class Methods(Injector):
