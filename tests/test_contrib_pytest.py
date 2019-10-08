@@ -3,7 +3,8 @@ import types
 import pytest
 
 from dependencies import Injector
-from dependencies.contrib.pytest import register, require
+from dependencies.contrib.pytest import register
+from dependencies.contrib.pytest import require
 from dependencies.exceptions import DependencyError
 
 
@@ -14,7 +15,7 @@ class Foo(object):
         self.bar = bar
         self.baz = baz
 
-    def sum(self):
+    def do(self):
 
         return self.foo + self.bar + self.baz
 
@@ -28,19 +29,19 @@ class Container(Injector):
     bar = require("fixture_name_3")
 
 
-@pytest.fixture
+@pytest.fixture()
 def fixture_name_1():
 
     return 1
 
 
-@pytest.fixture
+@pytest.fixture()
 def fixture_name_2():
 
     return 2
 
 
-@pytest.fixture
+@pytest.fixture()
 def fixture_name_3():
 
     return 3
@@ -52,7 +53,7 @@ def test_register_fixture(fixture_name):
     """
 
     assert isinstance(fixture_name, Foo)
-    assert fixture_name.sum() == 6
+    assert fixture_name.do() == 6
 
 
 def test_docstrings():

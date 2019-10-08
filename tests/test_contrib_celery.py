@@ -1,6 +1,7 @@
 import pytest
 
-from dependencies import Injector, this
+from dependencies import Injector
+from dependencies import this
 from dependencies.exceptions import DependencyError
 from helpers import CodeCollector
 
@@ -9,7 +10,7 @@ celery = pytest.importorskip("celery")
 contrib = pytest.importorskip("dependencies.contrib.celery")
 
 
-@pytest.fixture
+@pytest.fixture()
 def celery_app():
     """Simulate global Celery application instance."""
 

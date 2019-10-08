@@ -46,11 +46,3 @@ mkdocs = ["mkdocs", "mkdocs-material"]
 [build-system]
 requires = ["poetry>=0.12"]
 build-backend = "poetry.masonry.api"
-
-[tool.black]
-exclude = '''
-/(
-    .tox
-  | migrations
-)/
-'''

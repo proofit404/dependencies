@@ -1,6 +1,7 @@
 import pytest
 
-from dependencies import Injector, operation
+from dependencies import Injector
+from dependencies import operation
 from dependencies.exceptions import DependencyError
 from helpers import CodeCollector
 

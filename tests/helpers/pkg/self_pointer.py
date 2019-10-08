@@ -1,4 +1,5 @@
-from dependencies import Injector, Package
+from dependencies import Injector
+from dependencies import Package
 
 
 current = Package("pkg.self_pointer")

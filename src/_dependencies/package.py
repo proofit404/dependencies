@@ -36,7 +36,8 @@ class ImportSpec(object):
         result = importlib.import_module(module)
         index = 0
 
-        for index, attr in enumerate(self.__attrs__):
+        for attr in self.__attrs__:
+            index += 1
             try:
                 module += "." + attr
                 result = importlib.import_module(module)
@@ -44,5 +45,4 @@ class ImportSpec(object):
                 result = getattr(result, attr)
                 break
 
-        index += 1
         raise Replace(result, self.__attrs__[index:])

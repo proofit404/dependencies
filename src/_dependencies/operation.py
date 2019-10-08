@@ -1,6 +1,7 @@
 import functools
 
-from _dependencies.checks.operation import check_class, check_method
+from _dependencies.checks.operation import check_class
+from _dependencies.checks.operation import check_method
 from _dependencies.func import make_func_spec
 from _dependencies.markers import injectable
 

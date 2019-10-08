@@ -1,4 +1,5 @@
-from _dependencies.checks.value import check_class, check_method
+from _dependencies.checks.value import check_class
+from _dependencies.checks.value import check_method
 from _dependencies.func import make_func_spec
 from _dependencies.markers import injectable
 

@@ -79,15 +79,12 @@ jobs:
         flake8:
           python.version: '3.7'
           tox.env: flake8
+        bandit:
+          python.version: '3.7'
+          tox.env: bandit
         mypy:
           python.version: '3.7'
           tox.env: mypy
-        black:
-          python.version: '3.7'
-          tox.env: black
-        isort:
-          python.version: '3.7'
-          tox.env: isort
         importlint:
           python.version: '3.7'
           tox.env: importlint

@@ -1,4 +1,7 @@
-from django.contrib.admin.models import ADDITION, CHANGE, DELETION, LogEntry
+from django.contrib.admin.models import ADDITION
+from django.contrib.admin.models import CHANGE
+from django.contrib.admin.models import DELETION
+from django.contrib.admin.models import LogEntry
 from django.contrib.auth.models import User
 from rest_framework.renderers import DocumentationRenderer
 from rest_framework.request import Request
@@ -32,7 +35,7 @@ class UserOperations(object):
         serializer = self.view.get_serializer(instance)
         return Response(serializer.data)
 
-    def list(self):
+    def collection(self):
 
         queryset = self.view.filter_queryset(self.view.get_queryset())
         page = self.view.paginate_queryset(queryset)

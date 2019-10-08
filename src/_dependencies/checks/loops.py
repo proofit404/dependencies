@@ -1,5 +1,7 @@
 from _dependencies.exceptions import DependencyError
-from _dependencies.markers import injectable, nested_injector, this
+from _dependencies.markers import injectable
+from _dependencies.markers import nested_injector
+from _dependencies.markers import this
 
 
 def check_loops(class_name, dependencies):
