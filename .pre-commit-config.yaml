@@ -19,3 +19,8 @@ repos:
       - id: reorder-python-imports
         args: [--application-directories=.:src:tests/helpers]
         exclude: migrations
+  - repo: https://github.com/psf/black
+    rev: ''
+    hooks:
+      - id: black
+        exclude: migrations
