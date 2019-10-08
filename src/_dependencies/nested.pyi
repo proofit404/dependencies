@@ -1,10 +1,10 @@
 from typing import Any, Dict, List, Tuple, Type, Union
 
-from dependencies import Injector
-from dependencies._attributes import Attributes
-from dependencies._package import ImportSpec
-from dependencies._raw import RawSpec
-from dependencies._this import ThisSpec
+from _dependencies.attributes import Attributes
+from _dependencies.injector import Injector
+from _dependencies.package import ImportSpec
+from _dependencies.raw import RawSpec
+from _dependencies.this import ThisSpec
 
 
 def make_nested_injector_spec(

@@ -1,8 +1,8 @@
 from typing import Any, Dict, Iterator, List, Tuple, Union
 
-from dependencies._attributes import Attributes
-from dependencies._nested import NestedInjectorSpec
-from dependencies._this import ThisSpec
+from _dependencies.attributes import Attributes
+from _dependencies.nested import NestedInjectorSpec
+from _dependencies.this import ThisSpec
 
 
 def check_loops(class_name: str, dependencies: Dict[str, Any]) -> None: ...

@@ -4,7 +4,7 @@ from celery.app.base import Celery
 from celery.canvas import Signature as _Signature
 from celery.result import EagerResult
 
-from dependencies._injector import Injector
+from _dependencies.injector import Injector
 
 
 def task(injector: Injector) -> Injector: ...

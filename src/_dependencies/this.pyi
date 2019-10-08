@@ -1,6 +1,6 @@
 from typing import Any, List, Tuple
 
-from dependencies import Injector
+from _dependencies.injector import Injector
 
 
 class This:

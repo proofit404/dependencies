@@ -1,6 +1,6 @@
 from typing import List, Type
 
-from dependencies._injector import Injector
+from _dependencies.injector import Injector
 
 
 def check_inheritance(bases: List[Type], injector: Injector) -> None: ...
