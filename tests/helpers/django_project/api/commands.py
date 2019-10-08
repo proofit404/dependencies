@@ -1,4 +1,7 @@
-from django.contrib.admin.models import ADDITION, CHANGE, DELETION, LogEntry
+from django.contrib.admin.models import ADDITION
+from django.contrib.admin.models import CHANGE
+from django.contrib.admin.models import DELETION
+from django.contrib.admin.models import LogEntry
 from django.contrib.auth.models import User
 from rest_framework.renderers import DocumentationRenderer
 from rest_framework.request import Request
