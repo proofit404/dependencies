@@ -1,4 +1,8 @@
-from typing import Callable, Dict, Optional, Tuple, Union
+from typing import Callable
+from typing import Dict
+from typing import Optional
+from typing import Tuple
+from typing import Union
 
 from celery.app.base import Celery
 from celery.canvas import Signature as _Signature
@@ -6,18 +10,11 @@ from celery.result import EagerResult
 
 from _dependencies.injector import Injector
 
-
 def task(injector: Injector) -> Injector: ...
-
-
 def shared_task(injector: Injector) -> Injector: ...
-
-
 def decorate_with(func: Callable, injector: Injector) -> Injector: ...
 
-
 class Signature:
-
     def __init__(
         self,
         name: str,
@@ -26,7 +23,6 @@ class Signature:
         options: Union[object, Dict[str, int]] = ...,
         subtask_type: Union[str, object] = ...,
     ) -> None: ...
-
     def __call__(
         self,
         args: Optional[Tuple[int, int]] = ...,
@@ -34,21 +30,13 @@ class Signature:
         **ex
     ) -> _Signature: ...
 
-
 class Shortcut:
-
     def __call__(self, *args, **kwargs) -> Signature: ...
-
 
 class ImmutableShortcut:
-
     def __call__(self, *args, **kwargs) -> Signature: ...
 
-
 class Delay:
-
     def __call__(self, *args, **kwargs) -> EagerResult: ...
 
-
-class TaskMixin:
-    ...
+class TaskMixin: ...
