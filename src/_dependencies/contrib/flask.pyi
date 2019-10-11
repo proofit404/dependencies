@@ -1,0 +1,9 @@
+from typing import Type
+
+from flask.views import MethodView
+
+from _dependencies.injector import Injector
+
+def method_view(injector: Injector) -> Injector: ...
+def create_handler(from_class: Type[MethodView]) -> Type[MethodView]: ...
+def apply_http_methods(handler: Type[MethodView], injector: Injector) -> None: ...
