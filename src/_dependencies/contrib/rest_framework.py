@@ -177,18 +177,15 @@ def apply_model_view_set_methods(handler, injector):
     def create_arguments(ns, serializer):
 
         ns["validated_data"] = serializer.validated_data
-        return ns
 
     def update_arguments(ns, serializer):
 
         ns["validated_data"] = serializer.validated_data
         ns["instance"] = serializer.instance
-        return ns
 
     def delete_arguments(ns, instance):
 
         ns["instance"] = instance
-        return ns
 
     def set_instance(serializer, instance):
 
@@ -270,20 +267,17 @@ def build_view_action(injector, action, detail, validated_data):
 def build_view_set_method(injector, method, set_args, callback):
     def __method(self, argument):
         __tracebackhide__ = True
-        ns = injector.let(
-            **set_args(
-                {
-                    "view": self,
-                    "request": this.view.request,
-                    "args": this.view.args,
-                    "kwargs": this.view.kwargs,
-                    "user": this.request.user,
-                    "pk": this.kwargs["pk"],
-                    "action": this.view.action,
-                },
-                argument,
-            )
-        )
+        scope = {
+            "view": self,
+            "request": this.view.request,
+            "args": this.view.args,
+            "kwargs": this.view.kwargs,
+            "user": this.request.user,
+            "pk": this.kwargs["pk"],
+            "action": this.view.action,
+        }
+        set_args(scope, argument)
+        ns = injector.let(**scope)
         callback(argument, getattr(ns, method)())
 
     return __method
