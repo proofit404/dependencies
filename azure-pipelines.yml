@@ -103,6 +103,9 @@ jobs:
         yamllint:
           python.version: '3.7'
           tox.env: yamllint
+        jscpd:
+          python.version: '3.7'
+          tox.env: jscpd
     steps:
       - task: UsePythonVersion@0
         inputs:
@@ -113,7 +116,7 @@ jobs:
       - task: NodeTool@0
         inputs:
           versionSpec: '10.x'
-        condition: in(variables['tox.env'], 'remarklint')
+        condition: in(variables['tox.env'], 'remarklint', 'jscpd')
         displayName: Install NodeJS.
       - script: tox -e $(tox.env)
         displayName: Run Tox.

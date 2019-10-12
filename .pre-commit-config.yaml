@@ -19,8 +19,15 @@ repos:
       - id: reorder-python-imports
         args: [--application-directories=.:src:tests/helpers]
         exclude: migrations
+        # override until resolved:
+        # https://github.com/asottile/reorder_python_imports/issues/103
+        files: \.pyi?$
+        types: []
   - repo: https://github.com/psf/black
     rev: ''
     hooks:
       - id: black
         exclude: migrations
+        # override until resolved: https://github.com/ambv/black/issues/402
+        files: \.pyi?$
+        types: []

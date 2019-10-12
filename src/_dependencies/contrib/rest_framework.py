@@ -125,24 +125,8 @@ def apply_api_view_attributes(handler, injector):
         "metadata_class",
     ]:
         if attribute in injector:
-
-            def locals_hack(attribute=attribute):
-                @property
-                def __attribute(self):
-                    __tracebackhide__ = True
-                    ns = injector.let(
-                        view=self,
-                        request=this.view.request,
-                        args=this.view.args,
-                        kwargs=this.view.kwargs,
-                        user=this.request.user,
-                        pk=this.kwargs["pk"],
-                    )
-                    return getattr(ns, attribute)
-
-                return __attribute
-
-            setattr(handler, attribute, locals_hack())
+            view_property = build_view_property(injector, attribute)
+            setattr(handler, attribute, view_property)
 
 
 def apply_generic_api_view_attributes(handler, injector):
@@ -170,25 +154,8 @@ def apply_generic_api_view_attributes(handler, injector):
         "pagination_class",
     ]:
         if attribute in injector:
-
-            def locals_hack(attribute=attribute):
-                @property
-                def __attribute(self):
-                    __tracebackhide__ = True
-                    ns = injector.let(
-                        view=self,
-                        request=this.view.request,
-                        args=this.view.args,
-                        kwargs=this.view.kwargs,
-                        user=this.request.user,
-                        pk=this.kwargs["pk"],
-                        action=this.view.action,
-                    )
-                    return getattr(ns, attribute)
-
-                return __attribute
-
-            setattr(handler, attribute, locals_hack())
+            view_property = build_view_property(injector, attribute)
+            setattr(handler, attribute, view_property)
 
 
 def apply_view_set_methods(handler, injector):
@@ -202,37 +169,23 @@ def apply_view_set_methods(handler, injector):
         ("destroy", True, None),
     ]:
         if action in injector:
-
-            def locals_hack(
-                action=action, detail=detail, validated_data=validated_data
-            ):
-                def __action(self, request, *args, **kwargs):
-                    __tracebackhide__ = True
-                    scope = build_injection_scope(self, detail, True, validated_data)
-                    ns = injector.let(**scope)
-                    return getattr(ns, action)()
-
-                return __action
-
-            setattr(handler, action, locals_hack())
+            view_action = build_view_action(injector, action, detail, validated_data)
+            setattr(handler, action, view_action)
 
 
 def apply_model_view_set_methods(handler, injector):
     def create_arguments(ns, serializer):
 
         ns["validated_data"] = serializer.validated_data
-        return ns
 
     def update_arguments(ns, serializer):
 
         ns["validated_data"] = serializer.validated_data
         ns["instance"] = serializer.instance
-        return ns
 
     def delete_arguments(ns, instance):
 
         ns["instance"] = instance
-        return ns
 
     def set_instance(serializer, instance):
 
@@ -252,47 +205,16 @@ def apply_model_view_set_methods(handler, injector):
 
         pass
 
-    for method, set_args, cb in [
+    for method, set_args, callback in [
         ("create", create_arguments, set_instance),
         ("update", update_arguments, set_instance),
         ("destroy", delete_arguments, ignore),
     ]:
         if method in injector:
-
-            def locals_hack(method=method, set_args=set_args, cb=cb):
-                def __method(self, argument):
-                    __tracebackhide__ = True
-                    ns = injector.let(
-                        **set_args(
-                            {
-                                "view": self,
-                                "request": this.view.request,
-                                "args": this.view.args,
-                                "kwargs": this.view.kwargs,
-                                "user": this.request.user,
-                                "pk": this.kwargs["pk"],
-                                "action": this.view.action,
-                            },
-                            argument,
-                        )
-                    )
-                    cb(argument, getattr(ns, method)())
-
-                return __method
-
+            viewset_method = build_view_set_method(injector, method, set_args, callback)
         else:
-
-            def locals_hack(method=method, ns=injector.__name__):  # type: ignore
-                def __method(self, argument):
-                    raise DependencyError(
-                        "Add {method!r} to the {ns!r} injector".format(
-                            method=method, ns=ns
-                        )
-                    )
-
-                return __method
-
-        setattr(handler, "perform_" + method, locals_hack())
+            viewset_method = build_view_set_error(injector, method)
+        setattr(handler, "perform_" + method, viewset_method)
 
 
 @Value
@@ -303,22 +225,68 @@ def get_validated_data(view, request):
     return serializer.validated_data
 
 
-def build_injection_scope(
-    view, detail=False, view_set=False, validated_data=None, instance=None
-):
-    scope = {
-        "view": view,
-        "request": this.view.request,
-        "args": this.view.args,
-        "kwargs": this.view.kwargs,
-        "user": this.request.user,
-    }
-    if detail:
-        scope["pk"] = this.kwargs["pk"]
-    if view_set:
-        scope["action"] = this.view.action
-    if validated_data is not None:
-        scope["validated_data"] = validated_data
-    if instance is not None:
-        scope["instance"] = instance
-    return scope
+def build_view_property(injector, attribute):
+    @property
+    def __attribute(self):
+        __tracebackhide__ = True
+        ns = injector.let(
+            view=self,
+            request=this.view.request,
+            args=this.view.args,
+            kwargs=this.view.kwargs,
+            user=this.request.user,
+            pk=this.kwargs["pk"],
+            action=this.view.action,
+        )
+        return getattr(ns, attribute)
+
+    return __attribute
+
+
+def build_view_action(injector, action, detail, validated_data):
+    def __action(self, request, *args, **kwargs):
+        __tracebackhide__ = True
+        scope = {
+            "view": self,
+            "request": this.view.request,
+            "args": this.view.args,
+            "kwargs": this.view.kwargs,
+            "user": this.request.user,
+            "action": action,
+        }
+        if detail:
+            scope["pk"] = this.kwargs["pk"]
+        if validated_data is not None:
+            scope["validated_data"] = validated_data
+        ns = injector.let(**scope)
+        return getattr(ns, action)()
+
+    return __action
+
+
+def build_view_set_method(injector, method, set_args, callback):
+    def __method(self, argument):
+        __tracebackhide__ = True
+        scope = {
+            "view": self,
+            "request": this.view.request,
+            "args": this.view.args,
+            "kwargs": this.view.kwargs,
+            "user": this.request.user,
+            "pk": this.kwargs["pk"],
+            "action": this.view.action,
+        }
+        set_args(scope, argument)
+        ns = injector.let(**scope)
+        callback(argument, getattr(ns, method)())
+
+    return __method
+
+
+def build_view_set_error(injector, method):
+    def __method(self, argument):
+        raise DependencyError(
+            "Add {!r} to the {!r} injector".format(method, injector.__name__)
+        )
+
+    return __method
