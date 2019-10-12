@@ -1,0 +1,13 @@
+---
+- case: injector_attribute_access
+  disable_cache: true
+  main: |
+    from dependencies import Injector
+
+    class Foo:
+        pass
+
+    class Container(Injector):
+        foo = Foo
+
+    reveal_type(Container.foo)  # N: Revealed type is 'Foo'
