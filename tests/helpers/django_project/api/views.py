@@ -12,19 +12,6 @@ from rest_framework.status import HTTP_204_NO_CONTENT
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.viewsets import ViewSet
 
-from .auth import AuthenticateAdmin
-from .auth import AuthenticateAll
-from .commands import UserCreateOperations
-from .commands import UserDestroyOperations
-from .commands import UserOperations
-from .commands import UserUpdateOperations
-from .filtersets import use_filterset_name
-from .filtersets import UserFilter
-from .metadata import DenyMetadata
-from .negotiation import DenyNegotiation
-from .serializers import UserSerializer
-from .throttle import ThrottleEveryOne
-from .version import DenyVersion
 from dependencies import Injector
 from dependencies import operation
 from dependencies import this
@@ -34,6 +21,19 @@ from dependencies.contrib.rest_framework import generic_api_view
 from dependencies.contrib.rest_framework import generic_view_set
 from dependencies.contrib.rest_framework import model_view_set
 from dependencies.contrib.rest_framework import view_set
+from django_project.api.auth import AuthenticateAdmin
+from django_project.api.auth import AuthenticateAll
+from django_project.api.commands import UserCreateOperations
+from django_project.api.commands import UserDestroyOperations
+from django_project.api.commands import UserOperations
+from django_project.api.commands import UserUpdateOperations
+from django_project.api.filtersets import use_filterset_name
+from django_project.api.filtersets import UserFilter
+from django_project.api.metadata import DenyMetadata
+from django_project.api.negotiation import DenyNegotiation
+from django_project.api.serializers import UserSerializer
+from django_project.api.throttle import ThrottleEveryOne
+from django_project.api.version import DenyVersion
 
 
 @api_view

@@ -1,6 +1,6 @@
 from rest_framework.metadata import BaseMetadata
 
-from .exceptions import MetadataError
+from django_project.api.exceptions import MetadataError
 
 
 class DenyMetadata(BaseMetadata):
