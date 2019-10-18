@@ -2,22 +2,9 @@
 - case: stubs_available
   disable_cache: true
   main: |
-    from dependencies import Injector
-    from dependencies import operation
-    from dependencies import Package
-    from dependencies import this
-    from dependencies import value
-    from dependencies.contrib.celery import shared_task
-    from dependencies.contrib.celery import task
-    from dependencies.contrib.django import form_view
-    from dependencies.contrib.django import view
-    from dependencies.contrib.pytest import register
-    from dependencies.contrib.pytest import require
-    from dependencies.contrib.rest_framework import api_view
-    from dependencies.contrib.rest_framework import generic_api_view
-    from dependencies.contrib.rest_framework import generic_view_set
-    from dependencies.contrib.rest_framework import list_api_view
-    from dependencies.contrib.rest_framework import model_view_set
-    from dependencies.contrib.rest_framework import retrieve_api_view
-    from dependencies.contrib.rest_framework import view_set
-    from dependencies.exceptions import DependencyError
+    from dependencies import *
+    from dependencies.contrib.celery import *
+    from dependencies.contrib.django import *
+    from dependencies.contrib.pytest import *
+    from dependencies.contrib.rest_framework import *
+    from dependencies.exceptions import *
