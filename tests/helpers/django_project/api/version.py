@@ -1,6 +1,6 @@
 from rest_framework.versioning import BaseVersioning
 
-from .exceptions import VersionError
+from django_project.api.exceptions import VersionError
 
 
 class DenyVersion(BaseVersioning):
