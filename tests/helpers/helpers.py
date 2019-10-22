@@ -1,3 +1,5 @@
+import configparser
+
 import pytest
 
 
@@ -24,3 +26,12 @@ class CodeCollector(object):
     def parametrize(self, test_func):
 
         return pytest.mark.parametrize(self.name, self)(test_func)
+
+
+def get_tox_deps():
+    ini_parser = configparser.ConfigParser()
+    ini_parser.read("tox.ini")
+    for section in ini_parser:
+        if "deps" in ini_parser[section]:
+            deps = ini_parser[section]["deps"].strip().splitlines()
+            yield deps
