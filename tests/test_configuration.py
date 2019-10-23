@@ -75,12 +75,32 @@ def test_tox_environments_equal_azure_tasks():
     assert tox_environments == azure_tasks
 
 
+def test_tox_environment_base_python_equal_azure_task_python_version():
+    """
+    If tox environment has `basepython` setting, the corresponding
+    Azure Pipeline task should has the same value in the `python.version`
+    setting.
+    """
+
+    azure_pipelines = yaml.safe_load(open("azure-pipelines.yml").read())
+    azure_tasks = {
+        k: v["python.version"]
+        for k, v in azure_pipelines["jobs"][0]["strategy"]["matrix"].items()
+    }
+
+    for env, basepython in helpers.tox_info("basepython"):
+        env = re.sub(r"^testenv:", "", env)
+        basepython = re.sub(r"^python", "", basepython)
+        assert basepython == azure_tasks[env]
+
+
 def test_tox_deps_are_ordered():
     """
     Dependencies section of all tox environments should be in alphabetical order.
     """
 
-    for deps in helpers.get_tox_deps():
+    for _env, deps in helpers.tox_info("deps"):
+        deps = deps.splitlines()
         ordered = [
             deps[l[-1]]
             for l in sorted(
@@ -123,12 +143,14 @@ def test_packages_are_ordered():
         assert packages == sorted(packages)
 
 
+@pytest.mark.xfail(reason="https://github.com/dry-python/stories/issues/213")
 def test_tox_deps_not_pinned():
     """
     Dependencies section of all tox environments should not have version specified.
     """
 
-    for deps in helpers.get_tox_deps():  # pragma: no cover
+    for _env, deps in helpers.tox_info("deps"):  # pragma: no cover
+        deps = deps.splitlines()
         deps = [d.split(":")[-1].strip().split("==") for d in deps]
         versions = collections.defaultdict(list)
         for d in deps:
