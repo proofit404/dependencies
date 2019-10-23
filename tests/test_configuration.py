@@ -143,7 +143,6 @@ def test_packages_are_ordered():
         assert packages == sorted(packages)
 
 
-@pytest.mark.xfail(reason="https://github.com/dry-python/stories/issues/213")
 def test_tox_deps_not_pinned():
     """
     Dependencies section of all tox environments should not have version specified.
