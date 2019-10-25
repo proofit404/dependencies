@@ -102,18 +102,13 @@ def test_tox_deps_are_ordered():
     for _env, deps in helpers.tox_info("deps"):
         deps = [d.split("==")[0] for d in deps.splitlines()]
         ordered = [
-            deps[l[-1]]
+            deps[l[1]]
             for l in sorted(
                 [
-                    tuple(
-                        itertools.chain(
-                            map(lambda x: x.strip().lower(), reversed(d.split(":"))),
-                            [i],
-                        )
-                    )
+                    [list(map(lambda x: x.strip().lower(), reversed(d.split(":")))), i]
                     for i, d in enumerate(deps)
                 ],
-                key=lambda key: (key[0], key[1]),
+                key=lambda key: key[0],
             )
         ]
         assert deps == ordered
