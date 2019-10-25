@@ -76,6 +76,15 @@ class ThrottleAll(Injector):
 
 
 @api_view
+class ThrottleScope(Injector):
+
+    get = this.command.login
+    command = UserOperations
+
+    throttle_scope = 'throttle_scope'
+
+
+@api_view
 class BadNegotiation(Injector):
 
     get = this.command.respond

@@ -119,6 +119,7 @@ def apply_api_view_attributes(handler, injector):
         "renderer_classes",
         "parser_classes",
         "throttle_classes",
+        "throttle_scope",
         "permission_classes",
         "content_negotiation_class",
         "versioning_class",
