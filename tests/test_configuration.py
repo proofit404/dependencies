@@ -34,7 +34,7 @@ def test_tox_environments_order():
         for e in tox_environments
     ]
 
-    assert offsets == sorted(offsets)
+    assert offsets == sorted(offsets, key=lambda key: key[0])
 
 
 def test_tox_environments_includes_python_versions():
