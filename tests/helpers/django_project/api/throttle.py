@@ -7,7 +7,7 @@ class ThrottleEveryOne(BaseThrottle):
         return False
 
 
-class ThrottleEveryOneInScope(ScopedRateThrottle):
+class ThrottleScope(ScopedRateThrottle):
     scope = "throttle_scope"
 
     def wait(self):

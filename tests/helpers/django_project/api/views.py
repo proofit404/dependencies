@@ -81,7 +81,7 @@ class ThrottleScope(Injector):
     get = this.command.respond
     command = UserOperations
 
-    throttle_scope = 'throttle_scope'
+    throttle_scope = "throttle_scope"
 
 
 @api_view
