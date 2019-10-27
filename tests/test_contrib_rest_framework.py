@@ -52,7 +52,10 @@ def test_dispatch_request(db):
 
     # Throttle scope applies.
 
-    response = client.get("/api/throttle_scope")
+    response = client.get("/api/throttle_scope/")
+    assert response.status_code == status.HTTP_200_OK
+
+    response = client.get("/api/throttle_scope/")
     assert response.status_code == status.HTTP_429_TOO_MANY_REQUESTS
 
     # Strict content negotiation.

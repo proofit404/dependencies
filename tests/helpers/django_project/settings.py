@@ -26,3 +26,10 @@ TEMPLATES = [
         "NAME": "default",
     }
 ]
+
+REST_FRAMEWORK = {
+    "DEFAULT_THROTTLE_CLASSES": (
+        "django_project.api.throttle.ThrottleEveryOneInScope",
+    ),
+    "DEFAULT_THROTTLE_RATES": {"throttle_scope": "1/min"},
+}

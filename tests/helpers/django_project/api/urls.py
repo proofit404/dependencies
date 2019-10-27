@@ -11,14 +11,13 @@ from django_project.api.views import InjectedGenericViewSet
 from django_project.api.views import InjectedViewSet
 from django_project.api.views import LoginAll
 from django_project.api.views import ThrottleAll
+from django_project.api.views import ThrottleScope
 from django_project.api.views import UserAction
 from django_project.api.views import UserListFilterFieldsView
 from django_project.api.views import UserListView
 from django_project.api.views import UserLogin
 from django_project.api.views import UserRetrieveView
 from django_project.api.views import UserViewSet
-
-from tests.helpers.django_project.api.views import ThrottleScope
 
 router = SimpleRouter()
 # FIXME: We can not user router without `basename` because `queryset`

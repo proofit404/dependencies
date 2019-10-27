@@ -78,7 +78,7 @@ class ThrottleAll(Injector):
 @api_view
 class ThrottleScope(Injector):
 
-    get = this.command.login
+    get = this.command.respond
     command = UserOperations
 
     throttle_scope = 'throttle_scope'

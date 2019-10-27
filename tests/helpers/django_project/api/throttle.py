@@ -1,4 +1,5 @@
-from rest_framework.throttling import BaseThrottle, ScopedRateThrottle
+from rest_framework.throttling import BaseThrottle
+from rest_framework.throttling import ScopedRateThrottle
 
 
 class ThrottleEveryOne(BaseThrottle):
@@ -7,7 +8,7 @@ class ThrottleEveryOne(BaseThrottle):
 
 
 class ThrottleEveryOneInScope(ScopedRateThrottle):
-    scope = 'throttle_scope'
+    scope = "throttle_scope"
 
-    def allow_request(self, request, view):
-        return False
+    def wait(self):
+        return 1
