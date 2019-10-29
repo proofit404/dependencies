@@ -8,7 +8,7 @@ class Package:
     def __getattr__(self, attrname: str) -> Package: ...
 
 def make_package_spec(
-    dependency: Package
+    dependency: Package,
 ) -> Tuple[str, ImportSpec, List[Any], int]: ...
 
 class ImportSpec:
