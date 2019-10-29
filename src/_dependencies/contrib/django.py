@@ -26,7 +26,6 @@ def form_view(injector):
 def create_handler(from_class, injector):
     class Handler(from_class):
         __doc__ = injector.__doc__
-        throttle_classes = api_settings.DEFAULT_THROTTLE_CLASSES
 
     Handler.__name__ = injector.__name__
     Handler.__module__ = injector.__module__

@@ -1,7 +1,7 @@
 ---
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: ''
+    rev: v2.4.0
     hooks:
       - id: trailing-whitespace
       - id: end-of-file-fixer
@@ -9,12 +9,12 @@ repos:
       - id: file-contents-sorter
         files: ^(.gitignore|.python-version)$
   - repo: https://github.com/asottile/pyupgrade
-    rev: ''
+    rev: v1.25.1
     hooks:
       - id: pyupgrade
         args: [--keep-percent-format]
   - repo: https://github.com/asottile/reorder_python_imports
-    rev: ''
+    rev: v1.8.0
     hooks:
       - id: reorder-python-imports
         args: [--application-directories=.:src:tests/helpers]
@@ -24,7 +24,7 @@ repos:
         files: \.pyi?$
         types: []
   - repo: https://github.com/psf/black
-    rev: ''
+    rev: 19.10b0
     hooks:
       - id: black
         exclude: migrations
