@@ -9,7 +9,7 @@ class Operation:
     def __init__(self, function: Callable) -> None: ...
 
 def make_operation_spec(
-    dependency: Operation
+    dependency: Operation,
 ) -> Tuple[str, OperationSpec, List[str], int]: ...
 
 class OperationSpec:

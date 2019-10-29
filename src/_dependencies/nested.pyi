@@ -12,7 +12,7 @@ from _dependencies.raw import RawSpec
 from _dependencies.this import ThisSpec
 
 def make_nested_injector_spec(
-    dependency: Type[Injector]
+    dependency: Type[Injector],
 ) -> Tuple[str, NestedInjectorSpec, List[str], int]: ...
 
 class NestedInjectorSpec:
@@ -20,7 +20,7 @@ class NestedInjectorSpec:
     def __call__(self, __self__: Injector) -> Type[Injector]: ...
     @property
     def __dependencies__(
-        self
+        self,
     ) -> Dict[
         str,
         Union[
