@@ -120,6 +120,7 @@ def apply_api_view_attributes(handler, injector):
         "parser_classes",
         "throttle_classes",
         "throttle_scope",
+        "custom_throttle_scope",
         "permission_classes",
         "content_negotiation_class",
         "versioning_class",

@@ -1,7 +1,13 @@
 import pytest
+from django.test import override_settings
+from django.test import RequestFactory
+from django.test import TestCase
 
+from _dependencies.injector import Injector
+from dependencies import this
+from dependencies.contrib.rest_framework import api_view
 from dependencies.exceptions import DependencyError
-
+from django_project.api.commands import UserOperations
 
 admin_models = pytest.importorskip("django.contrib.admin.models")
 auth_models = pytest.importorskip("django.contrib.auth.models")
@@ -48,16 +54,6 @@ def test_dispatch_request(db):
     # Throttle classes applies.
 
     response = client.get("/api/throttle_all/")
-    assert response.status_code == status.HTTP_429_TOO_MANY_REQUESTS
-
-    # Throttle scope doesn't apply on first request.
-
-    response = client.get("/api/throttle_scope/")
-    assert response.status_code == status.HTTP_200_OK
-
-    # Throttle scope applies on second request.
-
-    response = client.get("/api/throttle_scope/")
     assert response.status_code == status.HTTP_429_TOO_MANY_REQUESTS
 
     # Strict content negotiation.
@@ -273,3 +269,78 @@ def test_keep_view_informanion():
     assert model_view_set.__name__ == "UserViewSet"
     assert model_view_set.__module__ == "django_project.api.views"
     assert model_view_set.__doc__ == "Intentionally left blank."
+
+
+@override_settings(
+    REST_FRAMEWORK={
+        "DEFAULT_THROTTLE_CLASSES": (
+            "django_project.api.throttle.ThrottleDefaultScope",
+        ),
+    }
+)
+class DefaultThrottleScopeTest(TestCase):
+    def setUp(self):
+        self.factory = RequestFactory()
+
+    def test_default_throttle_scope(self):
+        @api_view
+        class DefaultThrottleScope(Injector):
+            get = this.command.respond
+            command = UserOperations
+
+            throttle_scope = "throttle_scope"
+
+        # Throttle scope doesn't apply on first request.
+        request = self.factory.get("/api/default_throttle_scope/")
+        response = DefaultThrottleScope.as_view()(request)
+        assert response.status_code == status.HTTP_200_OK
+
+        # Throttle scope applies on second request.
+        response = DefaultThrottleScope.as_view()(request)
+        assert response.status_code == status.HTTP_429_TOO_MANY_REQUESTS
+
+
+@override_settings(
+    REST_FRAMEWORK={
+        "DEFAULT_THROTTLE_CLASSES": (
+            "django_project.api.throttle.ThrottleCustomScope",
+        ),
+    }
+)
+class CustomThrottleScopeTest(TestCase):
+    def setUp(self):
+        self.factory = RequestFactory()
+
+    def test_default_throttle_scope_not_applied(self):
+        @api_view
+        class DefaultThrottleScope(Injector):
+            get = this.command.respond
+            command = UserOperations
+
+            throttle_scope = "throttle_scope"
+
+        request = self.factory.get("/api/default_throttle_scope/")
+
+        # Throttle will always pass for default scope as it is not in settings.
+        response = DefaultThrottleScope.as_view()(request)
+        assert response.status_code == status.HTTP_200_OK
+
+        response = DefaultThrottleScope.as_view()(request)
+        assert response.status_code == status.HTTP_200_OK
+
+    def test_custom_throttle_scope_applied(self):
+        @api_view
+        class CustomThrottleScope(Injector):
+            get = this.command.respond
+            command = UserOperations
+
+            custom_throttle_scope = "custom_scope"
+
+        # Throttle scope doesn't apply on first request.
+        request = self.factory.get("/api/custom_throttle_scope/")
+        response = CustomThrottleScope.as_view()(request)
+        assert response.status_code == status.HTTP_200_OK
+
+        # Throttle scope applies on second request.
+        response = CustomThrottleScope.as_view()(request)
+        assert response.status_code == status.HTTP_429_TOO_MANY_REQUESTS

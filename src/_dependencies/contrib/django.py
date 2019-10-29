@@ -2,6 +2,7 @@ from __future__ import absolute_import
 
 from django.views.generic import FormView
 from django.views.generic import View
+from rest_framework.settings import api_settings
 
 from _dependencies.this import this
 
@@ -25,6 +26,7 @@ def form_view(injector):
 def create_handler(from_class, injector):
     class Handler(from_class):
         __doc__ = injector.__doc__
+        throttle_classes = api_settings.DEFAULT_THROTTLE_CLASSES
 
     Handler.__name__ = injector.__name__
     Handler.__module__ = injector.__module__
