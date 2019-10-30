@@ -272,82 +272,79 @@ def test_keep_view_informanion():
     assert model_view_set.__doc__ == "Intentionally left blank."
 
 
-@override_settings(
-    REST_FRAMEWORK={
+def test_default_throttle_scope_applied_to_default(rf, settings):
+    settings.REST_FRAMEWORK = {
         "DEFAULT_THROTTLE_CLASSES": (
             "django_project.api.throttle.ThrottleDefaultScope",
         ),
     }
-)
-class DefaultThrottleScopeTest(TestCase):
-    def setUp(self):
-        self.factory = RequestFactory()
 
-    def test_default_throttle_scope(self):
-        @api_view
-        class DefaultThrottleScope(Injector):
-            get = this.command.respond
-            command = UserOperations
+    @api_view
+    class DefaultThrottleScope(Injector):
+        get = this.command.respond
+        command = UserOperations
 
-            throttle_scope = "throttle_scope"
-            # this is the workaround for https://github.com/encode/django-rest-framework/issues/6030
-            throttle_classes = api_settings.DEFAULT_THROTTLE_CLASSES
+        throttle_scope = "throttle_scope"
+        # this is the workaround for https://github.com/encode/django-rest-framework/issues/6030
+        throttle_classes = api_settings.DEFAULT_THROTTLE_CLASSES
 
-        # Throttle scope doesn't apply on first request.
-        request = self.factory.get("/api/default_throttle_scope/")
-        response = DefaultThrottleScope.as_view()(request)
-        assert response.status_code == status.HTTP_200_OK
+    # Throttle scope doesn't apply on first request.
+    request = rf.get("/api/default_throttle_scope/")
+    response = DefaultThrottleScope.as_view()(request)
+    assert response.status_code == status.HTTP_200_OK
 
-        # Throttle scope applies on second request.
-        response = DefaultThrottleScope.as_view()(request)
-        assert response.status_code == status.HTTP_429_TOO_MANY_REQUESTS
+    # Throttle scope applies on second request.
+    response = DefaultThrottleScope.as_view()(request)
+    assert response.status_code == status.HTTP_429_TOO_MANY_REQUESTS
 
 
-@override_settings(
-    REST_FRAMEWORK={
+def test_custom_throttle_scope_not_applied_to_default(rf, settings):
+    settings.REST_FRAMEWORK = {
         "DEFAULT_THROTTLE_CLASSES": (
             "django_project.api.throttle.ThrottleCustomScope",
         ),
     }
-)
-class CustomThrottleScopeTest(TestCase):
-    def setUp(self):
-        self.factory = RequestFactory()
 
-    def test_default_throttle_scope_not_applied(self):
-        @api_view
-        class DefaultThrottleScope(Injector):
-            get = this.command.respond
-            command = UserOperations
+    @api_view
+    class DefaultThrottleScope(Injector):
+        get = this.command.respond
+        command = UserOperations
 
-            throttle_scope = "throttle_scope"
-            # this is the workaround for https://github.com/encode/django-rest-framework/issues/6030
-            throttle_classes = api_settings.DEFAULT_THROTTLE_CLASSES
+        throttle_scope = "throttle_scope"
+        # this is the workaround for https://github.com/encode/django-rest-framework/issues/6030
+        throttle_classes = api_settings.DEFAULT_THROTTLE_CLASSES
 
-        request = self.factory.get("/api/default_throttle_scope/")
+    request = rf.get("/api/default_throttle_scope/")
 
-        # Throttle will always pass for default scope as it is not in settings.
-        response = DefaultThrottleScope.as_view()(request)
-        assert response.status_code == status.HTTP_200_OK
+    # Throttle will always pass for default scope as it is not in settings.
+    response = DefaultThrottleScope.as_view()(request)
+    assert response.status_code == status.HTTP_200_OK
 
-        response = DefaultThrottleScope.as_view()(request)
-        assert response.status_code == status.HTTP_200_OK
+    response = DefaultThrottleScope.as_view()(request)
+    assert response.status_code == status.HTTP_200_OK
 
-    def test_custom_throttle_scope_applied(self):
-        @api_view
-        class CustomThrottleScope(Injector):
-            get = this.command.respond
-            command = UserOperations
 
-            custom_throttle_scope = "custom_scope"
-            # this is the workaround for https://github.com/encode/django-rest-framework/issues/6030
-            throttle_classes = api_settings.DEFAULT_THROTTLE_CLASSES
+def test_custom_throttle_scope_applied_to_custom(settings, rf):
+    settings.REST_FRAMEWORK = {
+        "DEFAULT_THROTTLE_CLASSES": (
+            "django_project.api.throttle.ThrottleCustomScope",
+        ),
+    }
 
-        # Throttle scope doesn't apply on first request.
-        request = self.factory.get("/api/custom_throttle_scope/")
-        response = CustomThrottleScope.as_view()(request)
-        assert response.status_code == status.HTTP_200_OK
+    @api_view
+    class CustomThrottleScope(Injector):
+        get = this.command.respond
+        command = UserOperations
 
-        # Throttle scope applies on second request.
-        response = CustomThrottleScope.as_view()(request)
-        assert response.status_code == status.HTTP_429_TOO_MANY_REQUESTS
+        custom_throttle_scope = "custom_scope"
+        # this is the workaround for https://github.com/encode/django-rest-framework/issues/6030
+        throttle_classes = api_settings.DEFAULT_THROTTLE_CLASSES
+
+    # Throttle scope doesn't apply on first request.
+    request = rf.get("/api/custom_throttle_scope/")
+    response = CustomThrottleScope.as_view()(request)
+    assert response.status_code == status.HTTP_200_OK
+
+    # Throttle scope applies on second request.
+    response = CustomThrottleScope.as_view()(request)
+    assert response.status_code == status.HTTP_429_TOO_MANY_REQUESTS
