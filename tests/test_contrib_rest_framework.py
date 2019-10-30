@@ -1,6 +1,6 @@
 import pytest
 
-from _dependencies.injector import Injector
+from dependencies import Injector
 from dependencies import this
 from dependencies.exceptions import DependencyError
 
@@ -10,8 +10,8 @@ status = pytest.importorskip("rest_framework.status")
 test_client = pytest.importorskip("rest_framework.test")
 contrib = pytest.importorskip("dependencies.contrib.rest_framework")
 project_exceptions = pytest.importorskip("django_project.api.exceptions")
-commands = pytest.importorskip("django_project.api.commands")
-throttle = pytest.importorskip("django_project.api.throttle")
+project_commands = pytest.importorskip("django_project.api.commands")
+project_throttle = pytest.importorskip("django_project.api.throttle")
 
 
 client = test_client.APIClient()
@@ -278,12 +278,12 @@ def test_default_throttle_scope_applied_to_default(rf, settings):
     @contrib.api_view
     class DefaultThrottleScope(Injector):
         get = this.command.respond
-        command = commands.UserOperations
+        command = project_commands.UserOperations
 
         throttle_scope = "throttle_scope"
         # this is the workaround for
         # https://github.com/encode/django-rest-framework/issues/6030
-        throttle_classes = [throttle.ThrottleDefaultScope]
+        throttle_classes = [project_throttle.ThrottleDefaultScope]
 
     # Throttle scope doesn't apply on first request.
     request = rf.get("/api/default_throttle_scope/")
@@ -305,12 +305,12 @@ def test_custom_throttle_scope_not_applied_to_default(rf, settings):
     @contrib.api_view
     class DefaultThrottleScope(Injector):
         get = this.command.respond
-        command = commands.UserOperations
+        command = project_commands.UserOperations
 
         throttle_scope = "throttle_scope"
         # this is the workaround for
         # https://github.com/encode/django-rest-framework/issues/6030
-        throttle_classes = [throttle.ThrottleCustomScope]
+        throttle_classes = [project_throttle.ThrottleCustomScope]
 
     request = rf.get("/api/default_throttle_scope/")
 
@@ -332,12 +332,12 @@ def test_custom_throttle_scope_applied_to_custom(settings, rf):
     @contrib.api_view
     class CustomThrottleScope(Injector):
         get = this.command.respond
-        command = commands.UserOperations
+        command = project_commands.UserOperations
 
         custom_throttle_scope = "custom_scope"
         # this is the workaround for
         # https://github.com/encode/django-rest-framework/issues/6030
-        throttle_classes = [throttle.ThrottleCustomScope]
+        throttle_classes = [project_throttle.ThrottleCustomScope]
 
     # Throttle scope doesn't apply on first request.
     request = rf.get("/api/custom_throttle_scope/")
