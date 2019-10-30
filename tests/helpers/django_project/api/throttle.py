@@ -1,6 +1,5 @@
 from rest_framework.throttling import BaseThrottle
 from rest_framework.throttling import ScopedRateThrottle
-from rest_framework.throttling import SimpleRateThrottle
 
 
 class ThrottleEveryOne(BaseThrottle):

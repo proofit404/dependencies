@@ -1,7 +1,4 @@
 import pytest
-from django.test import override_settings
-from django.test import RequestFactory
-from django.test import TestCase
 from rest_framework.settings import api_settings
 
 from _dependencies.injector import Injector
@@ -285,7 +282,8 @@ def test_default_throttle_scope_applied_to_default(rf, settings):
         command = UserOperations
 
         throttle_scope = "throttle_scope"
-        # this is the workaround for https://github.com/encode/django-rest-framework/issues/6030
+        # this is the workaround for
+        # https://github.com/encode/django-rest-framework/issues/6030
         throttle_classes = api_settings.DEFAULT_THROTTLE_CLASSES
 
     # Throttle scope doesn't apply on first request.
@@ -311,7 +309,8 @@ def test_custom_throttle_scope_not_applied_to_default(rf, settings):
         command = UserOperations
 
         throttle_scope = "throttle_scope"
-        # this is the workaround for https://github.com/encode/django-rest-framework/issues/6030
+        # this is the workaround for
+        # https://github.com/encode/django-rest-framework/issues/6030
         throttle_classes = api_settings.DEFAULT_THROTTLE_CLASSES
 
     request = rf.get("/api/default_throttle_scope/")
@@ -337,7 +336,8 @@ def test_custom_throttle_scope_applied_to_custom(settings, rf):
         command = UserOperations
 
         custom_throttle_scope = "custom_scope"
-        # this is the workaround for https://github.com/encode/django-rest-framework/issues/6030
+        # this is the workaround for
+        # https://github.com/encode/django-rest-framework/issues/6030
         throttle_classes = api_settings.DEFAULT_THROTTLE_CLASSES
 
     # Throttle scope doesn't apply on first request.

@@ -2,7 +2,6 @@ from __future__ import absolute_import
 
 from django.views.generic import FormView
 from django.views.generic import View
-from rest_framework.settings import api_settings
 
 from _dependencies.this import this
 
