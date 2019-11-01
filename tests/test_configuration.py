@@ -138,6 +138,29 @@ def test_packages_are_ordered():
         assert packages == sorted(packages)
 
 
+def test_pre_commit_hooks_avoid_additional_dependencies():
+    """
+    Additional dependencies section of all hooks of all repositories
+    of the .pre-commit-config.yaml should not be used.
+    """
+    # There is no special policy related to the additional
+    # dependencies in the pre-commit hooks.  At the time of writing
+    # there were no additional dependencies in all hooks in all
+    # repositories.  If you need to include additional dependency to
+    # the hook, please replace this test with two tests:
+    #
+    # * additional dependencies are ordered
+    #
+    # * additional dependencies have no pinned versions
+
+    pre_commit_config_yaml = yaml.safe_load(open(".pre-commit-config.yaml").read())
+    assert all(
+        "additional_dependencies" not in hook
+        for repo in pre_commit_config_yaml["repos"]
+        for hook in repo["hooks"]
+    )
+
+
 def test_tox_deps_not_pinned():
     """
     Dependencies section of all tox environments should not have version specified.
