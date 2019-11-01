@@ -5,19 +5,22 @@ import itertools
 import json
 import re
 import subprocess
+import sys
 
 import pytest
+import tomlkit
+import yaml
 
 import helpers
 
 # This is a little bit a workaround of the PyYaml library limitations.
 # It doesn't preserve the order of keys of the parsed dict.  It works
 # on recent Python versions where the order of keys is guaranteed by
-# dict implementation.  We do not install necessary libraries for the
-# test, so it does not fail because it does not run.  See
-# https://github.com/yaml/pyyaml/issues/110 for more info.
-tomlkit = pytest.importorskip("tomlkit")
-yaml = pytest.importorskip("yaml")
+# dict implementation.  See https://github.com/yaml/pyyaml/issues/110
+# for more info.
+pytestmark = pytest.mark.skipif(
+    sys.version_info < (3, 6), reason="These tests rely on the order of the dict keys"
+)
 
 
 def test_tox_environments_order():
@@ -138,12 +141,32 @@ def test_packages_are_ordered():
         assert packages == sorted(packages)
 
 
+def test_pre_commit_hooks_avoid_additional_dependencies():
+    """
+    Additional dependencies section of all hooks of all repositories
+    of the .pre-commit-config.yaml should not be used.
+    """
+    # There is no special policy related to the additional
+    # dependencies in the pre-commit hooks.  At the time of writing
+    # there were no additional dependencies in all hooks in all
+    # repositories.  If you need to include additional dependency to
+    # the hook, please replace this test with two tests:
+    #
+    # * additional dependencies are ordered
+    #
+    # * additional dependencies have no pinned versions
+
+    pre_commit_config_yaml = yaml.safe_load(open(".pre-commit-config.yaml").read())
+    hooks = (hook for repo in pre_commit_config_yaml["repos"] for hook in repo["hooks"])
+    assert all("additional_dependencies" not in hook for hook in hooks)
+
+
 def test_tox_deps_not_pinned():
     """
     Dependencies section of all tox environments should not have version specified.
     """
 
-    for _env, deps in helpers.tox_info("deps"):  # pragma: no cover
+    for _env, deps in helpers.tox_info("deps"):
         deps = deps.splitlines()
         deps = [d.split(":")[-1].strip().split("==") for d in deps]
         versions = collections.defaultdict(list)
@@ -176,6 +199,15 @@ def test_packages_not_pinned():
             if isinstance(d, dict)
         ]
         assert all(v == "*" for v in versions)
+
+
+def test_pre_commit_hooks_not_pinned():
+    """
+    Hook revisions of the .pre-commit-config.yaml should not have tag specified.
+    """
+
+    pre_commit_config_yaml = yaml.safe_load(open(".pre-commit-config.yaml").read())
+    assert all(repo["rev"] == "" for repo in pre_commit_config_yaml["repos"])
 
 
 def test_coverage_include_all_packages():
