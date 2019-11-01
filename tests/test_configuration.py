@@ -169,7 +169,7 @@ def test_tox_deps_not_pinned():
     Dependencies section of all tox environments should not have version specified.
     """
 
-    for _env, deps in helpers.tox_info("deps"):  # pragma: no cover
+    for _env, deps in helpers.tox_info("deps"):
         deps = deps.splitlines()
         deps = [d.split(":")[-1].strip().split("==") for d in deps]
         versions = collections.defaultdict(list)
