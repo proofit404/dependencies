@@ -5,19 +5,22 @@ import itertools
 import json
 import re
 import subprocess
+import sys
 
 import pytest
+import tomlkit
+import yaml
 
 import helpers
 
 # This is a little bit a workaround of the PyYaml library limitations.
 # It doesn't preserve the order of keys of the parsed dict.  It works
 # on recent Python versions where the order of keys is guaranteed by
-# dict implementation.  We do not install necessary libraries for the
-# test, so it does not fail because it does not run.  See
-# https://github.com/yaml/pyyaml/issues/110 for more info.
-tomlkit = pytest.importorskip("tomlkit")
-yaml = pytest.importorskip("yaml")
+# dict implementation.  See https://github.com/yaml/pyyaml/issues/110
+# for more info.
+pytestmark = pytest.mark.skipif(
+    sys.version_info < (3, 6), reason="These tests rely on the order of the dict keys"
+)
 
 
 def test_tox_environments_order():
