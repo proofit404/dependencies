@@ -178,6 +178,15 @@ def test_packages_not_pinned():
         assert all(v == "*" for v in versions)
 
 
+def test_pre_commit_hooks_not_pinned():
+    """
+    Hook revisions of the .pre-commit-config.yaml should not have tag specified.
+    """
+
+    pre_commit_config_yaml = yaml.safe_load(open(".pre-commit-config.yaml").read())
+    assert all(repo["rev"] == "" for repo in pre_commit_config_yaml["repos"])
+
+
 def test_coverage_include_all_packages():
     """
     Coverage source should include packages:
