@@ -157,11 +157,8 @@ def test_pre_commit_hooks_avoid_additional_dependencies():
     # * additional dependencies have no pinned versions
 
     pre_commit_config_yaml = yaml.safe_load(open(".pre-commit-config.yaml").read())
-    assert all(
-        "additional_dependencies" not in hook
-        for repo in pre_commit_config_yaml["repos"]
-        for hook in repo["hooks"]
-    )
+    hooks = (hook for repo in pre_commit_config_yaml["repos"] for hook in repo["hooks"])
+    assert all("additional_dependencies" not in hook for hook in hooks)
 
 
 def test_tox_deps_not_pinned():
