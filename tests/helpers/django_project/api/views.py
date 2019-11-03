@@ -6,31 +6,34 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.renderers import DocumentationRenderer
 from rest_framework.request import Request
 from rest_framework.response import Response
-from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_204_NO_CONTENT
-from rest_framework.viewsets import GenericViewSet, ViewSet
+from rest_framework.status import HTTP_200_OK
+from rest_framework.status import HTTP_201_CREATED
+from rest_framework.status import HTTP_204_NO_CONTENT
+from rest_framework.viewsets import GenericViewSet
+from rest_framework.viewsets import ViewSet
 
-from dependencies import Injector, operation, this, value
-from dependencies.contrib.rest_framework import (
-    api_view,
-    generic_api_view,
-    generic_view_set,
-    model_view_set,
-    view_set,
-)
-
-from .auth import AuthenticateAdmin, AuthenticateAll
-from .commands import (
-    UserCreateOperations,
-    UserDestroyOperations,
-    UserOperations,
-    UserUpdateOperations,
-)
-from .filtersets import UserFilter, use_filterset_name
-from .metadata import DenyMetadata
-from .negotiation import DenyNegotiation
-from .serializers import UserSerializer
-from .throttle import ThrottleEveryOne
-from .version import DenyVersion
+from dependencies import Injector
+from dependencies import operation
+from dependencies import this
+from dependencies import value
+from dependencies.contrib.rest_framework import api_view
+from dependencies.contrib.rest_framework import generic_api_view
+from dependencies.contrib.rest_framework import generic_view_set
+from dependencies.contrib.rest_framework import model_view_set
+from dependencies.contrib.rest_framework import view_set
+from django_project.api.auth import AuthenticateAdmin
+from django_project.api.auth import AuthenticateAll
+from django_project.api.commands import UserCreateOperations
+from django_project.api.commands import UserDestroyOperations
+from django_project.api.commands import UserOperations
+from django_project.api.commands import UserUpdateOperations
+from django_project.api.filtersets import use_filterset_name
+from django_project.api.filtersets import UserFilter
+from django_project.api.metadata import DenyMetadata
+from django_project.api.negotiation import DenyNegotiation
+from django_project.api.serializers import UserSerializer
+from django_project.api.throttle import ThrottleEveryOne
+from django_project.api.version import DenyVersion
 
 
 @api_view
@@ -70,6 +73,22 @@ class ThrottleAll(Injector):
     command = UserOperations
 
     throttle_classes = (ThrottleEveryOne,)
+
+
+@api_view
+class DefaultThrottleScope(Injector):
+    get = this.command.respond
+    command = UserOperations
+
+    throttle_scope = "throttle_scope"
+
+
+@api_view
+class CustomThrottleScope(Injector):
+    get = this.command.respond
+    command = UserOperations
+
+    custom_throttle_scope = "custom_scope"
 
 
 @api_view

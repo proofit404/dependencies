@@ -1,7 +1,7 @@
-from dependencies import Injector, this
+from dependencies import Injector
+from dependencies import this
 from dependencies.contrib.flask import method_view
-
-from .commands import DispatchRequest
+from flask_project.commands import DispatchRequest
 
 
 class Methods(Injector):

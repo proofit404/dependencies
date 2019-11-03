@@ -1,6 +1,6 @@
 from rest_framework.negotiation import BaseContentNegotiation
 
-from .exceptions import NegotiationError
+from django_project.api.exceptions import NegotiationError
 
 
 class DenyNegotiation(BaseContentNegotiation):

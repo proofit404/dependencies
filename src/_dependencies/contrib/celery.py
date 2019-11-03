@@ -1,6 +1,5 @@
 from __future__ import absolute_import
 
-import celery
 import celery.canvas
 
 from _dependencies.injector import Injector

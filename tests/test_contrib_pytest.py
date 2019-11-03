@@ -3,7 +3,8 @@ import types
 import pytest
 
 from dependencies import Injector
-from dependencies.contrib.pytest import register, require
+from dependencies.contrib.pytest import register
+from dependencies.contrib.pytest import require
 from dependencies.exceptions import DependencyError
 
 

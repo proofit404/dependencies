@@ -1,13 +1,12 @@
-from django.conf.urls import include, url
+from django.conf.urls import include
+from django.conf.urls import url
 
-from .views import (
-    DispatchView,
-    EmptyView,
-    KwargsView,
-    QuestionFormView,
-    SelfView,
-    UserView,
-)
+from django_project.views import DispatchView
+from django_project.views import EmptyView
+from django_project.views import KwargsView
+from django_project.views import QuestionFormView
+from django_project.views import SelfView
+from django_project.views import UserView
 
 
 urlpatterns = [

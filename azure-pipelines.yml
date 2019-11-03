@@ -7,6 +7,9 @@ jobs:
       vmImage: 'ubuntu-latest'
     strategy:
       matrix:
+        precommit:
+          python.version: '3.7'
+          tox.env: precommit
         py27-django110:
           python.version: '2.7'
           tox.env: py27-django110
@@ -73,9 +76,6 @@ jobs:
         py37-celery:
           python.version: '3.7'
           tox.env: py37-celery
-        precommit:
-          python.version: '3.7'
-          tox.env: precommit
         flake8:
           python.version: '3.7'
           tox.env: flake8
@@ -85,12 +85,6 @@ jobs:
         mypy:
           python.version: '3.7'
           tox.env: mypy
-        black:
-          python.version: '3.7'
-          tox.env: black
-        isort:
-          python.version: '3.7'
-          tox.env: isort
         importlint:
           python.version: '3.7'
           tox.env: importlint
@@ -106,6 +100,9 @@ jobs:
         yamllint:
           python.version: '3.7'
           tox.env: yamllint
+        jscpd:
+          python.version: '3.7'
+          tox.env: jscpd
     steps:
       - task: UsePythonVersion@0
         inputs:
@@ -116,7 +113,7 @@ jobs:
       - task: NodeTool@0
         inputs:
           versionSpec: '10.x'
-        condition: in(variables['tox.env'], 'remarklint')
+        condition: in(variables['tox.env'], 'remarklint', 'jscpd')
         displayName: Install NodeJS.
       - script: tox -e $(tox.env)
         displayName: Run Tox.

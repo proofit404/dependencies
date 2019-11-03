@@ -1,7 +1,8 @@
 import pytest
 
+from dependencies import Injector
+from dependencies import this
 from dependencies.exceptions import DependencyError
-
 
 admin_models = pytest.importorskip("django.contrib.admin.models")
 auth_models = pytest.importorskip("django.contrib.auth.models")
@@ -9,6 +10,8 @@ status = pytest.importorskip("rest_framework.status")
 test_client = pytest.importorskip("rest_framework.test")
 contrib = pytest.importorskip("dependencies.contrib.rest_framework")
 project_exceptions = pytest.importorskip("django_project.api.exceptions")
+project_commands = pytest.importorskip("django_project.api.commands")
+project_throttle = pytest.importorskip("django_project.api.throttle")
 
 
 client = test_client.APIClient()
@@ -263,3 +266,84 @@ def test_keep_view_informanion():
     assert model_view_set.__name__ == "UserViewSet"
     assert model_view_set.__module__ == "django_project.api.views"
     assert model_view_set.__doc__ == "Intentionally left blank."
+
+
+def test_default_throttle_scope_applied_to_default(rf, settings):
+    settings.REST_FRAMEWORK = {
+        "DEFAULT_THROTTLE_CLASSES": (
+            "django_project.api.throttle.ThrottleDefaultScope",
+        ),
+    }
+
+    @contrib.api_view
+    class DefaultThrottleScope(Injector):
+        get = this.command.respond
+        command = project_commands.UserOperations
+
+        throttle_scope = "throttle_scope"
+        # this is the workaround for
+        # https://github.com/encode/django-rest-framework/issues/6030
+        throttle_classes = [project_throttle.ThrottleDefaultScope]
+
+    # Throttle scope doesn't apply on first request.
+    request = rf.get("/api/default_throttle_scope/")
+    response = DefaultThrottleScope.as_view()(request)
+    assert response.status_code == status.HTTP_200_OK
+
+    # Throttle scope applies on second request.
+    response = DefaultThrottleScope.as_view()(request)
+    assert response.status_code == status.HTTP_429_TOO_MANY_REQUESTS
+
+
+def test_custom_throttle_scope_not_applied_to_default(rf, settings):
+    settings.REST_FRAMEWORK = {
+        "DEFAULT_THROTTLE_CLASSES": (
+            "django_project.api.throttle.ThrottleCustomScope",
+        ),
+    }
+
+    @contrib.api_view
+    class DefaultThrottleScope(Injector):
+        get = this.command.respond
+        command = project_commands.UserOperations
+
+        throttle_scope = "throttle_scope"
+        # this is the workaround for
+        # https://github.com/encode/django-rest-framework/issues/6030
+        throttle_classes = [project_throttle.ThrottleCustomScope]
+
+    request = rf.get("/api/default_throttle_scope/")
+
+    # Throttle will always pass for default scope as it is not in settings.
+    response = DefaultThrottleScope.as_view()(request)
+    assert response.status_code == status.HTTP_200_OK
+
+    response = DefaultThrottleScope.as_view()(request)
+    assert response.status_code == status.HTTP_200_OK
+
+
+def test_custom_throttle_scope_applied_to_custom(settings, rf):
+    settings.REST_FRAMEWORK = {
+        "DEFAULT_THROTTLE_CLASSES": (
+            "django_project.api.throttle.ThrottleCustomScope",
+        ),
+    }
+
+    @contrib.api_view
+    class CustomThrottleScope(Injector):
+        get = this.command.respond
+        command = project_commands.UserOperations
+
+        custom_throttle_scope = "custom_scope"
+        # this is the workaround for
+        # https://github.com/encode/django-rest-framework/issues/6030
+        throttle_classes = [project_throttle.ThrottleCustomScope]
+
+    # Throttle scope doesn't apply on first request.
+    request = rf.get("/api/custom_throttle_scope/")
+    response = CustomThrottleScope.as_view()(request)
+    assert response.status_code == status.HTTP_200_OK
+
+    # Throttle scope applies on second request.
+    response = CustomThrottleScope.as_view()(request)
+    assert response.status_code == status.HTTP_429_TOO_MANY_REQUESTS
