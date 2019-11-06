@@ -35,3 +35,7 @@ repos:
         # override until resolved: https://github.com/ambv/black/issues/402
         files: \.pyi?$
         types: []
+  - repo: https://github.com/prettier/prettier
+    rev: ''
+    hooks:
+      - id: prettier
