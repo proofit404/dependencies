@@ -7,14 +7,14 @@
 [![pypi](https://img.shields.io/pypi/v/dependencies.svg)](https://pypi.python.org/pypi/dependencies/)
 [![black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
 
------
+---
 
 # Dependency Injection for Humans
 
-* [Source Code](https://github.com/dry-python/dependencies)
-* [Issue Tracker](https://github.com/dry-python/dependencies/issues)
-* [Documentation](https://dependencies.readthedocs.io/en/latest/)
-* [Discussion](https://gitter.im/dry-python/dependencies)
+- [Source Code](https://github.com/dry-python/dependencies)
+- [Issue Tracker](https://github.com/dry-python/dependencies/issues)
+- [Documentation](https://dependencies.readthedocs.io/en/latest/)
+- [Discussion](https://gitter.im/dry-python/dependencies)
 
 ## Installation
 

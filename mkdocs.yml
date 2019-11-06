@@ -3,17 +3,17 @@ strict: true
 site_name: dependencies
 site_description: Dependency Injection for Humans.
 theme:
-  name: 'material'
+  name: "material"
   palette:
-    primary: 'indigo'
-    accent: 'indigo'
+    primary: "indigo"
+    accent: "indigo"
   logo: "https://raw.githubusercontent.com\
     /dry-python/brand/master/logo/dry-python.png"
   # FIXME: Favicon.
-  language: 'en'
+  language: "en"
 repo_name: dry-python/dependencies
-repo_url: 'https://github.com/dry-python/dependencies'
-edit_uri: ''
+repo_url: "https://github.com/dry-python/dependencies"
+edit_uri: ""
 markdown_extensions:
   - admonition
   - codehilite:
@@ -25,30 +25,30 @@ markdown_extensions:
   - pymdownx.tasklist:
       custom_checkbox: true
 nav:
-  - 'Home': index.md
-  - 'Overview': overview.md
-  - 'Why': why.md
-  - 'Usage': usage.md
-  - 'Proxies':
-      - 'This': proxies/this.md
-      - 'Operation': proxies/operation.md
-      - 'Package': proxies/package.md
-  - 'Contrib':
-      - 'Attrs': contrib/attrs.md
-      - 'Django': contrib/django.md
-      - 'REST Framework': contrib/rest_framework.md
-      - 'Celery': contrib/celery.md
-      - 'Py.test': contrib/pytest.md
-  - 'Implementation': implementation.md
-  - 'FAQ': faq.md
-  - 'Changelog': changelog.md
+  - "Home": index.md
+  - "Overview": overview.md
+  - "Why": why.md
+  - "Usage": usage.md
+  - "Proxies":
+      - "This": proxies/this.md
+      - "Operation": proxies/operation.md
+      - "Package": proxies/package.md
+  - "Contrib":
+      - "Attrs": contrib/attrs.md
+      - "Django": contrib/django.md
+      - "REST Framework": contrib/rest_framework.md
+      - "Celery": contrib/celery.md
+      - "Py.test": contrib/pytest.md
+  - "Implementation": implementation.md
+  - "FAQ": faq.md
+  - "Changelog": changelog.md
   # A UI hack to split Table of Content into two visual parts.
-  - '': '/'
-  - '': '/'
-  - '': '/'
-  - '': '/'
-  - '': '/'
-  - 'GitHub': 'https://github.com/dry-python'
-  - 'Twitter': 'https://twitter.com/dry_py'
-  - 'Gitter': 'https://gitter.im/dry-python/dependencies'
-  - 'LinkedIn': 'https://www.linkedin.com/company/drylabs/'
+  - "": "/"
+  - "": "/"
+  - "": "/"
+  - "": "/"
+  - "": "/"
+  - "GitHub": "https://github.com/dry-python"
+  - "Twitter": "https://twitter.com/dry_py"
+  - "Gitter": "https://gitter.im/dry-python/dependencies"
+  - "LinkedIn": "https://www.linkedin.com/company/drylabs/"

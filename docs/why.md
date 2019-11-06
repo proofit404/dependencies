@@ -131,11 +131,11 @@ But this code has much more hidden cons at more precise analysis.
    layer of abstraction in the system. It's hard to manage two hundred
    methods in the same class. One will process HTTP request, another
    one will send email, another one will write to the database. It's
-   hard to figure out what *exactly* this class does.
+   hard to figure out what _exactly_ this class does.
 2. **Bad state management.** During life time of the instance
    different methods change state of the class. When you read short
-   method somewhere inside email sender logic you have no idea *from
-   where* attributes came from and *when exactly* they were set. Hello
+   method somewhere inside email sender logic you have no idea _from
+   where_ attributes came from and _when exactly_ they were set. Hello
    `print` statements to understand the code...
 
 Let's reduce amount of logic in the class (responsibility of the class).

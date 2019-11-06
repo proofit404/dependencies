@@ -3,8 +3,7 @@
 ## Preparations
 
 Before we start to inject dependencies lets define code which needs
-this dependencies.  Also, lets add some behavior to your robot.
-
+this dependencies. Also, lets add some behavior to your robot.
 
 ```pycon
 
@@ -84,14 +83,14 @@ Congratulations! We build our robot with dependency injection.
 `Container` above is a dependency scope. You can take any of them from
 his attribute. Following things happens when you access an argument:
 
-* If `class` stored in attributes it will be instantiated. We will see
+- If `class` stored in attributes it will be instantiated. We will see
   what arguments it takes and search for each in the same dependency
   scope.
-* If it a `class` stored in the attribute named with `_class` at the
+- If it a `class` stored in the attribute named with `_class` at the
   end - then it return as is. (For example `Container.foo_class` will
   give you class stored in it. Not an instance).
-* Anything else returned as is.
-* If we found a class during dependency search we will instantiate it
+- Anything else returned as is.
+- If we found a class during dependency search we will instantiate it
   as well.
 
 Here is a demonstration of rules above.
@@ -244,8 +243,8 @@ You need to have whole collection of dependencies only in injection
 moment i.e. on scope attribute access. You can define scope partially
 and then extend it. There are two ways to do that:
 
-* inheritance
-* `let` notation
+- inheritance
+- `let` notation
 
 ### Inheritance
 
