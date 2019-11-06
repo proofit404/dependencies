@@ -170,7 +170,7 @@ class UserListFilterFieldsView(Injector):
 class InjectedViewSet(Injector):
     """Intentionally left blank."""
 
-    @operation  # noqa: A003
+    @operation
     def list(view, request, args, kwargs, user, action):
 
         assert isinstance(view, ViewSet)
@@ -249,7 +249,7 @@ class InjectedGenericViewSet(Injector):
 
     serializer_class = UserSerializer
 
-    @operation  # noqa: A003
+    @operation
     def list(view, request, args, kwargs, user, action):
 
         assert isinstance(view, GenericViewSet)
