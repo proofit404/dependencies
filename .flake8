@@ -1,0 +1,9 @@
+[flake8]
+max-line-length = 88
+eradicate-aggressive = True
+ban-relative-imports = True
+exclude =
+  .tox
+  migrations
+per-file-ignores =
+  *.py: A003

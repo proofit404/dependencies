@@ -220,8 +220,8 @@ def test_coverage_include_all_packages():
     """
 
     ini_parser = configparser.ConfigParser()
-    ini_parser.read("setup.cfg")
-    coverage_sources = ini_parser["coverage:run"]["source"].strip().splitlines()
+    ini_parser.read(".coveragerc")
+    coverage_sources = ini_parser["run"]["source"].strip().splitlines()
 
     pyproject_toml = tomlkit.loads(open("pyproject.toml").read())
     packages = [
