@@ -236,6 +236,23 @@ def test_coverage_include_all_packages():
     assert coverage_sources == packages + helpers + ["tests"]
 
 
+def test_ini_files_indentation():
+    """
+    All ini files should have indentation level equals two spaces.
+    """
+
+    for ini_file in [
+        ".coveragerc",
+        ".flake8",
+        ".importlinter",
+        "mypy.ini",
+        "pytest.ini",
+        "tox.ini",
+    ]:
+        ini_text = open(ini_file).read()
+        assert not re.search(r"^   ", ini_text, re.MULTILINE)
+
+
 def test_lock_files_not_committed():
     """
     Lock files should not be committed to the git repository.
