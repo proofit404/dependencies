@@ -1,17 +1,10 @@
-*.egg-info/
-*.ipynb
-*.pyc
 *~
-.cache/
 .coverage
-.ipynb_checkpoints/
 .mypy_cache/
 .pytest_cache/
 .tox/
 [#]*[#]
 __pycache__/
-build/
-dist/
 htmlcov/
 node_modules/
 package-lock.json

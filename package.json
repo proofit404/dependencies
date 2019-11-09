@@ -11,17 +11,5 @@
   "scripts": {
     "lint:cp": "jscpd src/",
     "lint:md": "remark --frail ."
-  },
-  "jscpd": {
-    "threshold": 0
-  },
-  "remarkConfig": {
-    "plugins": [
-      "remark-preset-lint-recommended",
-      [
-        "remark-lint-list-item-indent",
-        "space"
-      ]
-    ]
   }
 }

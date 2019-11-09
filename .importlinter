@@ -1,0 +1,9 @@
+[importlinter]
+root_package = _dependencies
+include_external_packages = True
+
+[importlinter:contract:1]
+name = Private package can not import from public package
+type = forbidden
+source_modules = _dependencies
+forbidden_modules = dependencies

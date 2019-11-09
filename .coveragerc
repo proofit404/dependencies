@@ -1,0 +1,12 @@
+[run]
+branch = True
+source =
+  _dependencies
+  dependencies
+  django_project
+  examples
+  flask_project
+  helpers
+  mddoctest
+  pkg
+  tests
