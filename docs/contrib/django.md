@@ -92,6 +92,47 @@ related to the current request.
 - `pk` primary key view argument. A short cat for frequently used
   keyword argument.
 
+## Template views
+
+If you need to render template as a response to the request, you can
+define template view. The main difference from the original
+`TemplateView` subclass of the Django generics is the ability to use
+dependency injection for things which will populate additional
+template context.
+
+```pycon
+>>> # cart/views.py
+
+>>> from dependencies import Injector, value
+>>> from dependencies.contrib.django import template_view
+
+>>> from examples.cart.commands import DiscountCalc
+
+>>> @template_view
+... class ShowCartWithDiscount(Injector):
+...
+...     # Template name with {{ price }} variable in it.
+...     template_name = 'carts/discount.html'
+...
+...     price_calc = DiscountCalc
+...
+...     @value
+...     def extra_context(price_calc, user):
+...
+...         return {'price': price_calc.calculate(user)}
+
+```
+
+You can pass following attributes to the injector subclass to
+customize actual template render behavior.
+
+- `template_name` view template name to render form on GET.
+- `extra_context` extra context dict for template render.
+
+### Available scope
+
+Exactly the same as operations under HTTP verbs in the `@view`.
+
 ## Form processing views
 
 Form processing views are similar to regular views in case of
