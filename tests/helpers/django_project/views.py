@@ -3,6 +3,7 @@ from django.template.response import TemplateResponse
 from dependencies import Injector
 from dependencies import this
 from dependencies.contrib.django import form_view
+from dependencies.contrib.django import template_view
 from dependencies.contrib.django import view
 from django_project.commands import DispatchRequest
 from django_project.commands import InjectKwargs
@@ -59,6 +60,17 @@ class SelfView(Methods):
 class TestTemplateResponse(TemplateResponse):
 
     pass
+
+
+@template_view
+class QuestionTemplateView(Injector):
+    """Intentionally left blank."""
+
+    template_name = "question.html"
+    template_engine = "default"
+    response_class = TestTemplateResponse
+    content_type = "text/html"
+    extra_context = {"extra_var": "extra-var"}
 
 
 @form_view

@@ -9,6 +9,7 @@ contrib = pytest.importorskip("dependencies.contrib.django")
 http_methods = set(generic_views.View.http_method_names)
 http_methods_no_head = http_methods - {"head"}
 http_methods_no_options = http_methods - {"options"}
+http_methods_safe = {"get", "head", "options"}
 
 
 @pytest.mark.parametrize("method", http_methods_no_head)
@@ -58,6 +59,27 @@ def test_inject_self(client, method):
     assert response.content == b"<h1>OK</h1>"
 
 
+def test_template_view(client):
+    """Retrieve template view created from injector."""
+
+    response = client.get("/test_template_view/1/")
+    assert response.status_code == 200
+    if django.VERSION >= (2, 0):
+        assert response.content == b"extra-var\n"
+
+
+def test_template_view_attributes():
+    """Access attributes of generated TemplateView."""
+
+    from django_project.views import QuestionTemplateView
+
+    view_class = QuestionTemplateView.as_view().view_class
+    assert view_class.template_name == "question.html"
+    assert view_class.template_engine == "default"
+    assert view_class.response_class.__name__ == "TestTemplateResponse"
+    assert view_class.content_type == "text/html"
+
+
 def test_form_view(client):
     """Retrieve and submit form view created from injector."""
 
@@ -97,6 +119,10 @@ def test_docstrings():
 
     assert contrib.view.__doc__ == "Create Django class-based view from injector class."
     assert (
+        contrib.template_view.__doc__
+        == "Create Django template class-based view from injector class."
+    )
+    assert (
         contrib.form_view.__doc__
         == "Create Django form processing class-based view from injector class."
     )
@@ -105,13 +131,23 @@ def test_docstrings():
 def test_keep_view_informanion():
     """Generated view should point to the `Injector` subclass."""
 
-    from django_project.views import DispatchView, QuestionFormView
+    from django_project.views import (
+        DispatchView,
+        QuestionTemplateView,
+        QuestionFormView,
+    )
 
     view = DispatchView.as_view()
 
     assert view.__name__ == "DispatchView"
     assert view.__module__ == "django_project.views"
     assert view.__doc__ == "Intentionally left blank."
+
+    template_view = QuestionTemplateView.as_view()
+
+    assert template_view.__name__ == "QuestionTemplateView"
+    assert template_view.__module__ == "django_project.views"
+    assert template_view.__doc__ == "Intentionally left blank."
 
     form_view = QuestionFormView.as_view()
 
