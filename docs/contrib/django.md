@@ -127,6 +127,10 @@ You can pass following attributes to the injector subclass to
 customize actual template render behavior.
 
 - `template_name` view template name to render form on GET.
+- `template_engine` alias of the configured template engine from the
+  TEMPLATES setting.
+- `response_class` HTTP response class to use.
+- `content_type` response content type to use.
 - `extra_context` extra context dict for template render.
 
 ### Available scope
