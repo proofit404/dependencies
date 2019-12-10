@@ -12,6 +12,9 @@ http_methods_no_options = http_methods - {"options"}
 http_methods_safe = {"get", "head", "options"}
 
 
+# View.
+
+
 @pytest.mark.parametrize("method", http_methods_no_head)
 def test_dispatch_request(client, method):
     """Dispatch request to the `Injector` subclass attributes."""
@@ -59,10 +62,14 @@ def test_inject_self(client, method):
     assert response.content == b"<h1>OK</h1>"
 
 
-def test_template_view(client):
+# Template view.
+
+
+@pytest.mark.parametrize("url", ["test_template_view", "test_template_view_dynamic"])
+def test_template_view(client, url):
     """Retrieve template view created from injector."""
 
-    response = client.get("/test_template_view/1/")
+    response = client.get("/%s/1/" % (url,))
     assert response.status_code == 200
     if django.VERSION >= (2, 0):
         assert response.content == b"extra-var\n"
@@ -73,13 +80,17 @@ def test_template_view_attributes():
 
     from django_project.views import QuestionTemplateView
 
-    view_class = QuestionTemplateView.as_view().view_class
-    assert view_class.template_name == "question.html"
-    assert view_class.template_engine == "default"
-    assert view_class.response_class.__name__ == "TestTemplateResponse"
-    assert view_class.content_type == "text/html"
+    view = QuestionTemplateView.as_view().view_class()
+    assert view.template_name == "question.html"
+    assert view.template_engine == "default"
+    assert view.response_class.__name__ == "TestTemplateResponse"
+    assert view.content_type == "text/html"
 
 
+# Form view.
+
+
+# FIXME: Support dynamic fields.
 def test_form_view(client):
     """Retrieve and submit form view created from injector."""
 
@@ -105,13 +116,16 @@ def test_form_view_attributes():
 
     from django_project.views import QuestionFormView
 
-    view_class = QuestionFormView.as_view().view_class
-    assert view_class.success_url == "/thanks/"
-    assert view_class.template_name == "question.html"
-    assert view_class.template_engine == "default"
-    assert view_class.response_class.__name__ == "TestTemplateResponse"
-    assert view_class.content_type == "text/html"
-    assert view_class.initial == {"is_testing": True}
+    view = QuestionFormView.as_view().view_class()
+    assert view.success_url == "/thanks/"
+    assert view.template_name == "question.html"
+    assert view.template_engine == "default"
+    assert view.response_class.__name__ == "TestTemplateResponse"
+    assert view.content_type == "text/html"
+    assert view.initial == {"is_testing": True}
+
+
+# Attributes.
 
 
 def test_docstrings():

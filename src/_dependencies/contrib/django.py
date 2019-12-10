@@ -46,44 +46,26 @@ def apply_http_methods(handler, injector):
 
     for method in ["get", "post", "put", "patch", "delete", "head", "options", "trace"]:
         if method in injector:
-
-            def locals_hack(method=method):
-                def __view(self, request, *args, **kwargs):
-                    __tracebackhide__ = True
-                    ns = injector.let(
-                        view=self,
-                        request=request,
-                        args=args,
-                        kwargs=kwargs,
-                        user=this.request.user,
-                        pk=this.kwargs["pk"],
-                    )
-                    return getattr(ns, method)()
-
-                return __view
-
-            setattr(handler, method, locals_hack())
+            setattr(handler, method, build_view_method(injector, method))
 
 
 def apply_template_methods(handler, injector):
 
-    handler.template_name = injector.template_name
-
     for attribute in [
+        "template_name",
         "template_engine",
         "response_class",
         "content_type",
         "extra_context",
     ]:
         if attribute in injector:
-            setattr(handler, attribute, getattr(injector, attribute))
+            setattr(handler, attribute, build_view_property(injector, attribute))
 
 
 def apply_form_methods(handler, injector):
 
-    handler.form_class = injector.form_class
-
     for attribute in [
+        "form_class",
         "success_url",
         "initial",
         "prefix",
@@ -93,21 +75,54 @@ def apply_form_methods(handler, injector):
 
     for method in ["form_valid", "form_invalid"]:
         if method in injector:
+            setattr(handler, method, build_form_view_method(injector, method))
 
-            def locals_hack(method=method):
-                def __method(self, form):
-                    __tracebackhide__ = True
-                    ns = injector.let(
-                        view=self,
-                        form=form,
-                        request=this.view.request,
-                        args=this.view.args,
-                        kwargs=this.view.kwargs,
-                        user=this.request.user,
-                        pk=this.kwargs["pk"],
-                    )
-                    return getattr(ns, method)()
 
-                return __method
+def build_view_method(injector, method):
+    def __view(self, request, *args, **kwargs):
+        __tracebackhide__ = True
+        ns = injector.let(
+            view=self,
+            request=request,
+            args=args,
+            kwargs=kwargs,
+            user=this.request.user,
+            pk=this.kwargs["pk"],
+        )
+        return getattr(ns, method)()
 
-            setattr(handler, method, locals_hack())
+    return __view
+
+
+def build_view_property(injector, attribute):
+    @property
+    def __attribute(self):
+        __tracebackhide__ = True
+        ns = injector.let(
+            view=self,
+            request=this.view.request,
+            args=this.view.args,
+            kwargs=this.view.kwargs,
+            user=this.request.user,
+            pk=this.kwargs["pk"],
+        )
+        return getattr(ns, attribute)
+
+    return __attribute
+
+
+def build_form_view_method(injector, method):
+    def __method(self, form):
+        __tracebackhide__ = True
+        ns = injector.let(
+            view=self,
+            form=form,
+            request=this.view.request,
+            args=this.view.args,
+            kwargs=this.view.kwargs,
+            user=this.request.user,
+            pk=this.kwargs["pk"],
+        )
+        return getattr(ns, method)()
+
+    return __method

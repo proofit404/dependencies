@@ -1,7 +1,9 @@
+from django.contrib.auth.models import AnonymousUser
 from django.template.response import TemplateResponse
 
 from dependencies import Injector
 from dependencies import this
+from dependencies import value
 from dependencies.contrib.django import form_view
 from dependencies.contrib.django import template_view
 from dependencies.contrib.django import view
@@ -23,6 +25,9 @@ class Methods(Injector):
     head = this.command.do
     options = this.command.do
     trace = this.command.do
+
+
+# View.
 
 
 @view
@@ -62,6 +67,9 @@ class TestTemplateResponse(TemplateResponse):
     pass
 
 
+# Template view.
+
+
 @template_view
 class QuestionTemplateView(Injector):
     """Intentionally left blank."""
@@ -71,6 +79,24 @@ class QuestionTemplateView(Injector):
     response_class = TestTemplateResponse
     content_type = "text/html"
     extra_context = {"extra_var": "extra-var"}
+
+
+@template_view
+class DynamicQuestionTemplateView(Injector):
+
+    template_name = "question.html"
+    template_engine = "default"
+    response_class = TestTemplateResponse
+    content_type = "text/html"
+
+    @value
+    def extra_context(user):
+
+        assert isinstance(user, AnonymousUser)
+        return {"extra_var": "extra-var"}
+
+
+# Form view.
 
 
 @form_view
