@@ -90,7 +90,10 @@ class DynamicQuestionTemplateView(Injector):
     content_type = "text/html"
 
     @value
-    def extra_context(user):
+    # Old versions of Django does not access this attribute while
+    # processing template view.  So not all Tox environment will
+    # report this function called.
+    def extra_context(user):  # pragma: no branch
 
         assert isinstance(user, AnonymousUser)
         return {"extra_var": "extra-var"}
