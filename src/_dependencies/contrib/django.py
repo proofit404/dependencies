@@ -94,7 +94,7 @@ def build_view_method(injector, method):
     return __view
 
 
-def build_view_property(injector, attribute):
+def build_view_property(injector, attribute, **extra):
     @property
     def __attribute(self):
         __tracebackhide__ = True
@@ -105,6 +105,7 @@ def build_view_property(injector, attribute):
             kwargs=this.view.kwargs,
             user=this.request.user,
             pk=this.kwargs["pk"],
+            **extra
         )
         return getattr(ns, attribute)
 
