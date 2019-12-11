@@ -25,6 +25,9 @@ jobs:
         py36-django111:
           python.version: "3.6"
           tox.env: py36-django111
+        py37-django111:
+          python.version: "3.7"
+          tox.env: py37-django111
         py35-django20:
           python.version: "3.5"
           tox.env: py35-django20
@@ -52,6 +55,18 @@ jobs:
         py37-django22:
           python.version: "3.7"
           tox.env: py37-django22
+        py38-django22:
+          python.version: "3.8"
+          tox.env: py38-django22
+        py36-django30:
+          python.version: "3.6"
+          tox.env: py36-django30
+        py37-django30:
+          python.version: "3.7"
+          tox.env: py37-django30
+        py38-django30:
+          python.version: "3.8"
+          tox.env: py38-django30
         py27-flask:
           python.version: "2.7"
           tox.env: py27-flask
@@ -76,9 +91,6 @@ jobs:
         py37-celery:
           python.version: "3.7"
           tox.env: py37-celery
-        py38:
-          python.version: "3.8"
-          tox.env: py38
         flake8:
           python.version: "3.8"
           tox.env: flake8
