@@ -8,7 +8,8 @@ This module implements injectable Django view.
 :license: BSD, see LICENSE for more details.
 """
 from _dependencies.contrib.django import form_view
+from _dependencies.contrib.django import template_view
 from _dependencies.contrib.django import view
 
 
-__all__ = ["form_view", "view"]
+__all__ = ["form_view", "template_view", "view"]
