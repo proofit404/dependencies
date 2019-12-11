@@ -4,6 +4,7 @@ from django.views.generic import FormView
 from django.views.generic import TemplateView
 from django.views.generic import View
 
+from _dependencies.exceptions import DependencyError
 from _dependencies.this import this
 
 
@@ -75,7 +76,10 @@ def apply_form_methods(handler, injector):
 
     for method in ["form_valid", "form_invalid"]:
         if method in injector:
-            setattr(handler, method, build_form_view_method(injector, method))
+            form_method = build_form_view_method(injector, method)
+        else:
+            form_method = build_form_view_error(injector, method)
+        setattr(handler, method, form_method)
 
 
 def build_view_method(injector, method):
@@ -125,5 +129,14 @@ def build_form_view_method(injector, method):
             pk=this.kwargs["pk"],
         )
         return getattr(ns, method)()
+
+    return __method
+
+
+def build_form_view_error(injector, method):
+    def __method(self, form):
+        raise DependencyError(
+            "Add {!r} to the {!r} injector".format(method, injector.__name__)
+        )
 
     return __method

@@ -3,6 +3,7 @@ from django.conf.urls import url
 
 from django_project.views import DispatchView
 from django_project.views import DynamicQuestionTemplateView
+from django_project.views import EmptyFormView
 from django_project.views import EmptyView
 from django_project.views import KwargsView
 from django_project.views import QuestionFormView
@@ -23,5 +24,6 @@ urlpatterns = [
         DynamicQuestionTemplateView.as_view(),
     ),
     url(r"^test_form_view/(?P<pk>\d+)/$", QuestionFormView.as_view()),
+    url(r"^empty_form_view/$", EmptyFormView.as_view()),
     url(r"^api/", include("django_project.api.urls")),
 ]

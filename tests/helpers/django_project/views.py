@@ -119,3 +119,11 @@ class QuestionFormView(Injector):
     initial = {"is_testing": True}
     prefix = "test"
     extra_context = {"extra_var": "extra-var"}
+
+
+@form_view
+class EmptyFormView(Injector):
+
+    form_class = QuestionForm
+    template_name = "question.html"
+    success_url = "/thanks/"
