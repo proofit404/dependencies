@@ -127,6 +127,19 @@ def test_nodejs_deps_are_ordered():
     assert deps == sorted(deps)
 
 
+def test_poetry_deps_are_ordered():
+    """
+    Dependencies section of all pyproject.toml files should be in
+    alphabetical order.
+    """
+
+    for pyproject_toml in ["pyproject.toml", "tests/helpers/pyproject.toml"]:
+        pyproject_toml = tomlkit.loads(open(pyproject_toml).read())
+        deps = list(pyproject_toml["tool"]["poetry"].get("dependencies", {}))
+        if deps:
+            assert deps == ["python"] + sorted(deps[1:])
+
+
 def test_packages_are_ordered():
     """
     Packages section of all pyproject.toml files should be in alphabetical order.
@@ -139,6 +152,17 @@ def test_packages_are_ordered():
             for p in pyproject_toml["tool"]["poetry"]["packages"]
         ]
         assert packages == sorted(packages)
+
+
+def test_build_requires_are_ordered():
+    """
+    Requirements of the build system of all pyproject.toml files
+    should be in alphabetical order.
+    """
+    for pyproject_toml in ["pyproject.toml", "tests/helpers/pyproject.toml"]:
+        pyproject_toml = tomlkit.loads(open(pyproject_toml).read())
+        requires = pyproject_toml["build-system"]["requires"]
+        assert requires == sorted(requires)
 
 
 def test_pre_commit_hooks_avoid_additional_dependencies():
@@ -186,7 +210,7 @@ def test_nodejs_deps_not_pinned():
     assert all(v == "*" for v in versions)
 
 
-def test_packages_not_pinned():
+def test_poetry_deps_not_pinned():
     """
     Dependencies section of all pyproject.toml files should not have version specified.
     """
@@ -199,6 +223,18 @@ def test_packages_not_pinned():
             if isinstance(d, dict)
         ]
         assert all(v == "*" for v in versions)
+
+
+def test_build_requires_not_pinned():
+    """
+    Requirements of the build system of all pyproject.toml files
+    should not have version specified.
+    """
+    for pyproject_toml in ["pyproject.toml", "tests/helpers/pyproject.toml"]:
+        pyproject_toml = tomlkit.loads(open(pyproject_toml).read())
+        requires = pyproject_toml["build-system"]["requires"]
+        for require in requires:
+            assert len(re.split(r"=+", require)) == 1
 
 
 def test_pre_commit_hooks_not_pinned():
