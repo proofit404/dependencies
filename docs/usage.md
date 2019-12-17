@@ -2,8 +2,8 @@
 
 ## Preparations
 
-Before we start to inject dependencies lets define code which needs
-this dependencies. Also, lets add some behavior to your robot.
+Before we start to inject dependencies, let's define code which needs
+these dependencies. Also, let's add some behavior to your robot.
 
 ```pycon
 
@@ -36,12 +36,12 @@ this dependencies. Also, lets add some behavior to your robot.
 
 ```
 
-We use constructor based dependency injection. We define necessary
-arguments and store it explicitly. We do this for readability. This will
-helps us to understand the path things go in your system. Attributes
-taken from nowhere in your code aren't fun. Believe me.
+We use constructor-based dependency injection here: we define necessary
+arguments and store them explicitly, for the sake of readability. This will
+help us to understand the execution path of your system. Attributes
+sourced from nowhere in your code aren't fun. Believe me.
 
-Now its time to make it work in real world
+Now, it's time to make this work in the real world.
 
 ```pycon
 
@@ -58,7 +58,7 @@ Now its time to make it work in real world
 
 ```
 
-So we are close to scream "It's alive!" and run out of the building.
+So, we are close to scream "It's alive!" and, if we're lucky enough, run out of the building.
 
 ```pycon
 
@@ -76,22 +76,19 @@ So we are close to scream "It's alive!" and run out of the building.
 
 ```
 
-Congratulations! We build our robot with dependency injection.
+Congratulations! We've built our robot with dependency injection.
 
 ## Injection rules
 
-`Container` above is a dependency scope. You can take any of them from
-his attribute. Following things happens when you access an argument:
+`Container` above is a dependency scope, and dependencies are defined as its attributes.
+When you access one of those attributes, the following happens:
 
-- If `class` stored in attributes it will be instantiated. We will see
-  what arguments it takes and search for each in the same dependency
-  scope.
-- If it a `class` stored in the attribute named with `_class` at the
-  end - then it return as is. (For example `Container.foo_class` will
-  give you class stored in it. Not an instance).
-- Anything else returned as is.
-- If we found a class during dependency search we will instantiate it
-  as well.
+- If attribute value is a `class`, it will be instantiated. To make that possible, the library
+  will inspect its constructor's argument list and search current dependency scope for dependencies
+  with the same name.
+- If attribute value is a `class` but attribute name ends with `_class` - then it will be returned as is. (For example, `Container.foo_class` will return the class stored in it, not its instance).
+- Anything else is returned as is.
+- If, during dependency search, we encounter another `class` - it will be instantiated along these rules, as well. The process is recursive.
 
 Here is a demonstration of rules above.
 
@@ -131,17 +128,23 @@ Here is a demonstration of rules above.
 
 ```
 
-As you can see `Foo` class needs argument named `two`. We find `Baz`
-class as a dependency satisfied this name. We see that this is a class -
-so we need to instantiate it too. We search for dependency named `x` and
-find `1`. We build `Baz` instance then use it to build `Foo` instance.
+Let's roll down what is happening here:
+
+* `Foo` class requires an argument named `two`;
+* In dependency scope, that argument resolves to `Baz` class;
+* Which is a class - oh boy, we need to instantiate it as well;
+* But its constructor requires an argument named `x`;
+* Which resolves to `1` in the dependency scope, so we do not need to go any further.
+
+Having found that out, we effectively construct, execute, and return `Foo(two=Baz(x=1))`.
 
 ### Calculation rules
 
-Each dependency evaluates once during injection process. If during
+Each dependency evaluates exactly once during injection process. If during
 dependency injection different classes have constructor argument with
-same name, it will be one object. But this objects lives only during one
-injection process. New attribute access - new object.
+the same name, the corresponding dependency will be instantiated once and these
+two constructors will receive the same object. But this object only lives during one
+injection process; another attribute access means a new object.
 
 ```pycon
 
@@ -184,8 +187,8 @@ False
 
 ### Nested `Injectors`
 
-It is possible to inject `Injector` it self. `Injector` subclasses
-provided as is and calculate its attributes on first use.
+It is possible to inject `Injector` itself. `Injector` subclasses
+are provided as is, and calculate their attributes on first use.
 
 ```pycon
 
@@ -239,17 +242,18 @@ provided as is and calculate its attributes on first use.
 
 ## Scope extension
 
-You need to have whole collection of dependencies only in injection
-moment i.e. on scope attribute access. You can define scope partially
-and then extend it. There are two ways to do that:
+You can define a dependency scope partially and then extend it; only in injection moment,
+meaning at the time of attribute access, you are required to have the complete scope.
+
+There are two ways to extend dependency scopes:
 
 - inheritance
 - `let` notation
 
 ### Inheritance
 
-You can add additional dependencies or redefine already provided in the
-scope subclasses:
+You can add additional dependencies or redefine existing ones in a
+scope subclass:
 
 ```pycon
 
@@ -284,8 +288,8 @@ Multiple inheritance is allowed as well.
 
 ```
 
-Also we provide `and` notation for inplace `Injector` composition.
-Example below is full equivalent to the previous one without
+We also provide `and` notation for in-place `Injector` composition.
+Example below is full equivalent to the previous one, but without
 intermediate class needed.
 
 ```pycon
@@ -304,9 +308,9 @@ intermediate class needed.
 
 ### `let` notation
 
-You can temporary redefine dependency for only one case. This is
-extremely useful for tests. Inject asserts instead of some dependency an
-you will be able to test your system in all possible cases. It even
+You can temporary redefine a dependency for only one case. This is
+extremely useful for tests. Inject an assertion instead of one or more dependencies, and
+you will be able to test your system in all possible cases. It is, for example,
 possible to simulate database integrity error on concurrent access.
 
 ```pycon

@@ -16,6 +16,6 @@ your classes and make instantiation as simple as attribute access.
 >>> Container.robot.run()
 >>> #         `---> This attribute access creates instances of `Logger`,
 >>> #               `Servo`, and `Robot` classes in the proper order and
->>> #               call each constructor with proper arguments.
+>>> #               calls each constructor with proper arguments.
 
 ```
