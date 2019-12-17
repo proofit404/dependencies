@@ -44,5 +44,5 @@ mkdocs-material = { version = "*", optional = true }
 mkdocs = ["mkdocs", "mkdocs-material"]
 
 [build-system]
-requires = ["poetry>=0.12"]
+requires = ["poetry"]
 build-backend = "poetry.masonry.api"
