@@ -48,23 +48,23 @@ an actual business logic behind it.
 As with pytest own `fixture` decorator arguments, you can set some
 attributes to the injector subclass to tweak fixture behavior.
 
-* `fixture` attribute resolved to the fixture value. The result of the
+- `fixture` attribute resolved to the fixture value. The result of the
   DI process will be available in tests as test argument value.
-* `name` of the fixture. You should add an argument with this name to
+- `name` of the fixture. You should add an argument with this name to
   your test to access fixture value.
-* `scope` of the fixture. The `session`, `module`, `class` and
+- `scope` of the fixture. The `session`, `module`, `class` and
   `function` scopes are available and work exactly the same way
   regular fixture scopes do.
-* `params` create parametrized fixture.
-* `autouse` attaches this fixture to every test in the suite.
-* `ids` getter for parametrized tests in the report.
+- `params` create parametrized fixture.
+- `autouse` attaches this fixture to every test in the suite.
+- `ids` getter for parametrized tests in the report.
 
 ### Available scope
 
 Before test run injector scope will be executed with this attributes.
 You can use them as dependencies for your classes.
 
-* `request` instance of the pytest `FixtureRequest`.
+- `request` instance of the pytest `FixtureRequest`.
 
 ## Depend on a fixture
 

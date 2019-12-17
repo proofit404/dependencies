@@ -1,6 +1,6 @@
 from flask import Flask
 
-from .views import DispatchView
+from flask_project.views import DispatchView
 
 
 def create_app():

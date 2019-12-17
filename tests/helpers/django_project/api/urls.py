@@ -2,22 +2,23 @@ from django.conf.urls import include
 from django.conf.urls import url
 from rest_framework.routers import SimpleRouter
 
-from .views import BadMetadata
-from .views import BadNegotiation
-from .views import BadVersion
-from .views import DynamicUserViewSet
-from .views import EmptyViewSet
-from .views import InjectedGenericViewSet
-from .views import InjectedViewSet
-from .views import LoginAll
-from .views import ThrottleAll
-from .views import UserAction
-from .views import UserListFilterFieldsView
-from .views import UserListView
-from .views import UserLogin
-from .views import UserRetrieveView
-from .views import UserViewSet
-
+from django_project.api.views import BadMetadata
+from django_project.api.views import BadNegotiation
+from django_project.api.views import BadVersion
+from django_project.api.views import CustomThrottleScope
+from django_project.api.views import DefaultThrottleScope
+from django_project.api.views import DynamicUserViewSet
+from django_project.api.views import EmptyViewSet
+from django_project.api.views import InjectedGenericViewSet
+from django_project.api.views import InjectedViewSet
+from django_project.api.views import LoginAll
+from django_project.api.views import ThrottleAll
+from django_project.api.views import UserAction
+from django_project.api.views import UserListFilterFieldsView
+from django_project.api.views import UserListView
+from django_project.api.views import UserLogin
+from django_project.api.views import UserRetrieveView
+from django_project.api.views import UserViewSet
 
 router = SimpleRouter()
 # FIXME: We can not user router without `basename` because `queryset`
@@ -39,6 +40,16 @@ urlpatterns = [
     url(r"^login/$", UserLogin.as_view(), name="api-login"),
     url(r"^login_all/$", LoginAll.as_view(), name="api-login-all"),
     url(r"^throttle_all/$", ThrottleAll.as_view(), name="api-throttle-all"),
+    url(
+        r"^default_throttle_scope/$",
+        DefaultThrottleScope.as_view(),
+        name="api-default-throttle-scope",
+    ),
+    url(
+        r"^custom_throttle_scope/$",
+        CustomThrottleScope.as_view(),
+        name="api-custom-throttle-scope",
+    ),
     url(r"^negotiate/$", BadNegotiation.as_view(), name="api-negotiate"),
     url(r"^versioning/$", BadVersion.as_view(), name="api-version"),
     url(r"^metadata/$", BadMetadata.as_view(), name="api-metadata"),

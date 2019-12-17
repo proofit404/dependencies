@@ -2,104 +2,122 @@
 trigger:
   - master
 jobs:
-  - job: 'Test'
+  - job: "Test"
     pool:
-      vmImage: 'ubuntu-latest'
+      vmImage: "ubuntu-latest"
     strategy:
       matrix:
+        precommit:
+          python.version: "3.8"
+          tox.env: precommit
         py27-django110:
-          python.version: '2.7'
+          python.version: "2.7"
           tox.env: py27-django110
         py35-django110:
-          python.version: '3.5'
+          python.version: "3.5"
           tox.env: py35-django110
         py27-django111:
-          python.version: '2.7'
+          python.version: "2.7"
           tox.env: py27-django111
         py35-django111:
-          python.version: '3.5'
+          python.version: "3.5"
           tox.env: py35-django111
         py36-django111:
-          python.version: '3.6'
+          python.version: "3.6"
           tox.env: py36-django111
+        py37-django111:
+          python.version: "3.7"
+          tox.env: py37-django111
         py35-django20:
-          python.version: '3.5'
+          python.version: "3.5"
           tox.env: py35-django20
         py36-django20:
-          python.version: '3.6'
+          python.version: "3.6"
           tox.env: py36-django20
         py37-django20:
-          python.version: '3.7'
+          python.version: "3.7"
           tox.env: py37-django20
         py35-django21:
-          python.version: '3.5'
+          python.version: "3.5"
           tox.env: py35-django21
         py36-django21:
-          python.version: '3.6'
+          python.version: "3.6"
           tox.env: py36-django21
         py37-django21:
-          python.version: '3.7'
+          python.version: "3.7"
           tox.env: py37-django21
         py35-django22:
-          python.version: '3.5'
+          python.version: "3.5"
           tox.env: py35-django22
         py36-django22:
-          python.version: '3.6'
+          python.version: "3.6"
           tox.env: py36-django22
         py37-django22:
-          python.version: '3.7'
+          python.version: "3.7"
           tox.env: py37-django22
+        py38-django22:
+          python.version: "3.8"
+          tox.env: py38-django22
+        py36-django30:
+          python.version: "3.6"
+          tox.env: py36-django30
+        py37-django30:
+          python.version: "3.7"
+          tox.env: py37-django30
+        py38-django30:
+          python.version: "3.8"
+          tox.env: py38-django30
         py27-flask:
-          python.version: '2.7'
+          python.version: "2.7"
           tox.env: py27-flask
         py35-flask:
-          python.version: '3.5'
+          python.version: "3.5"
           tox.env: py35-flask
         py36-flask:
-          python.version: '3.6'
+          python.version: "3.6"
           tox.env: py36-flask
         py37-flask:
-          python.version: '3.7'
+          python.version: "3.7"
           tox.env: py37-flask
         py27-celery:
-          python.version: '2.7'
+          python.version: "2.7"
           tox.env: py27-celery
         py35-celery:
-          python.version: '3.5'
+          python.version: "3.5"
           tox.env: py35-celery
         py36-celery:
-          python.version: '3.6'
+          python.version: "3.6"
           tox.env: py36-celery
         py37-celery:
-          python.version: '3.7'
+          python.version: "3.7"
           tox.env: py37-celery
-        precommit:
-          python.version: '3.7'
-          tox.env: precommit
         flake8:
-          python.version: '3.7'
+          python.version: "3.8"
           tox.env: flake8
         bandit:
-          python.version: '3.7'
+          python.version: "3.8"
           tox.env: bandit
         mypy:
-          python.version: '3.7'
+          python.version: "3.8"
           tox.env: mypy
         importlint:
-          python.version: '3.7'
+          python.version: "3.8"
           tox.env: importlint
         mkdocs:
-          python.version: '3.7'
+          python.version: "3.8"
           tox.env: mkdocs
         doctest:
-          python.version: '3.7'
+          python.version: "3.8"
           tox.env: doctest
         remarklint:
-          python.version: '3.7'
+          python.version: "3.8"
           tox.env: remarklint
         yamllint:
-          python.version: '3.7'
+          python.version: "3.8"
           tox.env: yamllint
+        jscpd:
+          python.version: "3.8"
+          tox.env: jscpd
     steps:
       - task: UsePythonVersion@0
         inputs:
@@ -109,8 +127,8 @@ jobs:
         displayName: Install Tox.
       - task: NodeTool@0
         inputs:
-          versionSpec: '10.x'
-        condition: in(variables['tox.env'], 'remarklint')
+          versionSpec: "10.x"
+        condition: in(variables['tox.env'], 'remarklint', 'jscpd')
         displayName: Install NodeJS.
       - script: tox -e $(tox.env)
         displayName: Run Tox.

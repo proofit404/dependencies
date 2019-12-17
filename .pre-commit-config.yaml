@@ -1,26 +1,41 @@
 ---
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: ''
+    rev: ""
     hooks:
       - id: trailing-whitespace
       - id: end-of-file-fixer
       - id: debug-statements
       - id: file-contents-sorter
-        files: .gitignore
+        files: ^(.gitignore|.python-version)$
   - repo: https://github.com/asottile/pyupgrade
-    rev: ''
+    rev: ""
     hooks:
       - id: pyupgrade
         args: [--keep-percent-format]
   - repo: https://github.com/asottile/reorder_python_imports
-    rev: ''
+    rev: ""
     hooks:
       - id: reorder-python-imports
         args: [--application-directories=.:src:tests/helpers]
         exclude: migrations
+        # override until resolved:
+        # https://github.com/asottile/reorder_python_imports/issues/103
+        files: \.pyi?$
+        types: []
+  - repo: https://github.com/asottile/yesqa
+    rev: ""
+    hooks:
+      - id: yesqa
   - repo: https://github.com/psf/black
-    rev: ''
+    rev: ""
     hooks:
       - id: black
         exclude: migrations
+        # override until resolved: https://github.com/ambv/black/issues/402
+        files: \.pyi?$
+        types: []
+  - repo: https://github.com/prettier/prettier
+    rev: ""
+    hooks:
+      - id: prettier
