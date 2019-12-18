@@ -1,7 +1,4 @@
 """
-dependencies.contrib.celery
----------------------------
-
 This module implements injectable Celery task.
 
 :copyright: (c) 2016-2019 by dry-python team.

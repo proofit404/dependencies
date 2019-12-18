@@ -1,7 +1,4 @@
 """
-dependencies.contrib.django
----------------------------
-
 This module implements injectable Django view.
 
 :copyright: (c) 2016-2019 by dry-python team.

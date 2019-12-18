@@ -1,7 +1,4 @@
 """
-dependencies.contrib.rest_framework
------------------------------------
-
 This module implements injectable Django Rest Framework API view.
 
 :copyright: (c) 2016-2019 by dry-python team.

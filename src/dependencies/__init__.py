@@ -1,7 +1,4 @@
 """
-dependencies
-------------
-
 Dependency Injection for Humans.
 
 :copyright: (c) 2016-2019 by dry-python team.
