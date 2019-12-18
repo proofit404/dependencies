@@ -5,11 +5,10 @@ ban-relative-imports = True
 exclude =
   .tox
   migrations
+# We're fine to have class attributes with the name `list`.
+# Document dunder methods is also redundant.
+ignore = A003, D105, D107
 per-file-ignores =
-  # We're fine to have class attributes with the name `list`.
-  *.py: A003
   # Private package should not have module docstrings.
   src/_dependencies/*.py: D100, D104
   tests/helpers/*.py: D100, D104
-  # Document dunder methods is also redundant.
-  *.py: D105, D107
