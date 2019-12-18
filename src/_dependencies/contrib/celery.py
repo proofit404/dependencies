@@ -10,15 +10,15 @@ undefined = object()
 
 def task(injector):
     """Create Celery task from injector class."""
-    return decorate_with(injector.app.task, injector)
+    return _decorate_with(injector.app.task, injector)
 
 
 def shared_task(injector):
     """Create Celery shared task from injector class."""
-    return decorate_with(celery.shared_task, injector)
+    return _decorate_with(celery.shared_task, injector)
 
 
-def decorate_with(func, injector):
+def _decorate_with(func, injector):
 
     if "run" not in injector:
         injector.run
@@ -61,7 +61,7 @@ def decorate_with(func, injector):
 
     func(**options)(__task)
 
-    return injector & TaskMixin
+    return injector & _TaskMixin
 
 
 class Signature(object):
@@ -134,7 +134,7 @@ class Delay(Signature):
         return signature.delay(*args, **kwargs)
 
 
-class TaskMixin(Injector):  # type: ignore
+class _TaskMixin(Injector):  # type: ignore
 
     signature = Signature
     s = Shortcut

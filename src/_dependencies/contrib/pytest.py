@@ -26,10 +26,10 @@ def register(injector):
 
 def require(fixturename):
     """Mark fixture as a dependency for injection process."""
-    return type(Requirement.__name__, (Requirement,), {"fixturename": fixturename})
+    return type(_Requirement.__name__, (_Requirement,), {"fixturename": fixturename})
 
 
-class Requirement(object):
+class _Requirement(object):
 
     fixturename = None
 

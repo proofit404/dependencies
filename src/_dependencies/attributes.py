@@ -1,10 +1,10 @@
-class Replace(Exception):
+class _Replace(Exception):
     def __init__(self, dependency, attrs):
         self.dependency = dependency
         self.attrs = attrs
 
 
-class Attributes(object):
+class _Attributes(object):
     def __init__(self, spec, attrs):
 
         self.spec = spec

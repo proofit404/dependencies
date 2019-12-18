@@ -1,6 +1,6 @@
-from _dependencies.checks.value import check_class
-from _dependencies.checks.value import check_method
-from _dependencies.func import make_func_spec
+from _dependencies.checks.value import _check_class
+from _dependencies.checks.value import _check_method
+from _dependencies.func import _make_func_spec
 from _dependencies.markers import injectable
 
 
@@ -15,13 +15,13 @@ class Value(object):
 
     def __init__(self, function):
 
-        check_class(function)
+        _check_class(function)
         self.__function__ = function
 
 
-def make_value_spec(dependency):
+def _make_value_spec(dependency):
 
     function = dependency.__function__
-    args, have_defaults = make_func_spec(function, function.__name__, "FIXME!")
-    check_method(args)
+    args, have_defaults = _make_func_spec(function, function.__name__, "FIXME!")
+    _check_method(args)
     return injectable, function, args, have_defaults

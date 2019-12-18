@@ -4,12 +4,12 @@ from _dependencies.markers import injectable
 from _dependencies.markers import nested_injector
 
 
-def make_nested_injector_spec(dependency):
+def _make_nested_injector_spec(dependency):
 
-    return nested_injector, NestedInjectorSpec(dependency), ["__self__"], 0
+    return nested_injector, _NestedInjectorSpec(dependency), ["__self__"], 0
 
 
-class NestedInjectorSpec(object):
+class _NestedInjectorSpec(object):
     def __init__(self, injector):
 
         self.injector = injector

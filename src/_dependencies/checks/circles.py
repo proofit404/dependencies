@@ -2,13 +2,13 @@ from _dependencies.exceptions import DependencyError
 from _dependencies.markers import injectable
 
 
-def check_circles(dependencies):
+def _check_circles(dependencies):
 
     for depname in dependencies:
-        check_circles_for(dependencies, depname, depname)
+        _check_circles_for(dependencies, depname, depname)
 
 
-def check_circles_for(dependencies, attrname, origin):
+def _check_circles_for(dependencies, attrname, origin):
 
     try:
         argspec = dependencies[attrname]
@@ -21,4 +21,4 @@ def check_circles_for(dependencies, attrname, origin):
             message = "{0!r} is a circular dependency in the {1!r} constructor"
             raise DependencyError(message.format(origin, argspec[1].__name__))
         for name in args:
-            check_circles_for(dependencies, name, origin)
+            _check_circles_for(dependencies, name, origin)

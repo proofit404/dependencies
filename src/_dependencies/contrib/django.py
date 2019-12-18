@@ -10,27 +10,27 @@ from _dependencies.this import this
 
 def view(injector):
     """Create Django class-based view from injector class."""
-    handler = create_handler(View, injector)
-    apply_http_methods(handler, injector)
+    handler = _create_handler(View, injector)
+    _apply_http_methods(handler, injector)
     return injector.let(as_view=handler.as_view)
 
 
 def template_view(injector):
     """Create Django template class-based view from injector class."""
-    handler = create_handler(TemplateView, injector)
-    apply_template_methods(handler, injector)
+    handler = _create_handler(TemplateView, injector)
+    _apply_template_methods(handler, injector)
     return injector.let(as_view=handler.as_view)
 
 
 def form_view(injector):
     """Create Django form processing class-based view from injector class."""
-    handler = create_handler(FormView, injector)
-    apply_template_methods(handler, injector)
-    apply_form_methods(handler, injector)
+    handler = _create_handler(FormView, injector)
+    _apply_template_methods(handler, injector)
+    _apply_form_methods(handler, injector)
     return injector.let(as_view=handler.as_view)
 
 
-def create_handler(from_class, injector):
+def _create_handler(from_class, injector):
     class Handler(from_class):
         __doc__ = injector.__doc__
 
@@ -40,14 +40,14 @@ def create_handler(from_class, injector):
     return Handler
 
 
-def apply_http_methods(handler, injector):
+def _apply_http_methods(handler, injector):
 
     for method in ["get", "post", "put", "patch", "delete", "head", "options", "trace"]:
         if method in injector:
-            setattr(handler, method, build_view_method(injector, method))
+            setattr(handler, method, _build_view_method(injector, method))
 
 
-def apply_template_methods(handler, injector):
+def _apply_template_methods(handler, injector):
 
     for attribute in [
         "template_name",
@@ -57,10 +57,10 @@ def apply_template_methods(handler, injector):
         "extra_context",
     ]:
         if attribute in injector:
-            setattr(handler, attribute, build_view_property(injector, attribute))
+            setattr(handler, attribute, _build_view_property(injector, attribute))
 
 
-def apply_form_methods(handler, injector):
+def _apply_form_methods(handler, injector):
 
     for attribute in [
         "form_class",
@@ -73,13 +73,13 @@ def apply_form_methods(handler, injector):
 
     for method in ["form_valid", "form_invalid"]:
         if method in injector:
-            form_method = build_form_view_method(injector, method)
+            form_method = _build_form_view_method(injector, method)
         else:
-            form_method = build_form_view_error(injector, method)
+            form_method = _build_form_view_error(injector, method)
         setattr(handler, method, form_method)
 
 
-def build_view_method(injector, method):
+def _build_view_method(injector, method):
     def __view(self, request, *args, **kwargs):
         __tracebackhide__ = True
         ns = injector.let(
@@ -95,7 +95,7 @@ def build_view_method(injector, method):
     return __view
 
 
-def build_view_property(injector, attribute, **extra):
+def _build_view_property(injector, attribute, **extra):
     @property
     def __attribute(self):
         __tracebackhide__ = True
@@ -113,7 +113,7 @@ def build_view_property(injector, attribute, **extra):
     return __attribute
 
 
-def build_form_view_method(injector, method):
+def _build_form_view_method(injector, method):
     def __method(self, form):
         __tracebackhide__ = True
         ns = injector.let(
@@ -130,7 +130,7 @@ def build_form_view_method(injector, method):
     return __method
 
 
-def build_form_view_error(injector, method):
+def _build_form_view_error(injector, method):
     def __method(self, form):
         raise DependencyError(
             "Add {!r} to the {!r} injector".format(method, injector.__name__)

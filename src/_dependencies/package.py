@@ -1,6 +1,6 @@
 import importlib
 
-from _dependencies.attributes import Replace
+from _dependencies.attributes import _Replace
 from _dependencies.markers import lazy_import
 
 
@@ -19,12 +19,12 @@ class Package(object):
         return result
 
 
-def make_package_spec(dependency):
+def _make_package_spec(dependency):
 
-    return lazy_import, ImportSpec(dependency), [], 0
+    return lazy_import, _ImportSpec(dependency), [], 0
 
 
-class ImportSpec(object):
+class _ImportSpec(object):
     def __init__(self, dependency):
 
         self.__name__ = dependency.__name__
@@ -45,4 +45,4 @@ class ImportSpec(object):
                 result = getattr(result, attr)
                 break
 
-        raise Replace(result, self.__attrs__[index:])
+        raise _Replace(result, self.__attrs__[index:])

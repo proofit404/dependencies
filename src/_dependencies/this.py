@@ -1,5 +1,5 @@
 from _dependencies import markers
-from _dependencies.checks.this import check_expression
+from _dependencies.checks.this import _check_expression
 from _dependencies.exceptions import DependencyError
 
 
@@ -29,13 +29,13 @@ class This(object):
 this = This(tuple())
 
 
-def make_this_spec(dependency):
+def _make_this_spec(dependency):
 
-    check_expression(dependency)
-    return markers.this, ThisSpec(dependency), ["__self__"], 0
+    _check_expression(dependency)
+    return markers.this, _ThisSpec(dependency), ["__self__"], 0
 
 
-class ThisSpec(object):
+class _ThisSpec(object):
     def __init__(self, dependency):
 
         self.dependency = dependency

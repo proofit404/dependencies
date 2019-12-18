@@ -7,7 +7,7 @@ from typing import Union
 
 from _dependencies.attributes import Attributes
 from _dependencies.injector import Injector
-from _dependencies.package import ImportSpec
+from _dependencies.package import _ImportSpec
 from _dependencies.raw import RawSpec
 from _dependencies.this import ThisSpec
 
@@ -28,6 +28,6 @@ class NestedInjectorSpec:
             Tuple[str, Attributes, List[str], int],
             Tuple[str, RawSpec, List[Any], int],
             Tuple[str, NestedInjectorSpec, List[str], int],
-            Tuple[str, ImportSpec, List[Any], int],
+            Tuple[str, _ImportSpec, List[Any], int],
         ],
     ]: ...
