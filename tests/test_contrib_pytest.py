@@ -56,19 +56,6 @@ def test_register_fixture(fixture_name):
     assert fixture_name.do() == 6
 
 
-def test_docstrings():
-    """
-    `register` decorator and `require` marker should have proper
-    documentation strings.
-    """
-
-    assert (
-        register.__doc__
-        == "Register Py.test fixture performing injection in it's scope."
-    )
-    assert require.__doc__ == "Mark fixture as a dependency for injection process."
-
-
 def test_register_return_value():
     """`register` should return `Injector` subclass unmodified."""
 

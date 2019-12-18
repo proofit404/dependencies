@@ -227,23 +227,6 @@ def test_model_view_set_undefined_method(db):
     assert message == "Add 'destroy' to the 'EmptyViewSet' injector"
 
 
-def test_docstrings():
-    """Access `api_view` and `generic_api_view` docstrings."""
-
-    assert (
-        contrib.api_view.__doc__
-        == "Create DRF class-based API view from injector class."
-    )
-    assert (
-        contrib.generic_api_view.__doc__
-        == "Create DRF generic class-based API view from injector class."
-    )
-    assert (
-        contrib.model_view_set.__doc__
-        == "Create DRF model view set from injector class."
-    )
-
-
 def test_keep_view_informanion():
     """Generated view should point to the `Injector` subclass."""
 

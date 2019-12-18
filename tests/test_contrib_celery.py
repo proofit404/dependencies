@@ -185,37 +185,6 @@ def u4kZae2NSFhE(container):
     return sign
 
 
-def test_docstrings():
-    """Access `task` and `shared_task` docstrings."""
-
-    assert contrib.task.__doc__ == "Create Celery task from injector class."
-    assert (
-        contrib.shared_task.__doc__ == "Create Celery shared task from injector class."
-    )
-
-    @contrib.shared_task
-    class Container(Injector):
-        """Foo bar baz task."""
-
-        name = "foo.bar.baz"
-        run = lambda: None  # noqa: E731
-
-    assert Container.__bases__[0].__doc__ == "Foo bar baz task."
-    assert (
-        Container.signature.__doc__
-        == """
-    Create Celery canvas signature with arguments collected from
-    `Injector` subclass.
-    """
-    )
-    assert Container.s.__doc__ == "Create Celery canvas shortcut expression."
-    assert Container.si.__doc__ == "Create immutable Celery canvas shortcut expression."
-    assert (
-        Container.delay.__doc__
-        == "Delay execution of the task defined with `Injector` subclass."
-    )
-
-
 def test_validation(celery_app):
     """
     Task and shared task decorators must check required `Injector`

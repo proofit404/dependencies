@@ -135,15 +135,3 @@ def iQXjlPlQGgSh(arg):
     """Let notation."""
 
     Injector.let(func=arg)
-
-
-def test_docstrings():
-    """Access `operation` documentation string."""
-
-    assert (
-        operation.__doc__ == "\n"
-        "    Create callable class appropriated for dependency injection.\n"
-        "\n"
-        "    Used as function decorator.\n"
-        "    "
-    )

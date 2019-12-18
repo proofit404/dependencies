@@ -5,8 +5,6 @@ from _dependencies.markers import lazy_import
 
 
 class Package(object):
-    # FIXME: Docstring.
-
     def __init__(self, name):
 
         self.__name__ = name

@@ -496,7 +496,11 @@ def test_nested_injectors():
 
 
 def test_docstrings():
-    """Check we can access all API entry points documentation."""
+    """
+    Check we can access Injector docstring.
+
+    It's handled by metaclass at runtime.
+    """
 
     assert (
         Injector.__doc__ == "\n"
@@ -505,11 +509,6 @@ def test_docstrings():
         "Classes inherited from this class may inject dependencies into classes\n"
         "specified in it namespace.\n"
     )
-    assert (
-        Injector.let.__doc__
-        == "Produce new Injector with some dependencies overwritten."
-    )
-    assert DependencyError.__doc__ == "Broken dependencies configuration error."
 
     class Foo(Injector):
         """New container."""

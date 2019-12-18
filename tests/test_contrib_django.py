@@ -149,20 +149,6 @@ def test_form_view_attributes():
 # Attributes.
 
 
-def test_docstrings():
-    """Access `view` and `form_view` docstring."""
-
-    assert contrib.view.__doc__ == "Create Django class-based view from injector class."
-    assert (
-        contrib.template_view.__doc__
-        == "Create Django template class-based view from injector class."
-    )
-    assert (
-        contrib.form_view.__doc__
-        == "Create Django form processing class-based view from injector class."
-    )
-
-
 def test_keep_view_informanion():
     """Generated view should point to the `Injector` subclass."""
 

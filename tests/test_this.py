@@ -217,14 +217,6 @@ def test_attribute_access_after_item_getter():
 # `test_item_access_after_call`.
 
 
-def test_docstrings():
-    """Check we can access all API entry points documentation."""
-
-    assert this.__doc__ == (
-        "Declare attribute and item access during dependency injection."
-    )
-
-
 direct_proxy = CodeCollector()
 
 

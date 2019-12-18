@@ -127,17 +127,3 @@ def jbfjlQveNjrZ(arg):
     """Let notation."""
 
     Injector.let(func=arg)
-
-
-def test_docstrings():
-    """Access `value` documentation string."""
-
-    assert (
-        value.__doc__ == "\n"
-        "    Evaluate given function during dependency injection.\n"
-        "\n"
-        "    Returned value is used as value of the dependency.\n"
-        "\n"
-        "    Used as function decorator.\n"
-        "    "
-    )

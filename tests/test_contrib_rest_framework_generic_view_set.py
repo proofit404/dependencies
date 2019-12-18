@@ -17,7 +17,7 @@ client = test_client.APIClient()
 #
 # [ ] Test GenericAPIView attributes.
 #
-# [ ] Test docstring and class name.
+# [ ] Test class name.
 
 
 def test_list_action():
