@@ -6,7 +6,6 @@ from flask.views import MethodView
 
 def method_view(injector):
     """Create Flask method based dispatching view from injector class."""
-
     handler = create_handler(MethodView)
     apply_http_methods(handler, injector)
     return injector.let(as_view=handler.as_view)

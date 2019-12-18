@@ -5,7 +5,6 @@ import pytest
 
 def register(injector):
     """Register Py.test fixture performing injection in it's scope."""
-
     if "fixture" not in injector:
         injector.fixture
 
@@ -27,7 +26,6 @@ def register(injector):
 
 def require(fixturename):
     """Mark fixture as a dependency for injection process."""
-
     return type(Requirement.__name__, (Requirement,), {"fixturename": fixturename})
 
 

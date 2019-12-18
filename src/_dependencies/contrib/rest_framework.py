@@ -19,7 +19,6 @@ from _dependencies.value import Value
 
 def api_view(injector):
     """Create DRF class-based API view from injector class."""
-
     handler = create_handler(APIView, injector)
     apply_http_methods(handler, injector)
     apply_api_view_attributes(handler, injector)
@@ -28,7 +27,6 @@ def api_view(injector):
 
 def generic_api_view(injector):
     """Create DRF generic class-based API view from injector class."""
-
     handler = create_handler(GenericAPIView, injector)
     apply_http_methods(handler, injector)
     apply_api_view_attributes(handler, injector)
@@ -47,7 +45,6 @@ def generic_api_view(injector):
 
 def list_api_view(injector):
     """Create DRF view for listing a queryset from injector class."""
-
     # FIXME:
     #
     # [ ] Test me.
@@ -61,7 +58,6 @@ def list_api_view(injector):
 
 def retrieve_api_view(injector):
     """Create DRF view for retrieving a model instance from injector class."""
-
     # FIXME:
     #
     # [ ] Write separate test module for each public function.
@@ -77,7 +73,6 @@ def retrieve_api_view(injector):
 
 def view_set(injector):
     """Create DRF view set from injector class."""
-
     # FIXME:
     #
     # [ ] Test me.
@@ -91,7 +86,6 @@ def view_set(injector):
 
 def generic_view_set(injector):
     """Create DRF generic view set from injector class."""
-
     # FIXME:
     #
     # [ ] Test me.
@@ -106,7 +100,6 @@ def generic_view_set(injector):
 
 def model_view_set(injector):
     """Create DRF model view set from injector class."""
-
     handler = create_handler(ModelViewSet, injector)
     apply_api_view_attributes(handler, injector)
     apply_generic_api_view_attributes(handler, injector)

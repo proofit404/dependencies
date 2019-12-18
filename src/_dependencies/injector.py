@@ -137,7 +137,6 @@ def __init__(self, *args, **kwargs):
 
 def let(cls, **kwargs):
     """Produce new Injector with some dependencies overwritten."""
-
     return type(cls.__name__, (cls,), kwargs)
 
 

@@ -10,7 +10,6 @@ from _dependencies.this import this
 
 def view(injector):
     """Create Django class-based view from injector class."""
-
     handler = create_handler(View, injector)
     apply_http_methods(handler, injector)
     return injector.let(as_view=handler.as_view)
@@ -18,7 +17,6 @@ def view(injector):
 
 def template_view(injector):
     """Create Django template class-based view from injector class."""
-
     handler = create_handler(TemplateView, injector)
     apply_template_methods(handler, injector)
     return injector.let(as_view=handler.as_view)
@@ -26,7 +24,6 @@ def template_view(injector):
 
 def form_view(injector):
     """Create Django form processing class-based view from injector class."""
-
     handler = create_handler(FormView, injector)
     apply_template_methods(handler, injector)
     apply_form_methods(handler, injector)

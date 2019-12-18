@@ -10,13 +10,11 @@ undefined = object()
 
 def task(injector):
     """Create Celery task from injector class."""
-
     return decorate_with(injector.app.task, injector)
 
 
 def shared_task(injector):
     """Create Celery shared task from injector class."""
-
     return decorate_with(celery.shared_task, injector)
 
 
