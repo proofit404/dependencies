@@ -107,16 +107,10 @@ def model_view_set(injector):
     return injector.let(as_viewset=lambda: handler)
 
 
-def add_custom_attributes_from_throttle_classes(attributes_list):
-    for throttle_class in api_settings.DEFAULT_THROTTLE_CLASSES:
-        if throttle_class.scope_attr not in attributes_list:
-            attributes_list.append(throttle_class.scope_attr)
-    return attributes_list
-
 
 def apply_api_view_attributes(handler, injector):
 
-    attributes_list = [
+    attributes = [
         "authentication_classes",
         "renderer_classes",
         "parser_classes",
@@ -127,8 +121,12 @@ def apply_api_view_attributes(handler, injector):
         "versioning_class",
         "metadata_class",
     ]
-    attributes_list = add_custom_attributes_from_throttle_classes(attributes_list)
-    for attribute in attributes_list:
+
+    for throttle_class in api_settings.DEFAULT_THROTTLE_CLASSES:
+        if throttle_class.scope_attr not in attributes:
+            attributes.append(throttle_class.scope_attr)
+
+    for attribute in attributes:
         if attribute in injector:
             view_property = build_view_property(
                 injector, attribute, action=this.view.action
