@@ -5,11 +5,12 @@ site_description: Dependency Injection for Humans.
 theme:
   name: "material"
   palette:
-    primary: "indigo"
-    accent: "indigo"
+    primary: "white"
+    accent: "light-blue"
   logo: "https://raw.githubusercontent.com\
     /dry-python/brand/master/logo/dry-python.png"
-  # FIXME: Favicon.
+  favicon: "https://raw.githubusercontent.com\
+    /dry-python/brand/master/logo/dry-python.ico"
   language: "en"
 repo_name: dry-python/dependencies
 repo_url: "https://github.com/dry-python/dependencies"
