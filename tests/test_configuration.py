@@ -1,5 +1,4 @@
 """Tests related to the project configuration."""
-
 import collections
 import configparser
 import datetime
