@@ -32,10 +32,10 @@ this:
 
 In our opinion, this makes code less declarative.
 
-1. **It hard to tell how dependencies will be resolved.** At the same
-   time looking on container definition and a signature of the
+1. **It's hard to tell how dependencies will be resolved.** At the same
+   time, looking on container definition and a signature of the
    `__init__` method can you easily say what arguments will be passed
-   to the constructor? You can't. You need to inspect a base class of
+   to the constructor? You can't. You will need to inspect all superclasses of
    each dependency registered in the container. With our `Injector`
    approach, you don't have this problem. You will find arguments
    right in the `Injector` subclass in one place.
@@ -49,12 +49,12 @@ In our opinion, this makes code less declarative.
    two different database classes. The same is necessary for these
    classes arguments. Both of them needs a port to run. How would you
    name it? `PrimaryDatabasePort` and `SecondaryDatabasePort` instead
-   of `int`? This lead to unnecessary boilerplate.
+   of `int`? This leads to unnecessary boilerplate.
 
 ## Mixins considered harmful
 
-`dependencies` are compared with mixins often. In a sense that both
-solutions were made to maximize code reuse. We already discussed this in
+`dependencies` are compared with mixins often, since both
+solutions are ways to maximize code reuse. We already discussed this in
 the [why](why.md#mixins) chapter. But let's return to it again:
 
 !!! note
@@ -78,9 +78,8 @@ Consider this code snippet:
 
 ```
 
-Where `get_object` and `get_serializer` were defined? We have no idea.
-We are thinking that code below is way better for understanding its
-structure.
+Where were `get_object` and `get_serializer` defined? We have no idea.
+We believe the code below is way better in the sense of understandability:
 
 ```pycon
 
@@ -99,10 +98,10 @@ structure.
 
 ```
 
-## What inject and what not inject
+## What to inject, and what not to
 
 It can be hard to draw the border between what should be injectable and
-what not. Let's consider this typical example.
+what shouldn't be. Let's consider this typical example.
 
 ```pycon
 
@@ -128,21 +127,21 @@ what not. Let's consider this typical example.
 ```
 
 1. Should I write code like this?
-2. Will I ever decide to use something other than excellent
+2. Will I ever decide to use something other than the excellent
    [requests](http://docs.python-requests.org/) library?
 
-In our opinion that are not right questions to ask.
+In our opinion these are not the correct questions to ask.
 
 By injecting a certain library you add a **hard** dependency on its
-interfaces to the whole systems. Migration to other libraries in the
+interfaces to the whole system. Migration to other libraries in the
 future can be painful.
 
 Also, this adds another **hard** dependency to the whole system. Your
 code depends on the structure of third-party API response. This makes
-the situation even worth. Migration to other third-party services will
-be painful as well.
+the situation even worse. Migration to other third-party services will
+be painful, as well.
 
-We believe that HTTP protocol itself is implementation detail!
+We believe that HTTP protocol itself is an implementation detail!
 
 We prefer to use dependency injection only on boundaries we control:
 

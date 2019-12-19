@@ -11,18 +11,18 @@
 
 # Dependency Injection for Humans
 
-Dependency Injection (or simply DI) is great technique. By using it you
-can organize responsibilities in you code base. Define high level
+Dependency Injection (or simply DI) is a great technique. By using it you
+can organize responsibilities in you codebase. Define high level
 policies and system behavior in one part. Delegate control to low level
-mechanisms from different part. Simple and powerful.
+mechanisms in anotherpart. Simple and powerful.
 
-With help of DI you can use different parts of you system independently
+With help of DI you can use different parts of your system independently
 and combine their behavior really easy.
 
 If you split logic and implementation into different classes, you will
-see how pleasant it became to change your system.
+see how pleasant it becomes to change your system.
 
-This tiny library helps you to connect parts of your system i.e. to
+This tiny library helps you to connect parts of your system, in particular - to
 inject low level implementation into high level behavior.
 
 # Example
@@ -65,13 +65,13 @@ Dependency injection with `dependencies`
 
 ## Release version
 
-Dependencies is available on PyPI - to install it just run:
+Dependencies is available on PyPI - to install it, just run:
 
 ```bash
 pip install -U dependencies
 ```
 
-That's it! Once installed, `dependencies` are available to use. Import
+That's it! Once installed, `dependencies` library is available for use. Import
 it and have fun.
 
 ## Development version
