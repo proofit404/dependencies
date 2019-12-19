@@ -3,12 +3,13 @@
 Here we will try to collect pros and cons of different approaches to
 make your code extendable and reusable.
 
-Let's imagine we have an order processing system. We want 
+Let's imagine we have an order processing system. We want
 to implement order purchase feature. There is a lot of functionality
 to be built:
-* We should change our data,
-* send a request to the payment processing system,
-* and we should send notification to the user.
+
+- We should change our data,
+- send a request to the payment processing system,
+- and we should send notification to the user.
 
 ## Simple functions
 

@@ -130,11 +130,11 @@ Here is a demonstration of rules above.
 
 Let's roll down what is happening here:
 
-* `Foo` class requires an argument named `two`;
-* In dependency scope, that argument resolves to `Baz` class;
-* Which is a class - oh boy, we need to instantiate it as well;
-* But its constructor requires an argument named `x`;
-* Which resolves to `1` in the dependency scope, so we do not need to go any further.
+- `Foo` class requires an argument named `two`;
+- In dependency scope, that argument resolves to `Baz` class;
+- Which is a class - oh boy, we need to instantiate it as well;
+- But its constructor requires an argument named `x`;
+- Which resolves to `1` in the dependency scope, so we do not need to go any further.
 
 Having found that out, we effectively construct, execute, and return `Foo(two=Baz(x=1))`.
 
