@@ -1,6 +1,7 @@
 [tool.poetry]
 name = "helpers"
 version = "0"
+description = ""
 authors = []
 packages = [
     { include = "django_project" },
@@ -15,5 +16,5 @@ packages = [
 mddoctest = "mddoctest:main"
 
 [build-system]
-requires = ["poetry>=0.12"]
+requires = ["poetry"]
 build-backend = "poetry.masonry.api"
