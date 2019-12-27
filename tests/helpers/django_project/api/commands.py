@@ -11,32 +11,26 @@ from rest_framework.viewsets import ModelViewSet
 
 class UserOperations(object):
     def __init__(self, view, request):
-
         self.view = view
         self.request = request
 
     def do(self):
-
         assert self.request.data == {"last": True}
         assert isinstance(self.request.accepted_renderer, DocumentationRenderer)
         return Response({"details": "ok"})
 
     def login(self):
-
         raise Exception("Should not got there")  # pragma: no cover
 
     def respond(self):
-
         return Response()
 
     def retrieve(self):
-
         instance = self.view.get_object()
         serializer = self.view.get_serializer(instance)
         return Response(serializer.data)
 
     def collection(self):
-
         queryset = self.view.filter_queryset(self.view.get_queryset())
         page = self.view.paginate_queryset(queryset)
         serializer = self.view.get_serializer(page, many=True)
@@ -45,7 +39,6 @@ class UserOperations(object):
 
 class UserCreateOperations(object):
     def __init__(self, view, request, args, kwargs, user, validated_data, action):
-
         self.view = view
         self.request = request
         self.args = args
@@ -55,22 +48,18 @@ class UserCreateOperations(object):
         self.action = action
 
     def create(self):
-
         assert isinstance(self.view, ModelViewSet)
         assert isinstance(self.request, Request)
         assert self.args == ()
         assert self.kwargs == {}
         assert isinstance(self.validated_data, dict)
         assert self.action == "create"
-
         LogEntry.objects.create(user=self.user, action_flag=ADDITION)
-
         user = User.objects.create(
             username=self.validated_data["username"],
             first_name=self.validated_data["first_name"],
             last_name=self.validated_data["last_name"],
         )
-
         return user
 
 
@@ -78,7 +67,6 @@ class UserUpdateOperations(object):
     def __init__(
         self, view, request, args, kwargs, user, pk, validated_data, instance, action
     ):
-
         self.view = view
         self.request = request
         self.args = args
@@ -90,7 +78,6 @@ class UserUpdateOperations(object):
         self.action = action
 
     def update(self):
-
         assert isinstance(self.view, ModelViewSet)
         assert isinstance(self.request, Request)
         assert self.args == ()
@@ -99,9 +86,7 @@ class UserUpdateOperations(object):
         assert isinstance(self.validated_data, dict)
         assert isinstance(self.instance, User)
         assert self.action in {"update", "partial_update"}
-
         LogEntry.objects.create(user=self.user, action_flag=CHANGE)
-
         if "username" in self.validated_data:
             self.instance.username = self.validated_data["username"]
         if "first_name" in self.validated_data:
@@ -109,13 +94,11 @@ class UserUpdateOperations(object):
         if "last_name" in self.validated_data:
             self.instance.last_name = self.validated_data["last_name"]
         self.instance.save()
-
         return self.instance
 
 
 class UserDestroyOperations(object):
     def __init__(self, view, request, args, kwargs, user, pk, instance, action):
-
         self.view = view
         self.request = request
         self.args = args
@@ -126,7 +109,6 @@ class UserDestroyOperations(object):
         self.action = action
 
     def destroy(self):
-
         assert isinstance(self.view, ModelViewSet)
         assert isinstance(self.request, Request)
         assert self.args == ()
@@ -134,6 +116,5 @@ class UserDestroyOperations(object):
         assert self.pk == "2"
         assert isinstance(self.instance, User)
         assert self.action == "destroy"
-
         self.instance.delete()
         LogEntry.objects.create(user=self.user, action_flag=DELETION)

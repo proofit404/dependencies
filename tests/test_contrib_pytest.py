@@ -10,13 +10,11 @@ from dependencies.exceptions import DependencyError
 
 class Foo(object):
     def __init__(self, foo, bar, baz):
-
         self.foo = foo
         self.bar = bar
         self.baz = baz
 
     def do(self):
-
         return self.foo + self.bar + self.baz
 
 
@@ -31,19 +29,16 @@ class Container(Injector):
 
 @pytest.fixture()
 def fixture_name_1():
-
     return 1
 
 
 @pytest.fixture()
 def fixture_name_2():
-
     return 2
 
 
 @pytest.fixture()
 def fixture_name_3():
-
     return 3
 
 
@@ -74,7 +69,6 @@ def test_validation():
 
     message = str(exc_info.value)
     assert message == "'Container1' can not resolve attribute 'fixture'"
-
     with pytest.raises(DependencyError) as exc_info:
 
         @register

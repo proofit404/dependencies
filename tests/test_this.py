@@ -81,7 +81,6 @@ def ce642f492941():
         one = this.foo["one"]
 
     result = Container.one
-
     return result
 
 
@@ -94,7 +93,6 @@ def ffa208dc1130():
         two = this.foo["one"]["two"]
 
     result = Container.two
-
     return result
 
 
@@ -109,7 +107,6 @@ def e5c358190fef():
             spam = (this << 1).foo["bar"]["baz"]
 
     result = Container.SubContainer.spam
-
     return result
 
 
@@ -125,7 +122,6 @@ def ab4cdbf60b2f():
                 spam = (this << 2).foo["bar"]["baz"]
 
     result = Container.SubContainer.SubSubContainer.spam
-
     return result
 
 
@@ -138,7 +134,6 @@ def be332433b74d():
         bar = this.foo[0]
 
     result = Container.bar
-
     return result
 
 
@@ -151,7 +146,6 @@ def fe150d5ebe93():
         bar = this.foo[2]
 
     result = Container.bar
-
     return result
 
 
@@ -164,7 +158,6 @@ def dc4fedcd09d8():
         bar = this.foo[("x", 1)]
 
     result = Container.bar
-
     return result
 
 
@@ -227,7 +220,6 @@ def test_deny_this_without_attribute_access(code):
     """
     with pytest.raises(DependencyError) as exc_info:
         code()
-
     message = str(exc_info.value)
     assert message == "You can not use 'this' directly in the 'Injector'"
 
@@ -264,7 +256,6 @@ def test_this_deny_non_integers():
     """We can't shift `this` with non number argument."""
     with pytest.raises(ValueError) as exc_info:
         this << "boom"
-
     assert str(exc_info.value) == "Positive integer argument is required"
 
 
@@ -276,7 +267,6 @@ def test_this_deny_negative_integers(code):
     """We can't shift `this` with negative integer."""
     with pytest.raises(ValueError) as exc_info:
         code()
-
     assert str(exc_info.value) == "Positive integer argument is required"
 
 
@@ -303,7 +293,6 @@ def test_require_more_parents_that_injector_actually_has(code):
     """
     with pytest.raises(DependencyError) as exc_info:
         code()
-
     assert str(exc_info.value) == (
         "You tried to shift this more times than Injector has levels"
     )
@@ -314,7 +303,6 @@ def s6lduD7BJpxW():
     """Declarative Injector."""
 
     class Container(Injector):
-
         foo = (this << 1).bar
 
     Container.foo
@@ -326,7 +314,6 @@ def bUICVObtDZ4I():
 
     class Container(Injector):
         class SubContainer(Injector):
-
             foo = (this << 2).bar
 
     Container.SubContainer.foo
@@ -355,7 +342,6 @@ def test_attribute_error_on_parent_access(code):
     """
     with pytest.raises(DependencyError) as exc_info:
         code()
-
     assert str(exc_info.value) in {
         "'Container' can not resolve attribute 'bar'",
         "'Injector' can not resolve attribute 'bar'",
@@ -369,7 +355,6 @@ def t1jn9RI9v42t():
     """Declarative Injector."""
 
     class Container(Injector):
-
         foo = this.bar
 
     Container.foo
@@ -381,7 +366,6 @@ def yOEj1qQfsXHy():
 
     class Container(Injector):
         class SubContainer(Injector):
-
             foo = (this << 1).bar
 
     Container.SubContainer.foo

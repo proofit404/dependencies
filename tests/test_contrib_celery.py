@@ -39,7 +39,6 @@ def bAMWkT3WSTN1(_app):
 
     @contrib.task
     class Container(Injector):
-
         app = _app
         name = "foo.bar.baz"
         run = Run
@@ -53,7 +52,6 @@ def xPa7isagt3Lq(app):
 
     @contrib.shared_task
     class Container(Injector):
-
         name = "foo.bar.baz"
         run = Run
 
@@ -191,7 +189,6 @@ def test_validation(celery_app):
 
     message = str(exc_info.value)
     assert message == "'Container1' can not resolve attribute 'app'"
-
     with pytest.raises(DependencyError) as exc_info:
 
         @contrib.task
@@ -201,7 +198,6 @@ def test_validation(celery_app):
 
     message = str(exc_info.value)
     assert message == "'Container2' can not resolve attribute 'name'"
-
     with pytest.raises(DependencyError) as exc_info:
 
         @contrib.task
@@ -211,7 +207,6 @@ def test_validation(celery_app):
 
     message = str(exc_info.value)
     assert message == "'Container3' can not resolve attribute 'run'"
-
     with pytest.raises(DependencyError) as exc_info:
 
         @contrib.shared_task
@@ -220,7 +215,6 @@ def test_validation(celery_app):
 
     message = str(exc_info.value)
     assert message == "'Container4' can not resolve attribute 'name'"
-
     with pytest.raises(DependencyError) as exc_info:
 
         @contrib.shared_task
@@ -285,7 +279,6 @@ def test_task_arguments(celery_app, code):
             throws=(ValueError, AttributeError),
         ),
     )
-
     task_instance = celery_app.tasks["foo.bar.baz"]
     assert task_instance(1, two=2) == 3
     assert isinstance(task_instance, MyTask)
@@ -312,7 +305,6 @@ def z3uG24zlPL7s(_app, container):
 
     @contrib.task
     class Container(container):
-
         app = _app
         name = "foo.bar.baz"
         run = this.bar.do
@@ -324,6 +316,5 @@ def pvRJsuaumvOU(app, container):
 
     @contrib.shared_task
     class Container(container):
-
         name = "foo.bar.baz"
         run = this.bar.do

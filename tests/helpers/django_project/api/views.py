@@ -42,36 +42,29 @@ class UserAction(Injector):
 
     post = this.command.do
     command = UserOperations
-
     renderer_classes = (DocumentationRenderer,)
     parser_classes = (JSONParser,)
 
 
 @api_view
 class UserLogin(Injector):
-
     get = this.command.login
     command = UserOperations
-
     permission_classes = (IsAuthenticated,)
 
 
 @api_view
 class LoginAll(Injector):
-
     get = this.command.respond
     command = UserOperations
-
     authentication_classes = (AuthenticateAll,)
     permission_classes = (IsAuthenticated,)
 
 
 @api_view
 class ThrottleAll(Injector):
-
     get = this.command.login
     command = UserOperations
-
     throttle_classes = (ThrottleEveryOne,)
 
 
@@ -79,7 +72,6 @@ class ThrottleAll(Injector):
 class DefaultThrottleScope(Injector):
     get = this.command.respond
     command = UserOperations
-
     throttle_scope = "throttle_scope"
 
 
@@ -87,34 +79,27 @@ class DefaultThrottleScope(Injector):
 class CustomThrottleScope(Injector):
     get = this.command.respond
     command = UserOperations
-
     custom_throttle_scope = "custom_scope"
 
 
 @api_view
 class BadNegotiation(Injector):
-
     get = this.command.respond
     command = UserOperations
-
     content_negotiation_class = DenyNegotiation
 
 
 @api_view
 class BadVersion(Injector):
-
     get = this.command.respond
     command = UserOperations
-
     versioning_class = DenyVersion
 
 
 @api_view
 class BadMetadata(Injector):
-
     get = this.command.respond
     command = UserOperations
-
     metadata_class = DenyMetadata
 
 
@@ -124,7 +109,6 @@ class UserRetrieveView(Injector):
 
     get = this.command.retrieve
     command = UserOperations
-
     queryset = User.objects.all()
     serializer_class = UserSerializer
     lookup_field = "username"
@@ -133,10 +117,8 @@ class UserRetrieveView(Injector):
 
 @generic_api_view
 class UserListView(Injector):
-
     get = this.command.collection
     command = UserOperations
-
     queryset = User.objects.all()
     serializer_class = UserSerializer
     filter_backends = (DjangoFilterBackend,)
@@ -149,10 +131,8 @@ class UserListView(Injector):
 
 @generic_api_view
 class UserListFilterFieldsView(Injector):
-
     get = this.command.collection
     command = UserOperations
-
     queryset = User.objects.all()
     serializer_class = UserSerializer
     filter_backends = (DjangoFilterBackend,)
@@ -172,72 +152,60 @@ class InjectedViewSet(Injector):
 
     @operation
     def list(view, request, args, kwargs, user, action):
-
         assert isinstance(view, ViewSet)
         assert isinstance(request, Request)
         assert args == ()
         assert kwargs == {}
         assert action == "list"
-
         return Response(status=HTTP_200_OK, data={"list": "ok"})
 
     @operation
     def retrieve(view, request, args, kwargs, user, pk, action):
-
         assert isinstance(view, ViewSet)
         assert isinstance(request, Request)
         assert args == ()
         assert kwargs == {"pk": "1"}
         assert pk == "1"
         assert action == "retrieve"
-
         return Response(status=HTTP_200_OK, data={"retrieve": "ok"})
 
     @operation
     def create(view, request, args, kwargs, user, action):
-
         assert isinstance(view, ViewSet)
         assert isinstance(request, Request)
         assert args == ()
         assert kwargs == {}
         assert action == "create"
-
         return Response(status=HTTP_201_CREATED, data={"create": "ok"})
 
     @operation
     def update(view, request, args, kwargs, user, pk, action):
-
         assert isinstance(view, ViewSet)
         assert isinstance(request, Request)
         assert args == ()
         assert kwargs == {"pk": "1"}
         assert pk == "1"
         assert action == "update"
-
         return Response(status=HTTP_200_OK, data={"update": "ok"})
 
     @operation
     def partial_update(view, request, args, kwargs, user, pk, action):
-
         assert isinstance(view, ViewSet)
         assert isinstance(request, Request)
         assert args == ()
         assert kwargs == {"pk": "1"}
         assert pk == "1"
         assert action == "partial_update"
-
         return Response(status=HTTP_200_OK, data={"partial_update": "ok"})
 
     @operation
     def destroy(view, request, args, kwargs, user, pk, action):
-
         assert isinstance(view, ViewSet)
         assert isinstance(request, Request)
         assert args == ()
         assert kwargs == {"pk": "1"}
         assert pk == "1"
         assert action == "destroy"
-
         return Response(status=HTTP_204_NO_CONTENT)
 
 
@@ -246,35 +214,29 @@ class InjectedViewSet(Injector):
 
 @generic_view_set
 class InjectedGenericViewSet(Injector):
-
     serializer_class = UserSerializer
 
     @operation
     def list(view, request, args, kwargs, user, action):
-
         assert isinstance(view, GenericViewSet)
         assert isinstance(request, Request)
         assert args == ()
         assert kwargs == {}
         assert action == "list"
-
         return Response(status=HTTP_200_OK, data={"list": "ok"})
 
     @operation
     def retrieve(view, request, args, kwargs, user, pk, action):
-
         assert isinstance(view, GenericViewSet)
         assert isinstance(request, Request)
         assert args == ()
         assert kwargs == {"pk": "1"}
         assert pk == "1"
         assert action == "retrieve"
-
         return Response(status=HTTP_200_OK, data={"retrieve": "ok"})
 
     @operation
     def create(view, request, args, kwargs, user, action, validated_data):
-
         assert isinstance(view, GenericViewSet)
         assert isinstance(request, Request)
         assert args == ()
@@ -285,12 +247,10 @@ class InjectedGenericViewSet(Injector):
             "first_name": "John",
             "last_name": "Doe",
         }
-
         return Response(status=HTTP_201_CREATED, data={"create": "ok"})
 
     @operation
     def update(view, request, args, kwargs, user, pk, action, validated_data):
-
         assert isinstance(view, GenericViewSet)
         assert isinstance(request, Request)
         assert args == ()
@@ -302,12 +262,10 @@ class InjectedGenericViewSet(Injector):
             "first_name": "John",
             "last_name": "Doe",
         }
-
         return Response(status=HTTP_200_OK, data={"update": "ok"})
 
     @operation
     def partial_update(view, request, args, kwargs, user, pk, action, validated_data):
-
         assert isinstance(view, GenericViewSet)
         assert isinstance(request, Request)
         assert args == ()
@@ -315,19 +273,16 @@ class InjectedGenericViewSet(Injector):
         assert pk == "1"
         assert action == "partial_update"
         assert validated_data == {"username": "jimworm"}
-
         return Response(status=HTTP_200_OK, data={"partial_update": "ok"})
 
     @operation
     def destroy(view, request, args, kwargs, user, pk, action):
-
         assert isinstance(view, GenericViewSet)
         assert isinstance(request, Request)
         assert args == ()
         assert kwargs == {"pk": "1"}
         assert pk == "1"
         assert action == "destroy"
-
         return Response(status=HTTP_204_NO_CONTENT)
 
 
@@ -336,14 +291,11 @@ class UserViewSet(Injector):
     """Intentionally left blank."""
 
     authentication_classes = (AuthenticateAdmin,)
-
     queryset = User.objects.filter(username="johndoe")
     serializer_class = UserSerializer
-
     create = this.create_command.create
     update = this.update_command.update
     destroy = this.destroy_command.destroy
-
     create_command = UserCreateOperations
     update_command = UserUpdateOperations
     destroy_command = UserDestroyOperations
@@ -351,22 +303,18 @@ class UserViewSet(Injector):
 
 @model_view_set
 class DynamicUserViewSet(Injector):
-
     authentication_classes = (AuthenticateAdmin,)
 
     @value
     def queryset(user, action):
-
         assert action in {"list", "retrieve", "update", "partial_update", "destroy"}
         assert user.username == "admin"
         return User.objects.filter(username="johndoe")
 
     serializer_class = UserSerializer
-
     create = this.create_command.create
     update = this.update_command.update
     destroy = this.destroy_command.destroy
-
     create_command = UserCreateOperations
     update_command = UserUpdateOperations
     destroy_command = UserDestroyOperations
@@ -374,6 +322,5 @@ class DynamicUserViewSet(Injector):
 
 @model_view_set
 class EmptyViewSet(Injector):
-
     queryset = User.objects.all()
     serializer_class = UserSerializer

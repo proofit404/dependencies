@@ -108,7 +108,6 @@ def model_view_set(injector):
 
 
 def _apply_api_view_attributes(handler, injector):
-
     attributes = [
         "authentication_classes",
         "renderer_classes",
@@ -120,11 +119,9 @@ def _apply_api_view_attributes(handler, injector):
         "versioning_class",
         "metadata_class",
     ]
-
     for throttle_class in api_settings.DEFAULT_THROTTLE_CLASSES:
         if throttle_class.scope_attr not in attributes:
             attributes.append(throttle_class.scope_attr)
-
     for attribute in attributes:
         if attribute in injector:
             view_property = _build_view_property(
@@ -134,7 +131,6 @@ def _apply_api_view_attributes(handler, injector):
 
 
 def _apply_generic_api_view_attributes(handler, injector):
-
     # FIXME: Router issue.
     #
     # REST Framework tries to access ViewSet.queryset.model if we add
@@ -144,7 +140,6 @@ def _apply_generic_api_view_attributes(handler, injector):
     # should be wrapped in custom property subclass with model
     # attribute defined.  If dependency injection error occurs, we
     # should say explicitly about basename attribute.
-
     for attribute in [
         "queryset",
         "serializer_class",
@@ -165,7 +160,6 @@ def _apply_generic_api_view_attributes(handler, injector):
 
 
 def _apply_view_set_methods(handler, injector):
-
     for action, detail, validated_data in [
         ("list", False, None),
         ("create", False, _get_validated_data),
@@ -181,34 +175,27 @@ def _apply_view_set_methods(handler, injector):
 
 def _apply_model_view_set_methods(handler, injector):
     def create_arguments(ns, serializer):
-
         ns["validated_data"] = serializer.validated_data
 
     def update_arguments(ns, serializer):
-
         ns["validated_data"] = serializer.validated_data
         ns["instance"] = serializer.instance
 
     def delete_arguments(ns, instance):
-
         ns["instance"] = instance
 
     def set_instance(serializer, instance):
-
         # TODO:
         #
         # * Assert instance is not None. Suggest an edit to fix it.
         #
         # * Compare serializer.meta.model against instance type.
-
         serializer.instance = instance
 
     def ignore(instance, nothing):
-
         # TODO:
         #
         # * Assert nothing is None.
-
         pass
 
     for method, set_args, callback in [
@@ -227,7 +214,6 @@ def _apply_model_view_set_methods(handler, injector):
 
 @Value
 def _get_validated_data(view, request):
-
     serializer = view.get_serializer(data=request.data)
     serializer.is_valid(raise_exception=True)
     return serializer.validated_data

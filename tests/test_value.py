@@ -8,7 +8,6 @@ from helpers import CodeCollector
 
 def test_define_value():
     class Container(Injector):
-
         foo = 1
         bar = 2
         baz = 3
@@ -22,7 +21,6 @@ def test_define_value():
 
 def test_keyword_arguments():
     class Container(Injector):
-
         foo = 1
         bar = 2
 
@@ -46,7 +44,6 @@ def test_protect_against_self(code):
 
     with pytest.raises(DependencyError) as exc_info:
         code(method)
-
     assert str(exc_info.value) == "'value' decorator can not be used on methods"
 
 
@@ -65,7 +62,6 @@ def nVlMKQghCDAQ(arg):
 
 
 def test_protect_against_classes():
-
     with pytest.raises(DependencyError) as exc_info:
 
         @value
@@ -88,7 +84,6 @@ def test_protect_against_args_kwargs(code):
 
     with pytest.raises(DependencyError) as exc_info:
         code(func1)
-
     assert str(exc_info.value) == "func1 have arbitrary argument list"
 
     @value
@@ -97,7 +92,6 @@ def test_protect_against_args_kwargs(code):
 
     with pytest.raises(DependencyError) as exc_info:
         code(func2)
-
     assert str(exc_info.value) == "func2 have arbitrary keyword arguments"
 
     @value
@@ -106,7 +100,6 @@ def test_protect_against_args_kwargs(code):
 
     with pytest.raises(DependencyError) as exc_info:
         code(func3)
-
     assert (
         str(exc_info.value)
         == "func3 have arbitrary argument list and keyword arguments"

@@ -10,7 +10,6 @@ def test_define_operation():
     """Create operation from the function definition."""
 
     class Container(Injector):
-
         foo = 1
         bar = 2
         baz = 3
@@ -26,7 +25,6 @@ def test_keyword_arguments():
     """Preserve keyword argument defaults in the operation constructor."""
 
     class Container(Injector):
-
         foo = 1
         bar = 2
 
@@ -50,7 +48,6 @@ def test_protect_against_self(code):
 
     with pytest.raises(DependencyError) as exc_info:
         code(method)
-
     assert str(exc_info.value) == "'operation' decorator can not be used on methods"
 
 
@@ -96,7 +93,6 @@ def test_protect_against_args_kwargs(code):
 
     with pytest.raises(DependencyError) as exc_info:
         code(func1)
-
     assert str(exc_info.value) == "func1 have arbitrary argument list"
 
     @operation
@@ -105,7 +101,6 @@ def test_protect_against_args_kwargs(code):
 
     with pytest.raises(DependencyError) as exc_info:
         code(func2)
-
     assert str(exc_info.value) == "func2 have arbitrary keyword arguments"
 
     @operation
@@ -114,7 +109,6 @@ def test_protect_against_args_kwargs(code):
 
     with pytest.raises(DependencyError) as exc_info:
         code(func3)
-
     assert (
         str(exc_info.value)
         == "func3 have arbitrary argument list and keyword arguments"

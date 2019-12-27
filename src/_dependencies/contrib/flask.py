@@ -19,7 +19,6 @@ def _create_handler(from_class):
 
 
 def _apply_http_methods(handler, injector):
-
     for method in ["get", "post", "head", "options", "delete", "put", "trace", "patch"]:
         if method in injector:
 

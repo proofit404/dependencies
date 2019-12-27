@@ -5,17 +5,14 @@ from _dependencies.markers import nested_injector
 
 
 def _make_nested_injector_spec(dependency):
-
     return nested_injector, _NestedInjectorSpec(dependency), ["__self__"], 0
 
 
 class _NestedInjectorSpec(object):
     def __init__(self, injector):
-
         self.injector = injector
 
     def __call__(self, __self__):
-
         subclass = type(self.injector.__name__, (self.injector,), {})
         parent = injectable, weakref.ref(__self__), [], 0
         subclass.__dependencies__["__parent__"] = parent
@@ -23,5 +20,4 @@ class _NestedInjectorSpec(object):
 
     @property
     def __dependencies__(self):
-
         return self.injector.__dependencies__

@@ -60,7 +60,6 @@ def test_provide_a_class(code):
     in the attribute with `_class` in its name.
     """
     Container = code()
-
     from pkg.submodule import Foo
 
     assert inspect.isclass(Container.keep_class)
@@ -98,7 +97,6 @@ def uHSfYcZjGSJQ():
         function = sub.function
         variable = sub.variable
         keep_class = sub.Bar
-
         a = -1
         b = 2
 
@@ -116,7 +114,6 @@ def test_point_to_injector(code):
     attribute defined in another module.
     """
     Container = code()
-
     assert Container.foo == 1
     assert Container.bar == 2
 
@@ -127,7 +124,6 @@ def zprTYSyMkLEC():
     pkg = Package("pkg")
 
     class Container(Injector):
-
         foo = pkg.injected.Container.foo
         bar = pkg.injected.Container.bar
         baz = 2
@@ -141,7 +137,6 @@ def dqXJgFoftQja():
     injected = Package("pkg.injected")
 
     class Container(Injector):
-
         foo = injected.Container.foo
         bar = injected.Container.bar
         baz = 2
@@ -160,17 +155,14 @@ def test_package_provides_lazy_loading(code):
     the same module, we should handle it as usual.
     """
     Container = code()
-
     assert Container.foo == 1
 
 
 @self_pointer
 def dmldmoXCFIBG():
-
     self_pointer = Package("pkg.self_pointer")
 
     class Container(Injector):
-
         foo = self_pointer.Container.foo
 
     return Container

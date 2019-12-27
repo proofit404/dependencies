@@ -14,13 +14,11 @@ class Operation(object):
     """
 
     def __init__(self, function):
-
         _check_class(function)
         self.__function__ = function
 
 
 def _make_operation_spec(dependency):
-
     function = dependency.__function__
     args, have_defaults = _make_func_spec(function, function.__name__, "FIXME!")
     _check_method(args)
@@ -29,14 +27,11 @@ def _make_operation_spec(dependency):
 
 class _OperationSpec(object):
     def __init__(self, func):
-
         self.func = func
 
     def __call__(self, **kwargs):
-
         return functools.partial(self.func, **kwargs)
 
     @property
     def __name__(self):
-
         return self.func.__name__

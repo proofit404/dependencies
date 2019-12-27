@@ -5,7 +5,6 @@ from flask_project.commands import DispatchRequest
 
 
 class Methods(Injector):
-
     get = this.command.do
     post = this.command.do
     put = this.command.do
@@ -18,5 +17,4 @@ class Methods(Injector):
 
 @method_view
 class DispatchView(Methods):
-
     command = DispatchRequest

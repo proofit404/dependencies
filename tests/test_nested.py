@@ -56,7 +56,6 @@ def nurKbeeqoNCn():
 def hHytjZxQjNPQ():
     """Package link."""
     pkg = Package("pkg")
-
     return pkg.injected.SubContainer
 
 
@@ -130,7 +129,6 @@ def heSHjuBBFVLp():
 def mVVyoyBmvQwc():
     """Package link."""
     pkg = Package("pkg")
-
     return pkg.injected.SubSubContainer
 
 

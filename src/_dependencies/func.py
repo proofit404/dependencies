@@ -7,7 +7,6 @@ from _dependencies.checks.func import _check_varargs
 if getattr(inspect, "signature", None):
 
     def _make_func_spec(func, funcname, owner_message):
-
         signature = inspect.signature(func)
         parameters = iter(signature.parameters.items())
         args, defaults = [], []
@@ -32,7 +31,6 @@ if getattr(inspect, "signature", None):
 else:
 
     def _make_func_spec(func, funcname, owner_message):
-
         args, varargs, kwargs, defaults = inspect.getargspec(func)
         _check_varargs(funcname, varargs, kwargs)
         if defaults is not None:

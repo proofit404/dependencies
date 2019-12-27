@@ -25,7 +25,6 @@ def test_circle_dependencies(code, foo):
     """
     with pytest.raises(DependencyError) as exc_info:
         code(foo())
-
     message = str(exc_info.value)
     assert message == "'foo' is a circular dependency in the 'Foo' constructor"
 
@@ -44,7 +43,6 @@ def a6d9c893a92e(Foo):
 def e4b38a38de7e(Foo):
     """Let notation."""
     Summator = Injector.let(foo=Foo)
-
     Summator.foo
 
 
@@ -85,7 +83,6 @@ def kHqAxHovWKtI():
 def xoGkuXokhXpZ():
     """Package link to class."""
     pkg = Package("pkg")
-
     return pkg.circles.simple_class.Foo
 
 
@@ -93,7 +90,6 @@ def xoGkuXokhXpZ():
 def xdKqGtGJWEbR():
     """Package link to operation."""
     pkg = Package("pkg")
-
     return pkg.circles.simple_operation.Foo
 
 
@@ -101,7 +97,6 @@ def xdKqGtGJWEbR():
 def jIhFqCwKXFvv():
     """Package link to value."""
     pkg = Package("pkg")
-
     return pkg.circles.simple_value.Foo
 
 
@@ -127,7 +122,6 @@ def test_complex_circle_dependencies(code, foo, bar):
     """
     with pytest.raises(DependencyError) as exc_info:
         code(foo(), bar())
-
     message = str(exc_info.value)
     assert message in {
         "'foo' is a circular dependency in the 'Bar' constructor",
@@ -163,7 +157,6 @@ def d9c4e136c92c(Foo, Bar):
 def b54832f696e9(Foo, Bar):
     """Let notation."""
     Summator = Injector.let(foo=Foo, bar=Bar)
-
     Summator.foo
 
 
@@ -171,7 +164,6 @@ def b54832f696e9(Foo, Bar):
 def c039a81e8dce(Foo, Bar):
     """Let notation chain."""
     Summator = Injector.let(foo=Foo).let(bar=Bar)
-
     Summator.foo
 
 
@@ -212,7 +204,6 @@ def zklaYlyBZsEj():
 def xPLfwwcZNyyX():
     """Package link to class."""
     pkg = Package("pkg")
-
     return pkg.circles.complex_class.Foo
 
 
@@ -220,7 +211,6 @@ def xPLfwwcZNyyX():
 def nGROhaBTCNSO():
     """Package link to operation."""
     pkg = Package("pkg")
-
     return pkg.circles.complex_operation.Foo
 
 
@@ -228,7 +218,6 @@ def nGROhaBTCNSO():
 def fkedDYYeueXo():
     """Package link to value."""
     pkg = Package("pkg")
-
     return pkg.circles.complex_value.Foo
 
 
@@ -269,7 +258,6 @@ def aerRHoDXUNeV():
 def trvcvfPoOBEv():
     """Package link to class."""
     pkg = Package("pkg")
-
     return pkg.circles.complex_class.Bar
 
 
@@ -277,7 +265,6 @@ def trvcvfPoOBEv():
 def sHybukyZpyjf():
     """Package link to operation."""
     pkg = Package("pkg")
-
     return pkg.circles.complex_operation.Bar
 
 
@@ -285,7 +272,6 @@ def sHybukyZpyjf():
 def lNsNBNCTHPFX():
     """Package link to value."""
     pkg = Package("pkg")
-
     return pkg.circles.complex_value.Bar
 
 
@@ -309,7 +295,6 @@ def test_complex_circle_dependencies_long_circle(code, foo, bar, baz):
     """
     with pytest.raises(DependencyError) as exc_info:
         code(foo(), bar(), baz())
-
     message = str(exc_info.value)
     assert message in {
         "'foo' is a circular dependency in the 'Baz' constructor",
@@ -348,7 +333,6 @@ def fc13db5b9fda(Foo, Bar, Baz):
 def c729e6952fee(Foo, Bar, Baz):
     """Let notation."""
     Summator = Injector.let(foo=Foo, bar=Bar, baz=Baz)
-
     Summator.foo
 
 
@@ -356,7 +340,6 @@ def c729e6952fee(Foo, Bar, Baz):
 def d701f88a5c42(Foo, Bar, Baz):
     """Let notation chain."""
     Summator = Injector.let(foo=Foo).let(bar=Bar).let(baz=Baz)
-
     Summator.foo
 
 
@@ -397,7 +380,6 @@ def rwJmLRVuVSqm():
 def zAYYjvSPmIhZ():
     """Package link to class."""
     pkg = Package("pkg")
-
     return pkg.circles.long_class.Foo
 
 
@@ -405,7 +387,6 @@ def zAYYjvSPmIhZ():
 def xreTaLNoZeDz():
     """Package link to operation."""
     pkg = Package("pkg")
-
     return pkg.circles.long_operation.Foo
 
 
@@ -413,7 +394,6 @@ def xreTaLNoZeDz():
 def qOKmbpOgeDhk():
     """Package link to value."""
     pkg = Package("pkg")
-
     return pkg.circles.long_value.Foo
 
 
@@ -454,7 +434,6 @@ def mLsXYSzlYPRO():
 def pYMumhKUCBUy():
     """Package link to class."""
     pkg = Package("pkg")
-
     return pkg.circles.long_class.Bar
 
 
@@ -462,7 +441,6 @@ def pYMumhKUCBUy():
 def lCQgCPevBZXs():
     """Package link to operation."""
     pkg = Package("pkg")
-
     return pkg.circles.long_operation.Bar
 
 
@@ -470,7 +448,6 @@ def lCQgCPevBZXs():
 def xgyyAISoreQV():
     """Package link to value."""
     pkg = Package("pkg")
-
     return pkg.circles.long_value.Bar
 
 
@@ -511,7 +488,6 @@ def xjpTxDebbpnm():
 def ydSPPkZGDwPJ():
     """Package link to class."""
     pkg = Package("pkg")
-
     return pkg.circles.long_class.Baz
 
 
@@ -519,7 +495,6 @@ def ydSPPkZGDwPJ():
 def rxFZQwocGmhN():
     """Package link to operation."""
     pkg = Package("pkg")
-
     return pkg.circles.long_operation.Baz
 
 
@@ -527,5 +502,4 @@ def rxFZQwocGmhN():
 def eFMMMVDBKCFU():
     """Package link to value."""
     pkg = Package("pkg")
-
     return pkg.circles.long_value.Baz

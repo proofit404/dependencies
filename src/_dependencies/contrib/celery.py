@@ -19,15 +19,11 @@ def shared_task(injector):
 
 
 def _decorate_with(func, injector):
-
     if "run" not in injector:
         injector.run
-
     options = {"name": injector.name}
-
     if "base_class" in injector:
         options["base"] = injector.base_class
-
     for argument in [
         "bind",
         "typing",
@@ -48,7 +44,6 @@ def _decorate_with(func, injector):
     ]:
         if argument in injector:
             options[argument] = getattr(injector, argument)
-
     if "bind" in injector and injector.bind:
 
         def __task(self, *args, **kwargs):
@@ -60,7 +55,6 @@ def _decorate_with(func, injector):
             return injector.let(args=args, kwargs=kwargs).run()
 
     func(**options)(__task)
-
     return injector & _TaskMixin
 
 
@@ -75,7 +69,6 @@ class Signature(object):
         options=undefined,
         subtask_type=undefined,
     ):
-
         self.name = name
         self.app = app
         self.immutable = immutable
@@ -83,7 +76,6 @@ class Signature(object):
         self.subtask_type = subtask_type
 
     def __call__(self, args=None, kwargs=None, **ex):
-
         if "options" not in ex and self.options is not undefined:
             ex["options"] = self.options
         if "immutable" not in ex and self.immutable is not undefined:
@@ -101,7 +93,6 @@ class Shortcut(Signature):
     immutable_default = False
 
     def __call__(self, *args, **kwargs):
-
         return celery.canvas.Signature(
             task=self.name,
             app=self.app,
@@ -129,13 +120,11 @@ class Delay(Signature):
     """Delay execution of the task defined with `Injector` subclass."""
 
     def __call__(self, *args, **kwargs):
-
         signature = super(Delay, self).__call__()
         return signature.delay(*args, **kwargs)
 
 
 class _TaskMixin(Injector):  # type: ignore
-
     signature = Signature
     s = Shortcut
     si = ImmutableShortcut

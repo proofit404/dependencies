@@ -36,19 +36,16 @@ def _create_handler(from_class, injector):
 
     Handler.__name__ = injector.__name__
     Handler.__module__ = injector.__module__
-
     return Handler
 
 
 def _apply_http_methods(handler, injector):
-
     for method in ["get", "post", "put", "patch", "delete", "head", "options", "trace"]:
         if method in injector:
             setattr(handler, method, _build_view_method(injector, method))
 
 
 def _apply_template_methods(handler, injector):
-
     for attribute in [
         "template_name",
         "template_engine",
@@ -61,7 +58,6 @@ def _apply_template_methods(handler, injector):
 
 
 def _apply_form_methods(handler, injector):
-
     for attribute in [
         "form_class",
         "success_url",
@@ -70,7 +66,6 @@ def _apply_form_methods(handler, injector):
     ]:
         if attribute in injector:
             setattr(handler, attribute, getattr(injector, attribute))
-
     for method in ["form_valid", "form_invalid"]:
         if method in injector:
             form_method = _build_form_view_method(injector, method)

@@ -20,7 +20,6 @@ def test_circle_links(code):
     """
     with pytest.raises(DependencyError) as exc_info:
         code()
-
     assert str(exc_info.value) in {
         "'foo' is a circle link in the 'Container' injector",
         "'foo' is a circle link in the 'Injector' injector",
@@ -78,7 +77,6 @@ def yfTnHHhvBmrQ():
 
 @flat_injector
 def ydZEbpRNlHEO():
-
     Injector.let(foo=this.bar, bar=this.baz, baz=this.foo).foo
 
 
@@ -97,7 +95,6 @@ def test_circle_links_one_level(code, sub):
     """
     with pytest.raises(DependencyError) as exc_info:
         code(sub())
-
     assert str(exc_info.value) in {
         "'foo' is a circle link in the 'Container' injector",
         "'foo' is a circle link in the 'Injector' injector",
@@ -143,7 +140,6 @@ def nFibPCOxGsrX():
 def utUTZLLngouR():
     """Package link."""
     pkg = Package("pkg")
-
     return pkg.injected.SubContainer
 
 
@@ -165,7 +161,6 @@ def test_circle_links_two_level_complex_loop(code, middle, lowest):
     """
     with pytest.raises(DependencyError) as exc_info:
         code(middle(lowest()))
-
     assert str(exc_info.value) in {
         "'foo' is a circle link in the 'Container' injector",
         "'foo' is a circle link in the 'Injector' injector",
@@ -228,7 +223,6 @@ def qzYMsyvxYFLe():
 def epoadTufdhne():
     """Package link."""
     pkg = Package("pkg")
-
     return pkg.injected.SubSubContainer
 
 
@@ -250,7 +244,6 @@ def test_circle_links_two_level_long_loop(code, middle, lowest):
     """
     with pytest.raises(DependencyError) as exc_info:
         code(middle(lowest()))
-
     assert str(exc_info.value) in {
         "'foo' is a circle link in the 'Container' injector",
         "'foo' is a circle link in the 'Injector' injector",
@@ -317,7 +310,6 @@ def fiktpicgZWNS():
 def uugFwsWbfgXg():
     """Package link."""
     pkg = Package("pkg")
-
     return pkg.injected.SubSubContainer
 
 
@@ -339,7 +331,6 @@ def test_cross_injector_loops(code, sub1, sub2):
     """
     with pytest.raises(DependencyError) as exc_info:
         code(sub1(), sub2())
-
     assert str(exc_info.value) in {
         "'foo' is a circle link in the 'Container' injector",
         "'foo' is a circle link in the 'Injector' injector",
@@ -387,7 +378,6 @@ def elifFWSpshiv():
 def yavnvOrgKYNS():
     """Package link."""
     pkg = Package("pkg")
-
     return pkg.injected.SubContainer1
 
 
@@ -411,7 +401,6 @@ def rRsNsCaBSxke():
 def xVeDBvAxsNYP():
     """Package link."""
     pkg = Package("pkg")
-
     return pkg.injected.SubContainer2
 
 
@@ -426,7 +415,6 @@ def test_item_access_loops(code):
     """We can detect loops created with get item access."""
     with pytest.raises(DependencyError) as exc_info:
         code()
-
     assert str(exc_info.value) in {
         "'foo' is a circle link in the 'Container' injector",
         "'foo' is a circle link in the 'Injector' injector",
@@ -439,7 +427,6 @@ def oClqGRmWJAkA():
 
     class Container(Injector):
         class SubContainer(Injector):
-
             foo = (this << 1).bar["sub"].foo
 
         bar = {"sub": SubContainer}
@@ -461,11 +448,9 @@ def test_false_positive_loop_lookup_protection():
     """
 
     class Container(Injector):
-
         foo = this.SubContainer.baz
 
         class SubContainer(Injector):
-
             baz = this.foo
             foo = 1
 

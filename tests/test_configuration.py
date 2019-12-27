@@ -14,6 +14,7 @@ import yaml
 
 import helpers
 
+
 # This is a little bit a workaround of the PyYaml library limitations.
 # It doesn't preserve the order of keys of the parsed dict.  It works
 # on recent Python versions where the order of keys is guaranteed by
@@ -27,14 +28,11 @@ pytestmark = pytest.mark.skipif(
 def test_tox_environments_order():
     """The definition of the tox environments should follow order of the envlist."""
     tox_environments = subprocess.check_output(["tox", "-l"]).decode().splitlines()
-
     tox_ini = open("tox.ini").read()
-
     offsets = [
         (tox_ini.find("testenv{}".format("" if re.match(r"py\d+", e) else ":" + e)), e)
         for e in tox_environments
     ]
-
     assert offsets == sorted(offsets, key=lambda key: key[0])
 
 
@@ -46,12 +44,10 @@ def test_tox_environments_includes_python_versions():
             for e in subprocess.check_output(["tox", "-l"]).decode().splitlines()
         )
     )
-
     pyenv_versions = [
         "py{}{}".format(*v.split(".")[0:2])
         for v in open(".python-version").read().splitlines()
     ]
-
     for version in pyenv_versions:
         assert version in tox_environments
 
@@ -63,12 +59,10 @@ def test_tox_environments_equal_azure_tasks():
     The order should be preserved.
     """
     tox_environments = subprocess.check_output(["tox", "-l"]).decode().splitlines()
-
     azure_pipelines = yaml.safe_load(open("azure-pipelines.yml").read())
     azure_tasks = [
         v["tox.env"] for v in azure_pipelines["jobs"][0]["strategy"]["matrix"].values()
     ]
-
     assert tox_environments == azure_tasks
 
 
@@ -84,7 +78,6 @@ def test_tox_environment_base_python_equal_azure_task_python_version():
         k: v["python.version"]
         for k, v in azure_pipelines["jobs"][0]["strategy"]["matrix"].items()
     }
-
     for env, basepython in helpers.tox_info("basepython"):
         env = re.sub(r"^testenv:", "", env)
         basepython = re.sub(r"^python", "", basepython)
@@ -220,17 +213,14 @@ def test_coverage_include_all_packages():
     ini_parser = configparser.ConfigParser()
     ini_parser.read(".coveragerc")
     coverage_sources = ini_parser["run"]["source"].strip().splitlines()
-
     pyproject_toml = tomlkit.loads(open("pyproject.toml").read())
     packages = [
         p["include"].rstrip(".py") for p in pyproject_toml["tool"]["poetry"]["packages"]
     ]
-
     pyproject_toml = tomlkit.loads(open("tests/helpers/pyproject.toml").read())
     helpers = [
         p["include"].rstrip(".py") for p in pyproject_toml["tool"]["poetry"]["packages"]
     ]
-
     assert coverage_sources == packages + helpers + ["tests"]
 
 

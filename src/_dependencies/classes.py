@@ -3,7 +3,6 @@ from _dependencies.markers import injectable
 
 
 def _make_init_spec(dependency):
-
     if _using_object_init(dependency):
         return injectable, dependency, [], 0
     else:
@@ -14,7 +13,6 @@ def _make_init_spec(dependency):
 
 
 def _using_object_init(cls):
-
     for base in cls.__mro__:
         if base is object:
             return True

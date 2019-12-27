@@ -4,8 +4,6 @@ import pytest
 pytest.importorskip("flask")
 views = pytest.importorskip("flask.views")
 contrib = pytest.importorskip("dependencies.contrib.flask")
-
-
 http_methods = views.http_method_funcs
 http_methods_no_head = http_methods - {"head"}
 

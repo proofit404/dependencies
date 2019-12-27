@@ -16,7 +16,6 @@ from django_project.forms import QuestionForm
 
 
 class Methods(Injector):
-
     get = this.command.do
     post = this.command.do
     put = this.command.do
@@ -39,31 +38,26 @@ class DispatchView(Methods):
 
 @view
 class EmptyView(Injector):
-
     pass
 
 
 @view
 class UserView(Methods):
-
     command = InjectUser
 
 
 @view
 class KwargsView(Methods):
-
     command = InjectKwargs
     slug = this.kwargs["slug"]
 
 
 @view
 class SelfView(Methods):
-
     command = InjectSelf
 
 
 class TestTemplateResponse(TemplateResponse):
-
     pass
 
 
@@ -83,7 +77,6 @@ class QuestionTemplateView(Injector):
 
 @template_view
 class DynamicQuestionTemplateView(Injector):
-
     template_name = "question.html"
     template_engine = "default"
     response_class = TestTemplateResponse
@@ -94,7 +87,6 @@ class DynamicQuestionTemplateView(Injector):
     # processing template view.  So not all Tox environment will
     # report this function called.
     def extra_context(user):  # pragma: no cover
-
         assert isinstance(user, AnonymousUser)
         return {"extra_var": "extra-var"}
 
@@ -112,7 +104,6 @@ class QuestionFormView(Injector):
     form_valid = this.command.handle_form
     form_invalid = this.command.handle_error
     command = ProcessQuestion
-
     template_engine = "default"
     response_class = TestTemplateResponse
     content_type = "text/html"
@@ -123,7 +114,6 @@ class QuestionFormView(Injector):
 
 @form_view
 class EmptyFormView(Injector):
-
     form_class = QuestionForm
     template_name = "question.html"
     success_url = "/thanks/"

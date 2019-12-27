@@ -399,7 +399,6 @@ def test_deny_injector_changes(code):
     """Explicitly deny change of any kind on `Injector` and its subclasses."""
     with pytest.raises(DependencyError) as exc_info:
         code()
-
     assert str(exc_info.value) == "'Injector' modification is not allowed"
 
 
@@ -666,7 +665,6 @@ def test_multiple_inheritance_deny_regular_classes(code):
 
     with pytest.raises(DependencyError) as exc_info:
         code(Foo)
-
     message = str(exc_info.value)
     assert message == "Multiple inheritance is allowed for Injector subclasses only"
 
@@ -693,7 +691,6 @@ def test_deny_magic_methods_injection(code):
     """`Injector` doesn't accept magic methods."""
     with pytest.raises(DependencyError) as exc_info:
         code()
-
     assert str(exc_info.value) == "Magic methods are not allowed"
 
 
@@ -727,7 +724,6 @@ def test_attribute_error(code):
     """Raise `DependencyError` if we can't find dependency."""
     with pytest.raises(DependencyError) as exc_info:
         code()
-
     assert str(exc_info.value) in {
         "'Foo' can not resolve attribute 'test'",
         "'Injector' can not resolve attribute 'test'",
@@ -748,7 +744,6 @@ def c58b054bfcd0():
 def f9c50c81e8c9():
     """Let notation."""
     Foo = Injector.let()
-
     Foo.test
 
 
@@ -770,7 +765,6 @@ def test_incomplete_dependencies_error(code):
     """Raise `DependencyError` if we can't find dependency."""
     with pytest.raises(DependencyError) as exc_info:
         code()
-
     assert str(exc_info.value) in {
         "'Foo' can not resolve attribute 'test' while building 'bar'",
         "'Injector' can not resolve attribute 'test' while building 'bar'",
@@ -800,7 +794,6 @@ def dmsMgYqbsHgB():
             pass  # pragma: no cover
 
     Foo = Injector.let(bar=Bar)
-
     Foo.bar
 
 
@@ -844,7 +837,6 @@ def test_deny_arbitrary_argument_list(code):
 
     with pytest.raises(DependencyError) as exc_info:
         code(Foo)
-
     message = str(exc_info.value)
     assert message == "Foo.__init__ have arbitrary argument list"
 
@@ -877,7 +869,6 @@ def test_deny_arbitrary_keyword_arguments(code):
 
     with pytest.raises(DependencyError) as exc_info:
         code(Foo)
-
     message = str(exc_info.value)
     assert message == "Foo.__init__ have arbitrary keyword arguments"
 
@@ -913,7 +904,6 @@ def test_deny_arbitrary_positional_and_keyword_arguments_together(code):
 
     with pytest.raises(DependencyError) as exc_info:
         code(Foo)
-
     message = str(exc_info.value)
     assert message == "Foo.__init__ have arbitrary argument list and keyword arguments"
 
@@ -942,7 +932,6 @@ def test_deny_to_redefine_let_attribute(code):
     """We can't redefine let attribute in the `Injector` subclasses."""
     with pytest.raises(DependencyError) as exc_info:
         code()
-
     assert str(exc_info.value) == "'let' redefinition is not allowed"
 
 
@@ -972,7 +961,6 @@ def test_deny_to_instantiate_injector(code):
     """Deny injector instantiation."""
     with pytest.raises(DependencyError) as exc_info:
         code()
-
     assert str(exc_info.value) == "Do not instantiate Injector"
 
 
@@ -1023,7 +1011,6 @@ def test_deny_classes_as_default_values(code):
 
     with pytest.raises(DependencyError) as exc_info:
         code(Foo, Bar)
-
     message = str(exc_info.value)
     expected_message = """
 'Bar' class has a default value of 'foo' argument set to 'Foo' class.
@@ -1064,7 +1051,6 @@ def test_deny_non_classes_in_class_named_arguments(code):
 
     with pytest.raises(DependencyError) as exc_info:
         code(Bar)
-
     message = str(exc_info.value)
     assert message == "'foo_class' default value should be a class"
 

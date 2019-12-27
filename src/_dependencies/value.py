@@ -14,13 +14,11 @@ class Value(object):
     """
 
     def __init__(self, function):
-
         _check_class(function)
         self.__function__ = function
 
 
 def _make_value_spec(dependency):
-
     function = dependency.__function__
     args, have_defaults = _make_func_spec(function, function.__name__, "FIXME!")
     _check_method(args)
