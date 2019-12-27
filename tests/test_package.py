@@ -22,11 +22,7 @@ def test_provide_module(code):
 
 @package_definitions.parametrize
 def test_provide_an_instance(code):
-    """
-    Package instance attribute access should provide injectable spec
-    when refer to a class.
-    """
-
+    """Package instance attribute access should provide injectable spec when refer to a class."""
     Container = code()
 
     from pkg.submodule import Foo, Bar
@@ -37,10 +33,7 @@ def test_provide_an_instance(code):
 
 @package_definitions.parametrize
 def test_provide_instance_method(code):
-    """
-    Package instance attribute access should provide instance method.
-    """
-
+    """Package instance attribute access should provide instance method."""
     Container = code()
 
     assert inspect.ismethod(Container.instance_method)
@@ -49,10 +42,7 @@ def test_provide_instance_method(code):
 
 @package_definitions.parametrize
 def test_provide_a_function(code):
-    """
-    Package instance attribute access should provide regular function.
-    """
-
+    """Package instance attribute access should provide regular function."""
     Container = code()
 
     assert inspect.isfunction(Container.function)
@@ -61,10 +51,7 @@ def test_provide_a_function(code):
 
 @package_definitions.parametrize
 def test_provide_a_variable(code):
-    """
-    Package instance attribute access should provide regular variable.
-    """
-
+    """Package instance attribute access should provide regular variable."""
     Container = code()
 
     assert Container.variable == 1

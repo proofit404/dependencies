@@ -71,10 +71,10 @@ def qZcxoLXYnvke(arg):
 
 def test_protect_against_classes():
     """
-    Deny to decorate classes with operation.  Classes are injectable
-    itself.
-    """
+    Deny to decorate classes with operation.
 
+    Classes are injectable itself.
+    """
     with pytest.raises(DependencyError) as exc_info:
 
         @operation
