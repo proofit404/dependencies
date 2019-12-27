@@ -24,7 +24,6 @@ def test_dispatch_request(db):
     DRF APIView render, parser, permissions and other attributes
     should be respected.
     """
-
     response = client.post("/api/action/", {"last": True}, format="json")
     assert response.status_code == status.HTTP_200_OK
     assert response.content.decode().lstrip().startswith("<!DOCTYPE html>")
@@ -73,7 +72,6 @@ def test_dispatch_request_generic_view_retrieve(db):
     """
     Retrieve user details through view defined with injector subclass.
     """
-
     auth_models.User.objects.create(
         pk=1, username="johndoe", first_name="John", last_name="Doe"
     )
@@ -93,7 +91,6 @@ def test_dispatch_request_generic_view_list(db, basename):
     """
     List user details through view defined with injector subclass.
     """
-
     auth_models.User.objects.create(
         pk=1, username="johndoe", first_name="John", last_name="Doe"
     )
@@ -121,7 +118,6 @@ def test_dispatch_request_model_view_set(db, basename):
     List, retrieve, create, update & delete actions in the
     `ModelViewSet` defined with `Injector` subclass.
     """
-
     auth_models.User.objects.create(
         pk=1, username="admin", first_name="admin", last_name="admin"
     )
@@ -195,7 +191,6 @@ def test_model_view_set_undefined_method(db):
     Throw error if corresponding model view set action method is not
     defined in the injector.
     """
-
     auth_models.User.objects.create(
         pk=1, username="admin", first_name="admin", last_name="admin"
     )
@@ -229,7 +224,6 @@ def test_model_view_set_undefined_method(db):
 
 def test_keep_view_informanion():
     """Generated view should point to the `Injector` subclass."""
-
     from django_project.api.views import UserAction, UserRetrieveView, UserViewSet
 
     api_view = UserAction.as_view()

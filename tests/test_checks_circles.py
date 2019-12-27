@@ -23,7 +23,6 @@ def test_circle_dependencies(code, foo):
     class.  `Summator.foo` will fail with maximum recursion depth.  So
     we need to raise exception before this attribute access.
     """
-
     with pytest.raises(DependencyError) as exc_info:
         code(foo())
 
@@ -44,7 +43,6 @@ def a6d9c893a92e(Foo):
 @circle_deps
 def e4b38a38de7e(Foo):
     """Let notation."""
-
     Summator = Injector.let(foo=Foo)
 
     Summator.foo
@@ -86,7 +84,6 @@ def kHqAxHovWKtI():
 @circle_defs
 def xoGkuXokhXpZ():
     """Package link to class."""
-
     pkg = Package("pkg")
 
     return pkg.circles.simple_class.Foo
@@ -95,7 +92,6 @@ def xoGkuXokhXpZ():
 @circle_defs
 def xdKqGtGJWEbR():
     """Package link to operation."""
-
     pkg = Package("pkg")
 
     return pkg.circles.simple_operation.Foo
@@ -104,7 +100,6 @@ def xdKqGtGJWEbR():
 @circle_defs
 def jIhFqCwKXFvv():
     """Package link to value."""
-
     pkg = Package("pkg")
 
     return pkg.circles.simple_value.Foo
@@ -130,7 +125,6 @@ def test_complex_circle_dependencies(code, foo, bar):
     define an argument in its constructor named like first class in
     the container.  We have mutual recursion in this case.
     """
-
     with pytest.raises(DependencyError) as exc_info:
         code(foo(), bar())
 
@@ -168,7 +162,6 @@ def d9c4e136c92c(Foo, Bar):
 @complex_circle_deps
 def b54832f696e9(Foo, Bar):
     """Let notation."""
-
     Summator = Injector.let(foo=Foo, bar=Bar)
 
     Summator.foo
@@ -177,7 +170,6 @@ def b54832f696e9(Foo, Bar):
 @complex_circle_deps
 def c039a81e8dce(Foo, Bar):
     """Let notation chain."""
-
     Summator = Injector.let(foo=Foo).let(bar=Bar)
 
     Summator.foo
@@ -219,7 +211,6 @@ def zklaYlyBZsEj():
 @complex_circle_defs_foo
 def xPLfwwcZNyyX():
     """Package link to class."""
-
     pkg = Package("pkg")
 
     return pkg.circles.complex_class.Foo
@@ -228,7 +219,6 @@ def xPLfwwcZNyyX():
 @complex_circle_defs_foo
 def nGROhaBTCNSO():
     """Package link to operation."""
-
     pkg = Package("pkg")
 
     return pkg.circles.complex_operation.Foo
@@ -237,7 +227,6 @@ def nGROhaBTCNSO():
 @complex_circle_defs_foo
 def fkedDYYeueXo():
     """Package link to value."""
-
     pkg = Package("pkg")
 
     return pkg.circles.complex_value.Foo
@@ -279,7 +268,6 @@ def aerRHoDXUNeV():
 @complex_circle_defs_bar
 def trvcvfPoOBEv():
     """Package link to class."""
-
     pkg = Package("pkg")
 
     return pkg.circles.complex_class.Bar
@@ -288,7 +276,6 @@ def trvcvfPoOBEv():
 @complex_circle_defs_bar
 def sHybukyZpyjf():
     """Package link to operation."""
-
     pkg = Package("pkg")
 
     return pkg.circles.complex_operation.Bar
@@ -297,7 +284,6 @@ def sHybukyZpyjf():
 @complex_circle_defs_bar
 def lNsNBNCTHPFX():
     """Package link to value."""
-
     pkg = Package("pkg")
 
     return pkg.circles.complex_value.Bar
@@ -321,7 +307,6 @@ def test_complex_circle_dependencies_long_circle(code, foo, bar, baz):
     Detect complex dependencies recursion with circles longer then two
     constructors.
     """
-
     with pytest.raises(DependencyError) as exc_info:
         code(foo(), bar(), baz())
 
@@ -362,7 +347,6 @@ def fc13db5b9fda(Foo, Bar, Baz):
 @long_circle_deps
 def c729e6952fee(Foo, Bar, Baz):
     """Let notation."""
-
     Summator = Injector.let(foo=Foo, bar=Bar, baz=Baz)
 
     Summator.foo
@@ -371,7 +355,6 @@ def c729e6952fee(Foo, Bar, Baz):
 @long_circle_deps
 def d701f88a5c42(Foo, Bar, Baz):
     """Let notation chain."""
-
     Summator = Injector.let(foo=Foo).let(bar=Bar).let(baz=Baz)
 
     Summator.foo
@@ -413,7 +396,6 @@ def rwJmLRVuVSqm():
 @long_circle_defs_foo
 def zAYYjvSPmIhZ():
     """Package link to class."""
-
     pkg = Package("pkg")
 
     return pkg.circles.long_class.Foo
@@ -422,7 +404,6 @@ def zAYYjvSPmIhZ():
 @long_circle_defs_foo
 def xreTaLNoZeDz():
     """Package link to operation."""
-
     pkg = Package("pkg")
 
     return pkg.circles.long_operation.Foo
@@ -431,7 +412,6 @@ def xreTaLNoZeDz():
 @long_circle_defs_foo
 def qOKmbpOgeDhk():
     """Package link to value."""
-
     pkg = Package("pkg")
 
     return pkg.circles.long_value.Foo
@@ -473,7 +453,6 @@ def mLsXYSzlYPRO():
 @long_circle_defs_bar
 def pYMumhKUCBUy():
     """Package link to class."""
-
     pkg = Package("pkg")
 
     return pkg.circles.long_class.Bar
@@ -482,7 +461,6 @@ def pYMumhKUCBUy():
 @long_circle_defs_bar
 def lCQgCPevBZXs():
     """Package link to operation."""
-
     pkg = Package("pkg")
 
     return pkg.circles.long_operation.Bar
@@ -491,7 +469,6 @@ def lCQgCPevBZXs():
 @long_circle_defs_bar
 def xgyyAISoreQV():
     """Package link to value."""
-
     pkg = Package("pkg")
 
     return pkg.circles.long_value.Bar
@@ -533,7 +510,6 @@ def xjpTxDebbpnm():
 @long_circle_defs_baz
 def ydSPPkZGDwPJ():
     """Package link to class."""
-
     pkg = Package("pkg")
 
     return pkg.circles.long_class.Baz
@@ -542,7 +518,6 @@ def ydSPPkZGDwPJ():
 @long_circle_defs_baz
 def rxFZQwocGmhN():
     """Package link to operation."""
-
     pkg = Package("pkg")
 
     return pkg.circles.long_operation.Baz
@@ -551,7 +526,6 @@ def rxFZQwocGmhN():
 @long_circle_defs_baz
 def eFMMMVDBKCFU():
     """Package link to value."""
-
     pkg = Package("pkg")
 
     return pkg.circles.long_value.Baz

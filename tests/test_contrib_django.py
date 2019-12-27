@@ -19,7 +19,6 @@ http_methods_safe = {"get", "head", "options"}
 @pytest.mark.parametrize("method", http_methods_no_head)
 def test_dispatch_request(client, method):
     """Dispatch request to the `Injector` subclass attributes."""
-
     response = getattr(client, method)("/test_dispatch_request/1/test/")
     assert response.status_code == 200
     assert response.content == b"<h1>OK</h1>"
@@ -31,7 +30,6 @@ def test_empty_request(client, method):
     Use method not allowed, if `Injector` subclass doesn't define an
     attribute for this method.
     """
-
     response = getattr(client, method)("/test_empty_request/1/test/")
     assert response.status_code == 405
 
@@ -39,7 +37,6 @@ def test_empty_request(client, method):
 @pytest.mark.parametrize("method", http_methods_no_head)
 def test_inject_user(client, method):
     """Access request user property."""
-
     response = getattr(client, method)("/test_inject_user/1/test/")
     assert response.status_code == 200
     assert response.content == b"<h1>OK</h1>"
@@ -48,7 +45,6 @@ def test_inject_user(client, method):
 @pytest.mark.parametrize("method", http_methods_no_head)
 def test_inject_kwargs(client, method):
     """Pass kwargs to the nested service object."""
-
     response = getattr(client, method)("/test_inject_kwargs/1/test/")
     assert response.status_code == 200
     assert response.content == b"<h1>OK</h1>"
@@ -57,7 +53,6 @@ def test_inject_kwargs(client, method):
 @pytest.mark.parametrize("method", http_methods_no_head)
 def test_inject_self(client, method):
     """Access generated view instance."""
-
     response = getattr(client, method)("/test_inject_self/1/test/")
     assert response.status_code == 200
     assert response.content == b"<h1>OK</h1>"
@@ -69,7 +64,6 @@ def test_inject_self(client, method):
 @pytest.mark.parametrize("url", ["test_template_view", "test_template_view_dynamic"])
 def test_template_view(client, url):
     """Retrieve template view created from injector."""
-
     response = client.get("/%s/1/" % (url,))
     assert response.status_code == 200
     if django.VERSION >= (2, 0):
@@ -78,7 +72,6 @@ def test_template_view(client, url):
 
 def test_template_view_attributes():
     """Access attributes of generated TemplateView."""
-
     from django_project.views import QuestionTemplateView
 
     view = QuestionTemplateView.as_view().view_class()
@@ -94,7 +87,6 @@ def test_template_view_attributes():
 # FIXME: Support dynamic fields.
 def test_form_view(client):
     """Retrieve and submit form view created from injector."""
-
     response = client.get("/test_form_view/1/")
     assert response.status_code == 200
     if django.VERSION >= (2, 0):
@@ -117,7 +109,6 @@ def test_form_view_undefined_method(client):
     Throw error if corresponding form view method is not defined in
     the injector.
     """
-
     with pytest.raises(DependencyError) as exc_info:
         client.post(
             "/empty_form_view/",
@@ -134,7 +125,6 @@ def test_form_view_undefined_method(client):
 
 def test_form_view_attributes():
     """Access attributes of generated FormView."""
-
     from django_project.views import QuestionFormView
 
     view = QuestionFormView.as_view().view_class()
@@ -151,7 +141,6 @@ def test_form_view_attributes():
 
 def test_keep_view_informanion():
     """Generated view should point to the `Injector` subclass."""
-
     from django_project.views import (
         DispatchView,
         QuestionTemplateView,

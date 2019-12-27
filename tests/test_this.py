@@ -68,7 +68,6 @@ def test_item_getter(code):
     We can describe item access in the `Injector` in the
     declarative manner.
     """
-
     result = code()
     assert result == 1
 
@@ -226,7 +225,6 @@ def test_deny_this_without_attribute_access(code):
     `Thisable` instances can't be injected without pointing to any
     other attribute.
     """
-
     with pytest.raises(DependencyError) as exc_info:
         code()
 
@@ -253,20 +251,17 @@ def c147d398f4be():
 @direct_proxy
 def a37783b6d1ad():
     """Let notation."""
-
     Injector.let(foo=this)
 
 
 @direct_proxy
 def bd05271fb831():
     """Let notation with parent access."""
-
     Injector.let(foo=(this << 1))
 
 
 def test_this_deny_non_integers():
     """We can't shift `this` with non number argument."""
-
     with pytest.raises(ValueError) as exc_info:
         this << "boom"
 
@@ -279,7 +274,6 @@ negative_integers = CodeCollector()
 @negative_integers.parametrize
 def test_this_deny_negative_integers(code):
     """We can't shift `this` with negative integer."""
-
     with pytest.raises(ValueError) as exc_info:
         code()
 
@@ -289,14 +283,12 @@ def test_this_deny_negative_integers(code):
 @negative_integers
 def xsJWb2lx6EMs():
     """Minus one."""
-
     this << -1
 
 
 @negative_integers
 def nvm3ybp98vGm():
     """Zero."""
-
     this << 0
 
 
@@ -309,7 +301,6 @@ def test_require_more_parents_that_injector_actually_has(code):
     If we shift more that container levels available, we should
     provide meaningful message to user.
     """
-
     with pytest.raises(DependencyError) as exc_info:
         code()
 
@@ -344,14 +335,12 @@ def bUICVObtDZ4I():
 @too_many
 def ww6xNI4YrNr6():
     """Let notation."""
-
     Injector.let(foo=(this << 1).bar).foo
 
 
 @too_many
 def rN3suiVzhqMM():
     """Let notation with nested layer."""
-
     Injector.let(SubContainer=Injector.let(foo=(this << 2).bar)).SubContainer.foo
 
 
@@ -364,7 +353,6 @@ def test_attribute_error_on_parent_access(code):
     We should raise `AttributeError` if we have correct number of
     parents but specify wrong attribute name.
     """
-
     with pytest.raises(DependencyError) as exc_info:
         code()
 
@@ -402,12 +390,10 @@ def yOEj1qQfsXHy():
 @attribute_error
 def vnmkIELBH3MN():
     """Let notation."""
-
     Injector.let(foo=this.bar).foo
 
 
 @attribute_error
 def pG9M52ZRQr2S():
     """Let notation with nested layer."""
-
     Injector.let(SubContainer=Injector.let(foo=(this << 1).bar)).SubContainer.foo

@@ -65,7 +65,6 @@ def lSxEXspkuups(arg):
 @deny_method
 def qZcxoLXYnvke(arg):
     """Let notation."""
-
     Injector.let(method=arg)
 
 
@@ -133,5 +132,4 @@ def puELUDZLxkDG(arg):
 @deny_kwargs
 def iQXjlPlQGgSh(arg):
     """Let notation."""
-
     Injector.let(func=arg)

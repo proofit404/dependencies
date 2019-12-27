@@ -22,7 +22,6 @@ def app():
 @pytest.mark.parametrize("method", http_methods_no_head)
 def test_dispatch_request(client, method):
     """Dispatch request to the `Injector` subclass attributes."""
-
     response = getattr(client, method)("/test_dispatch_request/1/test/")
     assert response.status_code == 200
     assert response.data == b"<h1>OK</h1>"

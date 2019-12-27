@@ -18,7 +18,6 @@ def test_circle_links(code):
     """
     We can detect link loops in the same container without hierarchy.
     """
-
     with pytest.raises(DependencyError) as exc_info:
         code()
 
@@ -45,7 +44,6 @@ def kSSnnkw6CNPx():
 @flat_injector
 def n8NHZqiZN43Q():
     """Let notation.  Link to self."""
-
     Injector.let(foo=this.foo).foo
 
 
@@ -63,7 +61,6 @@ def ai0hNOPGX2PI():
 @flat_injector
 def ySnRrxW6M79T():
     """Let notation.  Complex loop."""
-
     Injector.let(foo=this.bar, bar=this.foo).foo
 
 
@@ -98,7 +95,6 @@ def test_circle_links_one_level(code, sub):
     """
     We can detect link loops in nested injectors one level deep.
     """
-
     with pytest.raises(DependencyError) as exc_info:
         code(sub())
 
@@ -124,7 +120,6 @@ def eaK6IxW88SNh(sub):
 @one_level
 def nWhKtJb16yg6(sub):
     """Let notation."""
-
     Injector.let(foo=this.SubContainer.bar, SubContainer=sub).foo
 
 
@@ -141,14 +136,12 @@ def jijKOYgyZHNz():
 @subcontainer
 def nFibPCOxGsrX():
     """Let notation."""
-
     return Injector.let(bar=(this << 1).foo)
 
 
 @subcontainer
 def utUTZLLngouR():
     """Package link."""
-
     pkg = Package("pkg")
 
     return pkg.injected.SubContainer
@@ -170,7 +163,6 @@ def test_circle_links_two_level_complex_loop(code, middle, lowest):
     We can detect link loops in nested injectors two level deep
     without intermediate links.
     """
-
     with pytest.raises(DependencyError) as exc_info:
         code(middle(lowest()))
 
@@ -197,7 +189,6 @@ def mF4akoHlg84C(middle):
 @complex_two_levels
 def bCw8LPUeVK6J(middle):
     """Let notation."""
-
     Injector.let(foo=this.SubContainer.SubSubContainer.bar, SubContainer=middle).foo
 
 
@@ -214,7 +205,6 @@ def yPFeGKPGXPIY(lowest):
 @complex_middle_container
 def uIRpkBWARVOQ(lowest):
     """Let notation."""
-
     return Injector.let(SubSubContainer=lowest)
 
 
@@ -231,14 +221,12 @@ def bJmCQECfcIzZ():
 @complex_lowest_container
 def qzYMsyvxYFLe():
     """Let notation."""
-
     return Injector.let(bar=(this << 2).foo)
 
 
 @complex_lowest_container
 def epoadTufdhne():
     """Package link."""
-
     pkg = Package("pkg")
 
     return pkg.injected.SubSubContainer
@@ -260,7 +248,6 @@ def test_circle_links_two_level_long_loop(code, middle, lowest):
     We can detect link loops in nested injectors two level deep with
     intermediate links.
     """
-
     with pytest.raises(DependencyError) as exc_info:
         code(middle(lowest()))
 
@@ -290,7 +277,6 @@ def eHyErh9kExHG(middle):
 @long_two_levels
 def q0KytyVbE2XA(middle):
     """Let notation."""
-
     Injector.let(foo=this.SubContainer.baz, SubContainer=middle).foo
 
 
@@ -308,7 +294,6 @@ def mwcbtGunjMac(lowest):
 @long_middle_container
 def aVJRixHNhChV(lowest):
     """Let notation."""
-
     return Injector.let(baz=this.SubSubContainer.bar, SubSubContainer=lowest)
 
 
@@ -325,14 +310,12 @@ def qRcNcKzedWaI():
 @long_lowest_container
 def fiktpicgZWNS():
     """Let notation."""
-
     return Injector.let(bar=(this << 2).foo)
 
 
 @long_lowest_container
 def uugFwsWbfgXg():
     """Package link."""
-
     pkg = Package("pkg")
 
     return pkg.injected.SubSubContainer
@@ -354,7 +337,6 @@ def test_cross_injector_loops(code, sub1, sub2):
     We can detect loops between links in different `Injector`
     subclasses in the hierarchy.
     """
-
     with pytest.raises(DependencyError) as exc_info:
         code(sub1(), sub2())
 
@@ -382,7 +364,6 @@ def vAyZepNGAUjY(sub1, sub2):
 @cross_injector_loops
 def bLRoCCj9uNOp(sub1, sub2):
     """Let notation.  Cross injector links."""
-
     Injector.let(SubContainer1=sub1, SubContainer2=sub2).SubContainer1.bar
 
 
@@ -399,14 +380,12 @@ def eiVzvYStvpNL():
 @subcontainer1
 def elifFWSpshiv():
     """Let notation."""
-
     return Injector.let(bar=(this << 1).SubContainer2.baz)
 
 
 @subcontainer1
 def yavnvOrgKYNS():
     """Package link."""
-
     pkg = Package("pkg")
 
     return pkg.injected.SubContainer1
@@ -425,14 +404,12 @@ def fFuLltxguVgC():
 @subcontainer2
 def rRsNsCaBSxke():
     """Let notation."""
-
     return Injector.let(baz=(this << 1).SubContainer1.bar)
 
 
 @subcontainer2
 def xVeDBvAxsNYP():
     """Package link."""
-
     pkg = Package("pkg")
 
     return pkg.injected.SubContainer2
@@ -447,7 +424,6 @@ items = CodeCollector()
 @items.parametrize
 def test_item_access_loops(code):
     """We can detect loops created with get item access."""
-
     with pytest.raises(DependencyError) as exc_info:
         code()
 
@@ -474,7 +450,6 @@ def oClqGRmWJAkA():
 @items.xfail  # FIXME: Make this work.
 def t41yMywZuPhA():
     """Let notation."""
-
     SubContainer = Injector.let(foo=(this << 1).bar["sub"].foo)
     Injector.let(SubContainer=SubContainer, bar={"sub": SubContainer}).SubContainer.foo
 

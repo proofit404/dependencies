@@ -370,7 +370,6 @@ def test_show_injected_dependencies_with_dir_once():
 
 def test_show_let_dependencies_with_dir():
     """`dir` show dependencies injected with `let`."""
-
     assert "x" in dir(Injector.let(x=1))
 
     class Foo(Injector):
@@ -398,7 +397,6 @@ attribute_assignment = CodeCollector()
 @attribute_assignment.parametrize
 def test_deny_injector_changes(code):
     """Explicitly deny change of any kind on `Injector` and its subclasses."""
-
     with pytest.raises(DependencyError) as exc_info:
         code()
 
@@ -418,14 +416,12 @@ def mvT9oyJdXhzh():
 @attribute_assignment
 def fXxRX4KFUc8q():
     """Direct assignmet to the `Injector`."""
-
     Injector.foo = 1
 
 
 @attribute_assignment
 def pHfF0rbEjCsV():
     """Let notation."""
-
     Container = Injector.let()
     Container.foo = 1
 
@@ -443,7 +439,6 @@ def xhZaIhujf34t():
 @attribute_assignment
 def jShuBfttg97c():
     """Delete attribute let notation."""
-
     Container = Injector.let(foo=1)
     del Container.foo
 
@@ -451,7 +446,6 @@ def jShuBfttg97c():
 @attribute_assignment
 def tQeRzD5ZsyTm():
     """Delete attribute from `Injector` directly."""
-
     del Injector.let
 
 
@@ -501,7 +495,6 @@ def test_docstrings():
 
     It's handled by metaclass at runtime.
     """
-
     assert (
         Injector.__doc__ == "\n"
         "Default dependencies specification DSL.\n"
@@ -553,7 +546,6 @@ def test_evaluate_dependencies_once(code):
 @evaluate_classes
 def ea4367450e47(Container):
     """Each dependency evaluated once during injection."""
-
     x = Container.a
     assert x.b.d is x.c.d
 
@@ -561,7 +553,6 @@ def ea4367450e47(Container):
 @evaluate_classes
 def dd91602f3455(Container):
     """We reevaluate each dependency for different injections."""
-
     assert Container.a.b.d is not Container.a.b.d
     assert Container.a.b.d is not Container.a.c.d
 
@@ -609,7 +600,6 @@ def edf946cc6077(Foo, FooContainer, BarContainer, BazContainer):
 @multiple_inheritance
 def efdc426cd096(Foo, FooContainer, BarContainer, BazContainer):
     """Inplace creation."""
-
     assert isinstance((FooContainer & BarContainer & BazContainer).baz.bar.foo, Foo)
 
 
@@ -658,7 +648,6 @@ def e056e22f3fd5(Container1, Container2, Container3):
 @inheritance_order
 def d851e0414bdf(Container1, Container2, Container3):
     """Inplace creation."""
-
     assert (Container1 & Container2 & Container3).x == 1
 
 
@@ -693,7 +682,6 @@ def f1583394f1a6(Foo):
 @subclasses_only
 def b51814725d07(Foo):
     """Inplace creation."""
-
     Injector & Foo
 
 
@@ -703,7 +691,6 @@ deny_magic_methods = CodeCollector()
 @deny_magic_methods.parametrize
 def test_deny_magic_methods_injection(code):
     """`Injector` doesn't accept magic methods."""
-
     with pytest.raises(DependencyError) as exc_info:
         code()
 
@@ -738,7 +725,6 @@ attribute_error = CodeCollector()
 @attribute_error.parametrize
 def test_attribute_error(code):
     """Raise `DependencyError` if we can't find dependency."""
-
     with pytest.raises(DependencyError) as exc_info:
         code()
 
@@ -761,7 +747,6 @@ def c58b054bfcd0():
 @attribute_error
 def f9c50c81e8c9():
     """Let notation."""
-
     Foo = Injector.let()
 
     Foo.test
@@ -783,7 +768,6 @@ incomplete_dependencies = CodeCollector()
 @incomplete_dependencies.parametrize
 def test_incomplete_dependencies_error(code):
     """Raise `DependencyError` if we can't find dependency."""
-
     with pytest.raises(DependencyError) as exc_info:
         code()
 
@@ -826,7 +810,6 @@ has_attribute = CodeCollector()
 @has_attribute.parametrize
 def test_has_attribute(code):
     """`Injector` should support `in` statement."""
-
     container = code()
     assert "foo" in container
     assert "bar" not in container
@@ -845,7 +828,6 @@ def gwufxYkhURAF():
 @has_attribute
 def zlZoLka31ndk():
     """Let notation."""
-
     return Injector.let(foo=1)
 
 
@@ -912,7 +894,6 @@ def e281099be65d(Foo):
 @deny_kwargs
 def bcf7c5881b2c(Foo):
     """Let notation."""
-
     Injector.let(foo=Foo, kwargs={"start": 5})
 
 
@@ -950,7 +931,6 @@ def efbf07f8deb6(Foo):
 @deny_varargs_kwargs
 def c4362558f312(Foo):
     """Let notation."""
-
     Injector.let(foo=Foo, args=(1, 2, 3), kwargs={"start": 5})
 
 
@@ -960,7 +940,6 @@ deny_let_redefine = CodeCollector()
 @deny_let_redefine.parametrize
 def test_deny_to_redefine_let_attribute(code):
     """We can't redefine let attribute in the `Injector` subclasses."""
-
     with pytest.raises(DependencyError) as exc_info:
         code()
 
@@ -991,7 +970,6 @@ deny_call = CodeCollector()
 @deny_call.parametrize
 def test_deny_to_instantiate_injector(code):
     """Deny injector instantiation."""
-
     with pytest.raises(DependencyError) as exc_info:
         code()
 
@@ -1001,7 +979,6 @@ def test_deny_to_instantiate_injector(code):
 @deny_call
 def ce52d740af31():
     """Direct call."""
-
     Injector()
 
 
@@ -1018,14 +995,12 @@ def a95940f44400():
 @deny_call
 def d10b4ba474a9():
     """Ignore any arguments passed."""
-
     Injector(1)
 
 
 @deny_call
 def d665c722baae():
     """Ignore any keyword argument passed."""
-
     Injector(x=1)
 
 
@@ -1070,7 +1045,6 @@ def dad79637580d(Foo, Bar):
 @cls_named_arguments
 def bccb4f621e70(Foo, Bar):
     """Let notation."""
-
     Injector.let(bar=Bar)
 
 
@@ -1106,5 +1080,4 @@ def a8cd70341d3d(Bar):
 @cls_named_defaults
 def b859e98f2913(Bar):
     """Let notation."""
-
     Injector.let(bar=Bar)

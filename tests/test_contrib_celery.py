@@ -13,7 +13,6 @@ contrib = pytest.importorskip("dependencies.contrib.celery")
 @pytest.fixture()
 def celery_app():
     """Simulate global Celery application instance."""
-
     app = celery.Celery()
     app.conf.update(task_always_eager=True, task_eager_propagates=True)
     app.tasks.clear()
@@ -64,7 +63,6 @@ def xPa7isagt3Lq(app):
 @containers.parametrize
 def test_register_task(celery_app, code):
     """Register Celery task with declarative injector syntax."""
-
     code(celery_app)
     assert "foo.bar.baz" in celery_app.tasks
 
@@ -72,7 +70,6 @@ def test_register_task(celery_app, code):
 @containers.parametrize
 def test_execute_task(celery_app, code):
     """Execute task from Celery application."""
-
     code(celery_app)
     assert celery.signature("foo.bar.baz")("foo", bar="baz") == 1
 
@@ -80,7 +77,6 @@ def test_execute_task(celery_app, code):
 @containers.parametrize
 def test_delay_task(celery_app, code):
     """Delay task from Celery application."""
-
     ret = code(celery_app)
     assert ret.delay("foo", bar="baz").get() == 1
 
@@ -88,7 +84,6 @@ def test_delay_task(celery_app, code):
 @containers.parametrize
 def test_return_value(celery_app, code):
     """Return `Injector` subclass from register decorator."""
-
     ret = code(celery_app)
     assert issubclass(ret, Injector)
 
@@ -100,7 +95,6 @@ make_signature = CodeCollector("factory")
 @make_signature.parametrize
 def test_make_signature(celery_app, code, factory):
     """Insert signature generator into injector."""
-
     sign = factory(code(celery_app))
     if isinstance(sign, tuple):
         sign, immutable, subtask_type = sign
@@ -119,7 +113,6 @@ def test_make_signature(celery_app, code, factory):
 @make_signature
 def cgTE4xh2ZSVI(container):
     """Verbose signature."""
-
     sign = container.signature((2, 2), {"debug": True}, immutable=True, countdown=10)
     return sign
 
@@ -127,7 +120,6 @@ def cgTE4xh2ZSVI(container):
 @make_signature
 def dUf679YyStBw(container):
     """Verbose signature with options."""
-
     sign = container.signature(
         (2, 2), {"debug": True}, immutable=True, options={"countdown": 10}
     )
@@ -190,7 +182,6 @@ def test_validation(celery_app):
     Task and shared task decorators must check required `Injector`
     attributes.
     """
-
     with pytest.raises(DependencyError) as exc_info:
 
         @contrib.task

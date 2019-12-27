@@ -15,7 +15,6 @@ subcontainer = CodeCollector("sub")
 @subcontainer.parametrize
 def test_attribute_getter_parent_access(code, sub):
     """We can access attribute of outer container."""
-
     Container = code(sub())
     assert Container.SubContainer.bar == 1
 
@@ -34,7 +33,6 @@ def ac7814095628(sub):
 @parent_attr
 def f607abc82079(sub):
     """Let notation."""
-
     return Injector.let(foo=1, SubContainer=sub)
 
 
@@ -51,14 +49,12 @@ def iGphUpthTooT():
 @subcontainer
 def nurKbeeqoNCn():
     """Let notation."""
-
     return Injector.let(bar=(this << 1).foo)
 
 
 @subcontainer
 def hHytjZxQjNPQ():
     """Package link."""
-
     pkg = Package("pkg")
 
     return pkg.injected.SubContainer
@@ -77,7 +73,6 @@ lowest_container = CodeCollector("lowest")
 @lowest_container.parametrize
 def test_attribute_getter_few_parents(code, middle, lowest):
     """We can access attribute of outer container in any nesting depth."""
-
     Container = code(middle(lowest()))
     assert Container.SubContainer.SubSubContainer.bar == 1
 
@@ -96,7 +91,6 @@ def e477afc961b6(middle):
 @few_parent_attr
 def c4ed4c61e154(middle):
     """Let notation."""
-
     return Injector.let(foo=1, SubContainer=middle)
 
 
@@ -113,7 +107,6 @@ def hjVHyztckQNe(lowest):
 @middle_container
 def gYijGKMqAbZN(lowest):
     """Let notation."""
-
     return Injector.let(SubSubContainer=lowest)
 
 
@@ -130,14 +123,12 @@ def pDqnxaJFVRcS():
 @lowest_container
 def heSHjuBBFVLp():
     """Let notation."""
-
     return Injector.let(bar=(this << 2).foo)
 
 
 @lowest_container
 def mVVyoyBmvQwc():
     """Package link."""
-
     pkg = Package("pkg")
 
     return pkg.injected.SubSubContainer

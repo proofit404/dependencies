@@ -51,14 +51,12 @@ def test_register_fixture(fixture_name):
     """
     Register and require Py.test fixtures with `Injector` subclasses.
     """
-
     assert isinstance(fixture_name, Foo)
     assert fixture_name.do() == 6
 
 
 def test_register_return_value():
     """`register` should return `Injector` subclass unmodified."""
-
     assert isinstance(Container, types.FunctionType)
     assert issubclass(Container.injector, Injector)
 
@@ -68,7 +66,6 @@ def test_validation():
     `register` decorator should check required `Injector` subclass
     attribute.
     """
-
     with pytest.raises(DependencyError) as exc_info:
 
         @register
