@@ -1,3 +1,4 @@
+"""Tests related to the Django contrib."""
 import pytest
 
 from dependencies.exceptions import DependencyError

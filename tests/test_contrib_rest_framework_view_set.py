@@ -1,3 +1,4 @@
+"""Tests related to the Django REST Framework @view_set."""
 import pytest
 
 

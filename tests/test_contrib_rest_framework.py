@@ -1,3 +1,4 @@
+"""Tests related to the Django REST Framework contrib."""
 import pytest
 
 from dependencies import Injector
@@ -55,9 +56,7 @@ def test_dispatch_request(db):
 
 
 def test_dispatch_request_generic_view_retrieve(db):
-    """
-    Retrieve user details through view defined with injector subclass.
-    """
+    """Retrieve user details through view defined with injector subclass."""
     auth_models.User.objects.create(
         pk=1, username="johndoe", first_name="John", last_name="Doe"
     )
@@ -73,9 +72,7 @@ def test_dispatch_request_generic_view_retrieve(db):
 
 @pytest.mark.parametrize("basename", ["users", "user_fields"])
 def test_dispatch_request_generic_view_list(db, basename):
-    """
-    List user details through view defined with injector subclass.
-    """
+    """List user details through view defined with injector subclass."""
     auth_models.User.objects.create(
         pk=1, username="johndoe", first_name="John", last_name="Doe"
     )
@@ -98,10 +95,7 @@ def test_dispatch_request_generic_view_list(db, basename):
 
 @pytest.mark.parametrize("basename", ["user_set", "dynamic_user_set"])
 def test_dispatch_request_model_view_set(db, basename):
-    """
-    List, retrieve, create, update & delete actions in the
-    `ModelViewSet` defined with `Injector` subclass.
-    """
+    """List, retrieve, create, update & delete actions in the `ModelViewSet` defined with `Injector` subclass."""
     auth_models.User.objects.create(
         pk=1, username="admin", first_name="admin", last_name="admin"
     )
@@ -165,10 +159,7 @@ def test_dispatch_request_model_view_set(db, basename):
 
 
 def test_model_view_set_undefined_method(db):
-    """
-    Throw error if corresponding model view set action method is not
-    defined in the injector.
-    """
+    """Throw error if corresponding model view set action method is not defined in the injector."""
     auth_models.User.objects.create(
         pk=1, username="admin", first_name="admin", last_name="admin"
     )

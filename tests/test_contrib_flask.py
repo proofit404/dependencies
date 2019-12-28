@@ -1,3 +1,4 @@
+"""Tests related to the Flask contrib."""
 import pytest
 
 

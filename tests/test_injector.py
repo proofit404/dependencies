@@ -1,3 +1,4 @@
+"""Tests related to the Injector subclasses."""
 from inspect import isclass
 
 import pytest
@@ -96,8 +97,9 @@ def test_class_dependency():
 
 def test_do_not_instantiate_dependencies_ended_with_class():
     """
-    Do not call class constructor, if it stored with name ended
-    `_class`.  For example, `logger_class`.
+    Do not call class constructor, if it stored with name ended `_class`.
+
+    For example, `logger_class`.
     """
 
     class Foo(object):
@@ -110,10 +112,7 @@ def test_do_not_instantiate_dependencies_ended_with_class():
 
 
 def test_redefine_dependency():
-    """
-    We can redefine dependency by inheritance from the `Injector`
-    subclass.
-    """
+    """We can redefine dependency by inheritance from the `Injector` subclass."""
 
     class Foo(object):
         def __init__(self, add):
@@ -134,6 +133,8 @@ def test_redefine_dependency():
 
 def test_override_keyword_argument_if_dependency_was_specified():
     """
+    Injector attributes takes precedence on default keyword arguments.
+
     Use specified dependency for constructor keyword arguments if
     dependency with desired name was mentioned in the injector.
     """
@@ -156,6 +157,8 @@ def test_override_keyword_argument_if_dependency_was_specified():
 
 def test_preserve_keyword_argument_if_dependency_was_missed():
     """
+    Default keyword arguments should be used if injector attribute is missing.
+
     Use constructor keyword arguments if dependency with desired name
     was missed in the injector.
     """
@@ -177,6 +180,8 @@ def test_preserve_keyword_argument_if_dependency_was_missed():
 
 def test_preserve_missed_keyword_argument_in_the_middle():
     """
+    Missed injector attributes could be defined in any order.
+
     Use default keyword argument and override following keyword
     argument since it was specified in the constructor.
     """
@@ -199,10 +204,7 @@ def test_preserve_missed_keyword_argument_in_the_middle():
 
 
 def test_class_named_argument_default_value():
-    """
-    Allow classes as default argument values if argument name ends
-    with `_class`.
-    """
+    """Allow classes as default argument values if argument name ends with `_class`."""
 
     class Foo(object):
         pass
@@ -219,6 +221,8 @@ def test_class_named_argument_default_value():
 
 def test_injectable_without_its_own_init():
     """
+    Instantiate classes without it's own constructor.
+
     Inject dependencies into object subclass which doesn't specify its
     own `__init__`.
     """
@@ -234,10 +238,7 @@ def test_injectable_without_its_own_init():
 
 
 def test_injectable_with_parent_init():
-    """
-    Inject dependencies into object which parent class define
-    `__init__`.
-    """
+    """Inject dependencies into object which parent class define `__init__`."""
 
     class Foo(object):
         def __init__(self, x, y):
@@ -257,10 +258,7 @@ def test_injectable_with_parent_init():
 
 
 def test_injectable_with_parent_without_init():
-    """
-    Inject dependencies into object which parent doesn't define
-    `__init__`.
-    """
+    """Inject dependencies into object which parent doesn't define `__init__`."""
 
     class Foo(object):
         pass
@@ -279,10 +277,7 @@ def test_injectable_with_parent_without_init():
 
 
 def test_let_factory():
-    """
-    `Injector` subclass can produce its own subclasses with `let`
-    factory.
-    """
+    """`Injector` subclass can produce its own subclasses with `let` factory."""
 
     class Foo(Injector):
         pass
@@ -291,10 +286,7 @@ def test_let_factory():
 
 
 def test_let_factory_overwrite_dependencies():
-    """
-    `Injector.let` produce `Injector` subclass with overwritten
-    dependencies.
-    """
+    """`Injector.let` produce `Injector` subclass with overwritten dependencies."""
 
     class Foo(Injector):
         bar = 1
@@ -344,10 +336,7 @@ def test_show_common_class_attributes_with_dir():
 
 
 def test_show_injected_dependencies_with_dir():
-    """
-    `dir` should show injected dependencies and hide
-    `__dependencies__` container.
-    """
+    """`dir` should show injected dependencies and hide `__dependencies__` container."""
 
     class Foo(Injector):
         x = 1
@@ -379,10 +368,7 @@ def test_show_let_dependencies_with_dir():
 
 
 def test_omit_parent_link_in_dir_listing():
-    """
-    Don't show `__parent__` link in the `dir` output.  It is an
-    implementation detail.
-    """
+    """Don't show `__parent__` link in the `dir` output.  It is an implementation detail."""
 
     class Foo(Injector):
         class Bar(Injector):
@@ -452,10 +438,7 @@ def tQeRzD5ZsyTm():
 
 
 def test_nested_injectors():
-    """
-    It is possible to use `Injector` subclass as attribute in the
-    another `Injector` subclass.
-    """
+    """It is possible to use `Injector` subclass as attribute in the another `Injector` subclass."""
 
     def do_x(a, b):
         return a + b
@@ -607,10 +590,7 @@ inheritance_order = CodeCollector()
 
 @inheritance_order.parametrize
 def test_multiple_inheritance_injectors_order(code):
-    """
-    `Injector` which comes first in the subclass bases or inplace
-    creation must have higher precedence.
-    """
+    """`Injector` which comes first in the subclass bases or inplace creation must have higher precedence."""
 
     class Container1(Injector):
         x = 1
@@ -655,10 +635,7 @@ subclasses_only = CodeCollector()
 
 @subclasses_only.parametrize
 def test_multiple_inheritance_deny_regular_classes(code):
-    """
-    We can't use classes in multiple inheritance which are not
-    `Injector` subclasses.
-    """
+    """We can't use classes in multiple inheritance which are not `Injector` subclasses."""
 
     class Foo(object):
         pass
@@ -893,10 +870,7 @@ deny_varargs_kwargs = CodeCollector()
 
 @deny_varargs_kwargs.parametrize
 def test_deny_arbitrary_positional_and_keyword_arguments_together(code):
-    """
-    Raise `DependencyError` if constructor have *args and **kwargs
-    argument.
-    """
+    """Raise `DependencyError` if constructor have *args and **kwargs argument."""
 
     class Foo(object):
         def __init__(self, *args, **kwargs):
@@ -997,10 +971,7 @@ cls_named_arguments = CodeCollector()
 
 @cls_named_arguments.parametrize
 def test_deny_classes_as_default_values(code):
-    """
-    If argument name doesn't ends with `_class`, its default value
-    can't be a class.
-    """
+    """If argument name doesn't ends with `_class`, its default value can't be a class."""
 
     class Foo(object):
         pass
@@ -1040,10 +1011,7 @@ cls_named_defaults = CodeCollector()
 
 @cls_named_defaults.parametrize
 def test_deny_non_classes_in_class_named_arguments(code):
-    """
-    If argument name ends with `_class`, it must have a class as it
-    default value.
-    """
+    """If argument name ends with `_class`, it must have a class as it default value."""
 
     class Bar(object):
         def __init__(self, foo_class=1):

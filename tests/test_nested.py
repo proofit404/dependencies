@@ -1,3 +1,4 @@
+"""Tests related to Injector classes written inside other Injector classes."""
 from dependencies import Injector
 from dependencies import Package
 from dependencies import this
@@ -137,8 +138,9 @@ def mVVyoyBmvQwc():
 
 def test_one_subcontainer_multiple_parents():
     """
-    Same sub container can be used in many parent containers.  This
-    usage should not overlap those containers.
+    Same sub container can be used in many parent containers.
+
+    This usage should not overlap those containers.
     """
 
     class SubContainer(Injector):

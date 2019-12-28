@@ -1,3 +1,4 @@
+"""Tests related to the @operation proxy."""
 import pytest
 
 from dependencies import Injector
@@ -52,7 +53,7 @@ def test_protect_against_self(code):
 
 
 @deny_method
-def lSxEXspkuups(arg):
+def _lSxEXspkuups(arg):
     """Declarative injector."""
 
     class Container(Injector):
@@ -60,7 +61,7 @@ def lSxEXspkuups(arg):
 
 
 @deny_method
-def qZcxoLXYnvke(arg):
+def _qZcxoLXYnvke(arg):
     """Let notation."""
     Injector.let(method=arg)
 
@@ -85,7 +86,7 @@ deny_kwargs = CodeCollector()
 
 @deny_kwargs.parametrize
 def test_protect_against_args_kwargs(code):
-    """Deny operation definition with varied arguments and keywords. """
+    """Deny operation definition with varied arguments and keywords."""
 
     @operation
     def func1(*args):
@@ -116,7 +117,7 @@ def test_protect_against_args_kwargs(code):
 
 
 @deny_kwargs
-def puELUDZLxkDG(arg):
+def _puELUDZLxkDG(arg):
     """Declarative injector."""
 
     class Container(Injector):
@@ -124,6 +125,6 @@ def puELUDZLxkDG(arg):
 
 
 @deny_kwargs
-def iQXjlPlQGgSh(arg):
+def _iQXjlPlQGgSh(arg):
     """Let notation."""
     Injector.let(func=arg)

@@ -1,3 +1,4 @@
+"""Tests related to the Package() proxy."""
 import inspect
 
 import pytest
@@ -20,7 +21,7 @@ def test_provide_module(code):
 
 @package_definitions.parametrize
 def test_provide_an_instance(code):
-    """Package instance attribute access should provide injectable spec when refer to a class."""
+    """Package attribute access should provide an instance when refer to a class."""
     Container = code()
     from pkg.submodule import Foo, Bar
 
@@ -56,8 +57,10 @@ def test_provide_a_variable(code):
 @package_definitions.parametrize
 def test_provide_a_class(code):
     """
-    Package instance attribute should provide a class when it stored
-    in the attribute with `_class` in its name.
+    Package attribute access should provide a class in case of `_class`-named attribute.
+
+    Package attribute should provide a class when it stored in the
+    attribute with `_class` in its name.
     """
     Container = code()
     from pkg.submodule import Foo
@@ -110,6 +113,8 @@ injector_pointer = CodeCollector()
 @injector_pointer.parametrize
 def test_point_to_injector(code):
     """
+    Package attribute access should provide Injector classes as is.
+
     Package pointer should be able to point to `Injector` subclass
     attribute defined in another module.
     """
@@ -150,16 +155,18 @@ self_pointer = CodeCollector()
 @self_pointer.parametrize
 def test_package_provides_lazy_loading(code):
     """
-    We can point `Package` to the same module.  If `Injector` subclass
-    tries to point to another `Injector` subclass defined *below* in
-    the same module, we should handle it as usual.
+    We can point `Package` to the same module.
+
+    If `Injector` subclass tries to point to another `Injector`
+    subclass defined *below* in the same module, we should handle it
+    as usual.
     """
     Container = code()
     assert Container.foo == 1
 
 
 @self_pointer
-def dmldmoXCFIBG():
+def _dmldmoXCFIBG():
     self_pointer = Package("pkg.self_pointer")
 
     class Container(Injector):

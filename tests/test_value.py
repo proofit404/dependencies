@@ -1,3 +1,4 @@
+"""Tests related to the @value proxy."""
 import pytest
 
 from dependencies import Injector
@@ -7,6 +8,7 @@ from helpers import CodeCollector
 
 
 def test_define_value():
+    """Evaluate @value decorated function during dependency injection process."""
     class Container(Injector):
         foo = 1
         bar = 2
@@ -20,6 +22,12 @@ def test_define_value():
 
 
 def test_keyword_arguments():
+    """
+    @value decorated function should support keyword arguments.
+
+    If keyword argument is missing in the Injector subclass the
+    default value should be used.
+    """
     class Container(Injector):
         foo = 1
         bar = 2
@@ -48,7 +56,7 @@ def test_protect_against_self(code):
 
 
 @deny_method
-def sUIvAUUeQIde(arg):
+def _sUIvAUUeQIde(arg):
     """Declarative injector."""
 
     class Container(Injector):
@@ -56,12 +64,13 @@ def sUIvAUUeQIde(arg):
 
 
 @deny_method
-def nVlMKQghCDAQ(arg):
+def _nVlMKQghCDAQ(arg):
     """Let notation."""
     Injector.let(method=arg)
 
 
 def test_protect_against_classes():
+    """Deny to decorate classes with @value proxy."""
     with pytest.raises(DependencyError) as exc_info:
 
         @value
@@ -76,7 +85,7 @@ deny_kwargs = CodeCollector()
 
 @deny_kwargs.parametrize
 def test_protect_against_args_kwargs(code):
-    """Deny value definition with varied arguments and keywords. """
+    """Deny value definition with varied arguments and keywords."""
 
     @value
     def func1(*args):
@@ -107,7 +116,7 @@ def test_protect_against_args_kwargs(code):
 
 
 @deny_kwargs
-def pqwvsBqbIiXg(arg):
+def _pqwvsBqbIiXg(arg):
     """Declarative injector."""
 
     class Container(Injector):
@@ -115,6 +124,6 @@ def pqwvsBqbIiXg(arg):
 
 
 @deny_kwargs
-def jbfjlQveNjrZ(arg):
+def _jbfjlQveNjrZ(arg):
     """Let notation."""
     Injector.let(func=arg)

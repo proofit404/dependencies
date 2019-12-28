@@ -1,3 +1,4 @@
+"""Tests related to the Celery contrib."""
 import pytest
 
 from dependencies import Injector
