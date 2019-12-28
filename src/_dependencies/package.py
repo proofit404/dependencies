@@ -5,6 +5,16 @@ from _dependencies.markers import lazy_import
 
 
 class Package(object):
+    """
+    Import given package during dependency injection.
+
+    If it point to the class in the module, construct an instance of
+    the class after import.
+
+    If it point to the method of the class, provide bound method after
+    construct an instance of the class after import.
+    """
+
     def __init__(self, name):
         self.__name__ = name
         self.__attrs__ = ()

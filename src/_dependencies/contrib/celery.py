@@ -76,6 +76,7 @@ class Signature(object):
         self.subtask_type = subtask_type
 
     def __call__(self, args=None, kwargs=None, **ex):
+        """Construct canvas object."""
         if "options" not in ex and self.options is not undefined:
             ex["options"] = self.options
         if "immutable" not in ex and self.immutable is not undefined:
@@ -93,6 +94,7 @@ class Shortcut(Signature):
     immutable_default = False
 
     def __call__(self, *args, **kwargs):
+        """Construct canvas object."""
         return celery.canvas.Signature(
             task=self.name,
             app=self.app,
@@ -120,6 +122,7 @@ class Delay(Signature):
     """Delay execution of the task defined with `Injector` subclass."""
 
     def __call__(self, *args, **kwargs):
+        """Schedule celery task to the queue."""
         signature = super(Delay, self).__call__()
         return signature.delay(*args, **kwargs)
 
