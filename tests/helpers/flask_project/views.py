@@ -1,10 +1,10 @@
 from dependencies import Injector
 from dependencies import this
 from dependencies.contrib.flask import method_view
-from flask_project.commands import DispatchRequest
+from flask_project.commands import _DispatchRequest
 
 
-class Methods(Injector):
+class _Methods(Injector):
     get = this.command.do
     post = this.command.do
     put = this.command.do
@@ -16,5 +16,5 @@ class Methods(Injector):
 
 
 @method_view
-class DispatchView(Methods):
-    command = DispatchRequest
+class _DispatchView(_Methods):
+    command = _DispatchRequest

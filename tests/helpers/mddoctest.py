@@ -7,7 +7,7 @@ from django.apps import apps
 from django.conf import settings
 
 
-def setup():
+def _setup():
     responses.add(
         responses.GET,
         "http://api.com/users/1/",
@@ -16,9 +16,9 @@ def setup():
     responses.start()
 
 
-def main():
+def _main():
     apps.populate(settings.INSTALLED_APPS)
-    setup()
+    _setup()
     markdown_files = glob("**/*.md", recursive=True)
     exit_code = 0
     for markdown_file in markdown_files:
@@ -28,4 +28,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    _main()

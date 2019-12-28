@@ -10,9 +10,9 @@ http_methods_no_head = http_methods - {"head"}
 
 @pytest.fixture()
 def app():
-    from flask_project.app import create_app
+    from flask_project.app import _create_app
 
-    app = create_app()
+    app = _create_app()
     app.config["TESTING"] = True
     return app
 

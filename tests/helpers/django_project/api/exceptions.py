@@ -1,10 +1,10 @@
-class NegotiationError(Exception):
+class _NegotiationError(Exception):
     pass
 
 
-class VersionError(Exception):
+class _VersionError(Exception):
     pass
 
 
-class MetadataError(Exception):
+class _MetadataError(Exception):
     pass

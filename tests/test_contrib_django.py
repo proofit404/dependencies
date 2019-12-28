@@ -71,12 +71,12 @@ def test_template_view(client, url):
 
 def test_template_view_attributes():
     """Access attributes of generated TemplateView."""
-    from django_project.views import QuestionTemplateView
+    from django_project.views import _QuestionTemplateView
 
-    view = QuestionTemplateView.as_view().view_class()
+    view = _QuestionTemplateView.as_view().view_class()
     assert view.template_name == "question.html"
     assert view.template_engine == "default"
-    assert view.response_class.__name__ == "TestTemplateResponse"
+    assert view.response_class.__name__ == "_TestTemplateResponse"
     assert view.content_type == "text/html"
 
 
@@ -112,22 +112,22 @@ def test_form_view_undefined_method(client):
             {"question_text": "foo", "pub_date": "12/23/2008 00:12"},
         )
     message = str(exc_info.value)
-    assert message == "Add 'form_valid' to the 'EmptyFormView' injector"
+    assert message == "Add 'form_valid' to the '_EmptyFormView' injector"
     with pytest.raises(DependencyError) as exc_info:
         client.post("/empty_form_view/")
     message = str(exc_info.value)
-    assert message == "Add 'form_invalid' to the 'EmptyFormView' injector"
+    assert message == "Add 'form_invalid' to the '_EmptyFormView' injector"
 
 
 def test_form_view_attributes():
     """Access attributes of generated FormView."""
-    from django_project.views import QuestionFormView
+    from django_project.views import _QuestionFormView
 
-    view = QuestionFormView.as_view().view_class()
+    view = _QuestionFormView.as_view().view_class()
     assert view.success_url == "/thanks/"
     assert view.template_name == "question.html"
     assert view.template_engine == "default"
-    assert view.response_class.__name__ == "TestTemplateResponse"
+    assert view.response_class.__name__ == "_TestTemplateResponse"
     assert view.content_type == "text/html"
     assert view.initial == {"is_testing": True}
 
@@ -138,20 +138,20 @@ def test_form_view_attributes():
 def test_keep_view_informanion():
     """Generated view should point to the `Injector` subclass."""
     from django_project.views import (
-        DispatchView,
-        QuestionTemplateView,
-        QuestionFormView,
+        _DispatchView,
+        _QuestionTemplateView,
+        _QuestionFormView,
     )
 
-    view = DispatchView.as_view()
-    assert view.__name__ == "DispatchView"
+    view = _DispatchView.as_view()
+    assert view.__name__ == "_DispatchView"
     assert view.__module__ == "django_project.views"
     assert view.__doc__ == "Intentionally left blank."
-    template_view = QuestionTemplateView.as_view()
-    assert template_view.__name__ == "QuestionTemplateView"
+    template_view = _QuestionTemplateView.as_view()
+    assert template_view.__name__ == "_QuestionTemplateView"
     assert template_view.__module__ == "django_project.views"
     assert template_view.__doc__ == "Intentionally left blank."
-    form_view = QuestionFormView.as_view()
-    assert form_view.__name__ == "QuestionFormView"
+    form_view = _QuestionFormView.as_view()
+    assert form_view.__name__ == "_QuestionFormView"
     assert form_view.__module__ == "django_project.views"
     assert form_view.__doc__ == "Intentionally left blank."

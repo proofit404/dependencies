@@ -44,13 +44,13 @@ def test_dispatch_request(db):
     response = client.get("/api/throttle_all/")
     assert response.status_code == status.HTTP_429_TOO_MANY_REQUESTS
     # Strict content negotiation.
-    with pytest.raises(project_exceptions.NegotiationError):
+    with pytest.raises(project_exceptions._NegotiationError):
         client.get("/api/negotiate/")
     # Versioning classes applies.
-    with pytest.raises(project_exceptions.VersionError):
+    with pytest.raises(project_exceptions._VersionError):
         client.get("/api/versioning/")
     # Metadata classes applies.
-    with pytest.raises(project_exceptions.MetadataError):
+    with pytest.raises(project_exceptions._MetadataError):
         client.options("/api/metadata/")
 
 
@@ -179,35 +179,35 @@ def test_model_view_set_undefined_method(db):
     with pytest.raises(DependencyError) as exc_info:
         client.post("/api/empty_set/", {"username": "johndoe"})
     message = str(exc_info.value)
-    assert message == "Add 'create' to the 'EmptyViewSet' injector"
+    assert message == "Add 'create' to the '_EmptyViewSet' injector"
     with pytest.raises(DependencyError) as exc_info:
         client.patch("/api/empty_set/1/", {"username": "jimworm"})
     message = str(exc_info.value)
-    assert message == "Add 'update' to the 'EmptyViewSet' injector"
+    assert message == "Add 'update' to the '_EmptyViewSet' injector"
     with pytest.raises(DependencyError) as exc_info:
         client.put("/api/empty_set/1/", {"username": "jimworm"})
     message = str(exc_info.value)
-    assert message == "Add 'update' to the 'EmptyViewSet' injector"
+    assert message == "Add 'update' to the '_EmptyViewSet' injector"
     with pytest.raises(DependencyError) as exc_info:
         client.delete("/api/empty_set/1/")
     message = str(exc_info.value)
-    assert message == "Add 'destroy' to the 'EmptyViewSet' injector"
+    assert message == "Add 'destroy' to the '_EmptyViewSet' injector"
 
 
 def test_keep_view_informanion():
     """Generated view should point to the `Injector` subclass."""
-    from django_project.api.views import UserAction, UserRetrieveView, UserViewSet
+    from django_project.api.views import _UserAction, _UserRetrieveView, _UserViewSet
 
-    api_view = UserAction.as_view()
-    assert api_view.__name__ == "UserAction"
+    api_view = _UserAction.as_view()
+    assert api_view.__name__ == "_UserAction"
     assert api_view.__module__ == "django_project.api.views"
     assert api_view.__doc__ == "Intentionally left blank."
-    generic_api_view = UserRetrieveView.as_view()
-    assert generic_api_view.__name__ == "UserRetrieveView"
+    generic_api_view = _UserRetrieveView.as_view()
+    assert generic_api_view.__name__ == "_UserRetrieveView"
     assert generic_api_view.__module__ == "django_project.api.views"
     assert generic_api_view.__doc__ == "Intentionally left blank."
-    model_view_set = UserViewSet.as_viewset()
-    assert model_view_set.__name__ == "UserViewSet"
+    model_view_set = _UserViewSet.as_viewset()
+    assert model_view_set.__name__ == "_UserViewSet"
     assert model_view_set.__module__ == "django_project.api.views"
     assert model_view_set.__doc__ == "Intentionally left blank."
 
@@ -215,72 +215,72 @@ def test_keep_view_informanion():
 def test_default_throttle_scope_applied_to_default(rf, settings):
     settings.REST_FRAMEWORK = {
         "DEFAULT_THROTTLE_CLASSES": (
-            "django_project.api.throttle.ThrottleDefaultScope",
+            "django_project.api.throttle._ThrottleDefaultScope",
         ),
     }
 
     @contrib.api_view
-    class DefaultThrottleScope(Injector):
+    class _DefaultThrottleScope(Injector):
         get = this.command.respond
-        command = project_commands.UserOperations
+        command = project_commands._UserOperations
         throttle_scope = "throttle_scope"
         # this is the workaround for
         # https://github.com/encode/django-rest-framework/issues/6030
-        throttle_classes = [project_throttle.ThrottleDefaultScope]
+        throttle_classes = [project_throttle._ThrottleDefaultScope]
 
     # Throttle scope doesn't apply on first request.
     request = rf.get("/api/default_throttle_scope/")
-    response = DefaultThrottleScope.as_view()(request)
+    response = _DefaultThrottleScope.as_view()(request)
     assert response.status_code == status.HTTP_200_OK
     # Throttle scope applies on second request.
-    response = DefaultThrottleScope.as_view()(request)
+    response = _DefaultThrottleScope.as_view()(request)
     assert response.status_code == status.HTTP_429_TOO_MANY_REQUESTS
 
 
 def test_custom_throttle_scope_not_applied_to_default(rf, settings):
     settings.REST_FRAMEWORK = {
         "DEFAULT_THROTTLE_CLASSES": (
-            "django_project.api.throttle.ThrottleCustomScope",
+            "django_project.api.throttle._ThrottleCustomScope",
         ),
     }
 
     @contrib.api_view
-    class DefaultThrottleScope(Injector):
+    class _DefaultThrottleScope(Injector):
         get = this.command.respond
-        command = project_commands.UserOperations
+        command = project_commands._UserOperations
         throttle_scope = "throttle_scope"
         # this is the workaround for
         # https://github.com/encode/django-rest-framework/issues/6030
-        throttle_classes = [project_throttle.ThrottleCustomScope]
+        throttle_classes = [project_throttle._ThrottleCustomScope]
 
     request = rf.get("/api/default_throttle_scope/")
     # Throttle will always pass for default scope as it is not in settings.
-    response = DefaultThrottleScope.as_view()(request)
+    response = _DefaultThrottleScope.as_view()(request)
     assert response.status_code == status.HTTP_200_OK
-    response = DefaultThrottleScope.as_view()(request)
+    response = _DefaultThrottleScope.as_view()(request)
     assert response.status_code == status.HTTP_200_OK
 
 
 def test_custom_throttle_scope_applied_to_custom(settings, rf):
     settings.REST_FRAMEWORK = {
         "DEFAULT_THROTTLE_CLASSES": (
-            "django_project.api.throttle.ThrottleCustomScope",
+            "django_project.api.throttle._ThrottleCustomScope",
         ),
     }
 
     @contrib.api_view
-    class CustomThrottleScope(Injector):
+    class _CustomThrottleScope(Injector):
         get = this.command.respond
-        command = project_commands.UserOperations
+        command = project_commands._UserOperations
         custom_throttle_scope = "custom_scope"
         # this is the workaround for
         # https://github.com/encode/django-rest-framework/issues/6030
-        throttle_classes = [project_throttle.ThrottleCustomScope]
+        throttle_classes = [project_throttle._ThrottleCustomScope]
 
     # Throttle scope doesn't apply on first request.
     request = rf.get("/api/custom_throttle_scope/")
-    response = CustomThrottleScope.as_view()(request)
+    response = _CustomThrottleScope.as_view()(request)
     assert response.status_code == status.HTTP_200_OK
     # Throttle scope applies on second request.
-    response = CustomThrottleScope.as_view()(request)
+    response = _CustomThrottleScope.as_view()(request)
     assert response.status_code == status.HTTP_429_TOO_MANY_REQUESTS

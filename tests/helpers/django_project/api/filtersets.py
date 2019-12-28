@@ -6,7 +6,7 @@ from django_filters.rest_framework import FilterSet
 use_filterset_name = VERSION >= (2, 0)
 
 
-class UserFilter(FilterSet):
+class _UserFilter(FilterSet):
     class Meta(object):
         model = User
         fields = ["username"]

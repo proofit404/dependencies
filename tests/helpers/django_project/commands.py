@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from django.views.generic import View
 
 
-class DispatchRequest(object):
+class _DispatchRequest(object):
     def __init__(self, request, args, kwargs):
         self.request = request
         self.args = args
@@ -20,7 +20,7 @@ class DispatchRequest(object):
         return HttpResponse("<h1>OK</h1>")
 
 
-class InjectUser(object):
+class _InjectUser(object):
     def __init__(self, user):
         self.user = user
 
@@ -29,7 +29,7 @@ class InjectUser(object):
         return HttpResponse("<h1>OK</h1>")
 
 
-class InjectKwargs(object):
+class _InjectKwargs(object):
     def __init__(self, pk, slug):
         self.pk = pk
         self.slug = slug
@@ -40,7 +40,7 @@ class InjectKwargs(object):
         return HttpResponse("<h1>OK</h1>")
 
 
-class InjectSelf(object):
+class _InjectSelf(object):
     def __init__(self, view):
         self.view = view
 
@@ -49,7 +49,7 @@ class InjectSelf(object):
         return HttpResponse("<h1>OK</h1>")
 
 
-class ProcessQuestion(object):
+class _ProcessQuestion(object):
     def __init__(self, view, form, request, args, kwargs, user, pk):
         self.view = view
         self.form = form

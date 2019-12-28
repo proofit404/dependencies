@@ -9,7 +9,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 
-class UserOperations(object):
+class _UserOperations(object):
     def __init__(self, view, request):
         self.view = view
         self.request = request
@@ -37,7 +37,7 @@ class UserOperations(object):
         return self.view.get_paginated_response(serializer.data)
 
 
-class UserCreateOperations(object):
+class _UserCreateOperations(object):
     def __init__(self, view, request, args, kwargs, user, validated_data, action):
         self.view = view
         self.request = request
@@ -63,7 +63,7 @@ class UserCreateOperations(object):
         return user
 
 
-class UserUpdateOperations(object):
+class _UserUpdateOperations(object):
     def __init__(
         self, view, request, args, kwargs, user, pk, validated_data, instance, action
     ):
@@ -97,7 +97,7 @@ class UserUpdateOperations(object):
         return self.instance
 
 
-class UserDestroyOperations(object):
+class _UserDestroyOperations(object):
     def __init__(self, view, request, args, kwargs, user, pk, instance, action):
         self.view = view
         self.request = request

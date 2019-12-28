@@ -5,5 +5,5 @@ class ItemSerializer(serializers.Serializer):
     pass
 
 
-class UserSerializer(serializers.Serializer):
+class _UserSerializer(serializers.Serializer):
     pass

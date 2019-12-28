@@ -21,120 +21,120 @@ from dependencies.contrib.rest_framework import generic_api_view
 from dependencies.contrib.rest_framework import generic_view_set
 from dependencies.contrib.rest_framework import model_view_set
 from dependencies.contrib.rest_framework import view_set
-from django_project.api.auth import AuthenticateAdmin
-from django_project.api.auth import AuthenticateAll
-from django_project.api.commands import UserCreateOperations
-from django_project.api.commands import UserDestroyOperations
-from django_project.api.commands import UserOperations
-from django_project.api.commands import UserUpdateOperations
+from django_project.api.auth import _AuthenticateAdmin
+from django_project.api.auth import _AuthenticateAll
+from django_project.api.commands import _UserCreateOperations
+from django_project.api.commands import _UserDestroyOperations
+from django_project.api.commands import _UserOperations
+from django_project.api.commands import _UserUpdateOperations
+from django_project.api.filtersets import _UserFilter
 from django_project.api.filtersets import use_filterset_name
-from django_project.api.filtersets import UserFilter
-from django_project.api.metadata import DenyMetadata
-from django_project.api.negotiation import DenyNegotiation
-from django_project.api.serializers import UserSerializer
-from django_project.api.throttle import ThrottleEveryOne
-from django_project.api.version import DenyVersion
+from django_project.api.metadata import _DenyMetadata
+from django_project.api.negotiation import _DenyNegotiation
+from django_project.api.serializers import _UserSerializer
+from django_project.api.throttle import _ThrottleEveryOne
+from django_project.api.version import _DenyVersion
 
 
 @api_view
-class UserAction(Injector):
+class _UserAction(Injector):
     """Intentionally left blank."""
 
     post = this.command.do
-    command = UserOperations
+    command = _UserOperations
     renderer_classes = (DocumentationRenderer,)
     parser_classes = (JSONParser,)
 
 
 @api_view
-class UserLogin(Injector):
+class _UserLogin(Injector):
     get = this.command.login
-    command = UserOperations
+    command = _UserOperations
     permission_classes = (IsAuthenticated,)
 
 
 @api_view
-class LoginAll(Injector):
+class _LoginAll(Injector):
     get = this.command.respond
-    command = UserOperations
-    authentication_classes = (AuthenticateAll,)
+    command = _UserOperations
+    authentication_classes = (_AuthenticateAll,)
     permission_classes = (IsAuthenticated,)
 
 
 @api_view
-class ThrottleAll(Injector):
+class _ThrottleAll(Injector):
     get = this.command.login
-    command = UserOperations
-    throttle_classes = (ThrottleEveryOne,)
+    command = _UserOperations
+    throttle_classes = (_ThrottleEveryOne,)
 
 
 @api_view
-class DefaultThrottleScope(Injector):
+class _DefaultThrottleScope(Injector):
     get = this.command.respond
-    command = UserOperations
+    command = _UserOperations
     throttle_scope = "throttle_scope"
 
 
 @api_view
-class CustomThrottleScope(Injector):
+class _CustomThrottleScope(Injector):
     get = this.command.respond
-    command = UserOperations
+    command = _UserOperations
     custom_throttle_scope = "custom_scope"
 
 
 @api_view
-class BadNegotiation(Injector):
+class _BadNegotiation(Injector):
     get = this.command.respond
-    command = UserOperations
-    content_negotiation_class = DenyNegotiation
+    command = _UserOperations
+    content_negotiation_class = _DenyNegotiation
 
 
 @api_view
-class BadVersion(Injector):
+class _BadVersion(Injector):
     get = this.command.respond
-    command = UserOperations
-    versioning_class = DenyVersion
+    command = _UserOperations
+    versioning_class = _DenyVersion
 
 
 @api_view
-class BadMetadata(Injector):
+class _BadMetadata(Injector):
     get = this.command.respond
-    command = UserOperations
-    metadata_class = DenyMetadata
+    command = _UserOperations
+    metadata_class = _DenyMetadata
 
 
 @generic_api_view
-class UserRetrieveView(Injector):
+class _UserRetrieveView(Injector):
     """Intentionally left blank."""
 
     get = this.command.retrieve
-    command = UserOperations
+    command = _UserOperations
     queryset = User.objects.all()
-    serializer_class = UserSerializer
+    serializer_class = _UserSerializer
     lookup_field = "username"
     lookup_url_kwarg = "nick"
 
 
 @generic_api_view
-class UserListView(Injector):
+class _UserListView(Injector):
     get = this.command.collection
-    command = UserOperations
+    command = _UserOperations
     queryset = User.objects.all()
-    serializer_class = UserSerializer
+    serializer_class = _UserSerializer
     filter_backends = (DjangoFilterBackend,)
     if use_filterset_name:
-        filterset_class = UserFilter
+        filterset_class = _UserFilter
     else:
-        filter_class = UserFilter
+        filter_class = _UserFilter
     pagination_class = LimitOffsetPagination
 
 
 @generic_api_view
-class UserListFilterFieldsView(Injector):
+class _UserListFilterFieldsView(Injector):
     get = this.command.collection
-    command = UserOperations
+    command = _UserOperations
     queryset = User.objects.all()
-    serializer_class = UserSerializer
+    serializer_class = _UserSerializer
     filter_backends = (DjangoFilterBackend,)
     if use_filterset_name:
         filterset_fields = ["username"]
@@ -147,7 +147,7 @@ class UserListFilterFieldsView(Injector):
 
 
 @view_set
-class InjectedViewSet(Injector):
+class _InjectedViewSet(Injector):
     """Intentionally left blank."""
 
     @operation
@@ -213,8 +213,8 @@ class InjectedViewSet(Injector):
 
 
 @generic_view_set
-class InjectedGenericViewSet(Injector):
-    serializer_class = UserSerializer
+class _InjectedGenericViewSet(Injector):
+    serializer_class = _UserSerializer
 
     @operation
     def list(view, request, args, kwargs, user, action):
@@ -287,23 +287,23 @@ class InjectedGenericViewSet(Injector):
 
 
 @model_view_set
-class UserViewSet(Injector):
+class _UserViewSet(Injector):
     """Intentionally left blank."""
 
-    authentication_classes = (AuthenticateAdmin,)
+    authentication_classes = (_AuthenticateAdmin,)
     queryset = User.objects.filter(username="johndoe")
-    serializer_class = UserSerializer
+    serializer_class = _UserSerializer
     create = this.create_command.create
     update = this.update_command.update
     destroy = this.destroy_command.destroy
-    create_command = UserCreateOperations
-    update_command = UserUpdateOperations
-    destroy_command = UserDestroyOperations
+    create_command = _UserCreateOperations
+    update_command = _UserUpdateOperations
+    destroy_command = _UserDestroyOperations
 
 
 @model_view_set
-class DynamicUserViewSet(Injector):
-    authentication_classes = (AuthenticateAdmin,)
+class _DynamicUserViewSet(Injector):
+    authentication_classes = (_AuthenticateAdmin,)
 
     @value
     def queryset(user, action):
@@ -311,16 +311,16 @@ class DynamicUserViewSet(Injector):
         assert user.username == "admin"
         return User.objects.filter(username="johndoe")
 
-    serializer_class = UserSerializer
+    serializer_class = _UserSerializer
     create = this.create_command.create
     update = this.update_command.update
     destroy = this.destroy_command.destroy
-    create_command = UserCreateOperations
-    update_command = UserUpdateOperations
-    destroy_command = UserDestroyOperations
+    create_command = _UserCreateOperations
+    update_command = _UserUpdateOperations
+    destroy_command = _UserDestroyOperations
 
 
 @model_view_set
-class EmptyViewSet(Injector):
+class _EmptyViewSet(Injector):
     queryset = User.objects.all()
-    serializer_class = UserSerializer
+    serializer_class = _UserSerializer

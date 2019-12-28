@@ -15,5 +15,5 @@ class CartAPIView(Injector):
 
 
 @model_view_set
-class UserViewSet(Injector):
+class _UserViewSet(Injector):
     pass
