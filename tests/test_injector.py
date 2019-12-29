@@ -389,7 +389,7 @@ def test_deny_injector_changes(code):
 
 
 @attribute_assignment
-def mvT9oyJdXhzh():
+def _mvT9oyJdXhzh():
     """Attribute assignment."""
 
     class Container(Injector):
@@ -399,20 +399,20 @@ def mvT9oyJdXhzh():
 
 
 @attribute_assignment
-def fXxRX4KFUc8q():
+def _fXxRX4KFUc8q():
     """Direct assignmet to the `Injector`."""
     Injector.foo = 1
 
 
 @attribute_assignment
-def pHfF0rbEjCsV():
+def _pHfF0rbEjCsV():
     """Let notation."""
     Container = Injector.let()
     Container.foo = 1
 
 
 @attribute_assignment
-def xhZaIhujf34t():
+def _xhZaIhujf34t():
     """Delete attribute."""
 
     class Container(Injector):
@@ -422,14 +422,14 @@ def xhZaIhujf34t():
 
 
 @attribute_assignment
-def jShuBfttg97c():
+def _jShuBfttg97c():
     """Delete attribute let notation."""
     Container = Injector.let(foo=1)
     del Container.foo
 
 
 @attribute_assignment
-def tQeRzD5ZsyTm():
+def _tQeRzD5ZsyTm():
     """Delete attribute from `Injector` directly."""
     del Injector.let
 
@@ -526,14 +526,14 @@ def test_evaluate_dependencies_once(code):
 
 
 @evaluate_classes
-def ea4367450e47(Container):
+def _ea4367450e47(Container):
     """Each dependency evaluated once during injection."""
     x = Container.a
     assert x.b.d is x.c.d
 
 
 @evaluate_classes
-def dd91602f3455(Container):
+def _dd91602f3455(Container):
     """We reevaluate each dependency for different injections."""
     assert Container.a.b.d is not Container.a.b.d
     assert Container.a.b.d is not Container.a.c.d
@@ -570,7 +570,7 @@ def test_multiple_inheritance(code):
 
 
 @multiple_inheritance
-def edf946cc6077(Foo, FooContainer, BarContainer, BazContainer):
+def _edf946cc6077(Foo, FooContainer, BarContainer, BazContainer):
     """Inheritance."""
 
     class Container(FooContainer, BarContainer, BazContainer):
@@ -580,7 +580,7 @@ def edf946cc6077(Foo, FooContainer, BarContainer, BazContainer):
 
 
 @multiple_inheritance
-def efdc426cd096(Foo, FooContainer, BarContainer, BazContainer):
+def _efdc426cd096(Foo, FooContainer, BarContainer, BazContainer):
     """Inplace creation."""
     assert isinstance((FooContainer & BarContainer & BazContainer).baz.bar.foo, Foo)
 
@@ -605,7 +605,7 @@ def test_multiple_inheritance_injectors_order(code):
 
 
 @inheritance_order
-def aa10c7747a1f(Container1, Container2, Container3):
+def _aa10c7747a1f(Container1, Container2, Container3):
     """Inheritance."""
 
     class Foo(Container1, Container2, Container3):
@@ -615,7 +615,7 @@ def aa10c7747a1f(Container1, Container2, Container3):
 
 
 @inheritance_order
-def e056e22f3fd5(Container1, Container2, Container3):
+def _e056e22f3fd5(Container1, Container2, Container3):
     """Inheritance with own attributes."""
 
     class Foo(Container1, Container2, Container3):
@@ -625,7 +625,7 @@ def e056e22f3fd5(Container1, Container2, Container3):
 
 
 @inheritance_order
-def d851e0414bdf(Container1, Container2, Container3):
+def _d851e0414bdf(Container1, Container2, Container3):
     """Inplace creation."""
     assert (Container1 & Container2 & Container3).x == 1
 
@@ -647,7 +647,7 @@ def test_multiple_inheritance_deny_regular_classes(code):
 
 
 @subclasses_only
-def f1583394f1a6(Foo):
+def _f1583394f1a6(Foo):
     """Inheritance."""
 
     class Bar(Injector, Foo):
@@ -655,7 +655,7 @@ def f1583394f1a6(Foo):
 
 
 @subclasses_only
-def b51814725d07(Foo):
+def _b51814725d07(Foo):
     """Inplace creation."""
     Injector & Foo
 
@@ -672,7 +672,7 @@ def test_deny_magic_methods_injection(code):
 
 
 @deny_magic_methods
-def e78bf771747c():
+def _e78bf771747c():
     """Declarative injector."""
 
     class Bar(Injector):
@@ -681,7 +681,7 @@ def e78bf771747c():
 
 
 @deny_magic_methods
-def e34b88041f64():
+def _e34b88041f64():
     """Let notation."""
 
     class Foo(Injector):
@@ -708,7 +708,7 @@ def test_attribute_error(code):
 
 
 @attribute_error
-def c58b054bfcd0():
+def _c58b054bfcd0():
     """Declarative injector."""
 
     class Foo(Injector):
@@ -718,14 +718,14 @@ def c58b054bfcd0():
 
 
 @attribute_error
-def f9c50c81e8c9():
+def _f9c50c81e8c9():
     """Let notation."""
     Foo = Injector.let()
     Foo.test
 
 
 @attribute_error
-def e2f16596a652():
+def _e2f16596a652():
     """Let notation from subclass."""
 
     class Foo(Injector):
@@ -749,7 +749,7 @@ def test_incomplete_dependencies_error(code):
 
 
 @incomplete_dependencies
-def c4e7ecf75167():
+def _c4e7ecf75167():
     """Keyword arguments in the constructor."""
 
     class Bar(object):
@@ -763,7 +763,7 @@ def c4e7ecf75167():
 
 
 @incomplete_dependencies
-def dmsMgYqbsHgB():
+def _dmsMgYqbsHgB():
     """Constructor argument with let notation."""
 
     class Bar(object):
@@ -786,7 +786,7 @@ def test_has_attribute(code):
 
 
 @has_attribute
-def gwufxYkhURAF():
+def _gwufxYkhURAF():
     """Declarative injector."""
 
     class Container(Injector):
@@ -796,7 +796,7 @@ def gwufxYkhURAF():
 
 
 @has_attribute
-def zlZoLka31ndk():
+def _zlZoLka31ndk():
     """Let notation."""
     return Injector.let(foo=1)
 
@@ -819,7 +819,7 @@ def test_deny_arbitrary_argument_list(code):
 
 
 @deny_varargs
-def dfe1c22c641e(Foo):
+def _dfe1c22c641e(Foo):
     """Declarative injector."""
 
     class Summator(Injector):
@@ -828,7 +828,7 @@ def dfe1c22c641e(Foo):
 
 
 @deny_varargs
-def f7ef2aa82c18(Foo):
+def _f7ef2aa82c18(Foo):
     """Let notation."""
     Injector.let(foo=Foo, args=(1, 2, 3))
 
@@ -851,7 +851,7 @@ def test_deny_arbitrary_keyword_arguments(code):
 
 
 @deny_kwargs
-def e281099be65d(Foo):
+def _e281099be65d(Foo):
     """Declarative injector."""
 
     class Summator(Injector):
@@ -860,7 +860,7 @@ def e281099be65d(Foo):
 
 
 @deny_kwargs
-def bcf7c5881b2c(Foo):
+def _bcf7c5881b2c(Foo):
     """Let notation."""
     Injector.let(foo=Foo, kwargs={"start": 5})
 
@@ -883,7 +883,7 @@ def test_deny_arbitrary_positional_and_keyword_arguments_together(code):
 
 
 @deny_varargs_kwargs
-def efbf07f8deb6(Foo):
+def _efbf07f8deb6(Foo):
     """Declarative injector."""
 
     class Summator(Injector):
@@ -893,7 +893,7 @@ def efbf07f8deb6(Foo):
 
 
 @deny_varargs_kwargs
-def c4362558f312(Foo):
+def _c4362558f312(Foo):
     """Let notation."""
     Injector.let(foo=Foo, args=(1, 2, 3), kwargs={"start": 5})
 
@@ -910,7 +910,7 @@ def test_deny_to_redefine_let_attribute(code):
 
 
 @deny_let_redefine
-def a2bfa842df0c():
+def _a2bfa842df0c():
     """Declarative injector."""
 
     class Foo(Injector):
@@ -918,7 +918,7 @@ def a2bfa842df0c():
 
 
 @deny_let_redefine
-def ddd392e70db6():
+def _ddd392e70db6():
     """Let notation."""
 
     class Foo(Injector):
@@ -939,13 +939,13 @@ def test_deny_to_instantiate_injector(code):
 
 
 @deny_call
-def ce52d740af31():
+def _ce52d740af31():
     """Direct call."""
     Injector()
 
 
 @deny_call
-def a95940f44400():
+def _a95940f44400():
     """Subclass call."""
 
     class Foo(Injector):
@@ -955,13 +955,13 @@ def a95940f44400():
 
 
 @deny_call
-def d10b4ba474a9():
+def _d10b4ba474a9():
     """Ignore any arguments passed."""
     Injector(1)
 
 
 @deny_call
-def d665c722baae():
+def _d665c722baae():
     """Ignore any keyword argument passed."""
     Injector(x=1)
 
@@ -993,7 +993,7 @@ or set the default value to an instance of that class.
 
 
 @cls_named_arguments
-def dad79637580d(Foo, Bar):
+def _dad79637580d(Foo, Bar):
     """Declarative injector."""
 
     class Container(Injector):
@@ -1001,7 +1001,7 @@ def dad79637580d(Foo, Bar):
 
 
 @cls_named_arguments
-def bccb4f621e70(Foo, Bar):
+def _bccb4f621e70(Foo, Bar):
     """Let notation."""
     Injector.let(bar=Bar)
 
@@ -1024,7 +1024,7 @@ def test_deny_non_classes_in_class_named_arguments(code):
 
 
 @cls_named_defaults
-def a8cd70341d3d(Bar):
+def _a8cd70341d3d(Bar):
     """Declarative injector."""
 
     class Container(Injector):
@@ -1032,6 +1032,6 @@ def a8cd70341d3d(Bar):
 
 
 @cls_named_defaults
-def b859e98f2913(Bar):
+def _b859e98f2913(Bar):
     """Let notation."""
     Injector.let(bar=Bar)

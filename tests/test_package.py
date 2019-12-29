@@ -70,7 +70,7 @@ def test_provide_a_class(code):
 
 
 @package_definitions
-def rQlPiacYOKsN():
+def _rQlPiacYOKsN():
     """Attribute access submodule."""
     pkg = Package("pkg")
 
@@ -87,7 +87,7 @@ def rQlPiacYOKsN():
 
 
 @package_definitions
-def uHSfYcZjGSJQ():
+def _uHSfYcZjGSJQ():
     """Constructor argument submodule."""
     pkg = Package("pkg")
     sub = Package("pkg.submodule")
@@ -124,7 +124,7 @@ def test_point_to_injector(code):
 
 
 @injector_pointer
-def zprTYSyMkLEC():
+def _zprTYSyMkLEC():
     """Attribute access submodule."""
     pkg = Package("pkg")
 
@@ -137,7 +137,7 @@ def zprTYSyMkLEC():
 
 
 @injector_pointer
-def dqXJgFoftQja():
+def _dqXJgFoftQja():
     """Constructor argument submodule."""
     injected = Package("pkg.injected")
 

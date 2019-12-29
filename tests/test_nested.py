@@ -21,7 +21,7 @@ def test_attribute_getter_parent_access(code, sub):
 
 
 @parent_attr
-def ac7814095628(sub):
+def _ac7814095628(sub):
     """Declarative injector."""
 
     class Container(Injector):
@@ -32,13 +32,13 @@ def ac7814095628(sub):
 
 
 @parent_attr
-def f607abc82079(sub):
+def _f607abc82079(sub):
     """Let notation."""
     return Injector.let(foo=1, SubContainer=sub)
 
 
 @subcontainer
-def iGphUpthTooT():
+def _iGphUpthTooT():
     """Declarative injector."""
 
     class SubContainer(Injector):
@@ -48,13 +48,13 @@ def iGphUpthTooT():
 
 
 @subcontainer
-def nurKbeeqoNCn():
+def _nurKbeeqoNCn():
     """Let notation."""
     return Injector.let(bar=(this << 1).foo)
 
 
 @subcontainer
-def hHytjZxQjNPQ():
+def _hHytjZxQjNPQ():
     """Package link."""
     pkg = Package("pkg")
     return pkg.injected.SubContainer
@@ -78,7 +78,7 @@ def test_attribute_getter_few_parents(code, middle, lowest):
 
 
 @few_parent_attr
-def e477afc961b6(middle):
+def _e477afc961b6(middle):
     """Declarative injector."""
 
     class Container(Injector):
@@ -89,13 +89,13 @@ def e477afc961b6(middle):
 
 
 @few_parent_attr
-def c4ed4c61e154(middle):
+def _c4ed4c61e154(middle):
     """Let notation."""
     return Injector.let(foo=1, SubContainer=middle)
 
 
 @middle_container
-def hjVHyztckQNe(lowest):
+def _hjVHyztckQNe(lowest):
     """Declarative injector."""
 
     class SubContainer(Injector):
@@ -105,13 +105,13 @@ def hjVHyztckQNe(lowest):
 
 
 @middle_container
-def gYijGKMqAbZN(lowest):
+def _gYijGKMqAbZN(lowest):
     """Let notation."""
     return Injector.let(SubSubContainer=lowest)
 
 
 @lowest_container
-def pDqnxaJFVRcS():
+def _pDqnxaJFVRcS():
     """Declarative injector."""
 
     class SubSubContainer(Injector):
@@ -121,13 +121,13 @@ def pDqnxaJFVRcS():
 
 
 @lowest_container
-def heSHjuBBFVLp():
+def _heSHjuBBFVLp():
     """Let notation."""
     return Injector.let(bar=(this << 2).foo)
 
 
 @lowest_container
-def mVVyoyBmvQwc():
+def _mVVyoyBmvQwc():
     """Package link."""
     pkg = Package("pkg")
     return pkg.injected.SubSubContainer

@@ -65,7 +65,7 @@ def test_item_getter(code):
 
 
 @item_access
-def ce642f492941():
+def _ce642f492941():
     """Get item with string key."""
 
     class Container(Injector):
@@ -77,7 +77,7 @@ def ce642f492941():
 
 
 @item_access
-def ffa208dc1130():
+def _ffa208dc1130():
     """Get items as many times as we want."""
 
     class Container(Injector):
@@ -89,7 +89,7 @@ def ffa208dc1130():
 
 
 @item_access
-def e5c358190fef():
+def _e5c358190fef():
     """Get item from the outer container."""
 
     class Container(Injector):
@@ -103,7 +103,7 @@ def e5c358190fef():
 
 
 @item_access
-def ab4cdbf60b2f():
+def _ab4cdbf60b2f():
     """Get item from the outer container of any depth level."""
 
     class Container(Injector):
@@ -118,7 +118,7 @@ def ab4cdbf60b2f():
 
 
 @item_access
-def be332433b74d():
+def _be332433b74d():
     """Get items from list."""
 
     class Container(Injector):
@@ -130,7 +130,7 @@ def be332433b74d():
 
 
 @item_access
-def fe150d5ebe93():
+def _fe150d5ebe93():
     """Get items from dict with digit keys."""
 
     class Container(Injector):
@@ -142,7 +142,7 @@ def fe150d5ebe93():
 
 
 @item_access
-def dc4fedcd09d8():
+def _dc4fedcd09d8():
     """Get items from dict with tuple keys."""
 
     class Container(Injector):
@@ -216,7 +216,7 @@ def test_deny_this_without_attribute_access(code):
 
 
 @direct_proxy
-def b648b6f6a712():
+def _b648b6f6a712():
     """Declarative injector."""
 
     class Container(Injector):
@@ -224,7 +224,7 @@ def b648b6f6a712():
 
 
 @direct_proxy
-def c147d398f4be():
+def _c147d398f4be():
     """Declarative injector with parent access."""
 
     class Container(Injector):
@@ -232,13 +232,13 @@ def c147d398f4be():
 
 
 @direct_proxy
-def a37783b6d1ad():
+def _a37783b6d1ad():
     """Let notation."""
     Injector.let(foo=this)
 
 
 @direct_proxy
-def bd05271fb831():
+def _bd05271fb831():
     """Let notation with parent access."""
     Injector.let(foo=(this << 1))
 
@@ -262,13 +262,13 @@ def test_this_deny_negative_integers(code):
 
 
 @negative_integers
-def xsJWb2lx6EMs():
+def _xsJWb2lx6EMs():
     """Minus one."""
     this << -1
 
 
 @negative_integers
-def nvm3ybp98vGm():
+def _nvm3ybp98vGm():
     """Zero."""
     this << 0
 
@@ -290,7 +290,7 @@ def test_require_more_parents_that_injector_actually_has(code):
 
 
 @too_many
-def s6lduD7BJpxW():
+def _s6lduD7BJpxW():
     """Declarative Injector."""
 
     class Container(Injector):
@@ -300,7 +300,7 @@ def s6lduD7BJpxW():
 
 
 @too_many
-def bUICVObtDZ4I():
+def _bUICVObtDZ4I():
     """Declarative Injected with nested layer."""
 
     class Container(Injector):
@@ -311,13 +311,13 @@ def bUICVObtDZ4I():
 
 
 @too_many
-def ww6xNI4YrNr6():
+def _ww6xNI4YrNr6():
     """Let notation."""
     Injector.let(foo=(this << 1).bar).foo
 
 
 @too_many
-def rN3suiVzhqMM():
+def _rN3suiVzhqMM():
     """Let notation with nested layer."""
     Injector.let(SubContainer=Injector.let(foo=(this << 2).bar)).SubContainer.foo
 
@@ -342,7 +342,7 @@ def test_attribute_error_on_parent_access(code):
 
 
 @attribute_error
-def t1jn9RI9v42t():
+def _t1jn9RI9v42t():
     """Declarative Injector."""
 
     class Container(Injector):
@@ -352,7 +352,7 @@ def t1jn9RI9v42t():
 
 
 @attribute_error
-def yOEj1qQfsXHy():
+def _yOEj1qQfsXHy():
     """Declarative Injected with nested layer."""
 
     class Container(Injector):
@@ -363,12 +363,12 @@ def yOEj1qQfsXHy():
 
 
 @attribute_error
-def vnmkIELBH3MN():
+def _vnmkIELBH3MN():
     """Let notation."""
     Injector.let(foo=this.bar).foo
 
 
 @attribute_error
-def pG9M52ZRQr2S():
+def _pG9M52ZRQr2S():
     """Let notation with nested layer."""
     Injector.let(SubContainer=Injector.let(foo=(this << 1).bar)).SubContainer.foo

@@ -30,7 +30,7 @@ def test_circle_dependencies(code, foo):
 
 
 @circle_deps
-def a6d9c893a92e(Foo):
+def _a6d9c893a92e(Foo):
     """Declarative injector."""
 
     class Summator(Injector):
@@ -40,14 +40,14 @@ def a6d9c893a92e(Foo):
 
 
 @circle_deps
-def e4b38a38de7e(Foo):
+def _e4b38a38de7e(Foo):
     """Let notation."""
     Summator = Injector.let(foo=Foo)
     Summator.foo
 
 
 @circle_defs
-def nQpangWPMths():
+def _nQpangWPMths():
     """Class."""
 
     class Foo(object):
@@ -58,7 +58,7 @@ def nQpangWPMths():
 
 
 @circle_defs
-def gjhRaqkLmRmy():
+def _gjhRaqkLmRmy():
     """Operation."""
 
     @operation
@@ -69,7 +69,7 @@ def gjhRaqkLmRmy():
 
 
 @circle_defs
-def kHqAxHovWKtI():
+def _kHqAxHovWKtI():
     """Value."""
 
     @value
@@ -80,21 +80,21 @@ def kHqAxHovWKtI():
 
 
 @circle_defs
-def xoGkuXokhXpZ():
+def _xoGkuXokhXpZ():
     """Package link to class."""
     pkg = Package("pkg")
     return pkg.circles.simple_class.Foo
 
 
 @circle_defs
-def xdKqGtGJWEbR():
+def _xdKqGtGJWEbR():
     """Package link to operation."""
     pkg = Package("pkg")
     return pkg.circles.simple_operation.Foo
 
 
 @circle_defs
-def jIhFqCwKXFvv():
+def _jIhFqCwKXFvv():
     """Package link to value."""
     pkg = Package("pkg")
     return pkg.circles.simple_value.Foo
@@ -130,7 +130,7 @@ def test_complex_circle_dependencies(code, foo, bar):
 
 
 @complex_circle_deps
-def dcbd4c90b473(Foo, Bar):
+def _dcbd4c90b473(Foo, Bar):
     """Declarative injector."""
 
     class Summator(Injector):
@@ -141,7 +141,7 @@ def dcbd4c90b473(Foo, Bar):
 
 
 @complex_circle_deps
-def d9c4e136c92c(Foo, Bar):
+def _d9c4e136c92c(Foo, Bar):
     """Declarative injector with inheritance."""
 
     class First(Injector):
@@ -154,21 +154,21 @@ def d9c4e136c92c(Foo, Bar):
 
 
 @complex_circle_deps
-def b54832f696e9(Foo, Bar):
+def _b54832f696e9(Foo, Bar):
     """Let notation."""
     Summator = Injector.let(foo=Foo, bar=Bar)
     Summator.foo
 
 
 @complex_circle_deps
-def c039a81e8dce(Foo, Bar):
+def _c039a81e8dce(Foo, Bar):
     """Let notation chain."""
     Summator = Injector.let(foo=Foo).let(bar=Bar)
     Summator.foo
 
 
 @complex_circle_defs_foo
-def kodOTZfScpDc():
+def _kodOTZfScpDc():
     """Class."""
 
     class Foo(object):
@@ -179,7 +179,7 @@ def kodOTZfScpDc():
 
 
 @complex_circle_defs_foo
-def tYEhWPObJRXZ():
+def _tYEhWPObJRXZ():
     """Operation."""
 
     @operation
@@ -190,7 +190,7 @@ def tYEhWPObJRXZ():
 
 
 @complex_circle_defs_foo
-def zklaYlyBZsEj():
+def _zklaYlyBZsEj():
     """Value."""
 
     @value
@@ -201,28 +201,28 @@ def zklaYlyBZsEj():
 
 
 @complex_circle_defs_foo
-def xPLfwwcZNyyX():
+def _xPLfwwcZNyyX():
     """Package link to class."""
     pkg = Package("pkg")
     return pkg.circles.complex_class.Foo
 
 
 @complex_circle_defs_foo
-def nGROhaBTCNSO():
+def _nGROhaBTCNSO():
     """Package link to operation."""
     pkg = Package("pkg")
     return pkg.circles.complex_operation.Foo
 
 
 @complex_circle_defs_foo
-def fkedDYYeueXo():
+def _fkedDYYeueXo():
     """Package link to value."""
     pkg = Package("pkg")
     return pkg.circles.complex_value.Foo
 
 
 @complex_circle_defs_bar
-def uEevbDxHVHfN():
+def _uEevbDxHVHfN():
     """Class."""
 
     class Bar(object):
@@ -233,7 +233,7 @@ def uEevbDxHVHfN():
 
 
 @complex_circle_defs_bar
-def emGmGzXrbaZe():
+def _emGmGzXrbaZe():
     """Operation."""
 
     @operation
@@ -244,7 +244,7 @@ def emGmGzXrbaZe():
 
 
 @complex_circle_defs_bar
-def aerRHoDXUNeV():
+def _aerRHoDXUNeV():
     """Value."""
 
     @value
@@ -255,21 +255,21 @@ def aerRHoDXUNeV():
 
 
 @complex_circle_defs_bar
-def trvcvfPoOBEv():
+def _trvcvfPoOBEv():
     """Package link to class."""
     pkg = Package("pkg")
     return pkg.circles.complex_class.Bar
 
 
 @complex_circle_defs_bar
-def sHybukyZpyjf():
+def _sHybukyZpyjf():
     """Package link to operation."""
     pkg = Package("pkg")
     return pkg.circles.complex_operation.Bar
 
 
 @complex_circle_defs_bar
-def lNsNBNCTHPFX():
+def _lNsNBNCTHPFX():
     """Package link to value."""
     pkg = Package("pkg")
     return pkg.circles.complex_value.Bar
@@ -304,7 +304,7 @@ def test_complex_circle_dependencies_long_circle(code, foo, bar, baz):
 
 
 @long_circle_deps
-def d2b809c03bfa(Foo, Bar, Baz):
+def _d2b809c03bfa(Foo, Bar, Baz):
     """Declarative injector."""
 
     class Summator(Injector):
@@ -316,7 +316,7 @@ def d2b809c03bfa(Foo, Bar, Baz):
 
 
 @long_circle_deps
-def fc13db5b9fda(Foo, Bar, Baz):
+def _fc13db5b9fda(Foo, Bar, Baz):
     """Declarative injector with inheritance."""
 
     class First(Injector):
@@ -330,21 +330,21 @@ def fc13db5b9fda(Foo, Bar, Baz):
 
 
 @long_circle_deps
-def c729e6952fee(Foo, Bar, Baz):
+def _c729e6952fee(Foo, Bar, Baz):
     """Let notation."""
     Summator = Injector.let(foo=Foo, bar=Bar, baz=Baz)
     Summator.foo
 
 
 @long_circle_deps
-def d701f88a5c42(Foo, Bar, Baz):
+def _d701f88a5c42(Foo, Bar, Baz):
     """Let notation chain."""
     Summator = Injector.let(foo=Foo).let(bar=Bar).let(baz=Baz)
     Summator.foo
 
 
 @long_circle_defs_foo
-def uVWBksfNYEDw():
+def _uVWBksfNYEDw():
     """Class."""
 
     class Foo(object):
@@ -355,7 +355,7 @@ def uVWBksfNYEDw():
 
 
 @long_circle_defs_foo
-def yOscCQpEPstE():
+def _yOscCQpEPstE():
     """Operation."""
 
     @operation
@@ -366,7 +366,7 @@ def yOscCQpEPstE():
 
 
 @long_circle_defs_foo
-def rwJmLRVuVSqm():
+def _rwJmLRVuVSqm():
     """Value."""
 
     @value
@@ -377,28 +377,28 @@ def rwJmLRVuVSqm():
 
 
 @long_circle_defs_foo
-def zAYYjvSPmIhZ():
+def _zAYYjvSPmIhZ():
     """Package link to class."""
     pkg = Package("pkg")
     return pkg.circles.long_class.Foo
 
 
 @long_circle_defs_foo
-def xreTaLNoZeDz():
+def _xreTaLNoZeDz():
     """Package link to operation."""
     pkg = Package("pkg")
     return pkg.circles.long_operation.Foo
 
 
 @long_circle_defs_foo
-def qOKmbpOgeDhk():
+def _qOKmbpOgeDhk():
     """Package link to value."""
     pkg = Package("pkg")
     return pkg.circles.long_value.Foo
 
 
 @long_circle_defs_bar
-def oKtHawDksDNk():
+def _oKtHawDksDNk():
     """Class."""
 
     class Bar(object):
@@ -409,7 +409,7 @@ def oKtHawDksDNk():
 
 
 @long_circle_defs_bar
-def hpRbxUtEWyGJ():
+def _hpRbxUtEWyGJ():
     """Operation."""
 
     @operation
@@ -420,7 +420,7 @@ def hpRbxUtEWyGJ():
 
 
 @long_circle_defs_bar
-def mLsXYSzlYPRO():
+def _mLsXYSzlYPRO():
     """Value."""
 
     @value
@@ -431,28 +431,28 @@ def mLsXYSzlYPRO():
 
 
 @long_circle_defs_bar
-def pYMumhKUCBUy():
+def _pYMumhKUCBUy():
     """Package link to class."""
     pkg = Package("pkg")
     return pkg.circles.long_class.Bar
 
 
 @long_circle_defs_bar
-def lCQgCPevBZXs():
+def _lCQgCPevBZXs():
     """Package link to operation."""
     pkg = Package("pkg")
     return pkg.circles.long_operation.Bar
 
 
 @long_circle_defs_bar
-def xgyyAISoreQV():
+def _xgyyAISoreQV():
     """Package link to value."""
     pkg = Package("pkg")
     return pkg.circles.long_value.Bar
 
 
 @long_circle_defs_baz
-def uaOWixpAMVma():
+def _uaOWixpAMVma():
     """Class."""
 
     class Baz(object):
@@ -463,7 +463,7 @@ def uaOWixpAMVma():
 
 
 @long_circle_defs_baz
-def fvMICnYvGZlw():
+def _fvMICnYvGZlw():
     """Operation."""
 
     @operation
@@ -474,7 +474,7 @@ def fvMICnYvGZlw():
 
 
 @long_circle_defs_baz
-def xjpTxDebbpnm():
+def _xjpTxDebbpnm():
     """Value."""
 
     @value
@@ -485,21 +485,21 @@ def xjpTxDebbpnm():
 
 
 @long_circle_defs_baz
-def ydSPPkZGDwPJ():
+def _ydSPPkZGDwPJ():
     """Package link to class."""
     pkg = Package("pkg")
     return pkg.circles.long_class.Baz
 
 
 @long_circle_defs_baz
-def rxFZQwocGmhN():
+def _rxFZQwocGmhN():
     """Package link to operation."""
     pkg = Package("pkg")
     return pkg.circles.long_operation.Baz
 
 
 @long_circle_defs_baz
-def eFMMMVDBKCFU():
+def _eFMMMVDBKCFU():
     """Package link to value."""
     pkg = Package("pkg")
     return pkg.circles.long_value.Baz

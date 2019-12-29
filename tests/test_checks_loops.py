@@ -31,7 +31,7 @@ def test_circle_links(code):
 
 
 @flat_injector
-def kSSnnkw6CNPx():
+def _kSSnnkw6CNPx():
     """Declarative injector.  Link to self."""
 
     class Container(Injector):
@@ -41,13 +41,13 @@ def kSSnnkw6CNPx():
 
 
 @flat_injector
-def n8NHZqiZN43Q():
+def _n8NHZqiZN43Q():
     """Let notation.  Link to self."""
     Injector.let(foo=this.foo).foo
 
 
 @flat_injector
-def ai0hNOPGX2PI():
+def _ai0hNOPGX2PI():
     """Declarative injector.  Complex loop."""
 
     class Container(Injector):
@@ -58,13 +58,13 @@ def ai0hNOPGX2PI():
 
 
 @flat_injector
-def ySnRrxW6M79T():
+def _ySnRrxW6M79T():
     """Let notation.  Complex loop."""
     Injector.let(foo=this.bar, bar=this.foo).foo
 
 
 @flat_injector
-def yfTnHHhvBmrQ():
+def _yfTnHHhvBmrQ():
     """Declarative injector.  Long loop."""
 
     class Container(Injector):
@@ -76,7 +76,7 @@ def yfTnHHhvBmrQ():
 
 
 @flat_injector
-def ydZEbpRNlHEO():
+def _ydZEbpRNlHEO():
     Injector.let(foo=this.bar, bar=this.baz, baz=this.foo).foo
 
 
@@ -104,7 +104,7 @@ def test_circle_links_one_level(code, sub):
 
 
 @one_level
-def eaK6IxW88SNh(sub):
+def _eaK6IxW88SNh(sub):
     """Declarative injector."""
 
     class Container(Injector):
@@ -115,13 +115,13 @@ def eaK6IxW88SNh(sub):
 
 
 @one_level
-def nWhKtJb16yg6(sub):
+def _nWhKtJb16yg6(sub):
     """Let notation."""
     Injector.let(foo=this.SubContainer.bar, SubContainer=sub).foo
 
 
 @subcontainer
-def jijKOYgyZHNz():
+def _jijKOYgyZHNz():
     """Declarative injector."""
 
     class SubContainer(Injector):
@@ -131,13 +131,13 @@ def jijKOYgyZHNz():
 
 
 @subcontainer
-def nFibPCOxGsrX():
+def _nFibPCOxGsrX():
     """Let notation."""
     return Injector.let(bar=(this << 1).foo)
 
 
 @subcontainer
-def utUTZLLngouR():
+def _utUTZLLngouR():
     """Package link."""
     pkg = Package("pkg")
     return pkg.injected.SubContainer
@@ -171,7 +171,7 @@ def test_circle_links_two_level_complex_loop(code, middle, lowest):
 
 
 @complex_two_levels
-def mF4akoHlg84C(middle):
+def _mF4akoHlg84C(middle):
     """Declarative injector."""
 
     class Container(Injector):
@@ -182,13 +182,13 @@ def mF4akoHlg84C(middle):
 
 
 @complex_two_levels
-def bCw8LPUeVK6J(middle):
+def _bCw8LPUeVK6J(middle):
     """Let notation."""
     Injector.let(foo=this.SubContainer.SubSubContainer.bar, SubContainer=middle).foo
 
 
 @complex_middle_container
-def yPFeGKPGXPIY(lowest):
+def _yPFeGKPGXPIY(lowest):
     """Declarative injector."""
 
     class SubContainer(Injector):
@@ -198,13 +198,13 @@ def yPFeGKPGXPIY(lowest):
 
 
 @complex_middle_container
-def uIRpkBWARVOQ(lowest):
+def _uIRpkBWARVOQ(lowest):
     """Let notation."""
     return Injector.let(SubSubContainer=lowest)
 
 
 @complex_lowest_container
-def bJmCQECfcIzZ():
+def _bJmCQECfcIzZ():
     """Declarative injector."""
 
     class SubSubContainer(Injector):
@@ -214,13 +214,13 @@ def bJmCQECfcIzZ():
 
 
 @complex_lowest_container
-def qzYMsyvxYFLe():
+def _qzYMsyvxYFLe():
     """Let notation."""
     return Injector.let(bar=(this << 2).foo)
 
 
 @complex_lowest_container
-def epoadTufdhne():
+def _epoadTufdhne():
     """Package link."""
     pkg = Package("pkg")
     return pkg.injected.SubSubContainer
@@ -257,7 +257,7 @@ def test_circle_links_two_level_long_loop(code, middle, lowest):
 
 
 @long_two_levels
-def eHyErh9kExHG(middle):
+def _eHyErh9kExHG(middle):
     """Declarative injector."""
 
     class Container(Injector):
@@ -268,13 +268,13 @@ def eHyErh9kExHG(middle):
 
 
 @long_two_levels
-def q0KytyVbE2XA(middle):
+def _q0KytyVbE2XA(middle):
     """Let notation."""
     Injector.let(foo=this.SubContainer.baz, SubContainer=middle).foo
 
 
 @long_middle_container
-def mwcbtGunjMac(lowest):
+def _mwcbtGunjMac(lowest):
     """Declarative injector."""
 
     class SubContainer(Injector):
@@ -285,13 +285,13 @@ def mwcbtGunjMac(lowest):
 
 
 @long_middle_container
-def aVJRixHNhChV(lowest):
+def _aVJRixHNhChV(lowest):
     """Let notation."""
     return Injector.let(baz=this.SubSubContainer.bar, SubSubContainer=lowest)
 
 
 @long_lowest_container
-def qRcNcKzedWaI():
+def _qRcNcKzedWaI():
     """Declarative injector."""
 
     class SubSubContainer(Injector):
@@ -301,13 +301,13 @@ def qRcNcKzedWaI():
 
 
 @long_lowest_container
-def fiktpicgZWNS():
+def _fiktpicgZWNS():
     """Let notation."""
     return Injector.let(bar=(this << 2).foo)
 
 
 @long_lowest_container
-def uugFwsWbfgXg():
+def _uugFwsWbfgXg():
     """Package link."""
     pkg = Package("pkg")
     return pkg.injected.SubSubContainer
@@ -342,7 +342,7 @@ def test_cross_injector_loops(code, sub1, sub2):
 
 
 @cross_injector_loops
-def vAyZepNGAUjY(sub1, sub2):
+def _vAyZepNGAUjY(sub1, sub2):
     """Declarative injector."""
 
     class Container(Injector):
@@ -353,13 +353,13 @@ def vAyZepNGAUjY(sub1, sub2):
 
 
 @cross_injector_loops
-def bLRoCCj9uNOp(sub1, sub2):
+def _bLRoCCj9uNOp(sub1, sub2):
     """Let notation.  Cross injector links."""
     Injector.let(SubContainer1=sub1, SubContainer2=sub2).SubContainer1.bar
 
 
 @subcontainer1
-def eiVzvYStvpNL():
+def _eiVzvYStvpNL():
     """Declarative injector."""
 
     class SubContainer1(Injector):
@@ -369,20 +369,20 @@ def eiVzvYStvpNL():
 
 
 @subcontainer1
-def elifFWSpshiv():
+def _elifFWSpshiv():
     """Let notation."""
     return Injector.let(bar=(this << 1).SubContainer2.baz)
 
 
 @subcontainer1
-def yavnvOrgKYNS():
+def _yavnvOrgKYNS():
     """Package link."""
     pkg = Package("pkg")
     return pkg.injected.SubContainer1
 
 
 @subcontainer2
-def fFuLltxguVgC():
+def _fFuLltxguVgC():
     """Declarative injector."""
 
     class SubContainer2(Injector):
@@ -392,13 +392,13 @@ def fFuLltxguVgC():
 
 
 @subcontainer2
-def rRsNsCaBSxke():
+def _rRsNsCaBSxke():
     """Let notation."""
     return Injector.let(baz=(this << 1).SubContainer1.bar)
 
 
 @subcontainer2
-def xVeDBvAxsNYP():
+def _xVeDBvAxsNYP():
     """Package link."""
     pkg = Package("pkg")
     return pkg.injected.SubContainer2
@@ -422,7 +422,7 @@ def test_item_access_loops(code):
 
 
 @items.xfail  # FIXME: Make this work.
-def oClqGRmWJAkA():
+def _oClqGRmWJAkA():
     """Declarative injector."""
 
     class Container(Injector):
@@ -435,7 +435,7 @@ def oClqGRmWJAkA():
 
 
 @items.xfail  # FIXME: Make this work.
-def t41yMywZuPhA():
+def _t41yMywZuPhA():
     """Let notation."""
     SubContainer = Injector.let(foo=(this << 1).bar["sub"].foo)
     Injector.let(SubContainer=SubContainer, bar={"sub": SubContainer}).SubContainer.foo
