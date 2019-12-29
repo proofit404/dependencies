@@ -35,7 +35,7 @@ containers = CodeCollector()
 
 
 @containers
-def bAMWkT3WSTN1(_app):
+def _bAMWkT3WSTN1(_app):
     """Task decorator."""
 
     @contrib.task
@@ -48,7 +48,7 @@ def bAMWkT3WSTN1(_app):
 
 
 @containers
-def xPa7isagt3Lq(app):
+def _xPa7isagt3Lq(app):
     """Shared task decorator."""
 
     @contrib.shared_task
@@ -110,14 +110,14 @@ def test_make_signature(celery_app, code, factory):
 
 
 @make_signature
-def cgTE4xh2ZSVI(container):
+def _cgTE4xh2ZSVI(container):
     """Verbose signature."""
     sign = container.signature((2, 2), {"debug": True}, immutable=True, countdown=10)
     return sign
 
 
 @make_signature
-def dUf679YyStBw(container):
+def _dUf679YyStBw(container):
     """Verbose signature with options."""
     sign = container.signature(
         (2, 2), {"debug": True}, immutable=True, options={"countdown": 10}
@@ -126,7 +126,7 @@ def dUf679YyStBw(container):
 
 
 @make_signature
-def aTMB4bH5LwJh(container):
+def _aTMB4bH5LwJh(container):
     """Verbose signature with attributes from container."""
 
     class NewContainer(container):
@@ -139,7 +139,7 @@ def aTMB4bH5LwJh(container):
 
 
 @make_signature
-def b2Rm5nGbf27S(container):
+def _b2Rm5nGbf27S(container):
     """Verbose signature override attributes from container."""
 
     class NewContainer(container):
@@ -154,7 +154,7 @@ def b2Rm5nGbf27S(container):
 
 
 @make_signature
-def kj4SkFAcVOYQ(container):
+def _kj4SkFAcVOYQ(container):
     """Shortcut signature."""
 
     class NewContainer(container):
@@ -166,7 +166,7 @@ def kj4SkFAcVOYQ(container):
 
 
 @make_signature
-def u4kZae2NSFhE(container):
+def _u4kZae2NSFhE(container):
     """Immutable shortcut signature."""
 
     class NewContainer(container):
@@ -301,7 +301,7 @@ def test_task_arguments(celery_app, code):
 
 
 @task_arguments
-def z3uG24zlPL7s(_app, container):
+def _z3uG24zlPL7s(_app, container):
     """Task decorator."""
 
     @contrib.task
@@ -312,7 +312,7 @@ def z3uG24zlPL7s(_app, container):
 
 
 @task_arguments
-def pvRJsuaumvOU(app, container):
+def _pvRJsuaumvOU(app, container):
     """Shared task decorator."""
 
     @contrib.shared_task
