@@ -20,7 +20,7 @@ def celery_app():
     return app
 
 
-class Run(object):
+class _Run(object):
     def __init__(self, args, kwargs):
         self.args = args
         self.kwargs = kwargs
@@ -42,7 +42,7 @@ def _bAMWkT3WSTN1(_app):
     class Container(Injector):
         app = _app
         name = "foo.bar.baz"
-        run = Run
+        run = _Run
 
     return Container
 
@@ -54,7 +54,7 @@ def _xPa7isagt3Lq(app):
     @contrib.shared_task
     class Container(Injector):
         name = "foo.bar.baz"
-        run = Run
+        run = _Run
 
     return Container
 
@@ -177,10 +177,7 @@ def _u4kZae2NSFhE(container):
 
 
 def test_validation(celery_app):
-    """
-    Task and shared task decorators must check required `Injector`
-    attributes.
-    """
+    """Task and shared task decorators must check required `Injector` attributes."""
     with pytest.raises(DependencyError) as exc_info:
 
         @contrib.task
@@ -231,10 +228,7 @@ task_arguments = CodeCollector()
 
 @task_arguments.parametrize
 def test_task_arguments(celery_app, code):
-    """
-    Allow task decorator arguments customization through `Injector`
-    subclass attributes.
-    """
+    """Allow task decorator arguments customization through `Injector` subclass attributes."""
 
     class Foo(object):
         def __call__(self, a, b):

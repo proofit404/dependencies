@@ -304,10 +304,7 @@ def test_let_factory_resolve_not_overwritten_dependencies():
 
 
 def test_let_factory_on_injector_directly():
-    """
-    Dependencies can be specified with `let` factory applied to
-    `Injector` derectly.
-    """
+    """Dependencies can be specified with `let` factory applied to `Injector` derectly."""
 
     class Foo(object):
         def __init__(self, bar):

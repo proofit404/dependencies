@@ -9,7 +9,7 @@ from dependencies.contrib.pytest import require
 from dependencies.exceptions import DependencyError
 
 
-class Foo(object):
+class _Foo(object):
     def __init__(self, foo, bar, baz):
         self.foo = foo
         self.bar = bar
@@ -21,8 +21,10 @@ class Foo(object):
 
 @register
 class Container(Injector):
+    """The fixture."""
+
     name = "fixture_name"
-    fixture = Foo
+    fixture = _Foo
     foo = require("fixture_name_1")
     baz = require("fixture_name_2")
     bar = require("fixture_name_3")
@@ -30,22 +32,25 @@ class Container(Injector):
 
 @pytest.fixture()
 def fixture_name_1():
+    """The fixture dependency."""
     return 1
 
 
 @pytest.fixture()
 def fixture_name_2():
+    """The fixture dependency."""
     return 2
 
 
 @pytest.fixture()
 def fixture_name_3():
+    """The fixture dependency."""
     return 3
 
 
 def test_register_fixture(fixture_name):
     """`register` and `require` Py.test fixtures with `Injector` subclasses."""
-    assert isinstance(fixture_name, Foo)
+    assert isinstance(fixture_name, _Foo)
     assert fixture_name.do() == 6
 
 
@@ -69,7 +74,7 @@ def test_validation():
 
         @register
         class Container2(Injector):
-            fixture = Foo
+            fixture = _Foo
 
     message = str(exc_info.value)
     assert message == "'Container2' can not resolve attribute 'name'"

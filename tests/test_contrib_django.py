@@ -26,10 +26,7 @@ def test_dispatch_request(client, method):
 
 @pytest.mark.parametrize("method", http_methods_no_options)
 def test_empty_request(client, method):
-    """
-    Use method not allowed, if `Injector` subclass doesn't define an
-    attribute for this method.
-    """
+    """Use method not allowed, if `Injector` subclass doesn't define an attribute for this method."""
     response = getattr(client, method)("/test_empty_request/1/test/")
     assert response.status_code == 405
 
@@ -103,10 +100,7 @@ def test_form_view(client):
 
 
 def test_form_view_undefined_method(client):
-    """
-    Throw error if corresponding form view method is not defined in
-    the injector.
-    """
+    """Throw error if corresponding form view method is not defined in the injector."""
     with pytest.raises(DependencyError) as exc_info:
         client.post(
             "/empty_form_view/",

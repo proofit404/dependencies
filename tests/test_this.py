@@ -181,10 +181,7 @@ def test_item_getter_non_printable_key():
 
 
 def test_attribute_access_after_item_getter():
-    """
-    Check we can use attribute access notation after item getter
-    notation.
-    """
+    """Check we can use attribute access notation after item getter notation."""
 
     class Foo(object):
         x = 1
@@ -278,10 +275,7 @@ too_many = CodeCollector()
 
 @too_many.parametrize
 def test_require_more_parents_that_injector_actually_has(code):
-    """
-    If we shift more that container levels available, we should
-    provide meaningful message to user.
-    """
+    """If we shift more that container levels available, we should provide meaningful message to user."""
     with pytest.raises(DependencyError) as exc_info:
         code()
     assert str(exc_info.value) == (
@@ -327,10 +321,7 @@ attribute_error = CodeCollector()
 
 @attribute_error.parametrize
 def test_attribute_error_on_parent_access(code):
-    """
-    We should raise `AttributeError` if we have correct number of
-    parents but specify wrong attribute name.
-    """
+    """We should raise `AttributeError` if we have correct number of parents but specify wrong attribute name."""
     with pytest.raises(DependencyError) as exc_info:
         code()
     assert str(exc_info.value) in {

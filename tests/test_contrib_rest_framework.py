@@ -204,6 +204,7 @@ def test_keep_view_informanion():
 
 
 def test_default_throttle_scope_applied_to_default(rf, settings):
+    """Apply default throttle scope from the settings."""
     settings.REST_FRAMEWORK = {
         "DEFAULT_THROTTLE_CLASSES": (
             "django_project.api.throttle._ThrottleDefaultScope",
@@ -211,7 +212,7 @@ def test_default_throttle_scope_applied_to_default(rf, settings):
     }
 
     @contrib.api_view
-    class _DefaultThrottleScope(Injector):
+    class DefaultThrottleScope(Injector):
         get = this.command.respond
         command = project_commands._UserOperations
         throttle_scope = "throttle_scope"
@@ -221,14 +222,15 @@ def test_default_throttle_scope_applied_to_default(rf, settings):
 
     # Throttle scope doesn't apply on first request.
     request = rf.get("/api/default_throttle_scope/")
-    response = _DefaultThrottleScope.as_view()(request)
+    response = DefaultThrottleScope.as_view()(request)
     assert response.status_code == status.HTTP_200_OK
     # Throttle scope applies on second request.
-    response = _DefaultThrottleScope.as_view()(request)
+    response = DefaultThrottleScope.as_view()(request)
     assert response.status_code == status.HTTP_429_TOO_MANY_REQUESTS
 
 
 def test_custom_throttle_scope_not_applied_to_default(rf, settings):
+    """Ignore custom throttle scope from the settings."""
     settings.REST_FRAMEWORK = {
         "DEFAULT_THROTTLE_CLASSES": (
             "django_project.api.throttle._ThrottleCustomScope",
@@ -236,7 +238,7 @@ def test_custom_throttle_scope_not_applied_to_default(rf, settings):
     }
 
     @contrib.api_view
-    class _DefaultThrottleScope(Injector):
+    class DefaultThrottleScope(Injector):
         get = this.command.respond
         command = project_commands._UserOperations
         throttle_scope = "throttle_scope"
@@ -246,13 +248,14 @@ def test_custom_throttle_scope_not_applied_to_default(rf, settings):
 
     request = rf.get("/api/default_throttle_scope/")
     # Throttle will always pass for default scope as it is not in settings.
-    response = _DefaultThrottleScope.as_view()(request)
+    response = DefaultThrottleScope.as_view()(request)
     assert response.status_code == status.HTTP_200_OK
-    response = _DefaultThrottleScope.as_view()(request)
+    response = DefaultThrottleScope.as_view()(request)
     assert response.status_code == status.HTTP_200_OK
 
 
 def test_custom_throttle_scope_applied_to_custom(settings, rf):
+    """Apply custom throttle scope."""
     settings.REST_FRAMEWORK = {
         "DEFAULT_THROTTLE_CLASSES": (
             "django_project.api.throttle._ThrottleCustomScope",
@@ -260,7 +263,7 @@ def test_custom_throttle_scope_applied_to_custom(settings, rf):
     }
 
     @contrib.api_view
-    class _CustomThrottleScope(Injector):
+    class CustomThrottleScope(Injector):
         get = this.command.respond
         command = project_commands._UserOperations
         custom_throttle_scope = "custom_scope"
@@ -270,8 +273,8 @@ def test_custom_throttle_scope_applied_to_custom(settings, rf):
 
     # Throttle scope doesn't apply on first request.
     request = rf.get("/api/custom_throttle_scope/")
-    response = _CustomThrottleScope.as_view()(request)
+    response = CustomThrottleScope.as_view()(request)
     assert response.status_code == status.HTTP_200_OK
     # Throttle scope applies on second request.
-    response = _CustomThrottleScope.as_view()(request)
+    response = CustomThrottleScope.as_view()(request)
     assert response.status_code == status.HTTP_429_TOO_MANY_REQUESTS

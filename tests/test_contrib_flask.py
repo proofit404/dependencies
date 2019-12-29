@@ -11,6 +11,7 @@ http_methods_no_head = http_methods - {"head"}
 
 @pytest.fixture()
 def app():
+    """Create flask application."""
     from flask_project.app import _create_app
 
     app = _create_app()

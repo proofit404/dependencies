@@ -1,3 +1,4 @@
+"""Tests related to the circle detection in the injector definitions."""
 import pytest
 
 from dependencies import Injector
@@ -19,9 +20,11 @@ circle_defs = CodeCollector("foo")
 @circle_defs.parametrize
 def test_circle_dependencies(code, foo):
     """
-    Throw `DependencyError` if class needs a dependency named same as
-    class.  `Summator.foo` will fail with maximum recursion depth.  So
-    we need to raise exception before this attribute access.
+    Throw `DependencyError` if class needs a dependency named same as class.
+
+    `Summator.foo` will fail with maximum recursion depth.
+
+    So we need to raise exception before this attribute access.
     """
     with pytest.raises(DependencyError) as exc_info:
         code(foo())
@@ -289,10 +292,7 @@ long_circle_defs_baz = CodeCollector("baz")
 @long_circle_defs_bar.parametrize
 @long_circle_defs_baz.parametrize
 def test_complex_circle_dependencies_long_circle(code, foo, bar, baz):
-    """
-    Detect complex dependencies recursion with circles longer then two
-    constructors.
-    """
+    """Detect complex dependencies recursion with circles longer then two constructors."""
     with pytest.raises(DependencyError) as exc_info:
         code(foo(), bar(), baz())
     message = str(exc_info.value)
