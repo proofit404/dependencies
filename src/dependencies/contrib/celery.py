@@ -4,7 +4,7 @@ dependencies.contrib.celery
 
 This module implements injectable Celery task.
 
-:copyright: (c) 2016-2019 by dry-python team.
+:copyright: (c) 2016-2020 by dry-python team.
 :license: BSD, see LICENSE for more details.
 """
 from _dependencies.contrib.celery import shared_task
