@@ -3,13 +3,18 @@
   "author": "Artem Malyshev",
   "private": true,
   "devDependencies": {
+    "@commitlint/cli": "*",
+    "@commitlint/config-conventional": "*",
+    "@commitlint/prompt-cli": "*",
     "jscpd": "*",
     "remark-cli": "*",
     "remark-lint": "*",
     "remark-preset-lint-recommended": "*"
   },
   "scripts": {
+    "commit": "commit",
     "lint:cp": "jscpd src/",
+    "lint:git": "commitlint --from master",
     "lint:md": "remark --frail ."
   }
 }

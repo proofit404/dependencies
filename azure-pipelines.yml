@@ -118,6 +118,9 @@ jobs:
         jscpd:
           python.version: "3.8"
           tox.env: jscpd
+        commitlint:
+          python.version: "3.8"
+          tox.env: commitlint
     steps:
       - task: UsePythonVersion@0
         inputs:
@@ -130,6 +133,13 @@ jobs:
           versionSpec: "10.x"
         condition: in(variables['tox.env'], 'remarklint', 'jscpd')
         displayName: Install NodeJS.
+      - script: |
+          git remote set-branches origin master
+          git fetch --unshallow --quiet
+          git checkout master --quiet
+          git checkout - --quiet
+        condition: in(variables['tox.env'], 'commitlint')
+        displayName: Unshallow commit log.
       - script: tox -e $(tox.env)
         displayName: Run Tox.
       - script: |
