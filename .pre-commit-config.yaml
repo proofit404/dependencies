@@ -23,6 +23,10 @@ repos:
         # https://github.com/asottile/reorder_python_imports/issues/103
         files: \.pyi?$
         types: []
+  - repo: https://github.com/myint/docformatter
+    rev: ""
+    hooks:
+      - id: docformatter
   - repo: https://github.com/asottile/yesqa
     rev: ""
     hooks:
