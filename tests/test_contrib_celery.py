@@ -203,10 +203,8 @@ def test_docstrings():
     assert Container.__bases__[0].__doc__ == "Foo bar baz task."
     assert (
         Container.signature.__doc__
-        == """
-    Create Celery canvas signature with arguments collected from
-    `Injector` subclass.
-    """
+        == "Create Celery canvas signature with arguments collected from `Injector`\n"
+        "    subclass."
     )
     assert Container.s.__doc__ == "Create Celery canvas shortcut expression."
     assert Container.si.__doc__ == "Create immutable Celery canvas shortcut expression."
@@ -217,10 +215,8 @@ def test_docstrings():
 
 
 def test_validation(celery_app):
-    """
-    Task and shared task decorators must check required `Injector`
-    attributes.
-    """
+    """Task and shared task decorators must check required `Injector`
+    attributes."""
 
     with pytest.raises(DependencyError) as exc_info:
 
@@ -276,10 +272,8 @@ task_arguments = CodeCollector()
 
 @task_arguments.parametrize
 def test_task_arguments(celery_app, code):
-    """
-    Allow task decorator arguments customization through `Injector`
-    subclass attributes.
-    """
+    """Allow task decorator arguments customization through `Injector` subclass
+    attributes."""
 
     class Foo(object):
         def __call__(self, a, b):

@@ -7,8 +7,7 @@ from _dependencies.markers import injectable
 
 
 class Operation(object):
-    """
-    Create callable class appropriated for dependency injection.
+    """Create callable class appropriated for dependency injection.
 
     Used as function decorator.
     """

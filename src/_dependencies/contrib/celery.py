@@ -67,10 +67,8 @@ def decorate_with(func, injector):
 
 
 class Signature(object):
-    """
-    Create Celery canvas signature with arguments collected from
-    `Injector` subclass.
-    """
+    """Create Celery canvas signature with arguments collected from `Injector`
+    subclass."""
 
     def __init__(
         self,

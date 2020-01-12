@@ -29,9 +29,7 @@ def test_list_action():
 
 
 def test_retrieve_action():
-    """
-    Dispatch request to the `retrieve` action of the generic view set.
-    """
+    """Dispatch request to the `retrieve` action of the generic view set."""
 
     response = client.get("/api/generic_view_set/1/")
     assert response.status_code == status.HTTP_200_OK
@@ -61,10 +59,8 @@ def test_update_action():
 
 
 def test_partial_update_action():
-    """
-    Dispatch request to the `partial_update` action of the generic
-    view set.
-    """
+    """Dispatch request to the `partial_update` action of the generic view
+    set."""
 
     response = client.patch("/api/generic_view_set/1/", {"username": "jimworm"})
     assert response.status_code == status.HTTP_200_OK
@@ -72,9 +68,7 @@ def test_partial_update_action():
 
 
 def test_destroy_action():
-    """
-    Dispatch request to the `destroy` action of the generic view set.
-    """
+    """Dispatch request to the `destroy` action of the generic view set."""
 
     response = client.delete("/api/generic_view_set/1/")
     assert response.status_code == status.HTTP_204_NO_CONTENT

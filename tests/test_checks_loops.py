@@ -15,9 +15,7 @@ flat_injector = CodeCollector()
 
 @flat_injector.parametrize
 def test_circle_links(code):
-    """
-    We can detect link loops in the same container without hierarchy.
-    """
+    """We can detect link loops in the same container without hierarchy."""
 
     with pytest.raises(DependencyError) as exc_info:
         code()
@@ -34,7 +32,10 @@ def test_circle_links(code):
 
 @flat_injector
 def kSSnnkw6CNPx():
-    """Declarative injector.  Link to self."""
+    """Declarative injector.
+
+    Link to self.
+    """
 
     class Container(Injector):
         foo = this.foo
@@ -44,14 +45,20 @@ def kSSnnkw6CNPx():
 
 @flat_injector
 def n8NHZqiZN43Q():
-    """Let notation.  Link to self."""
+    """Let notation.
+
+    Link to self.
+    """
 
     Injector.let(foo=this.foo).foo
 
 
 @flat_injector
 def ai0hNOPGX2PI():
-    """Declarative injector.  Complex loop."""
+    """Declarative injector.
+
+    Complex loop.
+    """
 
     class Container(Injector):
         foo = this.bar
@@ -62,14 +69,20 @@ def ai0hNOPGX2PI():
 
 @flat_injector
 def ySnRrxW6M79T():
-    """Let notation.  Complex loop."""
+    """Let notation.
+
+    Complex loop.
+    """
 
     Injector.let(foo=this.bar, bar=this.foo).foo
 
 
 @flat_injector
 def yfTnHHhvBmrQ():
-    """Declarative injector.  Long loop."""
+    """Declarative injector.
+
+    Long loop.
+    """
 
     class Container(Injector):
         foo = this.bar
@@ -95,9 +108,7 @@ subcontainer = CodeCollector("sub")
 @one_level.parametrize
 @subcontainer.parametrize
 def test_circle_links_one_level(code, sub):
-    """
-    We can detect link loops in nested injectors one level deep.
-    """
+    """We can detect link loops in nested injectors one level deep."""
 
     with pytest.raises(DependencyError) as exc_info:
         code(sub())
@@ -166,10 +177,8 @@ complex_lowest_container = CodeCollector("lowest")
 @complex_middle_container.parametrize
 @complex_lowest_container.parametrize
 def test_circle_links_two_level_complex_loop(code, middle, lowest):
-    """
-    We can detect link loops in nested injectors two level deep
-    without intermediate links.
-    """
+    """We can detect link loops in nested injectors two level deep without
+    intermediate links."""
 
     with pytest.raises(DependencyError) as exc_info:
         code(middle(lowest()))
@@ -256,10 +265,8 @@ long_lowest_container = CodeCollector("lowest")
 @long_middle_container.parametrize
 @long_lowest_container.parametrize
 def test_circle_links_two_level_long_loop(code, middle, lowest):
-    """
-    We can detect link loops in nested injectors two level deep with
-    intermediate links.
-    """
+    """We can detect link loops in nested injectors two level deep with
+    intermediate links."""
 
     with pytest.raises(DependencyError) as exc_info:
         code(middle(lowest()))
@@ -350,10 +357,8 @@ subcontainer2 = CodeCollector("sub2")
 @subcontainer1.parametrize
 @subcontainer2.parametrize
 def test_cross_injector_loops(code, sub1, sub2):
-    """
-    We can detect loops between links in different `Injector`
-    subclasses in the hierarchy.
-    """
+    """We can detect loops between links in different `Injector` subclasses in
+    the hierarchy."""
 
     with pytest.raises(DependencyError) as exc_info:
         code(sub1(), sub2())
@@ -381,7 +386,10 @@ def vAyZepNGAUjY(sub1, sub2):
 
 @cross_injector_loops
 def bLRoCCj9uNOp(sub1, sub2):
-    """Let notation.  Cross injector links."""
+    """Let notation.
+
+    Cross injector links.
+    """
 
     Injector.let(SubContainer1=sub1, SubContainer2=sub2).SubContainer1.bar
 
@@ -480,10 +488,8 @@ def t41yMywZuPhA():
 
 
 def test_false_positive_loop_lookup_protection():
-    """
-    We should allow proxy to point to objects with the same name if it
-    does not create a circle link.
-    """
+    """We should allow proxy to point to objects with the same name if it does
+    not create a circle link."""
 
     class Container(Injector):
 

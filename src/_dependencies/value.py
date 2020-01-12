@@ -5,8 +5,7 @@ from _dependencies.markers import injectable
 
 
 class Value(object):
-    """
-    Evaluate given function during dependency injection.
+    """Evaluate given function during dependency injection.
 
     Returned value is used as value of the dependency.
 
