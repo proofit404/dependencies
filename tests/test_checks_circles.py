@@ -18,10 +18,10 @@ circle_defs = CodeCollector("foo")
 @circle_deps.parametrize
 @circle_defs.parametrize
 def test_circle_dependencies(code, foo):
-    """
-    Throw `DependencyError` if class needs a dependency named same as
-    class.  `Summator.foo` will fail with maximum recursion depth.  So
-    we need to raise exception before this attribute access.
+    """Throw `DependencyError` if class needs a dependency named same as class.
+
+    `Summator.foo` will fail with maximum recursion depth.  So we need
+    to raise exception before this attribute access.
     """
 
     with pytest.raises(DependencyError) as exc_info:
@@ -122,13 +122,12 @@ complex_circle_defs_bar = CodeCollector("bar")
 @complex_circle_defs_foo.parametrize
 @complex_circle_defs_bar.parametrize
 def test_complex_circle_dependencies(code, foo, bar):
-    """
-    Throw `DependencyError` in the case of complex dependency recursion.
+    """Throw `DependencyError` in the case of complex dependency recursion.
 
     One class define an argument in its constructor.  We have second
-    class in the container named for this dependency.  This class
-    define an argument in its constructor named like first class in
-    the container.  We have mutual recursion in this case.
+    class in the container named for this dependency.  This class define
+    an argument in its constructor named like first class in the
+    container.  We have mutual recursion in this case.
     """
 
     with pytest.raises(DependencyError) as exc_info:
@@ -317,10 +316,8 @@ long_circle_defs_baz = CodeCollector("baz")
 @long_circle_defs_bar.parametrize
 @long_circle_defs_baz.parametrize
 def test_complex_circle_dependencies_long_circle(code, foo, bar, baz):
-    """
-    Detect complex dependencies recursion with circles longer then two
-    constructors.
-    """
+    """Detect complex dependencies recursion with circles longer then two
+    constructors."""
 
     with pytest.raises(DependencyError) as exc_info:
         code(foo(), bar(), baz())

@@ -81,7 +81,7 @@ deny_kwargs = CodeCollector()
 
 @deny_kwargs.parametrize
 def test_protect_against_args_kwargs(code):
-    """Deny value definition with varied arguments and keywords. """
+    """Deny value definition with varied arguments and keywords."""
 
     @value
     def func1(*args):
@@ -133,8 +133,7 @@ def test_docstrings():
     """Access `value` documentation string."""
 
     assert (
-        value.__doc__ == "\n"
-        "    Evaluate given function during dependency injection.\n"
+        value.__doc__ == "Evaluate given function during dependency injection.\n"
         "\n"
         "    Returned value is used as value of the dependency.\n"
         "\n"

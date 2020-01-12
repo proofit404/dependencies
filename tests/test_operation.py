@@ -70,9 +70,9 @@ def qZcxoLXYnvke(arg):
 
 
 def test_protect_against_classes():
-    """
-    Deny to decorate classes with operation.  Classes are injectable
-    itself.
+    """Deny to decorate classes with operation.
+
+    Classes are injectable itself.
     """
 
     with pytest.raises(DependencyError) as exc_info:
@@ -89,7 +89,7 @@ deny_kwargs = CodeCollector()
 
 @deny_kwargs.parametrize
 def test_protect_against_args_kwargs(code):
-    """Deny operation definition with varied arguments and keywords. """
+    """Deny operation definition with varied arguments and keywords."""
 
     @operation
     def func1(*args):
@@ -141,8 +141,8 @@ def test_docstrings():
     """Access `operation` documentation string."""
 
     assert (
-        operation.__doc__ == "\n"
-        "    Create callable class appropriated for dependency injection.\n"
+        operation.__doc__
+        == "Create callable class appropriated for dependency injection.\n"
         "\n"
         "    Used as function decorator.\n"
         "    "

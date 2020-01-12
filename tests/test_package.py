@@ -22,10 +22,8 @@ def test_provide_module(code):
 
 @package_definitions.parametrize
 def test_provide_an_instance(code):
-    """
-    Package instance attribute access should provide injectable spec
-    when refer to a class.
-    """
+    """Package instance attribute access should provide injectable spec when
+    refer to a class."""
 
     Container = code()
 
@@ -37,9 +35,7 @@ def test_provide_an_instance(code):
 
 @package_definitions.parametrize
 def test_provide_instance_method(code):
-    """
-    Package instance attribute access should provide instance method.
-    """
+    """Package instance attribute access should provide instance method."""
 
     Container = code()
 
@@ -49,9 +45,7 @@ def test_provide_instance_method(code):
 
 @package_definitions.parametrize
 def test_provide_a_function(code):
-    """
-    Package instance attribute access should provide regular function.
-    """
+    """Package instance attribute access should provide regular function."""
 
     Container = code()
 
@@ -61,9 +55,7 @@ def test_provide_a_function(code):
 
 @package_definitions.parametrize
 def test_provide_a_variable(code):
-    """
-    Package instance attribute access should provide regular variable.
-    """
+    """Package instance attribute access should provide regular variable."""
 
     Container = code()
 
@@ -74,10 +66,8 @@ def test_provide_a_variable(code):
 @pytest.mark.xfail
 @package_definitions.parametrize
 def test_provide_a_class(code):
-    """
-    Package instance attribute should provide a class when it stored
-    in the attribute with `_class` in its name.
-    """
+    """Package instance attribute should provide a class when it stored in the
+    attribute with `_class` in its name."""
 
     Container = code()
 
@@ -133,10 +123,8 @@ injector_pointer = CodeCollector()
 @pytest.mark.xfail
 @injector_pointer.parametrize
 def test_point_to_injector(code):
-    """
-    Package pointer should be able to point to `Injector` subclass
-    attribute defined in another module.
-    """
+    """Package pointer should be able to point to `Injector` subclass attribute
+    defined in another module."""
 
     Container = code()
 
@@ -179,10 +167,10 @@ self_pointer = CodeCollector()
 
 @self_pointer.parametrize
 def test_package_provides_lazy_loading(code):
-    """
-    We can point `Package` to the same module.  If `Injector` subclass
-    tries to point to another `Injector` subclass defined *below* in
-    the same module, we should handle it as usual.
+    """We can point `Package` to the same module.
+
+    If `Injector` subclass tries to point to another `Injector` subclass
+    defined *below* in the same module, we should handle it as usual.
     """
 
     Container = code()

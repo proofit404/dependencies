@@ -147,9 +147,9 @@ def mVVyoyBmvQwc():
 
 
 def test_one_subcontainer_multiple_parents():
-    """
-    Same sub container can be used in many parent containers.  This
-    usage should not overlap those containers.
+    """Same sub container can be used in many parent containers.
+
+    This usage should not overlap those containers.
     """
 
     class SubContainer(Injector):

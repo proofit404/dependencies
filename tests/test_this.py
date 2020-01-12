@@ -10,10 +10,8 @@ from helpers import CodeCollector
 
 
 def test_attribute_getter():
-    """
-    We can describe attribute access in the `Injector` in declarative
-    manner.
-    """
+    """We can describe attribute access in the `Injector` in declarative
+    manner."""
 
     class Foo(object):
         def __init__(self, one, two):
@@ -37,10 +35,7 @@ def test_attribute_getter():
 
 
 def test_attribute_getter_few_attributes():
-    """
-    We resolve attribute access until we find all specified
-    attributes.
-    """
+    """We resolve attribute access until we find all specified attributes."""
 
     class Foo(object):
         def __init__(self, one):
@@ -64,10 +59,8 @@ item_access = CodeCollector()
 
 @item_access.parametrize
 def test_item_getter(code):
-    """
-    We can describe item access in the `Injector` in the
-    declarative manner.
-    """
+    """We can describe item access in the `Injector` in the declarative
+    manner."""
 
     result = code()
     assert result == 1
@@ -170,10 +163,8 @@ def dc4fedcd09d8():
 
 
 def test_item_getter_non_printable_key():
-    """
-    We can describe item access for keys which can't be presented as
-    normal strings.
-    """
+    """We can describe item access for keys which can't be presented as normal
+    strings."""
 
     class Boom(object):
         def __init__(self, salt):
@@ -195,10 +186,8 @@ def test_item_getter_non_printable_key():
 
 
 def test_attribute_access_after_item_getter():
-    """
-    Check we can use attribute access notation after item getter
-    notation.
-    """
+    """Check we can use attribute access notation after item getter
+    notation."""
 
     class Foo(object):
         x = 1
@@ -230,10 +219,8 @@ direct_proxy = CodeCollector()
 
 @direct_proxy.parametrize
 def test_deny_this_without_attribute_access(code):
-    """
-    `Thisable` instances can't be injected without pointing to any
-    other attribute.
-    """
+    """`Thisable` instances can't be injected without pointing to any other
+    attribute."""
 
     with pytest.raises(DependencyError) as exc_info:
         code()
@@ -313,10 +300,8 @@ too_many = CodeCollector()
 
 @too_many.parametrize
 def test_require_more_parents_that_injector_actually_has(code):
-    """
-    If we shift more that container levels available, we should
-    provide meaningful message to user.
-    """
+    """If we shift more that container levels available, we should provide
+    meaningful message to user."""
 
     with pytest.raises(DependencyError) as exc_info:
         code()
@@ -368,10 +353,8 @@ attribute_error = CodeCollector()
 
 @attribute_error.parametrize
 def test_attribute_error_on_parent_access(code):
-    """
-    We should raise `AttributeError` if we have correct number of
-    parents but specify wrong attribute name.
-    """
+    """We should raise `AttributeError` if we have correct number of parents
+    but specify wrong attribute name."""
 
     with pytest.raises(DependencyError) as exc_info:
         code()

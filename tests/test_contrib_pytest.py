@@ -48,19 +48,15 @@ def fixture_name_3():
 
 
 def test_register_fixture(fixture_name):
-    """
-    Register and require Py.test fixtures with `Injector` subclasses.
-    """
+    """Register and require Py.test fixtures with `Injector` subclasses."""
 
     assert isinstance(fixture_name, Foo)
     assert fixture_name.do() == 6
 
 
 def test_docstrings():
-    """
-    `register` decorator and `require` marker should have proper
-    documentation strings.
-    """
+    """`register` decorator and `require` marker should have proper
+    documentation strings."""
 
     assert (
         register.__doc__
@@ -77,10 +73,8 @@ def test_register_return_value():
 
 
 def test_validation():
-    """
-    `register` decorator should check required `Injector` subclass
-    attribute.
-    """
+    """`register` decorator should check required `Injector` subclass
+    attribute."""
 
     with pytest.raises(DependencyError) as exc_info:
 
@@ -102,10 +96,8 @@ def test_validation():
 
 
 def test_fixture_arguments():
-    """
-    Allow `register` decorator arguments customization through
-    `Injector` subclass attributes.
-    """
+    """Allow `register` decorator arguments customization through `Injector`
+    subclass attributes."""
 
     @register
     class Container(Injector):
