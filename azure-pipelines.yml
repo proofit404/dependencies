@@ -150,3 +150,41 @@ jobs:
         env:
           CODECOV_TOKEN: 0753e837-0ff8-4eac-b301-d9f39fdfee50
         displayName: Report Coverage.
+  - job: "Deploy"
+    dependsOn:
+      - "Test"
+    condition: |
+      and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    steps:
+      - task: UsePythonVersion@0
+        inputs:
+          versionSpec: "3.8"
+        displayName: Install Python.
+      - script: |
+          curl -sSL "https://raw.githubusercontent.com\
+          /python-poetry/poetry/master/get-poetry.py" | python
+          echo '##vso[task.prependpath]$(HOME)/.poetry/bin'
+        displayName: Install Poetry.
+      - task: NodeTool@0
+        inputs:
+          versionSpec: "10.x"
+        displayName: Install NodeJS.
+      - script: |
+          npm install
+        displayName: Install JS dependencies.
+      - script: |
+          git remote set-branches origin master
+          git fetch --unshallow --quiet
+          git checkout master --quiet
+          git checkout - --quiet
+        displayName: Unshallow commit log.
+      - script: |
+          npx semantic-release
+        env:
+          GIT_AUTHOR_NAME: $(GIT_AUTHOR_NAME)
+          GIT_AUTHOR_EMAIL: $(GIT_AUTHOR_EMAIL)
+          GIT_COMMITTER_NAME: $(GIT_COMMITTER_NAME)
+          GIT_COMMITTER_EMAIL: $(GIT_COMMITTER_EMAIL)
+          POETRY_PYPI_TOKEN_PYPI: $(POETRY_PYPI_TOKEN_PYPI)
+          GITHUB_TOKEN: $(GITHUB_TOKEN)
+        displayName: Release package.

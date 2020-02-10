@@ -6,10 +6,14 @@
     "@commitlint/cli": "*",
     "@commitlint/config-conventional": "*",
     "@commitlint/prompt-cli": "*",
+    "@semantic-release/changelog": "*",
+    "@semantic-release/exec": "*",
+    "@semantic-release/git": "*",
     "jscpd": "*",
     "remark-cli": "*",
     "remark-lint": "*",
-    "remark-preset-lint-recommended": "*"
+    "remark-preset-lint-recommended": "*",
+    "semantic-release": "*"
   },
   "scripts": {
     "commit": "commit",
