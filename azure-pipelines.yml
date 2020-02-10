@@ -135,7 +135,7 @@ jobs:
         displayName: Install NodeJS.
       - script: |
           git remote set-branches origin master
-          git fetch --unshallow --quiet
+          git fetch --quiet
           git checkout master --quiet
           git checkout - --quiet
         condition: in(variables['tox.env'], 'commitlint')
@@ -174,9 +174,8 @@ jobs:
         displayName: Install JS dependencies.
       - script: |
           git remote set-branches origin master
-          git fetch --unshallow --quiet
+          git fetch --quiet
           git checkout master --quiet
-          git checkout - --quiet
         displayName: Unshallow commit log.
       - script: |
           npx semantic-release
