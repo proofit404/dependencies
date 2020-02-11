@@ -5,6 +5,7 @@
 [![docs](https://readthedocs.org/projects/dependencies/badge/?version=latest)](http://dependencies.readthedocs.io/en/latest/?badge=latest)
 [![gitter](https://badges.gitter.im/dry-python/dependencies.svg)](https://gitter.im/dry-python/dependencies)
 [![pypi](https://img.shields.io/pypi/v/dependencies.svg)](https://pypi.python.org/pypi/dependencies/)
+[![conda-forge](https://img.shields.io/conda/vn/conda-forge/dependencies.svg)](https://anaconda.org/conda-forge/dependencies)
 [![black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
 
 ---
