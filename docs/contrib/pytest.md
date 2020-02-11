@@ -1,6 +1,6 @@
-# Py.Test contrib
+# pytest contrib
 
-[Py.test](https://docs.pytest.org/) is a state of art testing framework
+[pytest](https://docs.pytest.org/) is a state of art testing framework
 for Python.
 
 If you business objects have to do with a lot of third-party services,
