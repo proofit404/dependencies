@@ -1,3 +1,9 @@
+# 1.0.0 (2020-02-11)
+
+### Bug Fixes
+
+- prevent generated changelog from style guide violation ([d3a472f](https://github.com/dry-python/dependencies/commit/d3a472f1779f443be0d9f3321c8451241ee723ff))
+
 # Changelog
 
 Versions follow [0ver](https://0ver.org/) without a strict backward

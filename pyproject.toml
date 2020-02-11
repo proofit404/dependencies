@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "dependencies"
-version = "0.16.dev"
+version = "1.0.0"
 
 description = "Dependency Injection for Humans"
 readme = "README.md"
