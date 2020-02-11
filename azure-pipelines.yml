@@ -160,6 +160,8 @@ jobs:
         inputs:
           versionSpec: "3.8"
         displayName: Install Python.
+      - script: pip install --upgrade tox
+        displayName: Install Tox.
       - script: |
           curl -sSL "https://raw.githubusercontent.com\
           /python-poetry/poetry/master/get-poetry.py" | python
