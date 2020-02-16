@@ -97,7 +97,7 @@ def test_dispatch_request_generic_view_list(db, basename):
     )
 
     response = client.get(
-        "/api/%s/?username=johndoe&limit=1" % (basename,), format="json"
+        "/api/{}/?username=johndoe&limit=1".format(basename), format="json"
     )
     assert response.status_code == status.HTTP_200_OK
     assert response.json() == {
@@ -120,7 +120,7 @@ def test_dispatch_request_model_view_set(db, basename):
     )
 
     response = client.post(
-        "/api/%s/" % (basename,),
+        "/api/{}/".format(basename),
         {"username": "johndoe", "first_name": "John", "last_name": "Doe"},
     )
     assert response.status_code == status.HTTP_201_CREATED
@@ -134,13 +134,13 @@ def test_dispatch_request_model_view_set(db, basename):
         action_flag=admin_models.ADDITION
     ).exists()
 
-    response = client.get("/api/%s/" % (basename,))
+    response = client.get("/api/{}/".format(basename))
     assert response.status_code == status.HTTP_200_OK
     assert response.json() == [
         {"id": 2, "username": "johndoe", "first_name": "John", "last_name": "Doe"}
     ]
 
-    response = client.get("/api/%s/2/" % (basename,))
+    response = client.get("/api/{}/2/".format(basename))
     assert response.status_code == status.HTTP_200_OK
     assert response.json() == {
         "id": 2,
@@ -150,7 +150,7 @@ def test_dispatch_request_model_view_set(db, basename):
     }
 
     response = client.put(
-        "/api/%s/2/" % (basename,), {"username": "johndoe", "first_name": "Jim"}
+        "/api/{}/2/".format(basename), {"username": "johndoe", "first_name": "Jim"}
     )
     assert response.status_code == status.HTTP_200_OK
     assert response.json() == {
@@ -163,7 +163,7 @@ def test_dispatch_request_model_view_set(db, basename):
         action_flag=admin_models.CHANGE
     ).exists()
 
-    response = client.patch("/api/%s/2/" % (basename,), {"last_name": "Worm"})
+    response = client.patch("/api/{}/2/".format(basename), {"last_name": "Worm"})
     assert response.status_code == status.HTTP_200_OK
     assert response.json() == {
         "id": 2,
@@ -176,7 +176,7 @@ def test_dispatch_request_model_view_set(db, basename):
         == 2
     )
 
-    response = client.delete("/api/%s/2/" % (basename,))
+    response = client.delete("/api/{}/2/".format(basename))
     assert response.status_code == status.HTTP_204_NO_CONTENT
     assert admin_models.LogEntry.objects.filter(
         action_flag=admin_models.DELETION
