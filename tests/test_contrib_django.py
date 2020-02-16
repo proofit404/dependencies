@@ -68,7 +68,7 @@ def test_inject_self(client, method):
 def test_template_view(client, url):
     """Retrieve template view created from injector."""
 
-    response = client.get("/%s/1/" % (url,))
+    response = client.get("/{}/1/".format(url))
     assert response.status_code == 200
     if django.VERSION >= (2, 0):
         assert response.content == b"extra-var\n"
