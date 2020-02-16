@@ -4,11 +4,6 @@
 
 - prevent generated changelog from style guide violation ([d3a472f](https://github.com/dry-python/dependencies/commit/d3a472f1779f443be0d9f3321c8451241ee723ff))
 
-# Changelog
-
-Versions follow [0ver](https://0ver.org/) without a strict backward
-compatibility policy. We still try to figure some things out.
-
 ## 0.15 (2018-07-21)
 
 - Support `in` checks in the `Injector` subclasses.
