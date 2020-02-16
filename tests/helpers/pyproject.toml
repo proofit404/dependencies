@@ -12,9 +12,6 @@ packages = [
     { include = "pkg" },
 ]
 
-[tool.poetry.scripts]
-mddoctest = "mddoctest:main"
-
 [build-system]
 requires = ["poetry"]
 build-backend = "poetry.masonry.api"

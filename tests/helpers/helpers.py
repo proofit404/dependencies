@@ -30,6 +30,7 @@ class CodeCollector(object):
 
 
 def tox_info(var):
+    """Get variable value from all sections in the tox.ini file."""
     ini_parser = configparser.ConfigParser()
     ini_parser.read("tox.ini")
     for section in ini_parser:

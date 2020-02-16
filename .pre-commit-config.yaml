@@ -12,12 +12,11 @@ repos:
     rev: ""
     hooks:
       - id: pyupgrade
-        args: [--keep-percent-format]
   - repo: https://github.com/asottile/reorder_python_imports
     rev: ""
     hooks:
       - id: reorder-python-imports
-        args: [--application-directories=.:src:tests/helpers]
+        args: ["--application-directories=.:src:tests/helpers"]
         exclude: migrations
         # override until resolved:
         # https://github.com/asottile/reorder_python_imports/issues/103
