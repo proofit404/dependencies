@@ -63,10 +63,7 @@ def test_envlist_contains_all_tox_environments():
     It's not allowed to have tox environments defined without having
     them in the envlist.
     """
-    tox_environments = {
-        e.split("-")[0]
-        for e in subprocess.check_output(["tox", "-l"]).decode().splitlines()
-    }
+    tox_environments = set(subprocess.check_output(["tox", "-l"]).decode().splitlines())
 
     ini_parser = configparser.ConfigParser()
     ini_parser.read("tox.ini")
