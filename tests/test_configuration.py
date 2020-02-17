@@ -285,6 +285,42 @@ def test_build_requires_are_ordered():
         assert requires == sorted(requires)
 
 
+def test_flake8_exclude_patterns_are_ordered():
+    """Flake8 exclude directory patterns should be in order."""
+    ini_parser = configparser.ConfigParser()
+    ini_parser.read(".flake8")
+    exclude = [l.strip() for l in ini_parser["flake8"]["exclude"].strip().splitlines()]
+    assert exclude == sorted(exclude)
+
+
+def test_flake8_per_file_ignores_are_ordered():
+    """Flake8 per file ignores should be in order."""
+    ini_parser = configparser.ConfigParser()
+    ini_parser.read(".flake8")
+    per_file_ignores = [
+        l.strip()
+        for l in ini_parser["flake8"]["per-file-ignores"].strip().splitlines()
+        if not l.startswith("#")
+    ]
+    assert per_file_ignores == sorted(per_file_ignores)
+
+
+@pytest.mark.xfail
+def test_flake8_ignored_errors_are_ordered():  # pragma: no cover
+    """Flake8 ignored error codes should be in order."""
+    ini_parser = configparser.ConfigParser()
+    ini_parser.read(".flake8")
+    ignore = ini_parser["flake8"]["ignore"].strip().split(", ")
+    assert ignore == sorted(ignore)
+
+
+def test_yamllint_ignored_patterns_are_ordered():
+    """Yamllint ignored directory patterns should be in order."""
+    yamllint = yaml.safe_load(open(".yamllint").read())
+    ignore = [l.strip() for l in yamllint["ignore"].strip().splitlines()]
+    assert ignore == sorted(ignore)
+
+
 def test_pre_commit_hooks_avoid_additional_dependencies():
     """Additional dependencies of the pre-commit should not be used.
 
