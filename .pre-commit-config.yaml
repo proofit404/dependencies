@@ -3,11 +3,34 @@ repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: ""
     hooks:
-      - id: trailing-whitespace
+      - id: no-commit-to-branch
+      - id: forbid-new-submodules
+      - id: check-added-large-files
+      - id: check-byte-order-marker
+      - id: check-executables-have-shebangs
+      - id: check-merge-conflict
+      - id: check-symlinks
       - id: end-of-file-fixer
-      - id: debug-statements
+      - id: mixed-line-ending
+      - id: trailing-whitespace
       - id: file-contents-sorter
         files: ^(.gitignore|.python-version)$
+      - id: debug-statements
+      - id: fix-encoding-pragma
+      - id: check-builtin-literals
+        args:
+          - --no-allow-dict-kwargs
+      - id: check-json
+      - id: check-toml
+      - id: check-yaml
+  - repo: https://github.com/pre-commit/pygrep-hooks
+    rev: ""
+    hooks:
+      - id: python-check-blanket-noqa
+      - id: python-check-mock-methods
+      - id: python-no-eval
+      - id: python-no-log-warn
+      - id: text-unicode-replacement-char
   - repo: https://github.com/asottile/pyupgrade
     rev: ""
     hooks:
@@ -16,7 +39,8 @@ repos:
     rev: ""
     hooks:
       - id: reorder-python-imports
-        args: ["--application-directories=.:src:tests/helpers"]
+        args:
+          - --application-directories=.:src:tests/helpers
         exclude: migrations
         # override until resolved:
         # https://github.com/asottile/reorder_python_imports/issues/103
