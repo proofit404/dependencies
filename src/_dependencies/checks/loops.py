@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from _dependencies.exceptions import DependencyError
 from _dependencies.markers import injectable
 from _dependencies.markers import nested_injector

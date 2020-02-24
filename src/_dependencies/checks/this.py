@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # FIXME:
 #
 # [ ] Do we protect against `this['foo']` expression?

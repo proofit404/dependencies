@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from rest_framework.throttling import BaseThrottle
 from rest_framework.throttling import ScopedRateThrottle
 

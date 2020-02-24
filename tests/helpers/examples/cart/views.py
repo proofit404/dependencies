@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from dependencies import Injector
 from dependencies.contrib.django import view
 from dependencies.contrib.rest_framework import api_view

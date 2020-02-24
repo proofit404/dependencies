@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 dependencies.contrib.rest_framework
 -----------------------------------

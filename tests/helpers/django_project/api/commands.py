@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.contrib.admin.models import ADDITION
 from django.contrib.admin.models import CHANGE
 from django.contrib.admin.models import DELETION

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from _dependencies.markers import injectable
 
 

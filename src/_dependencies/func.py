@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import inspect
 
 from _dependencies.checks.func import check_cls_arguments

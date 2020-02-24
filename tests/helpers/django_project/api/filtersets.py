@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.contrib.auth.models import User
 from django_filters import VERSION
 from django_filters.rest_framework import FilterSet

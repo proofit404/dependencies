@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 class Replace(Exception):
     def __init__(self, dependency, attrs):
         self.dependency = dependency

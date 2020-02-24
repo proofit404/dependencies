@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from rest_framework.versioning import BaseVersioning
 
 from django_project.api.exceptions import VersionError
