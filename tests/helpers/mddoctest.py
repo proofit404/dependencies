@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import sys
 from doctest import testfile
 from glob import glob

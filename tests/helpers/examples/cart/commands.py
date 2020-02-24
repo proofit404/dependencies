@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 class ShowCart:
     def __init__(self, price_calc):
         pass

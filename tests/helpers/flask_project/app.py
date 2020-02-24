@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from flask import Flask
 
 from flask_project.views import DispatchView

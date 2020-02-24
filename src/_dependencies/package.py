@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import importlib
 
 from _dependencies.attributes import Replace

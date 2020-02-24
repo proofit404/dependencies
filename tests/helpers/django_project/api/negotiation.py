@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from rest_framework.negotiation import BaseContentNegotiation
 
 from django_project.api.exceptions import NegotiationError

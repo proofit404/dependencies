@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from dependencies import Injector
 from dependencies import this
 from dependencies.contrib.celery import shared_task

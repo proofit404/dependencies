@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from rest_framework.metadata import BaseMetadata
 
 from django_project.api.exceptions import MetadataError

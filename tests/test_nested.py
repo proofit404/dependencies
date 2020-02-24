@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from dependencies import Injector
 from dependencies import Package
 from dependencies import this

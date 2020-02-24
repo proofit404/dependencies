@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from _dependencies.func import make_func_spec
 from _dependencies.markers import injectable
 

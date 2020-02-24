@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 class DispatchRequest(object):
     def __init__(self, request, args, kwargs):
 

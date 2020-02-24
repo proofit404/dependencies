@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import weakref
 
 from _dependencies.markers import injectable

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import functools
 
 from _dependencies.checks.operation import check_class

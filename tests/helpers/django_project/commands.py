@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.contrib.auth.models import AnonymousUser
 from django.forms import Form
 from django.http import HttpResponse

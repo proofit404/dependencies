@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from _dependencies import markers
 from _dependencies.checks.this import check_expression
 from _dependencies.exceptions import DependencyError

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from _dependencies.checks.value import check_class
 from _dependencies.checks.value import check_method
 from _dependencies.func import make_func_spec
