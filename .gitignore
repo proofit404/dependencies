@@ -8,3 +8,4 @@ htmlcov/
 node_modules/
 package-lock.json
 site/
+test-output.xml

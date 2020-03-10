@@ -241,10 +241,10 @@ def test_tox_deps_are_ordered():
         ordered = [
             deps[l[1]]
             for l in sorted(
-                [
+                (
                     [list(map(lambda x: x.strip().lower(), reversed(d.split(":")))), i]
                     for i, d in enumerate(deps)
-                ],
+                ),
                 key=lambda key: key[0],
             )
         ]
