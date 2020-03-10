@@ -40,7 +40,7 @@ repos:
     hooks:
       - id: reorder-python-imports
         args:
-          - --application-directories=.:src:tests/helpers
+          - "--application-directories=.:src:tests/helpers"
         exclude: migrations
         # override until resolved:
         # https://github.com/asottile/reorder_python_imports/issues/103
