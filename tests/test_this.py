@@ -263,7 +263,7 @@ def bd05271fb831():
 def test_this_deny_non_integers():
     """We can't shift `this` with non number argument."""
 
-    with pytest.raises(ValueError) as exc_info:
+    with pytest.raises(ValueError, match=".*") as exc_info:
         this << "boom"
 
     assert str(exc_info.value) == "Positive integer argument is required"
@@ -276,7 +276,7 @@ negative_integers = CodeCollector()
 def test_this_deny_negative_integers(code):
     """We can't shift `this` with negative integer."""
 
-    with pytest.raises(ValueError) as exc_info:
+    with pytest.raises(ValueError, match=".*") as exc_info:
         code()
 
     assert str(exc_info.value) == "Positive integer argument is required"

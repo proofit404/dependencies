@@ -27,7 +27,7 @@ class This(object):
             return This(((".", "__parent__"),) * num)
 
 
-this = This(tuple())
+this = This(())
 
 
 def make_this_spec(dependency):
