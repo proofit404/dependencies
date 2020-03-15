@@ -97,9 +97,6 @@ jobs:
         bandit:
           python.version: "3.8"
           tox.env: bandit
-        mypy:
-          python.version: "3.8"
-          tox.env: mypy
         importlint:
           python.version: "3.8"
           tox.env: importlint
