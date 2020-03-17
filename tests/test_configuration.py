@@ -216,6 +216,26 @@ def test_tox_generative_environments_equal_azure_task_python_version():
         assert k == v
 
 
+def test_azure_nodejs_installed_for_necessary_tox_environments():
+    """Azure pipelines should have nodejs installed.
+
+    This is a hard requirement for all tox environmets running npm and
+    npx commands.
+    """
+    azure_pipelines = yaml.safe_load(open("azure-pipelines.yml").read())
+    nodejs = [
+        step
+        for step in azure_pipelines["jobs"][0]["steps"]
+        if step.get("task") == "NodeTool@0"
+    ][0]
+    tox_environments = ", ".join(
+        "'" + re.sub(r"^testenv:", "", env) + "'"
+        for env, commands in helpers.tox_info("commands")
+        if "npm install" in commands
+    )
+    assert tox_environments in nodejs["condition"]
+
+
 # Definition order.
 
 
