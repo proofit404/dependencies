@@ -37,11 +37,6 @@ packages = [
 
 [tool.poetry.dependencies]
 python = "~2.7 || ^3.5"
-mkdocs = { version = "*", optional = true }
-mkdocs-material = { version = "*", optional = true }
-
-[tool.poetry.extras]
-mkdocs = ["mkdocs", "mkdocs-material"]
 
 [build-system]
 requires = ["poetry"]
