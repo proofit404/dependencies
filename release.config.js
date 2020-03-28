@@ -7,28 +7,28 @@ module.exports = {
     [
       "@semantic-release/changelog",
       {
-        changelogFile: "docs/changelog.md"
-      }
+        changelogFile: "docs/changelog.md",
+      },
     ],
     [
       "@semantic-release/exec",
       {
         prepareCmd:
           "tox -e precommit -- --files docs/changelog.md ; poetry version ${nextRelease.version} && poetry build",
-        publishCmd: "poetry publish"
-      }
+        publishCmd: "poetry publish",
+      },
     ],
     [
       "@semantic-release/git",
       {
-        assets: ["docs/changelog.md", "pyproject.toml"]
-      }
+        assets: ["docs/changelog.md", "pyproject.toml"],
+      },
     ],
     [
       "@semantic-release/github",
       {
-        assets: [{ path: "dist/*.whl" }, { path: "dist/*.tar.gz" }]
-      }
-    ]
-  ]
+        assets: [{ path: "dist/*.whl" }, { path: "dist/*.tar.gz" }],
+      },
+    ],
+  ],
 };
