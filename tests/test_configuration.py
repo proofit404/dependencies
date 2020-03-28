@@ -236,6 +236,24 @@ def test_azure_nodejs_installed_for_necessary_tox_environments():
     assert tox_environments in nodejs["condition"]
 
 
+# Read the docs.
+
+
+def test_readthedocs_deps_equal_tox_mkdocs_env():
+    """Dependencies in readthedocs should match with tox environment."""
+    ini_parser = configparser.ConfigParser()
+    ini_parser.read("tox.ini")
+    tox_deps = [
+        d.strip() for d in ini_parser["testenv:mkdocs"]["deps"].strip().splitlines()
+    ]
+
+    readthedocs_deps = [
+        d.strip() for d in open(".readthedocs.txt").read().strip().splitlines()
+    ]
+
+    assert tox_deps == readthedocs_deps
+
+
 # Definition order.
 
 
@@ -275,15 +293,6 @@ def test_nodejs_deps_are_ordered():
     package_json = json.load(open("package.json"))
     deps = list(package_json["devDependencies"].keys())
     assert deps == sorted(deps)
-
-
-def test_poetry_deps_are_ordered():
-    """Dependencies of pyproject.toml files should be in order."""
-    for pyproject_toml in ["pyproject.toml", "tests/helpers/pyproject.toml"]:
-        pyproject_toml = tomlkit.loads(open(pyproject_toml).read())
-        deps = list(pyproject_toml["tool"]["poetry"].get("dependencies", {}))
-        if deps:
-            assert deps == ["python"] + sorted(deps[1:])
 
 
 def test_packages_are_ordered():
@@ -341,6 +350,18 @@ def test_yamllint_ignored_patterns_are_ordered():
     assert ignore == sorted(ignore)
 
 
+# Additional dependencies.
+
+
+def test_poetry_avoid_additional_dependencies():
+    """Python package should not have any of additional dependencies."""
+    for pyproject_toml in ["pyproject.toml", "tests/helpers/pyproject.toml"]:
+        pyproject_toml = tomlkit.loads(open(pyproject_toml).read())
+        deps = list(pyproject_toml["tool"]["poetry"].get("dependencies", {}))
+        if deps:
+            assert deps == ["python"]
+
+
 def test_pre_commit_hooks_avoid_additional_dependencies():
     """Additional dependencies of the pre-commit should not be used.
 
@@ -380,18 +401,6 @@ def test_nodejs_deps_not_pinned():
     package_json = json.load(open("package.json"))
     versions = list(package_json["devDependencies"].values())
     assert all(v == "*" for v in versions)
-
-
-def test_poetry_deps_not_pinned():
-    """Dependencies of pyproject.toml files should not have versions."""
-    for pyproject_toml in ["pyproject.toml", "tests/helpers/pyproject.toml"]:
-        pyproject_toml = tomlkit.loads(open(pyproject_toml).read())
-        versions = [
-            d.get("version")
-            for d in pyproject_toml["tool"]["poetry"].get("dependencies", {}).values()
-            if isinstance(d, dict)
-        ]
-        assert all(v == "*" for v in versions)
 
 
 def test_build_requires_not_pinned():
