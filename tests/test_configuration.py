@@ -248,7 +248,8 @@ def test_readthedocs_deps_equal_tox_mkdocs_env():
     ]
 
     readthedocs_deps = [
-        d.strip() for d in open(".readthedocs.txt").read().strip().splitlines()
+        d.strip().split(">")[0]
+        for d in open(".readthedocs.txt").read().strip().splitlines()
     ]
 
     assert tox_deps == readthedocs_deps
