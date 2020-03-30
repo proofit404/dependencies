@@ -15,6 +15,7 @@
 - [Source Code](https://github.com/dry-python/dependencies)
 - [Issue Tracker](https://github.com/dry-python/dependencies/issues)
 - [Documentation](https://dependencies.readthedocs.io/en/latest/)
+- [Newsletter](https://twitter.com/dry_py)
 - [Discussion](https://gitter.im/dry-python/dependencies)
 
 ## Installation
