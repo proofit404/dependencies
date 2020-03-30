@@ -66,3 +66,7 @@ Dependency injection with `dependencies`
 ## License
 
 Dependencies library is offered under the two clause BSD license.
+
+<p align="center">&mdash; ⭐️ &mdash;</p>
+<p align="center"><i>Drylabs maintains dry-python and helps those who want to use it inside their organizations.</i></p>
+<p align="center"><i>Read more at <a href="https://drylabs.io">drylabs.io</a></i></p>

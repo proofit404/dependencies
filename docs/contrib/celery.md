@@ -212,3 +212,7 @@ from knowing this is a task.
 
 In this case, your business logic can use `schedule_payment` as a
 regular function without knowing anything about task queues.
+
+<p align="center">&mdash; ⭐️ &mdash;</p>
+<p align="center"><i>Drylabs maintains dry-python and helps those who want to use it inside their organizations.</i></p>
+<p align="center"><i>Read more at <a href="https://drylabs.io">drylabs.io</a></i></p>

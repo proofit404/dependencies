@@ -34,3 +34,7 @@ Order(price=(799, 99), items=['amplifier', 'servo'])
 As you can see, instances of a class defined with `attrs` are built
 completely the same way we build handwritten classes. But there is no
 need to write all this boilerplate by hand.
+
+<p align="center">&mdash; ⭐️ &mdash;</p>
+<p align="center"><i>Drylabs maintains dry-python and helps those who want to use it inside their organizations.</i></p>
+<p align="center"><i>Read more at <a href="https://drylabs.io">drylabs.io</a></i></p>

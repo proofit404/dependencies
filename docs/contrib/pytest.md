@@ -133,3 +133,7 @@ set on the injector subclass.
 
 In this example we create parametrized fixture and use this param in
 actual object as a dependency.
+
+<p align="center">&mdash; ⭐️ &mdash;</p>
+<p align="center"><i>Drylabs maintains dry-python and helps those who want to use it inside their organizations.</i></p>
+<p align="center"><i>Read more at <a href="https://drylabs.io">drylabs.io</a></i></p>
