@@ -20,3 +20,7 @@ When you access an attribute of the class inherited from `Injector`:
    are resolved.
 4. If a found attribute is a class, we call **getattr** again looking for its spec
    in the same loop without recursion.
+
+<p align="center">&mdash; ⭐️ &mdash;</p>
+<p align="center"><i>Drylabs maintains dry-python and helps those who want to use it inside their organizations.</i></p>
+<p align="center"><i>Read more at <a href="https://drylabs.io">drylabs.io</a></i></p>

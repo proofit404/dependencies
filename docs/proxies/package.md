@@ -115,3 +115,7 @@ The injector definition above is equivalent to the longuer version:
 >>> assert Container.foo() == 3
 
 ```
+
+<p align="center">&mdash; ⭐️ &mdash;</p>
+<p align="center"><i>Drylabs maintains dry-python and helps those who want to use it inside their organizations.</i></p>
+<p align="center"><i>Read more at <a href="https://drylabs.io">drylabs.io</a></i></p>
