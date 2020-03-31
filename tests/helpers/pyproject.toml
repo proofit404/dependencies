@@ -5,7 +5,6 @@ description = ""
 authors = []
 packages = [
     { include = "django_project" },
-    { include = "doctested_module.py" },
     { include = "examples" },
     { include = "flask_project" },
     { include = "helpers.py" },

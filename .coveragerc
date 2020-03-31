@@ -4,7 +4,6 @@ source =
   _dependencies
   dependencies
   django_project
-  doctested_module
   examples
   flask_project
   helpers

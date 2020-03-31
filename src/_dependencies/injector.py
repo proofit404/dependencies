@@ -16,6 +16,7 @@ class InjectorType(InjectorTypeType):
 
         if not bases:
             namespace["__dependencies__"] = {}
+            namespace["__wrapped__"] = None
             return type.__new__(cls, class_name, bases, namespace)
 
         check_inheritance(bases, Injector)
@@ -41,10 +42,7 @@ class InjectorType(InjectorTypeType):
     def __getattr__(cls, attrname):
         __tracebackhide__ = True
 
-        cache, cached = (
-            {"__self__": cls, "__wrapped__": None},
-            {"__self__", "__wrapped__"},
-        )
+        cache, cached = {"__self__": cls}, {"__self__"}
         current_attr, attrs_stack = attrname, [attrname]
         have_default = False
 
@@ -128,7 +126,7 @@ class InjectorType(InjectorTypeType):
     def __dir__(cls):
 
         parent = set(dir(cls.__base__))
-        current = set(cls.__dict__) - {"__dependencies__"}
+        current = set(cls.__dict__) - {"__dependencies__", "__wrapped__"}
         dependencies = set(cls.__dependencies__) - {"__parent__"}
         attributes = sorted(parent | current | dependencies)
         return attributes
