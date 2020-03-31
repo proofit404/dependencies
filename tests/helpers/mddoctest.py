@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import doctest
 import sys
 from doctest import testfile
 from glob import glob
@@ -18,6 +19,12 @@ def _setup():
     responses.start()
 
 
+def _advanced_test():
+    import doctested_module
+
+    doctest.testmod(doctested_module)
+
+
 def _main():
     markdown_files = glob("**/*.md", recursive=True)
     exit_code = 0
@@ -29,4 +36,5 @@ def _main():
 
 if __name__ == "__main__":
     _setup()
+    _advanced_test()
     _main()

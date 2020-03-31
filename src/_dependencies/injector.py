@@ -41,7 +41,10 @@ class InjectorType(InjectorTypeType):
     def __getattr__(cls, attrname):
         __tracebackhide__ = True
 
-        cache, cached = {"__self__": cls}, {"__self__"}
+        cache, cached = (
+            {"__self__": cls, "__wrapped__": None},
+            {"__self__", "__wrapped__"},
+        )
         current_attr, attrs_stack = attrname, [attrname]
         have_default = False
 
