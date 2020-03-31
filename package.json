@@ -9,6 +9,8 @@
     "@semantic-release/changelog": "*",
     "@semantic-release/exec": "*",
     "@semantic-release/git": "*",
+    "eslint": "*",
+    "eslint-plugin-json": "*",
     "jscpd": "*",
     "remark-cli": "*",
     "remark-lint": "*",

@@ -223,17 +223,21 @@ def test_azure_nodejs_installed_for_necessary_tox_environments():
     npx commands.
     """
     azure_pipelines = yaml.safe_load(open("azure-pipelines.yml").read())
-    nodejs = [
-        step
-        for step in azure_pipelines["jobs"][0]["steps"]
-        if step.get("task") == "NodeTool@0"
-    ][0]
+    nodejs = re.sub(
+        r"\s+",
+        " ",
+        [
+            step
+            for step in azure_pipelines["jobs"][0]["steps"]
+            if step.get("task") == "NodeTool@0"
+        ][0]["condition"],
+    )
     tox_environments = ", ".join(
         "'" + re.sub(r"^testenv:", "", env) + "'"
         for env, commands in helpers.tox_info("commands")
         if "npm install" in commands
     )
-    assert tox_environments in nodejs["condition"]
+    assert tox_environments in nodejs
 
 
 # Read the docs.
