@@ -1,3 +1,9 @@
+## [1.0.1](https://github.com/dry-python/dependencies/compare/1.0.0...1.0.1) (2020-03-31)
+
+### Bug Fixes
+
+- add **wrapped** attribute ([e3c7aa9](https://github.com/dry-python/dependencies/commit/e3c7aa98cec4b33146c98855ae851fa57c990367))
+
 # 1.0.0 (2020-02-11)
 
 ### Bug Fixes
