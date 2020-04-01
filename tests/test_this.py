@@ -203,10 +203,6 @@ def test_attribute_access_after_item_getter():
     assert Container.baz == 1
 
 
-# FIXME: Check `test_attribute_access_after_call` and
-# `test_item_access_after_call`.
-
-
 def test_docstrings():
     """Check we can access all API entry points documentation."""
 

@@ -90,7 +90,6 @@ def test_template_view_attributes():
 # Form view.
 
 
-# FIXME: Support dynamic fields.
 def test_form_view(client):
     """Retrieve and submit form view created from injector."""
 

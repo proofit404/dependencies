@@ -37,23 +37,9 @@ def generic_api_view(injector):
     return injector.let(as_view=handler.as_view)
 
 
-# FIXME:
-#
-# [ ] create_api_view
-#
-# [ ] destroy_api_view
-#
-# [ ] update_api_view
-
-
 def list_api_view(injector):
     """Create DRF view for listing a queryset from injector class."""
 
-    # FIXME:
-    #
-    # [ ] Test me.
-    #
-    # [ ] Doc me.
     handler = create_handler(ListAPIView, injector)
     apply_api_view_attributes(handler, injector)
     apply_generic_api_view_attributes(handler, injector)
@@ -63,13 +49,6 @@ def list_api_view(injector):
 def retrieve_api_view(injector):
     """Create DRF view for retrieving a model instance from injector class."""
 
-    # FIXME:
-    #
-    # [ ] Write separate test module for each public function.
-    #
-    # [ ] Test me.
-    #
-    # [ ] Doc me.
     handler = create_handler(RetrieveAPIView, injector)
     apply_api_view_attributes(handler, injector)
     apply_generic_api_view_attributes(handler, injector)
@@ -79,11 +58,6 @@ def retrieve_api_view(injector):
 def view_set(injector):
     """Create DRF view set from injector class."""
 
-    # FIXME:
-    #
-    # [ ] Test me.
-    #
-    # [ ] Doc me.
     handler = create_handler(ViewSet, injector)
     apply_api_view_attributes(handler, injector)
     apply_view_set_methods(handler, injector)
@@ -93,11 +67,6 @@ def view_set(injector):
 def generic_view_set(injector):
     """Create DRF generic view set from injector class."""
 
-    # FIXME:
-    #
-    # [ ] Test me.
-    #
-    # [ ] Doc me.
     handler = create_handler(GenericViewSet, injector)
     apply_api_view_attributes(handler, injector)
     apply_generic_api_view_attributes(handler, injector)
@@ -145,16 +114,6 @@ def apply_api_view_attributes(handler, injector):
 
 
 def apply_generic_api_view_attributes(handler, injector):
-
-    # FIXME: Router issue.
-    #
-    # REST Framework tries to access ViewSet.queryset.model if we add
-    # this ViewSet to the router without basename.
-    #
-    # Property itself can not be monkey patched.  I think queryset
-    # should be wrapped in custom property subclass with model
-    # attribute defined.  If dependency injection error occurs, we
-    # should say explicitly about basename attribute.
 
     for attribute in [
         "queryset",
@@ -206,19 +165,9 @@ def apply_model_view_set_methods(handler, injector):
 
     def set_instance(serializer, instance):
 
-        # TODO:
-        #
-        # * Assert instance is not None. Suggest an edit to fix it.
-        #
-        # * Compare serializer.meta.model against instance type.
-
         serializer.instance = instance
 
     def ignore(instance, nothing):
-
-        # TODO:
-        #
-        # * Assert nothing is None.
 
         pass
 

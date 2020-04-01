@@ -466,7 +466,7 @@ def test_item_access_loops(code):
     }
 
 
-@items.xfail  # FIXME: Make this work.
+@items.xfail
 def oClqGRmWJAkA():
     """Declarative injector."""
 
@@ -480,7 +480,7 @@ def oClqGRmWJAkA():
     Container.SubContainer.foo
 
 
-@items.xfail  # FIXME: Make this work.
+@items.xfail
 def t41yMywZuPhA():
     """Let notation."""
 

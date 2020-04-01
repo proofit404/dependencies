@@ -63,7 +63,6 @@ def test_provide_a_variable(code):
     assert Container.variable == 1
 
 
-# FIXME: Protect `Package` and `this` from `_class` named attributes.
 @pytest.mark.xfail
 @package_definitions.parametrize
 def test_provide_a_class(code):

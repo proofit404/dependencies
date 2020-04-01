@@ -20,7 +20,6 @@ class InjectorTypeType(type):
 
 def make_dependency_spec(name, dependency):
 
-    # FIXME: Protect `Injector` from `_class` named attributes.
     if isinstance(dependency, InjectorTypeType):
         return make_nested_injector_spec(dependency)
     elif inspect.isclass(dependency) and not name.endswith("_class"):

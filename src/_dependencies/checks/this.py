@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-# FIXME:
-#
-# [ ] Do we protect against `this['foo']` expression?
-#
-# [ ] Do we protect against `(this.foo << 2)` expression?
 from _dependencies.exceptions import DependencyError
 
 
