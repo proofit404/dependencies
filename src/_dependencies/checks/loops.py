@@ -40,9 +40,6 @@ def check_loops_for(class_name, attribute_name, dependencies, origin, expression
         from weakref import ReferenceType
 
         if isinstance(spec[1], ReferenceType):
-            # FIXME: This is an ad-hoc solution for the broken
-            # `Replace` problem.  See `dependencies._injector` comment
-            # for more info.
             resolved_parent = spec[1]().__dependencies__
         else:
             resolved_parent = spec[1]

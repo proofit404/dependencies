@@ -9,13 +9,6 @@ test_client = pytest.importorskip("rest_framework.test")
 client = test_client.APIClient()
 
 
-# FIXME:
-#
-# [ ] Test APIView attributes.
-#
-# [ ] Test docstring and class name.
-
-
 def test_list_action():
     """Dispatch request to the `list` action of the view set."""
 

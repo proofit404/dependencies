@@ -22,8 +22,6 @@ from django_project.api.views import UserRetrieveView
 from django_project.api.views import UserViewSet
 
 router = SimpleRouter()
-# FIXME: We can not user router without `basename` because `queryset`
-# is a `property` and used as class attribute.
 router.register(r"view_set", InjectedViewSet.as_viewset(), basename="view_set")
 router.register(
     r"generic_view_set",

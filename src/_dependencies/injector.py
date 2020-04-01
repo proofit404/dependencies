@@ -52,10 +52,6 @@ class InjectorType(InjectorTypeType):
 
             if spec is None:
                 if have_default:
-                    # FIXME: If first dependency have this name as
-                    # default and the second one have this name
-                    # without default, we will see a very strange
-                    # KeyError about `cache` access.
                     cached.add(current_attr)
                     current_attr = attrs_stack.pop()
                     have_default = False
@@ -79,16 +75,6 @@ class InjectorType(InjectorTypeType):
                     cache[current_attr] = attribute(**kwargs)
                 except Replace as replace:
                     deep_replace_dependency(cls, current_attr, replace)
-                    # FIXME:
-                    #
-                    # We'll probably resolve weakref.  This happens because nested
-                    # injector decide to replace a lazy import.  This nested injector
-                    # is already resolved by its parent, so it contain a weakref in
-                    # it.  Ideally we should not have parent in the scope at all.
-                    #
-                    # Also, `Replace` doesn't change dependencies dict of its parent,
-                    # so lazy import will be evaluated again and again.  This kills
-                    # the whole point of `Replace`.
                     check_loops(cls.__name__, cls.__dependencies__)
                     check_circles(cls.__dependencies__)
                     continue

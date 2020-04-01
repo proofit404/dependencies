@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-# FIXME:
-#
-# [ ] Protect against classes with `__parent__` and `__self__` in the
-#     arguments.
-#
-# [ ] Validate we reuse cache with `Package`, `value` and `operation`.
 from _dependencies.exceptions import DependencyError
 
 
