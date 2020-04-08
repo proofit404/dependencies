@@ -24,7 +24,8 @@ Dependencies injected based on the arguments names.
 ...     def func(foo, bar, baz):
 ...         return foo + bar + baz
 
->>> assert Container.func() == 6
+>>> Container.func() == 6
+True
 
 ```
 
@@ -33,7 +34,13 @@ to the injector with the `let` notation.
 
 ```pycon
 
->>> from examples.operation import Foo, Bar
+>>> class Foo:
+...     def do(self, arg):
+...         return arg + 3
+
+>>> class Bar:
+...     def do(self, arg):
+...         return arg + 2
 
 >>> class Container(Injector):
 ...     foo = Foo
@@ -44,6 +51,7 @@ to the injector with the `let` notation.
 ...         return foo.do(bar.do(arg))
 
 >>> Container.let(arg=1).func()
+6
 
 ```
 

@@ -270,7 +270,7 @@ boundaries and clear dependency relationship.
 ...         payment_details = self.payment_processor.request(user, shipment_details)
 ...         self.notification.notify(user, payment_details)
 
->>> from examples import Logger, User, Product, ShipmentDetails
+>>> from app.shop import Logger, User, Product, ShipmentDetails
 
 >>> Order(
 ...     OrderProcessor(),

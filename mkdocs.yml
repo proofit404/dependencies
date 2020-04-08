@@ -12,6 +12,8 @@ theme:
   favicon: "https://raw.githubusercontent.com\
     /dry-python/brand/master/logo/dry-python.ico"
   language: "en"
+  features:
+    - tabs
 repo_name: dry-python/dependencies
 repo_url: "https://github.com/dry-python/dependencies"
 edit_uri: ""
@@ -28,30 +30,17 @@ markdown_extensions:
 extra_javascript:
   - "javascripts/extra.js"
 nav:
-  - "Home": index.md
-  - "Overview": overview.md
-  - "Why": why.md
-  - "Usage": usage.md
+  - "Home":
+      - "Home": index.md
+      - "Overview": overview.md
+      - "Why": why.md
+      - "Usage": usage.md
+      - "Implementation": implementation.md
+      - "FAQ": faq.md
+      - "Changelog": changelog.md
   - "Proxies":
       - "This": proxies/this.md
       - "Operation": proxies/operation.md
       - "Package": proxies/package.md
-  - "Contrib":
-      - "Attrs": contrib/attrs.md
-      - "Django": contrib/django.md
-      - "REST Framework": contrib/rest_framework.md
-      - "Celery": contrib/celery.md
-      - "Py.test": contrib/pytest.md
-  - "Implementation": implementation.md
-  - "FAQ": faq.md
-  - "Changelog": changelog.md
-  # A UI hack to split Table of Content into two visual parts.
-  - "": "/"
-  - "": "/"
-  - "": "/"
-  - "": "/"
-  - "": "/"
-  - "GitHub": "https://github.com/dry-python"
-  - "Twitter": "https://twitter.com/dry_py"
-  - "Gitter": "https://gitter.im/dry-python/dependencies"
-  - "LinkedIn": "https://www.linkedin.com/company/drylabs/"
+  - "Guides":
+      - "Attrs": attrs.md
