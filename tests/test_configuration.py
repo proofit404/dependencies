@@ -120,6 +120,40 @@ def test_coverage_include_all_packages():
     assert coverage_sources == packages + helpers + ["tests"]
 
 
+def test_coverage_paths_include_tox_environments():
+    """Coverage paths should include all tox environments."""
+    ini_parser = configparser.ConfigParser()
+    ini_parser.read(".coveragerc")
+    coverage_paths = ini_parser["paths"]["source"].strip().splitlines()
+
+    tox_environments = subprocess.check_output(["tox", "-l"]).decode().splitlines()
+    tox_ini = configparser.ConfigParser()
+    tox_ini.read("tox.ini")
+    coverage_environments = [
+        e
+        for e in tox_environments
+        if "coverage run"
+        in tox_ini["testenv:" + e if "testenv:" + e in tox_ini else "testenv"][
+            "commands"
+        ]
+    ]
+    tox_paths = [
+        ".tox/{name}/lib/{python}/site-packages".format(
+            name=e,
+            python=tox_ini["testenv:" + e]["basepython"]
+            if "testenv:" + e in tox_ini
+            else re.sub(
+                r"py(?P<major>\d)(?P<minor>\d)",
+                r"python\g<major>.\g<minor>",
+                e.split("-")[0],
+            ),
+        )
+        for e in coverage_environments
+    ]
+
+    assert coverage_paths == tox_paths
+
+
 def test_ini_files_indentation():
     """INI files should have indentation level equals two spaces."""
     for ini_file in [

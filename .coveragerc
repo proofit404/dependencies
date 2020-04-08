@@ -1,5 +1,6 @@
 [run]
 branch = True
+parallel = True
 source =
   _dependencies
   dependencies
@@ -10,3 +11,34 @@ source =
   mddoctest
   pkg
   tests
+
+[paths]
+source =
+  .tox/py27-django110/lib/python2.7/site-packages
+  .tox/py35-django110/lib/python3.5/site-packages
+  .tox/py27-django111/lib/python2.7/site-packages
+  .tox/py35-django111/lib/python3.5/site-packages
+  .tox/py36-django111/lib/python3.6/site-packages
+  .tox/py37-django111/lib/python3.7/site-packages
+  .tox/py35-django20/lib/python3.5/site-packages
+  .tox/py36-django20/lib/python3.6/site-packages
+  .tox/py37-django20/lib/python3.7/site-packages
+  .tox/py35-django21/lib/python3.5/site-packages
+  .tox/py36-django21/lib/python3.6/site-packages
+  .tox/py37-django21/lib/python3.7/site-packages
+  .tox/py35-django22/lib/python3.5/site-packages
+  .tox/py36-django22/lib/python3.6/site-packages
+  .tox/py37-django22/lib/python3.7/site-packages
+  .tox/py38-django22/lib/python3.8/site-packages
+  .tox/py36-django30/lib/python3.6/site-packages
+  .tox/py37-django30/lib/python3.7/site-packages
+  .tox/py38-django30/lib/python3.8/site-packages
+  .tox/py27-flask/lib/python2.7/site-packages
+  .tox/py35-flask/lib/python3.5/site-packages
+  .tox/py36-flask/lib/python3.6/site-packages
+  .tox/py37-flask/lib/python3.7/site-packages
+  .tox/py27-celery/lib/python2.7/site-packages
+  .tox/py35-celery/lib/python3.5/site-packages
+  .tox/py36-celery/lib/python3.6/site-packages
+  .tox/py37-celery/lib/python3.7/site-packages
+  .tox/doctest/lib/python3.8/site-packages
