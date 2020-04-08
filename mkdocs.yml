@@ -36,12 +36,7 @@ nav:
       - "This": proxies/this.md
       - "Operation": proxies/operation.md
       - "Package": proxies/package.md
-  - "Contrib":
-      - "Attrs": contrib/attrs.md
-      - "Django": contrib/django.md
-      - "REST Framework": contrib/rest_framework.md
-      - "Celery": contrib/celery.md
-      - "Py.test": contrib/pytest.md
+  - "Attrs": attrs.md
   - "Implementation": implementation.md
   - "FAQ": faq.md
   - "Changelog": changelog.md
