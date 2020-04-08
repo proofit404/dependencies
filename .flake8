@@ -5,7 +5,6 @@ ban-relative-imports = True
 accept-encodings = utf-8
 exclude =
   .tox
-  migrations
   node_modules
+ignore = E741, W503
 per-file-ignores =
-  *.py: A003

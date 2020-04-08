@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-class Foo:
+class Calc:
     def __init__(self, a, b):
         self.a = a
         self.b = b

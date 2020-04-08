@@ -32,7 +32,7 @@ Dependency injection without `dependencies`
 
 ```pycon
 
->>> from examples import Robot, Servo, Amplifier, Controller, Settings
+>>> from app.robot import Robot, Servo, Amplifier, Controller, Settings
 
 >>> robot = Robot(
 ...     servo=Servo(amplifier=Amplifier()),

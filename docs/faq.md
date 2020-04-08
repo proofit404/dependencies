@@ -8,11 +8,13 @@ this:
 
 ```pycon
 
->>> from examples.faq import AbstractNotificationService, \
-...                          AbstractPaymentService, \
-...                          TypedInjector, SMSService, PaypalService
+>>> from app.types import TypedInjector
+>>> from app.purchase import (
+...     AbstractPaymentService, PaypalService,
+...     AbstractNotificationService, SMSService
+... )
 
->>> class ApplicationService:
+>>> class PurchaseService:
 ...
 ...     def __init__(
 ...         self,
@@ -25,8 +27,8 @@ this:
 >>> container = TypedInjector()
 >>> container.register(SMSService)
 >>> container.register(PaypalService)
->>> container.build(ApplicationService)  # doctest: +ELLIPSIS
-<__main__.ApplicationService object at 0x...>
+>>> container.build(PurchaseService)  # doctest: +ELLIPSIS
+<__main__.PurchaseService object at 0x...>
 
 ```
 

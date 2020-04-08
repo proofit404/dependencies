@@ -41,7 +41,6 @@ repos:
       - id: reorder-python-imports
         args:
           - "--application-directories=.:src:tests/helpers"
-        exclude: migrations
   - repo: https://github.com/myint/docformatter
     rev: ""
     hooks:
@@ -54,7 +53,6 @@ repos:
     rev: ""
     hooks:
       - id: black
-        exclude: migrations
   - repo: https://github.com/prettier/prettier
     rev: ""
     hooks:

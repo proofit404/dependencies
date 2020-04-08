@@ -22,7 +22,7 @@ this in your injectors.
 
 ```pycon
 
->>> from examples.users.utils import create_user
+>>> from app.repositories import create_user
 >>> # A lot of import statements here...
 
 >>> class Container(Injector):
@@ -36,7 +36,7 @@ To save some typing I tend to write this code like this
 ```pycon
 
 >>> class Container(Injector):
-...     from examples.users.utils import create_user as persist_user
+...     from app.repositories import create_user as persist_user
 ...     # A lot of import statements here...
 
 ```
@@ -45,23 +45,23 @@ To save some typing I tend to write this code like this
 
 ```pycon
 
->>> examples = Package("examples")
+>>> app = Package("app")
 
 >>> class Container(Injector):
-...     persist_user = examples.users.utils.create_user
+...     persist_user = app.repositories.create_user
 ...     # A lot of assignment statements here...
 
 ```
 
-If a lot of dependencies defined in the utils module, you can set
-`Package` source to the utils module itself.
+If a lot of dependencies defined in the repositories module, you can
+set `Package` source to the repositories module itself.
 
 ```pycon
 
->>> utils = Package("examples.users.utils")
+>>> repositories = Package("app.repositories")
 
 >>> class Container(Injector):
-...     persist_user = utils.create_user
+...     persist_user = repositories.create_user
 ...     # A lot of assignment statements here...
 
 ```
@@ -75,9 +75,9 @@ exactly one line.
 
 ```pycon
 
-# examples/utils.py
+# app/calc.py
 
->>> class Foo:
+>>> class Calc:
 ...
 ...     def __init__(self, a, b):
 ...         self.a = a
@@ -86,12 +86,12 @@ exactly one line.
 ...     def do(self):
 ...         return self.a + self.b
 
-# examples/base.py
+# app/base.py
 
->>> utils = Package("examples.utils")
+>>> calc = Package("app.calc")
 
 >>> class Container(Injector):
-...     foo = utils.Foo.do
+...     foo = calc.Calc.do
 ...     a = 1
 ...     b = 2
 
@@ -104,11 +104,11 @@ The injector definition above is equivalent to the longuer version:
 ```pycon
 
 >>> from dependencies import this
->>> from examples.utils import Foo
+>>> from app.calc import Calc
 
 >>> class Container(Injector):
 ...     foo = this.tmp.do
-...     tmp = Foo
+...     tmp = Calc
 ...     a = 1
 ...     b = 2
 

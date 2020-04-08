@@ -257,7 +257,8 @@ scope subclass:
 
 ```pycon
 
->>> from examples import Foo
+>>> class Foo:
+...     pass
 
 >>> class Scope(Injector):
 ...     foo = Foo
@@ -266,7 +267,7 @@ scope subclass:
 ...     bar = Bar
 
 >>> ChildScope.foo  # doctest: +ELLIPSIS
-<examples.Foo object at 0x...>
+<__main__.Foo object at 0x...>
 
 ```
 
@@ -284,7 +285,7 @@ Multiple inheritance is allowed as well.
 ...     pass
 
 >>> ChildScope.foo  # doctest: +ELLIPSIS
-<examples.Foo object at 0x...>
+<__main__.Foo object at 0x...>
 
 ```
 
@@ -301,7 +302,7 @@ intermediate class needed.
 ...     bar = Bar
 
 >>> (Scope1 & Scope2).foo  # doctest: +ELLIPSIS
-<examples.Foo object at 0x...>
+<__main__.Foo object at 0x...>
 
 
 ```
@@ -320,7 +321,7 @@ possible to simulate database integrity error on concurrent access.
 ...     bar = Bar
 
 >>> Scope.let(bar=Baz).foo  # doctest: +ELLIPSIS
-<examples.Foo object at 0x...>
+<__main__.Foo object at 0x...>
 
 ```
 
@@ -329,7 +330,7 @@ using `let` notation.
 
 ```pycon
 
->>> from examples import settings
+>>> settings = {'host': 'localhost', 'port': 1234}
 
 >>> Scope = Injector.let(foo=Foo, bar=Bar, **settings)
 
