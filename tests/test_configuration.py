@@ -107,12 +107,14 @@ def test_coverage_include_all_packages():
 
     pyproject_toml = tomlkit.loads(open("pyproject.toml").read())
     packages = [
-        p["include"].rstrip(".py") for p in pyproject_toml["tool"]["poetry"]["packages"]
+        re.sub(r"\.py$", "", p["include"])
+        for p in pyproject_toml["tool"]["poetry"]["packages"]
     ]
 
     pyproject_toml = tomlkit.loads(open("tests/helpers/pyproject.toml").read())
     helpers = [
-        p["include"].rstrip(".py") for p in pyproject_toml["tool"]["poetry"]["packages"]
+        re.sub(r"\.py$", "", p["include"])
+        for p in pyproject_toml["tool"]["poetry"]["packages"]
     ]
 
     assert coverage_sources == packages + helpers + ["tests"]
