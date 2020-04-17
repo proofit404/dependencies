@@ -39,6 +39,9 @@ jobs:
           git checkout - --quiet
         displayName: Unshallow commit log.
       - script: tox
+        env:
+          CI_DEPS: pytest-azurepipelines
+          CI_FLAGS: -o junit_family=xunit2 -o junit_log_passing_tests=true
         displayName: Run Tox.
       - script: codecov
         env:
