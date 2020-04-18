@@ -2,11 +2,10 @@
 
 [![azure-devops-builds](https://img.shields.io/azure-devops/build/dry-python/dependencies/2?style=flat-square)](https://dev.azure.com/dry-python/dependencies/_build/latest?definitionId=2&branchName=master)
 [![azure-devops-coverage](https://img.shields.io/azure-devops/coverage/dry-python/dependencies/2?style=flat-square)](https://dev.azure.com/dry-python/dependencies/_build/latest?definitionId=2&branchName=master)
-[![docs](https://readthedocs.org/projects/dependencies/badge/?version=latest)](https://dependencies.readthedocs.io/en/latest/?badge=latest)
-[![gitter](https://badges.gitter.im/dry-python/dependencies.svg)](https://gitter.im/dry-python/dependencies)
-[![pypi](https://img.shields.io/pypi/v/dependencies.svg)](https://pypi.python.org/pypi/dependencies/)
-[![conda-forge](https://img.shields.io/conda/vn/conda-forge/dependencies.svg)](https://anaconda.org/conda-forge/dependencies)
-[![black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
+[![readthedocs](https://img.shields.io/readthedocs/dependencies?style=flat-square)](https://dependencies.readthedocs.io/en/latest/?badge=latest)
+[![gitter](https://img.shields.io/gitter/room/dry-python/dependencies?style=flat-square)](https://gitter.im/dry-python/dependencies)
+[![pypi](https://img.shields.io/pypi/v/dependencies?style=flat-square)](https://pypi.python.org/pypi/dependencies/)
+[![conda](https://img.shields.io/conda/vn/conda-forge/dependencies?style=flat-square)](https://anaconda.org/conda-forge/dependencies)
 
 ---
 
