@@ -40,9 +40,16 @@ jobs:
         displayName: Unshallow commit log.
       - script: tox
         env:
-          CI_DEPS: pytest-azurepipelines
-          CI_FLAGS: -o junit_family=xunit2 -o junit_log_passing_tests=true
+          CI_PYTEST_FLAGS: >-
+            --junitxml=junit-{envname}.xml -o junit_suite_name={envname}
+            -o junit_family=xunit2 -o junit_log_passing_tests=true
         displayName: Run Tox.
+      - task: PublishTestResults@2
+        condition: always()
+        inputs:
+          testResultsFormat: JUnit
+          testResultsFiles: junit-*.xml
+        displayName: Publish test results.
       - script: .tox/coverage/bin/coverage xml
         condition: always()
         displayName: Generate coverage.xml data.
@@ -51,6 +58,7 @@ jobs:
         inputs:
           codeCoverageTool: cobertura
           summaryFileLocation: coverage.xml
+        displayName: Publish coverage.xml data.
   - job: "Deploy"
     dependsOn:
       - "Test"
