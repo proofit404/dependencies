@@ -26,7 +26,7 @@ jobs:
         inputs:
           versionSpec: "3.8"
         displayName: Install Python 3.8.
-      - script: pip install --upgrade tox codecov
+      - script: pip install --upgrade tox
         displayName: Install Tox.
       - task: NodeTool@0
         inputs:
@@ -43,10 +43,14 @@ jobs:
           CI_DEPS: pytest-azurepipelines
           CI_FLAGS: -o junit_family=xunit2 -o junit_log_passing_tests=true
         displayName: Run Tox.
-      - script: codecov
-        env:
-          CODECOV_TOKEN: 0753e837-0ff8-4eac-b301-d9f39fdfee50
-        displayName: Report Coverage.
+      - script: .tox/coverage/bin/coverage xml
+        condition: always()
+        displayName: Generate coverage.xml data.
+      - task: PublishCodeCoverageResults@1
+        condition: always()
+        inputs:
+          codeCoverageTool: cobertura
+          summaryFileLocation: coverage.xml
   - job: "Deploy"
     dependsOn:
       - "Test"
