@@ -154,6 +154,29 @@ def test_coverage_paths_include_tox_environments():
     assert coverage_paths == tox_paths
 
 
+def test_coverage_environment_runs_at_the_end():
+    """Covarage report should runs after environments generating coverage."""
+    ini_parser = configparser.ConfigParser()
+    ini_parser.read("tox.ini")
+
+    envlist = helpers.tox_parse_envlist(ini_parser["tox"]["envlist"])
+
+    runs_coverage = [
+        e
+        for e in envlist
+        if "coverage run"
+        in ini_parser["testenv:" + e if "testenv:" + e in ini_parser else "testenv"][
+            "commands"
+        ]
+    ]
+
+    coverage_depends = helpers.tox_parse_envlist(
+        ini_parser["testenv:coverage"]["depends"]
+    )
+
+    assert coverage_depends == runs_coverage
+
+
 def test_ini_files_indentation():
     """INI files should have indentation level equals two spaces."""
     for ini_file in [
