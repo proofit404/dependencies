@@ -279,7 +279,7 @@ def test_packages_are_ordered():
     for pyproject_toml in ["pyproject.toml", "tests/helpers/pyproject.toml"]:
         pyproject_toml = tomlkit.loads(open(pyproject_toml).read())
         packages = [
-            p["include"].rstrip(".py")
+            re.sub(r"\.py$", "", p["include"])
             for p in pyproject_toml["tool"]["poetry"]["packages"]
         ]
         assert packages == sorted(packages)
