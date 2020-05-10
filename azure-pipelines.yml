@@ -60,6 +60,31 @@ jobs:
           codeCoverageTool: cobertura
           summaryFileLocation: coverage.xml
         displayName: Publish coverage.xml data.
+  - job: "Review"
+    condition: |
+      eq(variables['Build.Reason'], 'PullRequest')
+    steps:
+      - task: NodeTool@0
+        inputs:
+          versionSpec: "10.x"
+        displayName: Install NodeJS.
+      - script: |
+          npm install
+        displayName: Install JS dependencies.
+      - script: |
+          git remote set-branches origin master
+          git fetch --quiet
+          git checkout master --quiet
+          git checkout - --quiet
+        displayName: Unshallow commit log.
+      - script: |
+          npx danger ci
+        env:
+          DANGER_FAKE_CI: YEP
+          DANGER_TEST_REPO: dry-python/dependencies
+          DANGER_TEST_PR: $(System.PullRequest.PullRequestNumber)
+          GITHUB_TOKEN: $(DANGER_GITHUB_TOKEN)
+        displayName: Review pull request.
   - job: "Deploy"
     dependsOn:
       - "Test"
@@ -97,5 +122,5 @@ jobs:
           GIT_COMMITTER_NAME: $(GIT_COMMITTER_NAME)
           GIT_COMMITTER_EMAIL: $(GIT_COMMITTER_EMAIL)
           POETRY_PYPI_TOKEN_PYPI: $(POETRY_PYPI_TOKEN_PYPI)
-          GITHUB_TOKEN: $(GITHUB_TOKEN)
+          GITHUB_TOKEN: $(SEMANTIC_RELEASE_GITHUB_TOKEN)
         displayName: Release package.
