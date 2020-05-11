@@ -94,6 +94,26 @@ def test_tox_generative_environments_has_common_definition():
     assert tox_environments == tox_ini
 
 
+def test_tox_multiline_settings_are_written_next_line():
+    """Multiline tox settings should be written starting next line."""
+    multiline_settings = [
+        "commands",
+        "commands_post",
+        "depends",
+        "deps",
+        "envlist",
+        "whitelist_externals",
+    ]
+
+    ini_parser = configparser.ConfigParser()
+    ini_parser.read("tox.ini")
+    for section in ini_parser.values():
+        for setting in multiline_settings:
+            value = section.get(setting)
+            if value is not None:
+                assert value.startswith("\n") or not value
+
+
 def test_coverage_include_all_packages():
     """Coverage source should include all packages.
 
