@@ -60,25 +60,8 @@ jobs:
           codeCoverageTool: cobertura
           summaryFileLocation: coverage.xml
         displayName: Publish coverage.xml data.
-  - job: "Review"
-    condition: |
-      eq(variables['Build.Reason'], 'PullRequest')
-    steps:
-      - task: NodeTool@0
-        inputs:
-          versionSpec: "10.x"
-        displayName: Install NodeJS.
-      - script: |
-          npm install
-        displayName: Install JS dependencies.
-      - script: |
-          git remote set-branches origin master
-          git fetch --quiet
-          git checkout master --quiet
-          git checkout - --quiet
-        displayName: Unshallow commit log.
-      - script: |
-          npx danger ci
+      - script: npx danger ci
+        condition: eq(variables['Build.Reason'], 'PullRequest')
         env:
           DANGER_FAKE_CI: YEP
           DANGER_TEST_REPO: dry-python/dependencies
