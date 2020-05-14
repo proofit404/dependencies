@@ -25,7 +25,8 @@ export default async () => {
 
   const commitTypes = new Set(commitTest.map((commitMatch) => commitMatch[1])),
     hasFeatureCommit = commitTypes.has("feat"),
-    hasFixCommit = commitTypes.has("fix");
+    hasFixCommit = commitTypes.has("fix"),
+    hasDocsCommit = commitTypes.has("docs");
 
   if (commitTest.length !== commitTypes.size) {
     fail("PR can not contain commits with the same type");
@@ -69,7 +70,8 @@ export default async () => {
 
   const issueLabels = new Set(issueJSON.data.labels.map((label) => label.name)),
     hasFeatureLabel = issueLabels.has("feature"),
-    hasBugLabel = issueLabels.has("bug");
+    hasBugLabel = issueLabels.has("bug"),
+    hasDocumentationLabel = issueLabels.has("documentation");
 
   if (hasFeatureLabel & hasBugLabel) {
     fail("An issue can't be a bug and a feature simultaneously");
@@ -83,6 +85,11 @@ export default async () => {
 
   if (hasBugLabel ^ hasFixCommit) {
     fail("Only issue marked as bug is allowed to have fix commit");
+    return;
+  }
+
+  if (hasDocumentationLabel & !hasDocsCommit) {
+    fail("Issue marked as documentation should have docs commit");
     return;
   }
 
