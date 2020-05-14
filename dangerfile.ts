@@ -94,11 +94,12 @@ export default async () => {
   }
 
   for (let label of [
+    "blocked",
     "epic",
+    "invalid",
     "needs-investigation",
     "question",
     "wontfix",
-    "invalid",
   ]) {
     if (issueLabels.has(label)) {
       fail(`Issues marked as ${label} can not be implemented`);
