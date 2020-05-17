@@ -1,3 +1,15 @@
+# [2.0.0](https://github.com/dry-python/dependencies/compare/1.0.1...2.0.0) (2020-05-17)
+
+### Features
+
+- remove contrib package ([5bfe041](https://github.com/dry-python/dependencies/commit/5bfe041f72bc82a4a24ea47599cf2bfbb8d13900)), closes [#192](https://github.com/dry-python/dependencies/issues/192)
+
+### BREAKING CHANGES
+
+- Every time a new user asks me how to use their
+  favorite framework together with stories and dependencies I understand
+  that there is a missing module in the contrib package.
+
 ## [1.0.1](https://github.com/dry-python/dependencies/compare/1.0.0...1.0.1) (2020-03-31)
 
 ### Bug Fixes
