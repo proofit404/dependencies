@@ -4,7 +4,7 @@ import inspect
 from _dependencies.exceptions import DependencyError
 
 
-def check_cls_arguments(argnames, defaults, owner_message):
+def _check_cls_arguments(argnames, defaults, owner_message):
 
     for argument, value in zip(reversed(argnames), reversed(defaults)):
         expect_class = argument.endswith("_class")
@@ -19,7 +19,7 @@ def check_cls_arguments(argnames, defaults, owner_message):
             raise DependencyError(message)
 
 
-def check_varargs(name, varargs, kwargs):
+def _check_varargs(name, varargs, kwargs):
 
     if varargs and kwargs:
         message = "{0} have arbitrary argument list and keyword arguments"

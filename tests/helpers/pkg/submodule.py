@@ -1,19 +1,26 @@
 # -*- coding: utf-8 -*-
 class Foo(object):
+    """A dummy class for tests."""
+
     def do(self):
+        """Return dummy data."""
         return 1
 
 
 class Bar(object):
+    """A dummy class for tests."""
+
     def __init__(self, a, b):
         self.a = a
         self.b = b
 
     def do(self):
+        """Return dummy data."""
         return self.a + self.b
 
 
 def function():
+    """Return dummy data."""
     return 1
 
 

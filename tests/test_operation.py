@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+"""Tests related to the @operation proxy."""
 import pytest
 
 from dependencies import Injector
@@ -56,17 +57,16 @@ def test_protect_against_self(code):
 
 
 @deny_method
-def lSxEXspkuups(arg):
-    """Declarative injector."""
+def _lSxEXspkuups(arg):
+    # Declarative injector.
 
     class Container(Injector):
         method = arg
 
 
 @deny_method
-def qZcxoLXYnvke(arg):
-    """Let notation."""
-
+def _qZcxoLXYnvke(arg):
+    # Let notation.
     Injector.let(method=arg)
 
 
@@ -74,8 +74,8 @@ def test_protect_against_classes():
     """Deny to decorate classes with operation.
 
     Classes are injectable itself.
-    """
 
+    """
     with pytest.raises(DependencyError) as exc_info:
 
         @operation
@@ -124,27 +124,14 @@ def test_protect_against_args_kwargs(code):
 
 
 @deny_kwargs
-def puELUDZLxkDG(arg):
-    """Declarative injector."""
+def _puELUDZLxkDG(arg):
+    # Declarative injector.
 
     class Container(Injector):
         func = arg
 
 
 @deny_kwargs
-def iQXjlPlQGgSh(arg):
-    """Let notation."""
-
+def _iQXjlPlQGgSh(arg):
+    # Let notation.
     Injector.let(func=arg)
-
-
-def test_docstrings():
-    """Access `operation` documentation string."""
-
-    assert (
-        operation.__doc__
-        == "Create callable class appropriated for dependency injection.\n"
-        "\n"
-        "    Used as function decorator.\n"
-        "    "
-    )

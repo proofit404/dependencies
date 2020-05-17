@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+"""Tests related to the @value proxy."""
 import pytest
 
 from dependencies import Injector
@@ -8,6 +9,8 @@ from helpers import CodeCollector
 
 
 def test_define_value():
+    """Evaluate @value decorated function during dependency injection process."""
+
     class Container(Injector):
 
         foo = 1
@@ -22,6 +25,13 @@ def test_define_value():
 
 
 def test_keyword_arguments():
+    """
+    @value decorated function should support keyword arguments.
+
+    If keyword argument is missing in the Injector subclass the
+    default value should be used.
+    """
+
     class Container(Injector):
 
         foo = 1
@@ -52,22 +62,21 @@ def test_protect_against_self(code):
 
 
 @deny_method
-def sUIvAUUeQIde(arg):
-    """Declarative injector."""
+def _sUIvAUUeQIde(arg):
+    # Declarative injector.
 
     class Container(Injector):
         method = arg
 
 
 @deny_method
-def nVlMKQghCDAQ(arg):
-    """Let notation."""
-
+def _nVlMKQghCDAQ(arg):
+    # Let notation.
     Injector.let(method=arg)
 
 
 def test_protect_against_classes():
-
+    """Deny to decorate classes with @value proxy."""
     with pytest.raises(DependencyError) as exc_info:
 
         @value
@@ -116,28 +125,14 @@ def test_protect_against_args_kwargs(code):
 
 
 @deny_kwargs
-def pqwvsBqbIiXg(arg):
-    """Declarative injector."""
+def _pqwvsBqbIiXg(arg):
+    # Declarative injector.
 
     class Container(Injector):
         func = arg
 
 
 @deny_kwargs
-def jbfjlQveNjrZ(arg):
-    """Let notation."""
-
+def _jbfjlQveNjrZ(arg):
+    # Let notation.
     Injector.let(func=arg)
-
-
-def test_docstrings():
-    """Access `value` documentation string."""
-
-    assert (
-        value.__doc__ == "Evaluate given function during dependency injection.\n"
-        "\n"
-        "    Returned value is used as value of the dependency.\n"
-        "\n"
-        "    Used as function decorator.\n"
-        "    "
-    )

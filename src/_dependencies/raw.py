@@ -2,12 +2,12 @@
 from _dependencies.markers import injectable
 
 
-def make_raw_spec(dependency):
+def _make_raw_spec(dependency):
 
-    return injectable, RawSpec(dependency), [], 0
+    return injectable, _RawSpec(dependency), [], 0
 
 
-class RawSpec(object):
+class _RawSpec(object):
     def __init__(self, dependency):
 
         self.dependency = dependency

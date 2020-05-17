@@ -1,17 +1,17 @@
 # -*- coding: utf-8 -*-
-from _dependencies.attributes import Replace
-from _dependencies.checks.circles import check_circles
-from _dependencies.checks.injector import check_attrs_redefinition
-from _dependencies.checks.injector import check_dunder_name
-from _dependencies.checks.injector import check_inheritance
-from _dependencies.checks.loops import check_loops
+from _dependencies.attributes import _Replace
+from _dependencies.checks.circles import _check_circles
+from _dependencies.checks.injector import _check_attrs_redefinition
+from _dependencies.checks.injector import _check_dunder_name
+from _dependencies.checks.injector import _check_inheritance
+from _dependencies.checks.loops import _check_loops
 from _dependencies.exceptions import DependencyError
-from _dependencies.replace import deep_replace_dependency
-from _dependencies.spec import InjectorTypeType
-from _dependencies.spec import make_dependency_spec
+from _dependencies.replace import _deep_replace_dependency
+from _dependencies.spec import _InjectorTypeType
+from _dependencies.spec import _make_dependency_spec
 
 
-class InjectorType(InjectorTypeType):
+class _InjectorType(_InjectorTypeType):
     def __new__(cls, class_name, bases, namespace):
 
         if not bases:
@@ -19,7 +19,7 @@ class InjectorType(InjectorTypeType):
             namespace["__wrapped__"] = None
             return type.__new__(cls, class_name, bases, namespace)
 
-        check_inheritance(bases, Injector)
+        _check_inheritance(bases, Injector)
         ns = {}
         for attr in ("__module__", "__doc__", "__weakref__", "__qualname__"):
             try:
@@ -27,15 +27,15 @@ class InjectorType(InjectorTypeType):
             except KeyError:
                 pass
         for name in namespace:
-            check_dunder_name(name)
-            check_attrs_redefinition(name)
+            _check_dunder_name(name)
+            _check_attrs_redefinition(name)
         dependencies = {}
         for base in reversed(bases):
             dependencies.update(base.__dependencies__)
         for name, dep in namespace.items():
-            dependencies[name] = make_dependency_spec(name, dep)
-        check_loops(class_name, dependencies)
-        check_circles(dependencies)
+            dependencies[name] = _make_dependency_spec(name, dep)
+        _check_loops(class_name, dependencies)
+        _check_circles(dependencies)
         ns["__dependencies__"] = dependencies
         return type.__new__(cls, class_name, bases, ns)
 
@@ -73,10 +73,10 @@ class InjectorType(InjectorTypeType):
 
                 try:
                     cache[current_attr] = attribute(**kwargs)
-                except Replace as replace:
-                    deep_replace_dependency(cls, current_attr, replace)
-                    check_loops(cls.__name__, cls.__dependencies__)
-                    check_circles(cls.__dependencies__)
+                except _Replace as replace:
+                    _deep_replace_dependency(cls, current_attr, replace)
+                    _check_loops(cls.__name__, cls.__dependencies__)
+                    _check_circles(cls.__dependencies__)
                     continue
 
                 cached.add(current_attr)
@@ -125,7 +125,6 @@ def __init__(self, *args, **kwargs):
 
 def let(cls, **kwargs):
     """Produce new Injector with some dependencies overwritten."""
-
     return type(cls.__name__, (cls,), kwargs)
 
 
@@ -137,7 +136,7 @@ specified in it namespace.
 """
 
 
-Injector = InjectorType(
+Injector = _InjectorType(
     "Injector",
     (),
     {"__init__": __init__, "__doc__": injector_doc, "let": classmethod(let)},

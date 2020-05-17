@@ -1,13 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-dependencies
-------------
-
-Dependency Injection for Humans.
-
-:copyright: (c) 2016-2020 by Artem Malyshev.
-:license: BSD, see LICENSE for more details.
-"""
+"""Dependency Injection for Humans."""
 from _dependencies.injector import Injector
 from _dependencies.operation import Operation as operation
 from _dependencies.package import Package
