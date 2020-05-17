@@ -2,7 +2,7 @@
 from _dependencies.exceptions import DependencyError
 
 
-def check_expression(dependency):
+def _check_expression(dependency):
 
     if not any(
         symbol

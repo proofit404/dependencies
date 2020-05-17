@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+"""Tests related to the loops detection in the injector definition."""
 import pytest
 
 from dependencies import Injector
@@ -17,7 +18,6 @@ flat_injector = CodeCollector()
 @flat_injector.parametrize
 def test_circle_links(code):
     """We can detect link loops in the same container without hierarchy."""
-
     with pytest.raises(DependencyError) as exc_info:
         code()
 
@@ -32,11 +32,8 @@ def test_circle_links(code):
 
 
 @flat_injector
-def kSSnnkw6CNPx():
-    """Declarative injector.
-
-    Link to self.
-    """
+def _kSSnnkw6CNPx():
+    # Declarative injector.  Link to self.
 
     class Container(Injector):
         foo = this.foo
@@ -45,21 +42,14 @@ def kSSnnkw6CNPx():
 
 
 @flat_injector
-def n8NHZqiZN43Q():
-    """Let notation.
-
-    Link to self.
-    """
-
+def _n8NHZqiZN43Q():
+    # Let notation.  Link to self.
     Injector.let(foo=this.foo).foo
 
 
 @flat_injector
-def ai0hNOPGX2PI():
-    """Declarative injector.
-
-    Complex loop.
-    """
+def _ai0hNOPGX2PI():
+    # Declarative injector.  Complex loop.
 
     class Container(Injector):
         foo = this.bar
@@ -69,21 +59,14 @@ def ai0hNOPGX2PI():
 
 
 @flat_injector
-def ySnRrxW6M79T():
-    """Let notation.
-
-    Complex loop.
-    """
-
+def _ySnRrxW6M79T():
+    # Let notation.  Complex loop.
     Injector.let(foo=this.bar, bar=this.foo).foo
 
 
 @flat_injector
-def yfTnHHhvBmrQ():
-    """Declarative injector.
-
-    Long loop.
-    """
+def _yfTnHHhvBmrQ():
+    # Declarative injector.  Long loop.
 
     class Container(Injector):
         foo = this.bar
@@ -94,8 +77,8 @@ def yfTnHHhvBmrQ():
 
 
 @flat_injector
-def ydZEbpRNlHEO():
-
+def _ydZEbpRNlHEO():
+    # Let notation.  Long loop.
     Injector.let(foo=this.bar, bar=this.baz, baz=this.foo).foo
 
 
@@ -110,7 +93,6 @@ subcontainer = CodeCollector("sub")
 @subcontainer.parametrize
 def test_circle_links_one_level(code, sub):
     """We can detect link loops in nested injectors one level deep."""
-
     with pytest.raises(DependencyError) as exc_info:
         code(sub())
 
@@ -123,8 +105,8 @@ def test_circle_links_one_level(code, sub):
 
 
 @one_level
-def eaK6IxW88SNh(sub):
-    """Declarative injector."""
+def _eaK6IxW88SNh(sub):
+    # Declarative injector.
 
     class Container(Injector):
         foo = this.SubContainer.bar
@@ -134,15 +116,14 @@ def eaK6IxW88SNh(sub):
 
 
 @one_level
-def nWhKtJb16yg6(sub):
-    """Let notation."""
-
+def _nWhKtJb16yg6(sub):
+    # Let notation.
     Injector.let(foo=this.SubContainer.bar, SubContainer=sub).foo
 
 
 @subcontainer
-def jijKOYgyZHNz():
-    """Declarative injector."""
+def _jijKOYgyZHNz():
+    # Declarative injector.
 
     class SubContainer(Injector):
         bar = (this << 1).foo
@@ -151,16 +132,14 @@ def jijKOYgyZHNz():
 
 
 @subcontainer
-def nFibPCOxGsrX():
-    """Let notation."""
-
+def _nFibPCOxGsrX():
+    # Let notation.
     return Injector.let(bar=(this << 1).foo)
 
 
 @subcontainer
-def utUTZLLngouR():
-    """Package link."""
-
+def _utUTZLLngouR():
+    # Package link.
     pkg = Package("pkg")
 
     return pkg.injected.SubContainer
@@ -178,9 +157,12 @@ complex_lowest_container = CodeCollector("lowest")
 @complex_middle_container.parametrize
 @complex_lowest_container.parametrize
 def test_circle_links_two_level_complex_loop(code, middle, lowest):
-    """We can detect link loops in nested injectors two level deep without
-    intermediate links."""
+    """Search for dependency loop errors in the complex object graph.
 
+    We can detect link loops in nested injectors two level deep without intermediate
+    links.
+
+    """
     with pytest.raises(DependencyError) as exc_info:
         code(middle(lowest()))
 
@@ -194,8 +176,8 @@ def test_circle_links_two_level_complex_loop(code, middle, lowest):
 
 
 @complex_two_levels
-def mF4akoHlg84C(middle):
-    """Declarative injector."""
+def _mF4akoHlg84C(middle):
+    # Declarative injector.
 
     class Container(Injector):
         foo = this.SubContainer.SubSubContainer.bar
@@ -205,15 +187,14 @@ def mF4akoHlg84C(middle):
 
 
 @complex_two_levels
-def bCw8LPUeVK6J(middle):
-    """Let notation."""
-
+def _bCw8LPUeVK6J(middle):
+    # Let notation.
     Injector.let(foo=this.SubContainer.SubSubContainer.bar, SubContainer=middle).foo
 
 
 @complex_middle_container
-def yPFeGKPGXPIY(lowest):
-    """Declarative injector."""
+def _yPFeGKPGXPIY(lowest):
+    # Declarative injector.
 
     class SubContainer(Injector):
         SubSubContainer = lowest
@@ -222,15 +203,14 @@ def yPFeGKPGXPIY(lowest):
 
 
 @complex_middle_container
-def uIRpkBWARVOQ(lowest):
-    """Let notation."""
-
+def _uIRpkBWARVOQ(lowest):
+    # Let notation.
     return Injector.let(SubSubContainer=lowest)
 
 
 @complex_lowest_container
-def bJmCQECfcIzZ():
-    """Declarative injector."""
+def _bJmCQECfcIzZ():
+    # Declarative injector.
 
     class SubSubContainer(Injector):
         bar = (this << 2).foo
@@ -239,16 +219,14 @@ def bJmCQECfcIzZ():
 
 
 @complex_lowest_container
-def qzYMsyvxYFLe():
-    """Let notation."""
-
+def _qzYMsyvxYFLe():
+    # Let notation.
     return Injector.let(bar=(this << 2).foo)
 
 
 @complex_lowest_container
-def epoadTufdhne():
-    """Package link."""
-
+def _epoadTufdhne():
+    # Package link.
     pkg = Package("pkg")
 
     return pkg.injected.SubSubContainer
@@ -266,9 +244,11 @@ long_lowest_container = CodeCollector("lowest")
 @long_middle_container.parametrize
 @long_lowest_container.parametrize
 def test_circle_links_two_level_long_loop(code, middle, lowest):
-    """We can detect link loops in nested injectors two level deep with
-    intermediate links."""
+    """Search for dependency loop errors in the complex object graph.
 
+    We can detect link loops in nested injectors two level deep with intermediate links.
+
+    """
     with pytest.raises(DependencyError) as exc_info:
         code(middle(lowest()))
 
@@ -285,8 +265,8 @@ def test_circle_links_two_level_long_loop(code, middle, lowest):
 
 
 @long_two_levels
-def eHyErh9kExHG(middle):
-    """Declarative injector."""
+def _eHyErh9kExHG(middle):
+    # Declarative injector.
 
     class Container(Injector):
         foo = this.SubContainer.baz
@@ -296,15 +276,14 @@ def eHyErh9kExHG(middle):
 
 
 @long_two_levels
-def q0KytyVbE2XA(middle):
-    """Let notation."""
-
+def _q0KytyVbE2XA(middle):
+    # Let notation.
     Injector.let(foo=this.SubContainer.baz, SubContainer=middle).foo
 
 
 @long_middle_container
-def mwcbtGunjMac(lowest):
-    """Declarative injector."""
+def _mwcbtGunjMac(lowest):
+    # Declarative injector.
 
     class SubContainer(Injector):
         baz = this.SubSubContainer.bar
@@ -314,15 +293,14 @@ def mwcbtGunjMac(lowest):
 
 
 @long_middle_container
-def aVJRixHNhChV(lowest):
-    """Let notation."""
-
+def _aVJRixHNhChV(lowest):
+    # Let notation.
     return Injector.let(baz=this.SubSubContainer.bar, SubSubContainer=lowest)
 
 
 @long_lowest_container
-def qRcNcKzedWaI():
-    """Declarative injector."""
+def _qRcNcKzedWaI():
+    # Declarative injector.
 
     class SubSubContainer(Injector):
         bar = (this << 2).foo
@@ -331,16 +309,14 @@ def qRcNcKzedWaI():
 
 
 @long_lowest_container
-def fiktpicgZWNS():
-    """Let notation."""
-
+def _fiktpicgZWNS():
+    # Let notation.
     return Injector.let(bar=(this << 2).foo)
 
 
 @long_lowest_container
-def uugFwsWbfgXg():
-    """Package link."""
-
+def _uugFwsWbfgXg():
+    # Package link.
     pkg = Package("pkg")
 
     return pkg.injected.SubSubContainer
@@ -358,9 +334,12 @@ subcontainer2 = CodeCollector("sub2")
 @subcontainer1.parametrize
 @subcontainer2.parametrize
 def test_cross_injector_loops(code, sub1, sub2):
-    """We can detect loops between links in different `Injector` subclasses in
-    the hierarchy."""
+    """Search for dependency loop errors in the complex object graph.
 
+    We can detect loops between links in different `Injector` subclasses in the
+    hierarchy.
+
+    """
     with pytest.raises(DependencyError) as exc_info:
         code(sub1(), sub2())
 
@@ -375,8 +354,8 @@ def test_cross_injector_loops(code, sub1, sub2):
 
 
 @cross_injector_loops
-def vAyZepNGAUjY(sub1, sub2):
-    """Declarative injector."""
+def _vAyZepNGAUjY(sub1, sub2):
+    # Declarative injector.
 
     class Container(Injector):
         SubContainer1 = sub1
@@ -386,18 +365,14 @@ def vAyZepNGAUjY(sub1, sub2):
 
 
 @cross_injector_loops
-def bLRoCCj9uNOp(sub1, sub2):
-    """Let notation.
-
-    Cross injector links.
-    """
-
+def _bLRoCCj9uNOp(sub1, sub2):
+    # Let notation.  Cross injector links.
     Injector.let(SubContainer1=sub1, SubContainer2=sub2).SubContainer1.bar
 
 
 @subcontainer1
-def eiVzvYStvpNL():
-    """Declarative injector."""
+def _eiVzvYStvpNL():
+    # Declarative injector.
 
     class SubContainer1(Injector):
         bar = (this << 1).SubContainer2.baz
@@ -406,24 +381,22 @@ def eiVzvYStvpNL():
 
 
 @subcontainer1
-def elifFWSpshiv():
-    """Let notation."""
-
+def _elifFWSpshiv():
+    # Let notation.
     return Injector.let(bar=(this << 1).SubContainer2.baz)
 
 
 @subcontainer1
-def yavnvOrgKYNS():
-    """Package link."""
-
+def _yavnvOrgKYNS():
+    # Package link.
     pkg = Package("pkg")
 
     return pkg.injected.SubContainer1
 
 
 @subcontainer2
-def fFuLltxguVgC():
-    """Declarative injector."""
+def _fFuLltxguVgC():
+    # Declarative injector.
 
     class SubContainer2(Injector):
         baz = (this << 1).SubContainer1.bar
@@ -432,16 +405,14 @@ def fFuLltxguVgC():
 
 
 @subcontainer2
-def rRsNsCaBSxke():
-    """Let notation."""
-
+def _rRsNsCaBSxke():
+    # Let notation.
     return Injector.let(baz=(this << 1).SubContainer1.bar)
 
 
 @subcontainer2
-def xVeDBvAxsNYP():
-    """Package link."""
-
+def _xVeDBvAxsNYP():
+    # Package link.
     pkg = Package("pkg")
 
     return pkg.injected.SubContainer2
@@ -456,7 +427,6 @@ items = CodeCollector()
 @items.parametrize
 def test_item_access_loops(code):
     """We can detect loops created with get item access."""
-
     with pytest.raises(DependencyError) as exc_info:
         code()
 
@@ -467,8 +437,8 @@ def test_item_access_loops(code):
 
 
 @items.xfail
-def oClqGRmWJAkA():
-    """Declarative injector."""
+def _oClqGRmWJAkA():
+    # Declarative injector.
 
     class Container(Injector):
         class SubContainer(Injector):
@@ -481,16 +451,19 @@ def oClqGRmWJAkA():
 
 
 @items.xfail
-def t41yMywZuPhA():
-    """Let notation."""
-
+def _t41yMywZuPhA():
+    # Let notation.
     SubContainer = Injector.let(foo=(this << 1).bar["sub"].foo)
     Injector.let(SubContainer=SubContainer, bar={"sub": SubContainer}).SubContainer.foo
 
 
 def test_false_positive_loop_lookup_protection():
-    """We should allow proxy to point to objects with the same name if it does
-    not create a circle link."""
+    """Protect from false positive loop error detections.
+
+    We should allow proxy to point to objects with the same name if it does not create a
+    circle link.
+
+    """
 
     class Container(Injector):
 

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+"""Tests related to the Injector subclasses."""
 from inspect import isclass
 
 import pytest
@@ -68,6 +69,7 @@ def test_class_dependency():
     """Inject class.
 
     Instantiate class from the same scope and inject its instance.
+
     """
 
     class Foo(object):
@@ -98,6 +100,7 @@ def test_do_not_instantiate_dependencies_ended_with_class():
     """Do not call class constructor, if it stored with name ended `_class`.
 
     For example, `logger_class`.
+
     """
 
     class Foo(object):
@@ -110,8 +113,7 @@ def test_do_not_instantiate_dependencies_ended_with_class():
 
 
 def test_redefine_dependency():
-    """We can redefine dependency by inheritance from the `Injector`
-    subclass."""
+    """We can redefine dependency by inheritance from the `Injector` subclass."""
 
     class Foo(object):
         def __init__(self, add):
@@ -131,8 +133,12 @@ def test_redefine_dependency():
 
 
 def test_override_keyword_argument_if_dependency_was_specified():
-    """Use specified dependency for constructor keyword arguments if dependency
-    with desired name was mentioned in the injector."""
+    """Injector attributes takes precedence on default keyword arguments.
+
+    Use specified dependency for constructor keyword arguments if dependency with
+    desired name was mentioned in the injector.
+
+    """
 
     class Foo(object):
         def __init__(self, add, y=1):
@@ -151,8 +157,12 @@ def test_override_keyword_argument_if_dependency_was_specified():
 
 
 def test_preserve_keyword_argument_if_dependency_was_missed():
-    """Use constructor keyword arguments if dependency with desired name was
-    missed in the injector."""
+    """Default keyword arguments should be used if injector attribute is missing.
+
+    Use constructor keyword arguments if dependency with desired name was missed in the
+    injector.
+
+    """
 
     class Foo(object):
         def __init__(self, add, y=1):
@@ -170,8 +180,12 @@ def test_preserve_keyword_argument_if_dependency_was_missed():
 
 
 def test_preserve_missed_keyword_argument_in_the_middle():
-    """Use default keyword argument and override following keyword argument
-    since it was specified in the constructor."""
+    """Missed injector attributes could be defined in any order.
+
+    Use default keyword argument and override following keyword argument since it was
+    specified in the constructor.
+
+    """
 
     class Foo(object):
         def __init__(self, x, y=1, z=2):
@@ -191,8 +205,7 @@ def test_preserve_missed_keyword_argument_in_the_middle():
 
 
 def test_class_named_argument_default_value():
-    """Allow classes as default argument values if argument name ends with
-    `_class`."""
+    """Allow classes as default argument values if argument name ends with `_class`."""
 
     class Foo(object):
         pass
@@ -208,8 +221,11 @@ def test_class_named_argument_default_value():
 
 
 def test_injectable_without_its_own_init():
-    """Inject dependencies into object subclass which doesn't specify its own
-    `__init__`."""
+    """Instantiate classes without it's own constructor.
+
+    Inject dependencies into object subclass which doesn't specify its own `__init__`.
+
+    """
 
     class Foo(object):
         def do(self):
@@ -242,8 +258,7 @@ def test_injectable_with_parent_init():
 
 
 def test_injectable_with_parent_without_init():
-    """Inject dependencies into object which parent doesn't define
-    `__init__`."""
+    """Inject dependencies into object which parent doesn't define `__init__`."""
 
     class Foo(object):
         pass
@@ -262,8 +277,7 @@ def test_injectable_with_parent_without_init():
 
 
 def test_let_factory():
-    """`Injector` subclass can produce its own subclasses with `let`
-    factory."""
+    """`Injector` subclass can produce its own subclasses with `let` factory."""
 
     class Foo(Injector):
         pass
@@ -272,8 +286,7 @@ def test_let_factory():
 
 
 def test_let_factory_overwrite_dependencies():
-    """`Injector.let` produce `Injector` subclass with overwritten
-    dependencies."""
+    """`Injector.let` produce `Injector` subclass with overwritten dependencies."""
 
     class Foo(Injector):
         bar = 1
@@ -291,8 +304,7 @@ def test_let_factory_resolve_not_overwritten_dependencies():
 
 
 def test_let_factory_on_injector_directly():
-    """Dependencies can be specified with `let` factory applied to `Injector`
-    derectly."""
+    """`let` method could be called on `Injector` directly."""
 
     class Foo(object):
         def __init__(self, bar):
@@ -321,8 +333,7 @@ def test_show_common_class_attributes_with_dir():
 
 
 def test_show_injected_dependencies_with_dir():
-    """`dir` should show injected dependencies and hide `__dependencies__`
-    container."""
+    """`dir` should show injected dependencies and hide `__dependencies__` container."""
 
     class Foo(Injector):
         x = 1
@@ -345,7 +356,6 @@ def test_show_injected_dependencies_with_dir_once():
 
 def test_show_let_dependencies_with_dir():
     """`dir` show dependencies injected with `let`."""
-
     assert "x" in dir(Injector.let(x=1))
 
     class Foo(Injector):
@@ -358,6 +368,7 @@ def test_omit_parent_link_in_dir_listing():
     """Don't show `__parent__` link in the `dir` output.
 
     It is an implementation detail.
+
     """
 
     class Foo(Injector):
@@ -373,7 +384,6 @@ attribute_assignment = CodeCollector()
 @attribute_assignment.parametrize
 def test_deny_injector_changes(code):
     """Explicitly deny change of any kind on `Injector` and its subclasses."""
-
     with pytest.raises(DependencyError) as exc_info:
         code()
 
@@ -381,8 +391,8 @@ def test_deny_injector_changes(code):
 
 
 @attribute_assignment
-def mvT9oyJdXhzh():
-    """Attribute assignment."""
+def _mvT9oyJdXhzh():
+    # Attribute assignment.
 
     class Container(Injector):
         pass
@@ -391,23 +401,21 @@ def mvT9oyJdXhzh():
 
 
 @attribute_assignment
-def fXxRX4KFUc8q():
-    """Direct assignmet to the `Injector`."""
-
+def _fXxRX4KFUc8q():
+    # Direct assignmet to the `Injector`.
     Injector.foo = 1
 
 
 @attribute_assignment
-def pHfF0rbEjCsV():
-    """Let notation."""
-
+def _pHfF0rbEjCsV():
+    # Let notation.
     Container = Injector.let()
     Container.foo = 1
 
 
 @attribute_assignment
-def xhZaIhujf34t():
-    """Delete attribute."""
+def _xhZaIhujf34t():
+    # Delete attribute.
 
     class Container(Injector):
         foo = 1
@@ -416,17 +424,15 @@ def xhZaIhujf34t():
 
 
 @attribute_assignment
-def jShuBfttg97c():
-    """Delete attribute let notation."""
-
+def _jShuBfttg97c():
+    # Delete attribute let notation.
     Container = Injector.let(foo=1)
     del Container.foo
 
 
 @attribute_assignment
-def tQeRzD5ZsyTm():
-    """Delete attribute from `Injector` directly."""
-
+def _tQeRzD5ZsyTm():
+    # Delete attribute from `Injector` directly.
     del Injector.let
 
 
@@ -434,8 +440,7 @@ def tQeRzD5ZsyTm():
 
 
 def test_nested_injectors():
-    """It is possible to use `Injector` subclass as attribute in the another
-    `Injector` subclass."""
+    """`Injector` subclass could be used as attribute of another `Injector` subclass."""
 
     def do_x(a, b):
         return a + b
@@ -469,8 +474,11 @@ def test_nested_injectors():
 
 
 def test_docstrings():
-    """Check we can access all API entry points documentation."""
+    """Check we can access Injector docstring.
 
+    It's handled by metaclass at runtime.
+
+    """
     assert (
         Injector.__doc__ == "\n"
         "Default dependencies specification DSL.\n"
@@ -478,11 +486,6 @@ def test_docstrings():
         "Classes inherited from this class may inject dependencies into classes\n"
         "specified in it namespace.\n"
     )
-    assert (
-        Injector.let.__doc__
-        == "Produce new Injector with some dependencies overwritten."
-    )
-    assert DependencyError.__doc__ == "Broken dependencies configuration error."
 
     class Foo(Injector):
         """New container."""
@@ -525,17 +528,15 @@ def test_evaluate_dependencies_once(code):
 
 
 @evaluate_classes
-def ea4367450e47(Container):
-    """Each dependency evaluated once during injection."""
-
+def _ea4367450e47(Container):
+    # Each dependency evaluated once during injection.
     x = Container.a
     assert x.b.d is x.c.d
 
 
 @evaluate_classes
-def dd91602f3455(Container):
-    """We reevaluate each dependency for different injections."""
-
+def _dd91602f3455(Container):
+    # We reevaluate each dependency for different injections.
     assert Container.a.b.d is not Container.a.b.d
     assert Container.a.b.d is not Container.a.c.d
 
@@ -571,8 +572,8 @@ def test_multiple_inheritance(code):
 
 
 @multiple_inheritance
-def edf946cc6077(Foo, FooContainer, BarContainer, BazContainer):
-    """Inheritance."""
+def _edf946cc6077(Foo, FooContainer, BarContainer, BazContainer):
+    # Inheritance.
 
     class Container(FooContainer, BarContainer, BazContainer):
         pass
@@ -581,9 +582,8 @@ def edf946cc6077(Foo, FooContainer, BarContainer, BazContainer):
 
 
 @multiple_inheritance
-def efdc426cd096(Foo, FooContainer, BarContainer, BazContainer):
-    """Inplace creation."""
-
+def _efdc426cd096(Foo, FooContainer, BarContainer, BazContainer):
+    # Inplace creation.
     assert isinstance((FooContainer & BarContainer & BazContainer).baz.bar.foo, Foo)
 
 
@@ -592,8 +592,12 @@ inheritance_order = CodeCollector()
 
 @inheritance_order.parametrize
 def test_multiple_inheritance_injectors_order(code):
-    """`Injector` which comes first in the subclass bases or inplace creation
-    must have higher precedence."""
+    """Order of `Injector` subclasses should affect injection result.
+
+    `Injector` which comes first in the subclass bases or inplace creation must have
+    higher precedence.
+
+    """
 
     class Container1(Injector):
         x = 1
@@ -608,8 +612,8 @@ def test_multiple_inheritance_injectors_order(code):
 
 
 @inheritance_order
-def aa10c7747a1f(Container1, Container2, Container3):
-    """Inheritance."""
+def _aa10c7747a1f(Container1, Container2, Container3):
+    # Inheritance.
 
     class Foo(Container1, Container2, Container3):
         pass
@@ -618,8 +622,8 @@ def aa10c7747a1f(Container1, Container2, Container3):
 
 
 @inheritance_order
-def e056e22f3fd5(Container1, Container2, Container3):
-    """Inheritance with own attributes."""
+def _e056e22f3fd5(Container1, Container2, Container3):
+    # Inheritance with own attributes.
 
     class Foo(Container1, Container2, Container3):
         x = 4
@@ -628,9 +632,8 @@ def e056e22f3fd5(Container1, Container2, Container3):
 
 
 @inheritance_order
-def d851e0414bdf(Container1, Container2, Container3):
-    """Inplace creation."""
-
+def _d851e0414bdf(Container1, Container2, Container3):
+    # Inplace creation.
     assert (Container1 & Container2 & Container3).x == 1
 
 
@@ -639,8 +642,7 @@ subclasses_only = CodeCollector()
 
 @subclasses_only.parametrize
 def test_multiple_inheritance_deny_regular_classes(code):
-    """We can't use classes in multiple inheritance which are not `Injector`
-    subclasses."""
+    """Only `Injector` subclasses are allowed to be used in the inheritance."""
 
     class Foo(object):
         pass
@@ -653,17 +655,16 @@ def test_multiple_inheritance_deny_regular_classes(code):
 
 
 @subclasses_only
-def f1583394f1a6(Foo):
-    """Inheritance."""
+def _f1583394f1a6(Foo):
+    # Inheritance.
 
     class Bar(Injector, Foo):
         pass
 
 
 @subclasses_only
-def b51814725d07(Foo):
-    """Inplace creation."""
-
+def _b51814725d07(Foo):
+    # Inplace creation.
     Injector & Foo
 
 
@@ -673,7 +674,6 @@ deny_magic_methods = CodeCollector()
 @deny_magic_methods.parametrize
 def test_deny_magic_methods_injection(code):
     """`Injector` doesn't accept magic methods."""
-
     with pytest.raises(DependencyError) as exc_info:
         code()
 
@@ -681,8 +681,8 @@ def test_deny_magic_methods_injection(code):
 
 
 @deny_magic_methods
-def e78bf771747c():
-    """Declarative injector."""
+def _e78bf771747c():
+    # Declarative injector.
 
     class Bar(Injector):
         def __eq__(self, other):
@@ -690,8 +690,8 @@ def e78bf771747c():
 
 
 @deny_magic_methods
-def e34b88041f64():
-    """Let notation."""
+def _e34b88041f64():
+    # Let notation.
 
     class Foo(Injector):
         pass
@@ -708,7 +708,6 @@ attribute_error = CodeCollector()
 @attribute_error.parametrize
 def test_attribute_error(code):
     """Raise `DependencyError` if we can't find dependency."""
-
     with pytest.raises(DependencyError) as exc_info:
         code()
 
@@ -719,8 +718,8 @@ def test_attribute_error(code):
 
 
 @attribute_error
-def c58b054bfcd0():
-    """Declarative injector."""
+def _c58b054bfcd0():
+    # Declarative injector.
 
     class Foo(Injector):
         pass
@@ -729,17 +728,16 @@ def c58b054bfcd0():
 
 
 @attribute_error
-def f9c50c81e8c9():
-    """Let notation."""
-
+def _f9c50c81e8c9():
+    # Let notation.
     Foo = Injector.let()
 
     Foo.test
 
 
 @attribute_error
-def e2f16596a652():
-    """Let notation from subclass."""
+def _e2f16596a652():
+    # Let notation from subclass.
 
     class Foo(Injector):
         pass
@@ -753,7 +751,6 @@ incomplete_dependencies = CodeCollector()
 @incomplete_dependencies.parametrize
 def test_incomplete_dependencies_error(code):
     """Raise `DependencyError` if we can't find dependency."""
-
     with pytest.raises(DependencyError) as exc_info:
         code()
 
@@ -764,8 +761,8 @@ def test_incomplete_dependencies_error(code):
 
 
 @incomplete_dependencies
-def c4e7ecf75167():
-    """Keyword arguments in the constructor."""
+def _c4e7ecf75167():
+    # Keyword arguments in the constructor.
 
     class Bar(object):
         def __init__(self, test, two=2):
@@ -778,8 +775,8 @@ def c4e7ecf75167():
 
 
 @incomplete_dependencies
-def dmsMgYqbsHgB():
-    """Constructor argument with let notation."""
+def _dmsMgYqbsHgB():
+    # Constructor argument with let notation.
 
     class Bar(object):
         def __init__(self, test):
@@ -796,15 +793,14 @@ has_attribute = CodeCollector()
 @has_attribute.parametrize
 def test_has_attribute(code):
     """`Injector` should support `in` statement."""
-
     container = code()
     assert "foo" in container
     assert "bar" not in container
 
 
 @has_attribute
-def gwufxYkhURAF():
-    """Declarative injector."""
+def _gwufxYkhURAF():
+    # Declarative injector.
 
     class Container(Injector):
         foo = 1
@@ -813,9 +809,8 @@ def gwufxYkhURAF():
 
 
 @has_attribute
-def zlZoLka31ndk():
-    """Let notation."""
-
+def _zlZoLka31ndk():
+    # Let notation.
     return Injector.let(foo=1)
 
 
@@ -838,8 +833,8 @@ def test_deny_arbitrary_argument_list(code):
 
 
 @deny_varargs
-def dfe1c22c641e(Foo):
-    """Declarative injector."""
+def _dfe1c22c641e(Foo):
+    # Declarative injector.
 
     class Summator(Injector):
         foo = Foo
@@ -847,8 +842,8 @@ def dfe1c22c641e(Foo):
 
 
 @deny_varargs
-def f7ef2aa82c18(Foo):
-    """Let notation."""
+def _f7ef2aa82c18(Foo):
+    # Let notation.
     Injector.let(foo=Foo, args=(1, 2, 3))
 
 
@@ -871,8 +866,8 @@ def test_deny_arbitrary_keyword_arguments(code):
 
 
 @deny_kwargs
-def e281099be65d(Foo):
-    """Declarative injector."""
+def _e281099be65d(Foo):
+    # Declarative injector.
 
     class Summator(Injector):
         foo = Foo
@@ -880,9 +875,8 @@ def e281099be65d(Foo):
 
 
 @deny_kwargs
-def bcf7c5881b2c(Foo):
-    """Let notation."""
-
+def _bcf7c5881b2c(Foo):
+    # Let notation.
     Injector.let(foo=Foo, kwargs={"start": 5})
 
 
@@ -891,8 +885,7 @@ deny_varargs_kwargs = CodeCollector()
 
 @deny_varargs_kwargs.parametrize
 def test_deny_arbitrary_positional_and_keyword_arguments_together(code):
-    """Raise `DependencyError` if constructor have *args and **kwargs
-    argument."""
+    """Raise `DependencyError` if constructor have *args and **kwargs argument."""
 
     class Foo(object):
         def __init__(self, *args, **kwargs):
@@ -906,8 +899,8 @@ def test_deny_arbitrary_positional_and_keyword_arguments_together(code):
 
 
 @deny_varargs_kwargs
-def efbf07f8deb6(Foo):
-    """Declarative injector."""
+def _efbf07f8deb6(Foo):
+    # Declarative injector.
 
     class Summator(Injector):
         foo = Foo
@@ -916,9 +909,8 @@ def efbf07f8deb6(Foo):
 
 
 @deny_varargs_kwargs
-def c4362558f312(Foo):
-    """Let notation."""
-
+def _c4362558f312(Foo):
+    # Let notation.
     Injector.let(foo=Foo, args=(1, 2, 3), kwargs={"start": 5})
 
 
@@ -928,7 +920,6 @@ deny_let_redefine = CodeCollector()
 @deny_let_redefine.parametrize
 def test_deny_to_redefine_let_attribute(code):
     """We can't redefine let attribute in the `Injector` subclasses."""
-
     with pytest.raises(DependencyError) as exc_info:
         code()
 
@@ -936,16 +927,16 @@ def test_deny_to_redefine_let_attribute(code):
 
 
 @deny_let_redefine
-def a2bfa842df0c():
-    """Declarative injector."""
+def _a2bfa842df0c():
+    # Declarative injector.
 
     class Foo(Injector):
         let = 2
 
 
 @deny_let_redefine
-def ddd392e70db6():
-    """Let notation."""
+def _ddd392e70db6():
+    # Let notation.
 
     class Foo(Injector):
         pass
@@ -959,7 +950,6 @@ deny_call = CodeCollector()
 @deny_call.parametrize
 def test_deny_to_instantiate_injector(code):
     """Deny injector instantiation."""
-
     with pytest.raises(DependencyError) as exc_info:
         code()
 
@@ -967,15 +957,14 @@ def test_deny_to_instantiate_injector(code):
 
 
 @deny_call
-def ce52d740af31():
-    """Direct call."""
-
+def _ce52d740af31():
+    # Direct call.
     Injector()
 
 
 @deny_call
-def a95940f44400():
-    """Subclass call."""
+def _a95940f44400():
+    # Subclass call.
 
     class Foo(Injector):
         pass
@@ -984,16 +973,14 @@ def a95940f44400():
 
 
 @deny_call
-def d10b4ba474a9():
-    """Ignore any arguments passed."""
-
+def _d10b4ba474a9():
+    # Ignore any arguments passed.
     Injector(1)
 
 
 @deny_call
-def d665c722baae():
-    """Ignore any keyword argument passed."""
-
+def _d665c722baae():
+    # Ignore any keyword argument passed.
     Injector(x=1)
 
 
@@ -1002,8 +989,11 @@ cls_named_arguments = CodeCollector()
 
 @cls_named_arguments.parametrize
 def test_deny_classes_as_default_values(code):
-    """If argument name doesn't ends with `_class`, its default value can't be
-    a class."""
+    """Verify constructor default arguments against naming conventions.
+
+    If argument name doesn't ends with `_class`, its default value can't be a class.
+
+    """
 
     class Foo(object):
         pass
@@ -1026,17 +1016,16 @@ or set the default value to an instance of that class.
 
 
 @cls_named_arguments
-def dad79637580d(Foo, Bar):
-    """Declarative injector."""
+def _dad79637580d(Foo, Bar):
+    # Declarative injector.
 
     class Container(Injector):
         bar = Bar
 
 
 @cls_named_arguments
-def bccb4f621e70(Foo, Bar):
-    """Let notation."""
-
+def _bccb4f621e70(Foo, Bar):
+    # Let notation.
     Injector.let(bar=Bar)
 
 
@@ -1045,8 +1034,7 @@ cls_named_defaults = CodeCollector()
 
 @cls_named_defaults.parametrize
 def test_deny_non_classes_in_class_named_arguments(code):
-    """If argument name ends with `_class`, it must have a class as it default
-    value."""
+    """If argument name ends with `_class`, it must have a class as it default value."""
 
     class Bar(object):
         def __init__(self, foo_class=1):
@@ -1060,15 +1048,14 @@ def test_deny_non_classes_in_class_named_arguments(code):
 
 
 @cls_named_defaults
-def a8cd70341d3d(Bar):
-    """Declarative injector."""
+def _a8cd70341d3d(Bar):
+    # Declarative injector.
 
     class Container(Injector):
         bar = Bar
 
 
 @cls_named_defaults
-def b859e98f2913(Bar):
-    """Let notation."""
-
+def _b859e98f2913(Bar):
+    # Let notation.
     Injector.let(bar=Bar)

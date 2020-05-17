@@ -46,6 +46,7 @@ def test_tox_environments_use_max_base_python():
     use max Python version.
 
     Max Python version is assumed from the .python-versions file.
+
     """
     pyenv_version = max(
         sorted(
@@ -60,8 +61,9 @@ def test_tox_environments_use_max_base_python():
 def test_envlist_contains_all_tox_environments():
     """The envlist setting should contains all tox environments.
 
-    It's not allowed to have tox environments defined without having
-    them in the envlist.
+    It's not allowed to have tox environments defined without having them in the
+    envlist.
+
     """
     tox_environments = set(subprocess.check_output(["tox", "-l"]).decode().splitlines())
 
@@ -77,8 +79,9 @@ def test_envlist_contains_all_tox_environments():
 def test_tox_generative_environments_has_common_definition():
     """Test envlist contains python environments together with plain testenv.
 
-    The plain testenv definition is allowed only if envlist contains
-    generative environments.
+    The plain testenv definition is allowed only if envlist contains generative
+    environments.
+
     """
     tox_environments = {
         "testenv"
@@ -119,6 +122,7 @@ def test_coverage_include_all_packages():
     1. From the main pyproject.toml.
     2. From test helpers pyproject.toml.
     3. The tests package.
+
     """
     ini_parser = configparser.ConfigParser()
     ini_parser.read(".coveragerc")

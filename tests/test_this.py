@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+"""Tests related to the `this` proxy."""
 import pytest
 
 from dependencies import Injector
@@ -11,8 +12,7 @@ from helpers import CodeCollector
 
 
 def test_attribute_getter():
-    """We can describe attribute access in the `Injector` in declarative
-    manner."""
+    """We can describe attribute access in the `Injector` in declarative manner."""
 
     class Foo(object):
         def __init__(self, one, two):
@@ -60,16 +60,14 @@ item_access = CodeCollector()
 
 @item_access.parametrize
 def test_item_getter(code):
-    """We can describe item access in the `Injector` in the declarative
-    manner."""
-
+    """We can describe item access in the `Injector` in the declarative manner."""
     result = code()
     assert result == 1
 
 
 @item_access
-def ce642f492941():
-    """Get item with string key."""
+def _ce642f492941():
+    # Get item with string key.
 
     class Container(Injector):
         foo = {"one": 1}
@@ -81,8 +79,8 @@ def ce642f492941():
 
 
 @item_access
-def ffa208dc1130():
-    """Get items as many times as we want."""
+def _ffa208dc1130():
+    # Get items as many times as we want.
 
     class Container(Injector):
         foo = {"one": {"two": 1}}
@@ -94,8 +92,8 @@ def ffa208dc1130():
 
 
 @item_access
-def e5c358190fef():
-    """Get item from the outer container."""
+def _e5c358190fef():
+    # Get item from the outer container.
 
     class Container(Injector):
         foo = {"bar": {"baz": 1}}
@@ -109,8 +107,8 @@ def e5c358190fef():
 
 
 @item_access
-def ab4cdbf60b2f():
-    """Get item from the outer container of any depth level."""
+def _ab4cdbf60b2f():
+    # Get item from the outer container of any depth level.
 
     class Container(Injector):
         foo = {"bar": {"baz": 1}}
@@ -125,8 +123,8 @@ def ab4cdbf60b2f():
 
 
 @item_access
-def be332433b74d():
-    """Get items from list."""
+def _be332433b74d():
+    # Get items from list.
 
     class Container(Injector):
         foo = [1, 2, 3]
@@ -138,8 +136,8 @@ def be332433b74d():
 
 
 @item_access
-def fe150d5ebe93():
-    """Get items from dict with digit keys."""
+def _fe150d5ebe93():
+    # Get items from dict with digit keys.
 
     class Container(Injector):
         foo = {2: 1}
@@ -151,8 +149,8 @@ def fe150d5ebe93():
 
 
 @item_access
-def dc4fedcd09d8():
-    """Get items from dict with tuple keys."""
+def _dc4fedcd09d8():
+    # Get items from dict with tuple keys.
 
     class Container(Injector):
         foo = {("x", 1): 1}
@@ -164,8 +162,11 @@ def dc4fedcd09d8():
 
 
 def test_item_getter_non_printable_key():
-    """We can describe item access for keys which can't be presented as normal
-    strings."""
+    """Don't use string representation as key hash function.
+
+    We can describe item access for keys which can't be presented as normal strings.
+
+    """
 
     class Boom(object):
         def __init__(self, salt):
@@ -187,8 +188,7 @@ def test_item_getter_non_printable_key():
 
 
 def test_attribute_access_after_item_getter():
-    """Check we can use attribute access notation after item getter
-    notation."""
+    """Check we can use attribute access notation after item getter notation."""
 
     class Foo(object):
         x = 1
@@ -203,22 +203,12 @@ def test_attribute_access_after_item_getter():
     assert Container.baz == 1
 
 
-def test_docstrings():
-    """Check we can access all API entry points documentation."""
-
-    assert this.__doc__ == (
-        "Declare attribute and item access during dependency injection."
-    )
-
-
 direct_proxy = CodeCollector()
 
 
 @direct_proxy.parametrize
 def test_deny_this_without_attribute_access(code):
-    """`Thisable` instances can't be injected without pointing to any other
-    attribute."""
-
+    """`this` object can't be used as a dependency directly."""
     with pytest.raises(DependencyError) as exc_info:
         code()
 
@@ -227,38 +217,35 @@ def test_deny_this_without_attribute_access(code):
 
 
 @direct_proxy
-def b648b6f6a712():
-    """Declarative injector."""
+def _b648b6f6a712():
+    # Declarative injector.
 
     class Container(Injector):
         foo = this
 
 
 @direct_proxy
-def c147d398f4be():
-    """Declarative injector with parent access."""
+def _c147d398f4be():
+    # Declarative injector with parent access.
 
     class Container(Injector):
         foo = this << 1
 
 
 @direct_proxy
-def a37783b6d1ad():
-    """Let notation."""
-
+def _a37783b6d1ad():
+    # Let notation.
     Injector.let(foo=this)
 
 
 @direct_proxy
-def bd05271fb831():
-    """Let notation with parent access."""
-
+def _bd05271fb831():
+    # Let notation with parent access.
     Injector.let(foo=(this << 1))
 
 
 def test_this_deny_non_integers():
     """We can't shift `this` with non number argument."""
-
     with pytest.raises(ValueError, match=".*") as exc_info:
         this << "boom"
 
@@ -271,7 +258,6 @@ negative_integers = CodeCollector()
 @negative_integers.parametrize
 def test_this_deny_negative_integers(code):
     """We can't shift `this` with negative integer."""
-
     with pytest.raises(ValueError, match=".*") as exc_info:
         code()
 
@@ -279,16 +265,14 @@ def test_this_deny_negative_integers(code):
 
 
 @negative_integers
-def xsJWb2lx6EMs():
-    """Minus one."""
-
+def _xsJWb2lx6EMs():
+    # Minus one.
     this << -1
 
 
 @negative_integers
-def nvm3ybp98vGm():
-    """Zero."""
-
+def _nvm3ybp98vGm():
+    # Zero.
     this << 0
 
 
@@ -297,9 +281,12 @@ too_many = CodeCollector()
 
 @too_many.parametrize
 def test_require_more_parents_that_injector_actually_has(code):
-    """If we shift more that container levels available, we should provide
-    meaningful message to user."""
+    """Verify `this` expression against depth of nesting.
 
+    If we shift more that container levels available, we should provide meaningful
+    message to user.
+
+    """
     with pytest.raises(DependencyError) as exc_info:
         code()
 
@@ -309,8 +296,8 @@ def test_require_more_parents_that_injector_actually_has(code):
 
 
 @too_many
-def s6lduD7BJpxW():
-    """Declarative Injector."""
+def _s6lduD7BJpxW():
+    # Declarative Injector.
 
     class Container(Injector):
 
@@ -320,8 +307,8 @@ def s6lduD7BJpxW():
 
 
 @too_many
-def bUICVObtDZ4I():
-    """Declarative Injected with nested layer."""
+def _bUICVObtDZ4I():
+    # Declarative Injected with nested layer.
 
     class Container(Injector):
         class SubContainer(Injector):
@@ -332,16 +319,14 @@ def bUICVObtDZ4I():
 
 
 @too_many
-def ww6xNI4YrNr6():
-    """Let notation."""
-
+def _ww6xNI4YrNr6():
+    # Let notation.
     Injector.let(foo=(this << 1).bar).foo
 
 
 @too_many
-def rN3suiVzhqMM():
-    """Let notation with nested layer."""
-
+def _rN3suiVzhqMM():
+    # Let notation with nested layer.
     Injector.let(SubContainer=Injector.let(foo=(this << 2).bar)).SubContainer.foo
 
 
@@ -350,9 +335,12 @@ attribute_error = CodeCollector()
 
 @attribute_error.parametrize
 def test_attribute_error_on_parent_access(code):
-    """We should raise `AttributeError` if we have correct number of parents
-    but specify wrong attribute name."""
+    """Verify `this` object expression against existed dependencies.
 
+    We should raise `AttributeError` if we have correct number of parents but specify
+    wrong attribute name.
+
+    """
     with pytest.raises(DependencyError) as exc_info:
         code()
 
@@ -365,8 +353,8 @@ def test_attribute_error_on_parent_access(code):
 
 
 @attribute_error
-def t1jn9RI9v42t():
-    """Declarative Injector."""
+def _t1jn9RI9v42t():
+    # Declarative Injector.
 
     class Container(Injector):
 
@@ -376,8 +364,8 @@ def t1jn9RI9v42t():
 
 
 @attribute_error
-def yOEj1qQfsXHy():
-    """Declarative Injected with nested layer."""
+def _yOEj1qQfsXHy():
+    # Declarative Injected with nested layer.
 
     class Container(Injector):
         class SubContainer(Injector):
@@ -388,14 +376,12 @@ def yOEj1qQfsXHy():
 
 
 @attribute_error
-def vnmkIELBH3MN():
-    """Let notation."""
-
+def _vnmkIELBH3MN():
+    # Let notation.
     Injector.let(foo=this.bar).foo
 
 
 @attribute_error
-def pG9M52ZRQr2S():
-    """Let notation with nested layer."""
-
+def _pG9M52ZRQr2S():
+    # Let notation with nested layer.
     Injector.let(SubContainer=Injector.let(foo=(this << 1).bar)).SubContainer.foo
