@@ -6,5 +6,7 @@ accept-encodings = utf-8
 exclude =
   .tox
   node_modules
-ignore = E741, W503
+ignore = D105, D107, E741, W503
 per-file-ignores =
+  src/_dependencies/*.py: D100, D104
+  tests/helpers/*.py: D100, D104
