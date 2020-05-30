@@ -1,21 +1,11 @@
-![logo](https://raw.githubusercontent.com/dry-python/brand/master/logo/dependencies.png)
+# Dependencies
 
-[![azure-devops-builds](https://img.shields.io/azure-devops/build/dry-python/dependencies/2?style=flat-square)](https://dev.azure.com/dry-python/dependencies/_build/latest?definitionId=2&branchName=master)
-[![azure-devops-coverage](https://img.shields.io/azure-devops/coverage/dry-python/dependencies/2?style=flat-square)](https://dev.azure.com/dry-python/dependencies/_build/latest?definitionId=2&branchName=master)
-[![readthedocs](https://img.shields.io/readthedocs/dependencies?style=flat-square)](https://dependencies.readthedocs.io/en/latest/?badge=latest)
-[![gitter](https://img.shields.io/gitter/room/dry-python/dependencies?style=flat-square)](https://gitter.im/dry-python/dependencies)
+[![azure-devops-builds](https://img.shields.io/azure-devops/build/proofit404/dependencies/2?style=flat-square)](https://dev.azure.com/proofit404/dependencies/_build/latest?definitionId=2&branchName=master)
+[![azure-devops-coverage](https://img.shields.io/azure-devops/coverage/proofit404/dependencies/2?style=flat-square)](https://dev.azure.com/proofit404/dependencies/_build/latest?definitionId=2&branchName=master)
 [![pypi](https://img.shields.io/pypi/v/dependencies?style=flat-square)](https://pypi.python.org/pypi/dependencies/)
 [![conda](https://img.shields.io/conda/vn/conda-forge/dependencies?style=flat-square)](https://anaconda.org/conda-forge/dependencies)
 
----
-
-# Dependency Injection for Humans
-
-- [Source Code](https://github.com/dry-python/dependencies)
-- [Issue Tracker](https://github.com/dry-python/dependencies/issues)
-- [Documentation](https://dependencies.readthedocs.io/en/latest/)
-- [Newsletter](https://twitter.com/dry_py)
-- [Discussion](https://gitter.im/dry-python/dependencies)
+Dependency Injection for Humans.
 
 ## Installation
 
@@ -67,5 +57,4 @@ Dependency injection with `dependencies`
 Dependencies library is offered under the two clause BSD license.
 
 <p align="center">&mdash; ⭐️ &mdash;</p>
-<p align="center"><i>Drylabs maintains dry-python and helps those who want to use it inside their organizations.</i></p>
-<p align="center"><i>Read more at <a href="https://drylabs.io">drylabs.io</a></i></p>
+<p align="center"><i>The dependencies library is part of the SOLID python family.</i></p>

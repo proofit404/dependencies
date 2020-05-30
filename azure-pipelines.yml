@@ -26,11 +26,9 @@ jobs:
         inputs:
           versionSpec: "3.8"
         displayName: Install Python 3.8.
-      - script: pip install --upgrade tox
-        displayName: Install Tox.
       - task: NodeTool@0
         inputs:
-          versionSpec: "10.x"
+          versionSpec: "12.x"
         displayName: Install NodeJS.
       - script: |
           git remote set-branches origin master
@@ -38,6 +36,8 @@ jobs:
           git checkout master --quiet
           git checkout - --quiet
         displayName: Unshallow commit log.
+      - script: pip install --upgrade tox
+        displayName: Install Tox.
       - script: tox -p auto
         env:
           CI_PYTEST_FLAGS: >-
@@ -64,7 +64,7 @@ jobs:
         condition: eq(variables['Build.Reason'], 'PullRequest')
         env:
           DANGER_FAKE_CI: YEP
-          DANGER_TEST_REPO: dry-python/dependencies
+          DANGER_TEST_REPO: proofit404/dependencies
           DANGER_TEST_PR: $(System.PullRequest.PullRequestNumber)
           GITHUB_TOKEN: $(DANGER_GITHUB_TOKEN)
         displayName: Review pull request.
@@ -78,6 +78,15 @@ jobs:
         inputs:
           versionSpec: "3.8"
         displayName: Install Python.
+      - task: NodeTool@0
+        inputs:
+          versionSpec: "12.x"
+        displayName: Install NodeJS.
+      - script: |
+          git remote set-branches origin master
+          git fetch --quiet
+          git checkout master --quiet
+        displayName: Unshallow commit log.
       - script: pip install --upgrade tox
         displayName: Install Tox.
       - script: |
@@ -85,25 +94,12 @@ jobs:
           /python-poetry/poetry/master/get-poetry.py" | python
           echo '##vso[task.prependpath]$(HOME)/.poetry/bin'
         displayName: Install Poetry.
-      - task: NodeTool@0
-        inputs:
-          versionSpec: "10.x"
-        displayName: Install NodeJS.
       - script: |
           npm install
         displayName: Install JS dependencies.
       - script: |
-          git remote set-branches origin master
-          git fetch --quiet
-          git checkout master --quiet
-        displayName: Unshallow commit log.
-      - script: |
           npx semantic-release
         env:
-          GIT_AUTHOR_NAME: $(GIT_AUTHOR_NAME)
-          GIT_AUTHOR_EMAIL: $(GIT_AUTHOR_EMAIL)
-          GIT_COMMITTER_NAME: $(GIT_COMMITTER_NAME)
-          GIT_COMMITTER_EMAIL: $(GIT_COMMITTER_EMAIL)
           POETRY_PYPI_TOKEN_PYPI: $(POETRY_PYPI_TOKEN_PYPI)
           GITHUB_TOKEN: $(SEMANTIC_RELEASE_GITHUB_TOKEN)
         displayName: Release package.

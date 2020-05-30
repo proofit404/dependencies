@@ -234,25 +234,6 @@ def test_license_year():
             assert year == current_year
 
 
-# Read the docs.
-
-
-def test_readthedocs_deps_equal_tox_mkdocs_env():
-    """Dependencies in readthedocs should match with tox environment."""
-    ini_parser = configparser.ConfigParser()
-    ini_parser.read("tox.ini")
-    tox_deps = [
-        d.strip() for d in ini_parser["testenv:mkdocs"]["deps"].strip().splitlines()
-    ]
-
-    readthedocs_deps = [
-        d.strip().split(">")[0]
-        for d in open(".readthedocs.txt").read().strip().splitlines()
-    ]
-
-    assert tox_deps == readthedocs_deps
-
-
 # Definition order.
 
 

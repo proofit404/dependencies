@@ -3,19 +3,17 @@ strict: true
 site_name: dependencies
 site_description: Dependency Injection for Humans.
 theme:
-  name: "material"
+  name: material
   palette:
-    primary: "white"
-    accent: "light-blue"
-  logo: "https://raw.githubusercontent.com\
-    /dry-python/brand/master/logo/dry-python.png"
-  favicon: "https://raw.githubusercontent.com\
-    /dry-python/brand/master/logo/dry-python.ico"
-  language: "en"
+    primary: deep-purple
+    accent: deep-purple
+  icon:
+    logo: material/language-python
+  language: en
   features:
     - tabs
-repo_name: dry-python/dependencies
-repo_url: "https://github.com/dry-python/dependencies"
+repo_name: proofit404/dependencies
+repo_url: https://github.com/proofit404/dependencies
 edit_uri: ""
 markdown_extensions:
   - admonition
@@ -28,19 +26,19 @@ markdown_extensions:
   - pymdownx.tasklist:
       custom_checkbox: true
 extra_javascript:
-  - "javascripts/extra.js"
+  - javascripts/extra.js
 nav:
-  - "Home":
-      - "Home": index.md
-      - "Overview": overview.md
-      - "Why": why.md
-      - "Usage": usage.md
-      - "Implementation": implementation.md
-      - "FAQ": faq.md
-      - "Changelog": changelog.md
-  - "Proxies":
-      - "This": proxies/this.md
-      - "Operation": proxies/operation.md
-      - "Package": proxies/package.md
-  - "Guides":
-      - "Attrs": attrs.md
+  - Home:
+      - Home: index.md
+      - Overview: overview.md
+      - Why: why.md
+      - Usage: usage.md
+      - Implementation: implementation.md
+      - FAQ: faq.md
+      - Changelog: changelog.md
+  - Proxies:
+      - This: proxies/this.md
+      - Operation: proxies/operation.md
+      - Package: proxies/package.md
+  - Guides:
+      - Attrs: attrs.md

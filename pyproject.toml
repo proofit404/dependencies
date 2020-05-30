@@ -6,25 +6,14 @@ description = "Dependency Injection for Humans"
 readme = "README.md"
 license = "BSD-2-Clause"
 
-homepage = "https://dry-python.org/"
-repository = "https://github.com/dry-python/dependencies/"
-documentation = "https://dependencies.readthedocs.io/"
+repository = "https://github.com/proofit404/dependencies/"
 
 authors = [
     "Artem Malyshev <proofit404@gmail.com>",
 ]
 
-keywords = [
-    "di",
-    "dependency injection",
-    "ioc",
-    "inversion of control",
-    "architecture",
-    "design-patterns",
-]
-
 classifiers = [
-    "Development Status :: 4 - Beta",
+    "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
     "License :: OSI Approved :: BSD License",
     "Topic :: Software Development",

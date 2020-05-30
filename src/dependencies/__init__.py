@@ -5,7 +5,7 @@ dependencies
 
 Dependency Injection for Humans.
 
-:copyright: (c) 2016-2020 by dry-python team.
+:copyright: (c) 2016-2020 by Artem Malyshev.
 :license: BSD, see LICENSE for more details.
 """
 from _dependencies.injector import Injector
