@@ -1,8 +1,8 @@
-# [2.0.0](https://github.com/dry-python/dependencies/compare/1.0.1...2.0.0) (2020-05-17)
+# [2.0.0](https://github.com/proofit404/dependencies/compare/1.0.1...2.0.0) (2020-05-17)
 
 ### Features
 
-- remove contrib package ([5bfe041](https://github.com/dry-python/dependencies/commit/5bfe041f72bc82a4a24ea47599cf2bfbb8d13900)), closes [#192](https://github.com/dry-python/dependencies/issues/192)
+- remove contrib package ([5bfe041](https://github.com/proofit404/dependencies/commit/5bfe041f72bc82a4a24ea47599cf2bfbb8d13900)), closes [#192](https://github.com/proofit404/dependencies/issues/192)
 
 ### BREAKING CHANGES
 
@@ -10,17 +10,17 @@
   favorite framework together with stories and dependencies I understand
   that there is a missing module in the contrib package.
 
-## [1.0.1](https://github.com/dry-python/dependencies/compare/1.0.0...1.0.1) (2020-03-31)
+## [1.0.1](https://github.com/proofit404/dependencies/compare/1.0.0...1.0.1) (2020-03-31)
 
 ### Bug Fixes
 
-- add **wrapped** attribute ([e3c7aa9](https://github.com/dry-python/dependencies/commit/e3c7aa98cec4b33146c98855ae851fa57c990367))
+- add **wrapped** attribute ([e3c7aa9](https://github.com/proofit404/dependencies/commit/e3c7aa98cec4b33146c98855ae851fa57c990367))
 
 # 1.0.0 (2020-02-11)
 
 ### Bug Fixes
 
-- prevent generated changelog from style guide violation ([d3a472f](https://github.com/dry-python/dependencies/commit/d3a472f1779f443be0d9f3321c8451241ee723ff))
+- prevent generated changelog from style guide violation ([d3a472f](https://github.com/proofit404/dependencies/commit/d3a472f1779f443be0d9f3321c8451241ee723ff))
 
 ## 0.15 (2018-07-21)
 
@@ -118,5 +118,4 @@
 - Initial release.
 
 <p align="center">&mdash; ⭐️ &mdash;</p>
-<p align="center"><i>Drylabs maintains dry-python and helps those who want to use it inside their organizations.</i></p>
-<p align="center"><i>Read more at <a href="https://drylabs.io">drylabs.io</a></i></p>
+<p align="center"><i>The dependencies library is part of the SOLID python family.</i></p>

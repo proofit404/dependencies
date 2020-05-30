@@ -22,5 +22,4 @@ When you access an attribute of the class inherited from `Injector`:
    in the same loop without recursion.
 
 <p align="center">&mdash; ⭐️ &mdash;</p>
-<p align="center"><i>Drylabs maintains dry-python and helps those who want to use it inside their organizations.</i></p>
-<p align="center"><i>Read more at <a href="https://drylabs.io">drylabs.io</a></i></p>
+<p align="center"><i>The dependencies library is part of the SOLID python family.</i></p>

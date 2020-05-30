@@ -9,7 +9,7 @@ export default async () => {
     return;
   }
 
-  if (danger.github.pr.assignee.id !== danger.github.pr.user.id) {
+  if (danger.github.pr.assignee?.id !== danger.github.pr.user.id) {
     fail("Only PR author could be assigned to PR");
     return;
   }
