@@ -103,3 +103,11 @@ jobs:
           POETRY_PYPI_TOKEN_PYPI: $(POETRY_PYPI_TOKEN_PYPI)
           GITHUB_TOKEN: $(SEMANTIC_RELEASE_GITHUB_TOKEN)
         displayName: Release package.
+      - script: |
+          REMOTE="https://${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}"
+          git remote set-url origin $REMOTE
+          tox -e mkdocs -- gh-deploy --force
+        env:
+          GITHUB_TOKEN: $(SEMANTIC_RELEASE_GITHUB_TOKEN)
+          GITHUB_REPOSITORY: $(Build.Repository.Name)
+        displayName: Deploy documentation.
