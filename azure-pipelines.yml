@@ -64,7 +64,7 @@ jobs:
         condition: eq(variables['Build.Reason'], 'PullRequest')
         env:
           DANGER_FAKE_CI: YEP
-          DANGER_TEST_REPO: proofit404/dependencies
+          DANGER_TEST_REPO: $(Build.Repository.Name)
           DANGER_TEST_PR: $(System.PullRequest.PullRequestNumber)
           GITHUB_TOKEN: $(DANGER_GITHUB_TOKEN)
         displayName: Review pull request.
