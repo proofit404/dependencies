@@ -7,6 +7,7 @@ readme = "README.md"
 license = "BSD-2-Clause"
 
 repository = "https://github.com/proofit404/dependencies/"
+documentation = "https://proofit404.github.io/dependencies/"
 
 authors = [
     "Artem Malyshev <proofit404@gmail.com>",
