@@ -1,0 +1,976 @@
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Dependency Injection for Humans.">
+      
+      
+      
+      <link rel="shortcut icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-5.2.2">
+    
+    
+      
+        <title>Why - dependencies</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.a2408e81.min.css">
+      
+        <link rel="stylesheet" href="../assets/stylesheets/palette.a46bcfb3.min.css">
+      
+      
+        
+        
+        <meta name="theme-color" content="#7e57c2">
+      
+    
+    
+    
+      
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
+      
+    
+    
+    
+    
+      
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="deep-purple" data-md-color-accent="deep-purple">
+  
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#why-not" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid" aria-label="Header">
+    <a href=".." title="dependencies" class="md-header-nav__button md-logo" aria-label="dependencies">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19.14 7.5A2.86 2.86 0 0122 10.36v3.78A2.86 2.86 0 0119.14 17H12c0 .39.32.96.71.96H17v1.68a2.86 2.86 0 01-2.86 2.86H9.86A2.86 2.86 0 017 19.64v-3.75a2.85 2.85 0 012.86-2.85h5.25a2.85 2.85 0 002.85-2.86V7.5h1.18m-4.28 11.79c-.4 0-.72.3-.72.89 0 .59.32.71.72.71a.71.71 0 00.71-.71c0-.59-.32-.89-.71-.89m-10-1.79A2.86 2.86 0 012 14.64v-3.78A2.86 2.86 0 014.86 8H12c0-.39-.32-.96-.71-.96H7V5.36A2.86 2.86 0 019.86 2.5h4.28A2.86 2.86 0 0117 5.36v3.75a2.85 2.85 0 01-2.86 2.85H8.89a2.85 2.85 0 00-2.85 2.86v2.68H4.86M9.14 5.71c.4 0 .72-.3.72-.89 0-.59-.32-.71-.72-.71-.39 0-.71.12-.71.71s.32.89.71.89z"/></svg>
+
+    </a>
+    <label class="md-header-nav__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header-nav__title" data-md-component="header-title">
+      
+        <div class="md-header-nav__ellipsis">
+          <span class="md-header-nav__topic md-ellipsis">
+            dependencies
+          </span>
+          <span class="md-header-nav__topic md-ellipsis">
+            
+              Why
+            
+          </span>
+        </div>
+      
+    </div>
+    
+      <label class="md-header-nav__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active">
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" data-md-component="search-reset" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header-nav__source">
+        
+<a href="https://github.com/proofit404/dependencies" title="Go to repository" class="md-source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 00-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 01-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 000 40.81l195.61 195.6a28.86 28.86 0 0040.8 0l194.69-194.69a28.86 28.86 0 000-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    proofit404/dependencies
+  </div>
+</a>
+      </div>
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+        
+      
+      
+        
+          
+
+  
+
+<nav class="md-tabs md-tabs--active" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+    <li class="md-tabs__item">
+      
+        <a href=".." class="md-tabs__link md-tabs__link--active">
+          Home
+        </a>
+      
+    </li>
+  
+
+      
+        
+  
+  
+    <li class="md-tabs__item">
+      
+        <a href="../proxies/this/" class="md-tabs__link">
+          Proxies
+        </a>
+      
+    </li>
+  
+
+      
+        
+  
+  
+    <li class="md-tabs__item">
+      
+        <a href="../attrs/" class="md-tabs__link">
+          Guides
+        </a>
+      
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="dependencies" class="md-nav__button md-logo" aria-label="dependencies">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19.14 7.5A2.86 2.86 0 0122 10.36v3.78A2.86 2.86 0 0119.14 17H12c0 .39.32.96.71.96H17v1.68a2.86 2.86 0 01-2.86 2.86H9.86A2.86 2.86 0 017 19.64v-3.75a2.85 2.85 0 012.86-2.85h5.25a2.85 2.85 0 002.85-2.86V7.5h1.18m-4.28 11.79c-.4 0-.72.3-.72.89 0 .59.32.71.72.71a.71.71 0 00.71-.71c0-.59-.32-.89-.71-.89m-10-1.79A2.86 2.86 0 012 14.64v-3.78A2.86 2.86 0 014.86 8H12c0-.39-.32-.96-.71-.96H7V5.36A2.86 2.86 0 019.86 2.5h4.28A2.86 2.86 0 0117 5.36v3.75a2.85 2.85 0 01-2.86 2.85H8.89a2.85 2.85 0 00-2.85 2.86v2.68H4.86M9.14 5.71c.4 0 .72-.3.72-.89 0-.59-.32-.71-.72-.71-.39 0-.71.12-.71.71s.32.89.71.89z"/></svg>
+
+    </a>
+    dependencies
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/proofit404/dependencies" title="Go to repository" class="md-source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 00-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 01-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 000 40.81l195.61 195.6a28.86 28.86 0 0040.8 0l194.69-194.69a28.86 28.86 0 000-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    proofit404/dependencies
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-1" type="checkbox" id="nav-1" checked>
+    
+    <label class="md-nav__link" for="nav-1">
+      Home
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.58L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.42z"/></svg>
+      </span>
+    </label>
+    <nav class="md-nav" aria-label="Home" data-md-level="1">
+      <label class="md-nav__title" for="nav-1">
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+        </span>
+        Home
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href=".." title="Home" class="md-nav__link">
+      Home
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../overview/" title="Overview" class="md-nav__link">
+      Overview
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Why
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 9h14V7H3v2m0 4h14v-2H3v2m0 4h14v-2H3v2m16 0h2v-2h-2v2m0-10v2h2V7h-2m0 6h2v-2h-2v2z"/></svg>
+        </span>
+      </label>
+    
+    <a href="./" title="Why" class="md-nav__link md-nav__link--active">
+      Why
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#simple-functions" class="md-nav__link">
+    Simple functions
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#inheritance" class="md-nav__link">
+    Inheritance
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mixins" class="md-nav__link">
+    Mixins
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#composition" class="md-nav__link">
+    Composition
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dependencies" class="md-nav__link">
+    Dependencies
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../usage/" title="Usage" class="md-nav__link">
+      Usage
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../implementation/" title="Implementation" class="md-nav__link">
+      Implementation
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../faq/" title="FAQ" class="md-nav__link">
+      FAQ
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../changelog/" title="Changelog" class="md-nav__link">
+      Changelog
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2">
+    
+    <label class="md-nav__link" for="nav-2">
+      Proxies
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.58L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.42z"/></svg>
+      </span>
+    </label>
+    <nav class="md-nav" aria-label="Proxies" data-md-level="1">
+      <label class="md-nav__title" for="nav-2">
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+        </span>
+        Proxies
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../proxies/this/" title="This" class="md-nav__link">
+      This
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../proxies/operation/" title="Operation" class="md-nav__link">
+      Operation
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../proxies/package/" title="Package" class="md-nav__link">
+      Package
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3">
+    
+    <label class="md-nav__link" for="nav-3">
+      Guides
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.59 16.58L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.42z"/></svg>
+      </span>
+    </label>
+    <nav class="md-nav" aria-label="Guides" data-md-level="1">
+      <label class="md-nav__title" for="nav-3">
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+        </span>
+        Guides
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../attrs/" title="Attrs" class="md-nav__link">
+      Attrs
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#simple-functions" class="md-nav__link">
+    Simple functions
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#inheritance" class="md-nav__link">
+    Inheritance
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mixins" class="md-nav__link">
+    Mixins
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#composition" class="md-nav__link">
+    Composition
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dependencies" class="md-nav__link">
+    Dependencies
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                
+                  
+                
+                
+                <h1 id="why-not">Why not...<a class="headerlink" href="#why-not" title="Permanent link">&para;</a></h1>
+<p>Here we will try to collect pros and cons of different approaches to
+make your code extendable and reusable.</p>
+<p>Let's imagine we have an order processing system. We want
+to implement order purchase feature. There is a lot of functionality
+to be built:</p>
+<ul>
+<li>We should change our data,</li>
+<li>send a request to the payment processing system,</li>
+<li>and we should send notification to the user.</li>
+</ul>
+<h2 id="simple-functions">Simple functions<a class="headerlink" href="#simple-functions" title="Permanent link">&para;</a></h2>
+<p>Let's do it with simple functions.</p>
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">purchase</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">product</span><span class="p">,</span> <span class="n">shipment_details</span><span class="p">):</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="n">order</span> <span class="o">=</span> <span class="n">create_order</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">product</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="n">final_price</span> <span class="o">=</span> <span class="n">calculate_price</span><span class="p">(</span><span class="n">order</span><span class="p">,</span> <span class="n">shipment_details</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="n">payment_details</span> <span class="o">=</span> <span class="n">request_payment</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">shipment_details</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="n">notify_user</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">payment_details</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">notify_user</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">payment_details</span><span class="p">):</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="n">log_notification</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">payment_details</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="n">subject</span> <span class="o">=</span> <span class="n">get_notification_subject</span><span class="p">(</span><span class="n">payment_details</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="n">message</span> <span class="o">=</span> <span class="n">get_notification_text</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">payment_details</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="n">send_notification</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">subject</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">send_notification</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">subject</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="n">email</span> <span class="o">=</span> <span class="n">get_user_email</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="n">send_email</span><span class="p">(</span><span class="n">email</span><span class="p">,</span> <span class="n">subject</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
+</code></pre></div>
+
+<p>It's a readable and straightforward solution. What can possibly go wrong?</p>
+<p>Problem is that this code is difficult to change and extend.</p>
+<p>For example, you need to add SMS and push notifications in addition to
+plain text emails. To do that, you'll have to add a handful of different
+conditions to this simple default path.</p>
+<p>Push notification to the mobile app should be written in Markdown
+format, SMS requires plain text, and email needs HTML in addition to
+plain text. Users should be able to choose their preferred notification
+method.</p>
+<p>How can we change the code above to match new requirements?</p>
+<p>We have problems on all three layers of the code: <code>purchase</code>,
+<code>notify_user</code> and <code>send_notification</code> functions have to be changed.</p>
+<ol>
+<li><strong>Add conditions to all parameters to all layers of the code.</strong>
+   This will end up with messy code which is even harder to extend. No
+   one wants <code>purchase</code> function to have 12 arguments. No one wants to
+   wonder why <code>send_email</code> function accepts phone number. No one wants
+   to read 7 <code>if</code> statements in the <code>notify_user</code> function when they
+   are about to add eighth condition.</li>
+<li><strong>Add context variable instead of another argument.</strong> This little
+   <code>ctx</code> argument instead of email address, phone number, product
+   price and shipment destination will save us a lot of typing between
+   function calls. But we still have bunch of <code>if</code> statements.</li>
+<li><strong>Copy-paste this module and re-implement each feature separately.</strong>
+   Each feature will be readable and simple on it's own, but you will
+   regret this decision when usage of <code>request_payment</code> or
+   <code>calculate_price</code> changes.</li>
+</ol>
+<p>But we still have the same problem. We can't substitute implementation
+details of low level code without changing high level policies. Let's
+try...</p>
+<h2 id="inheritance">Inheritance<a class="headerlink" href="#inheritance" title="Permanent link">&para;</a></h2>
+<p>Let's rewrite our functions into a class which we can subclass for different
+purposes.</p>
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Order</span><span class="p">:</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">product</span><span class="p">,</span> <span class="n">shipment_details</span><span class="p">):</span>
+<span class="gp">...</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">user</span> <span class="o">=</span> <span class="n">user</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">product</span> <span class="o">=</span> <span class="n">product</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">shipment_details</span> <span class="o">=</span> <span class="n">shipment_details</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">final_price</span> <span class="o">=</span> <span class="kc">None</span>      <span class="c1"># Set by `calculate_price`.</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">payment_details</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># Set by `request_payment`.</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">subject</span> <span class="o">=</span> <span class="kc">None</span>          <span class="c1"># Set by `get_notification_subject`.</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> <span class="kc">None</span>          <span class="c1"># Set by `get_notification_text`.</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">email</span> <span class="o">=</span> <span class="kc">None</span>            <span class="c1"># Set by `get_user_email`.</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">purchase</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="gp">...</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">create_order</span><span class="p">()</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">calculate_price</span><span class="p">()</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">request_payment</span><span class="p">()</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">notify_user</span><span class="p">()</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">notify_user</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="gp">...</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">log_notification</span><span class="p">()</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">get_notification_subject</span><span class="p">()</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">get_notification_text</span><span class="p">()</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">send_notification</span><span class="p">()</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">send_notification</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="gp">...</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">get_user_email</span><span class="p">()</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">send_email</span><span class="p">()</span>
+</code></pre></div>
+
+<p>At first glance, this class is a better solution than before. Indeed, this code has
+several advantages.</p>
+<ol>
+<li><strong>At first glance high level methods even more readable.</strong> There
+   are no nosy arguments or variables. Only nice named methods.</li>
+<li><strong>Simple code reuse.</strong> With inheritance, we can override any
+   method on any layer of abstraction in the system. We can add any
+   number of methods or attributes is the child classes. Looks like it
+   is a very reasonable approach.</li>
+</ol>
+<p>But this code hides quite a few problems underneath the false premise of understandability
+and cleanness.</p>
+<ol>
+<li><strong>God object.</strong> One class contains methods related to every single
+   layer of abstraction in the system. It's hard to manage two hundred
+   methods in the same class: one will process HTTP request, another
+   one will send email, and yet another one will write to the database. It's
+   hard to figure out what <em>exactly</em> this class does.</li>
+<li><strong>Bad state management.</strong> During the life time of a class instance
+   different methods change state of the class. When you read short
+   method somewhere inside email sender logic, you have no idea <em>from
+   where</em> attribute values came from and <em>when exactly</em> they were set. Hello
+   <code>print</code> statements to understand the code...</li>
+</ol>
+<p>Let's reduce amount of logic in the class (responsibility of the class).
+Let's try...</p>
+<h2 id="mixins">Mixins<a class="headerlink" href="#mixins" title="Permanent link">&para;</a></h2>
+<p>We can split our God object into multiple classes and join it together
+later using multiple inheritance.</p>
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">OrderProcessingMixin</span><span class="p">:</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">create_order</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="gp">...</span>
+<span class="gp">... </span>        <span class="k">pass</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">PriceCalculationMixin</span><span class="p">:</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">calculate_price</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="gp">...</span>
+<span class="gp">... </span>        <span class="k">pass</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">NotificationMixin</span><span class="p">:</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">get_notification_text</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="gp">...</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">notification_text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">notification_text_template</span> <span class="o">%</span> <span class="p">(</span>
+<span class="gp">... </span>            <span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="p">,</span>
+<span class="gp">... </span>            <span class="bp">self</span><span class="o">.</span><span class="n">payment_details</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Order</span><span class="p">(</span><span class="n">OrderProcessingMixin</span><span class="p">,</span>
+<span class="gp">... </span>            <span class="n">PriceCalculationMixin</span><span class="p">,</span>
+<span class="gp">... </span>            <span class="n">NotificationMixin</span><span class="p">):</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">before_calculate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="gp">...</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">create_order</span><span class="p">()</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">after_commit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="gp">...</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">send_email</span><span class="p">()</span>
+</code></pre></div>
+
+<p>Someone might say this is an improvement over one huge class.</p>
+<ol>
+<li><strong>All methods grouped in classes with the same
+   responsibility.</strong></li>
+<li><strong>Better code reuse.</strong> We can use the same notification mechanism
+   in different classes with just one line of code.</li>
+</ol>
+<p>But there are a lot of problems too. During a debugging session,</p>
+<ol>
+<li><strong>In the <code>get_notification_text</code> you have no idea who set up
+   <code>payment_details</code>.</strong></li>
+<li><strong>In the <code>Order</code> class itself you see a bunch of low level methods
+   which are deep implementation details.</strong> What public method should
+   I call? When notification will be sent, exactly?</li>
+</ol>
+<p>This code is much harder to understand than it should be. Even if it
+reusable, this complexity in too large for my head. Let's try...</p>
+<h2 id="composition">Composition<a class="headerlink" href="#composition" title="Permanent link">&para;</a></h2>
+<p>Composition is a powerful pattern of organizing code with proper code
+boundaries and clear dependency relationship.</p>
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">OrderProcessor</span><span class="p">:</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">product</span><span class="p">):</span>
+<span class="gp">...</span>
+<span class="gp">... </span>        <span class="k">pass</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">PriceCalculator</span><span class="p">:</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">calculate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">product</span><span class="p">,</span> <span class="n">shipment_details</span><span class="p">):</span>
+<span class="gp">...</span>
+<span class="gp">... </span>        <span class="k">pass</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">PaymentProcessor</span><span class="p">:</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">shipment_details</span><span class="p">):</span>
+<span class="gp">...</span>
+<span class="gp">... </span>        <span class="k">pass</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Notification</span><span class="p">:</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">logger</span><span class="p">):</span>
+<span class="gp">...</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">logger</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">notify</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">payment_details</span><span class="p">):</span>
+<span class="gp">...</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">record</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">payment_details</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="n">subject</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_notification_subject</span><span class="p">(</span><span class="n">payment_details</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="n">message</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_notification_text</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">payment_details</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">send_notification</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">subject</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">get_notification_subject</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">payment_details</span><span class="p">):</span>
+<span class="gp">...</span>
+<span class="gp">... </span>        <span class="k">pass</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">get_notification_text</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">payment_details</span><span class="p">):</span>
+<span class="gp">...</span>
+<span class="gp">... </span>        <span class="k">pass</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">send_notification</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">subject</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+<span class="gp">...</span>
+<span class="gp">... </span>        <span class="k">pass</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Order</span><span class="p">:</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">order_processor</span><span class="p">,</span> <span class="n">price_calculator</span><span class="p">,</span>
+<span class="gp">... </span>                 <span class="n">payment_processor</span><span class="p">,</span> <span class="n">notification</span><span class="p">):</span>
+<span class="gp">...</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">order_processor</span> <span class="o">=</span> <span class="n">order_processor</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">price_calculator</span> <span class="o">=</span> <span class="n">price_calculator</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">payment_processor</span> <span class="o">=</span> <span class="n">payment_processor</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">notification</span> <span class="o">=</span> <span class="n">notification</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">purchase</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">product</span><span class="p">,</span> <span class="n">shipment_details</span><span class="p">):</span>
+<span class="gp">...</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">order_processor</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">product</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="n">final_price</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">price_calculator</span><span class="o">.</span><span class="n">calculate</span><span class="p">(</span><span class="n">product</span><span class="p">,</span> <span class="n">shipment_details</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="n">payment_details</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">payment_processor</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">shipment_details</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">notification</span><span class="o">.</span><span class="n">notify</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">payment_details</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">app.shop</span> <span class="kn">import</span> <span class="n">Logger</span><span class="p">,</span> <span class="n">User</span><span class="p">,</span> <span class="n">Product</span><span class="p">,</span> <span class="n">ShipmentDetails</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Order</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">OrderProcessor</span><span class="p">(),</span>
+<span class="gp">... </span>    <span class="n">PriceCalculator</span><span class="p">(),</span>
+<span class="gp">... </span>    <span class="n">PaymentProcessor</span><span class="p">(),</span>
+<span class="gp">... </span>    <span class="n">Notification</span><span class="p">(</span><span class="n">Logger</span><span class="p">()),</span>
+<span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">purchase</span><span class="p">(</span><span class="n">User</span><span class="p">(),</span> <span class="n">Product</span><span class="p">(),</span> <span class="n">ShipmentDetails</span><span class="p">())</span>
+</code></pre></div>
+
+<p>This code has a number of really good characteristics.</p>
+<ol>
+<li><strong>It's clear where things were defined.</strong> If you try to understand
+   what's wrong with your system, you can just use traceback. No nasty
+   code execution paths.</li>
+<li><strong>Your system becomes really configurable.</strong> You can <strong>inject</strong>
+   pretty much any implementation without changing high-level code.</li>
+</ol>
+<p>But there one unfortunate consequence of this style</p>
+<ol>
+<li><strong>There is too much boilerplate on the initiation stage.</strong></li>
+</ol>
+<p>Let's try...</p>
+<h2 id="dependencies">Dependencies<a class="headerlink" href="#dependencies" title="Permanent link">&para;</a></h2>
+<p>Here's where <code>dependencies</code> library comes in.</p>
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dependencies</span> <span class="kn">import</span> <span class="n">Injector</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">OrderContainer</span><span class="p">(</span><span class="n">Injector</span><span class="p">):</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="n">order</span> <span class="o">=</span> <span class="n">Order</span>
+<span class="gp">... </span>    <span class="n">order_processor</span> <span class="o">=</span> <span class="n">OrderProcessor</span>
+<span class="gp">... </span>    <span class="n">price_calculator</span> <span class="o">=</span> <span class="n">PriceCalculator</span>
+<span class="gp">... </span>    <span class="n">payment_processor</span> <span class="o">=</span> <span class="n">PaymentProcessor</span>
+<span class="gp">... </span>    <span class="n">notification</span> <span class="o">=</span> <span class="n">Notification</span>
+<span class="gp">... </span>    <span class="n">logger</span> <span class="o">=</span> <span class="n">Logger</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">OrderContainer</span><span class="o">.</span><span class="n">order</span><span class="o">.</span><span class="n">purchase</span><span class="p">(</span><span class="n">User</span><span class="p">(),</span> <span class="n">Product</span><span class="p">(),</span> <span class="n">ShipmentDetails</span><span class="p">())</span>
+</code></pre></div>
+
+<p>It helps you to reduce the boilerplate of the initiation stage. It
+doesn't require you to change your code. You still can instantiate
+your classes directly, if you don't like this library.</p>
+<p align="center">&mdash; ⭐️ &mdash;</p>
+
+<p align="center"><i>The dependencies library is part of the SOLID python family.</i></p>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
+        
+          <a href="../overview/" title="Overview" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+            </div>
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Overview
+              </div>
+            </div>
+          </a>
+        
+        
+          <a href="../usage/" title="Usage" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Usage
+              </div>
+            </div>
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../assets/javascripts/vendor.d710d30a.min.js"></script>
+      <script src="../assets/javascripts/bundle.5f27aba8.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents"}</script>
+      
+      <script>
+        app = initialize({
+          base: "..",
+          features: ["tabs"],
+          search: Object.assign({
+            worker: "../assets/javascripts/worker/search.27c6a5e6.min.js"
+          }, typeof search !== "undefined" && search)
+        })
+      </script>
+      
+        <script src="../javascripts/extra.js"></script>
+      
+    
+  </body>
+</html>
