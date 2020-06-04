@@ -7,6 +7,8 @@
 
 Dependency Injection for Humans.
 
+**[Documentation](https://proofit404.github.io/dependencies/)**
+
 ## Installation
 
 All released versions are hosted on the Python Package Index. You can
