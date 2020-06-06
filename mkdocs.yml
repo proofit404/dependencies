@@ -30,6 +30,7 @@ extra_javascript:
 nav:
   - Home:
       - Home: index.md
+      - Installation: installation.md
       - Overview: overview.md
       - Why: why.md
       - Usage: usage.md
