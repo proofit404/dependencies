@@ -5,12 +5,19 @@
 [![pypi](https://img.shields.io/pypi/v/dependencies?style=flat-square)](https://pypi.python.org/pypi/dependencies/)
 [![conda](https://img.shields.io/conda/vn/conda-forge/dependencies?style=flat-square)](https://anaconda.org/conda-forge/dependencies)
 
-Dependency Injection for Humans
+Dependency Injection for Humans.
+
+**[Documentation](https://proofit404.github.io/dependencies/) | [Source Code](https://github.com/proofit404/dependencies) | [Task Tracker](https://github.com/proofit404/dependencies/issues)**
+
+- Provide composition instead of inheritance.
+- Solves top-down approach problem.
+- Boilerplate-free object hierarchies.
+- API entrypoints, admin panels, CLI commands are oneliners.
 
 Dependency Injection (or simply DI) is a great technique. By using it you
 can organize responsibilities in you codebase. Define high level
 policies and system behavior in one part. Delegate control to low level
-mechanisms in anotherpart. Simple and powerful.
+mechanisms in another part. Simple and powerful.
 
 With help of DI you can use different parts of your system independently
 and combine their behavior really easy.
@@ -57,13 +64,9 @@ Dependency injection with `dependencies`
 
 ```
 
-## Installation
+## License
 
-Dependencies is available on PyPI - to install it, just run:
-
-```bash
-pip install -U dependencies
-```
+Dependencies library is offered under the two clause BSD license.
 
 <p align="center">&mdash; ⭐️ &mdash;</p>
 <p align="center"><i>The dependencies library is part of the SOLID python family.</i></p>

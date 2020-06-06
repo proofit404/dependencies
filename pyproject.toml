@@ -3,15 +3,14 @@ name = "dependencies"
 version = "2.0.0"
 
 description = "Dependency Injection for Humans"
-readme = "README.md"
+readme = "docs/index.md"
 license = "BSD-2-Clause"
 
+homepage = "https://pypi.org/project/dependencies/"
 repository = "https://github.com/proofit404/dependencies/"
 documentation = "https://proofit404.github.io/dependencies/"
 
-authors = [
-    "Artem Malyshev <proofit404@gmail.com>",
-]
+authors = ["Artem Malyshev <proofit404@gmail.com>"]
 
 classifiers = [
     "Development Status :: 5 - Production/Stable",
