@@ -60,6 +60,10 @@ jobs:
           codeCoverageTool: cobertura
           summaryFileLocation: coverage.xml
         displayName: Publish coverage.xml data.
+      - script: |
+          npm install --no-save --no-package-lock danger typescript
+        condition: eq(variables['Build.Reason'], 'PullRequest')
+        displayName: Install Danger.
       - script: npx danger ci
         condition: eq(variables['Build.Reason'], 'PullRequest')
         env:
@@ -94,9 +98,11 @@ jobs:
           /python-poetry/poetry/master/get-poetry.py" | python
           echo '##vso[task.prependpath]$(HOME)/.poetry/bin'
         displayName: Install Poetry.
-      - script: |
-          npm install
-        displayName: Install JS dependencies.
+      - script: >-
+          npm install --no-save --no-package-lock semantic-release
+          @semantic-release/changelog @semantic-release/exec
+          @semantic-release/git
+        displayName: Install Semantic Release.
       - script: |
           npx semantic-release
         env:

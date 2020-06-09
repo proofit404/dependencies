@@ -3,7 +3,6 @@
 import collections
 import configparser
 import datetime
-import json
 import re
 import subprocess
 import sys
@@ -214,7 +213,7 @@ def test_ini_files_indentation():
 def test_lock_files_not_committed():
     """Lock files should not be committed to the git repository."""
     git_files = subprocess.check_output(["git", "ls-files"]).decode().splitlines()
-    for lock_file in ["poetry.lock", "tests/helpers/poetry.lock", "package-lock.json"]:
+    for lock_file in ["poetry.lock", "tests/helpers/poetry.lock"]:
         assert lock_file not in git_files
 
 
@@ -266,13 +265,6 @@ def test_tox_deps_are_ordered():
             )
         ]
         assert deps == ordered
-
-
-def test_nodejs_deps_are_ordered():
-    """Development dependencies of the package.json should be in order."""
-    package_json = json.load(open("package.json"))
-    deps = list(package_json["devDependencies"].keys())
-    assert deps == sorted(deps)
 
 
 def test_packages_are_ordered():
@@ -374,13 +366,6 @@ def test_tox_deps_not_pinned():
             versions[d[0]].append(d[-1] if d[1:] else "*")
         for _package, v in versions.items():
             assert v == ["*"] or len(v) >= 2
-
-
-def test_nodejs_deps_not_pinned():
-    """Dependencies of the package.json should not have versions."""
-    package_json = json.load(open("package.json"))
-    versions = list(package_json["devDependencies"].values())
-    assert all(v == "*" for v in versions)
 
 
 def test_build_requires_not_pinned():
