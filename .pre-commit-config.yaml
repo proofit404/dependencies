@@ -1,7 +1,7 @@
 ---
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: ""
+    rev: master
     hooks:
       - id: no-commit-to-branch
       - id: forbid-new-submodules
@@ -24,36 +24,10 @@ repos:
       - id: check-toml
       - id: check-yaml
   - repo: https://github.com/pre-commit/pygrep-hooks
-    rev: ""
+    rev: master
     hooks:
       - id: python-check-blanket-noqa
       - id: python-check-mock-methods
       - id: python-no-eval
       - id: python-no-log-warn
       - id: text-unicode-replacement-char
-  - repo: https://github.com/asottile/pyupgrade
-    rev: ""
-    hooks:
-      - id: pyupgrade
-  - repo: https://github.com/asottile/reorder_python_imports
-    rev: ""
-    hooks:
-      - id: reorder-python-imports
-        args:
-          - "--application-directories=.:src:tests/helpers"
-  - repo: https://github.com/myint/docformatter
-    rev: ""
-    hooks:
-      - id: docformatter
-  - repo: https://github.com/asottile/yesqa
-    rev: ""
-    hooks:
-      - id: yesqa
-  - repo: https://github.com/psf/black
-    rev: ""
-    hooks:
-      - id: black
-  - repo: https://github.com/prettier/prettier
-    rev: ""
-    hooks:
-      - id: prettier
