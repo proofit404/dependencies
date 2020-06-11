@@ -327,27 +327,17 @@ def test_yamllint_ignored_patterns_are_ordered():
 
 def test_poetry_avoid_additional_dependencies():
     """Python package should not have any of additional dependencies."""
-    for pyproject_toml in ["pyproject.toml", "tests/helpers/pyproject.toml"]:
-        pyproject_toml = tomlkit.loads(open(pyproject_toml).read())
-        deps = list(pyproject_toml["tool"]["poetry"].get("dependencies", {}))
-        if deps:
-            assert deps == ["python"]
+    pyproject_toml = tomlkit.loads(open("pyproject.toml").read())
+    deps = list(pyproject_toml["tool"]["poetry"].get("dependencies", {}))
+    assert deps == ["python"]
+
+    pyproject_toml = tomlkit.loads(open("tests/helpers/pyproject.toml").read())
+    deps = list(pyproject_toml["tool"]["poetry"].get("dependencies", {}))
+    assert not deps
 
 
 def test_pre_commit_hooks_avoid_additional_dependencies():
-    """Additional dependencies of the pre-commit should not be used.
-
-    This is related to all hooks of all repositories.
-    """
-    # There is no special policy related to the additional
-    # dependencies in the pre-commit hooks.  At the time of writing
-    # there were no additional dependencies in all hooks in all
-    # repositories.  If you need to include additional dependency to
-    # the hook, please replace this test with two tests:
-    #
-    # * additional dependencies are ordered
-    #
-    # * additional dependencies have no pinned versions
+    """Additional dependencies of the pre-commit should not be used."""
     pre_commit_config_yaml = yaml.safe_load(open(".pre-commit-config.yaml").read())
     hooks = (hook for repo in pre_commit_config_yaml["repos"] for hook in repo["hooks"])
     assert all("additional_dependencies" not in hook for hook in hooks)
@@ -380,4 +370,4 @@ def test_build_requires_not_pinned():
 def test_pre_commit_hooks_not_pinned():
     """Hook revisions of the pre-commit should not have versions."""
     pre_commit_config_yaml = yaml.safe_load(open(".pre-commit-config.yaml").read())
-    assert all(repo["rev"] == "" for repo in pre_commit_config_yaml["repos"])
+    assert all(repo["rev"] == "master" for repo in pre_commit_config_yaml["repos"])
