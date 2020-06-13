@@ -9,11 +9,6 @@ Dependency Injection for Humans.
 
 **[Documentation](https://proofit404.github.io/dependencies/) | [Source Code](https://github.com/proofit404/dependencies) | [Task Tracker](https://github.com/proofit404/dependencies/issues)**
 
-- Provide composition instead of inheritance.
-- Solves top-down approach problem.
-- Boilerplate-free object hierarchies.
-- API entrypoints, admin panels, CLI commands are oneliners.
-
 Dependency Injection (or simply DI) is a great technique. By using it you
 can organize responsibilities in you codebase. Define high level
 policies and system behavior in one part. Delegate control to low level
@@ -27,6 +22,13 @@ see how pleasant it becomes to change your system.
 
 This tiny library helps you to connect parts of your system, in particular - to
 inject low level implementation into high level behavior.
+
+## Pros
+
+- Provide composition instead of inheritance.
+- Solves top-down architecture problems.
+- Boilerplate-free object hierarchies.
+- API entrypoints, admin panels, CLI commands are oneliners.
 
 ## Example
 
@@ -63,6 +65,10 @@ Dependency injection with `dependencies`
 >>> Container.robot.work()
 
 ```
+
+## Questions
+
+If you have any questions, feel free to create an issue in our [Task Tracker](https://github.com/proofit404/dependencies/issues). We have the [question label](https://github.com/proofit404/dependencies/issues?q=is%3Aopen+is%3Aissue+label%3Aquestion) exactly for this purpose.
 
 ## License
 
