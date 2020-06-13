@@ -300,8 +300,22 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#pros" class="md-nav__link">
+    Pros
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#example" class="md-nav__link">
     Example
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#questions" class="md-nav__link">
+    Questions
   </a>
   
 </li>
@@ -543,8 +557,22 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#pros" class="md-nav__link">
+    Pros
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#example" class="md-nav__link">
     Example
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#questions" class="md-nav__link">
+    Questions
   </a>
   
 </li>
@@ -579,12 +607,6 @@
 <a href="https://anaconda.org/conda-forge/dependencies"><img alt="conda" src="https://img.shields.io/conda/vn/conda-forge/dependencies?style=flat-square" /></a></p>
 <p>Dependency Injection for Humans.</p>
 <p><strong><a href="https://proofit404.github.io/dependencies/">Documentation</a> | <a href="https://github.com/proofit404/dependencies">Source Code</a> | <a href="https://github.com/proofit404/dependencies/issues">Task Tracker</a></strong></p>
-<ul>
-<li>Provide composition instead of inheritance.</li>
-<li>Solves top-down approach problem.</li>
-<li>Boilerplate-free object hierarchies.</li>
-<li>API entrypoints, admin panels, CLI commands are oneliners.</li>
-</ul>
 <p>Dependency Injection (or simply DI) is a great technique. By using it you
 can organize responsibilities in you codebase. Define high level
 policies and system behavior in one part. Delegate control to low level
@@ -595,6 +617,13 @@ and combine their behavior really easy.</p>
 see how pleasant it becomes to change your system.</p>
 <p>This tiny library helps you to connect parts of your system, in particular - to
 inject low level implementation into high level behavior.</p>
+<h2 id="pros">Pros<a class="headerlink" href="#pros" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Provide composition instead of inheritance.</li>
+<li>Solves top-down architecture problems.</li>
+<li>Boilerplate-free object hierarchies.</li>
+<li>API entrypoints, admin panels, CLI commands are oneliners.</li>
+</ul>
 <h2 id="example">Example<a class="headerlink" href="#example" title="Permanent link">&para;</a></h2>
 <p>Dependency injection without <code>dependencies</code></p>
 <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">app.robot</span> <span class="kn">import</span> <span class="n">Robot</span><span class="p">,</span> <span class="n">Servo</span><span class="p">,</span> <span class="n">Amplifier</span><span class="p">,</span> <span class="n">Controller</span><span class="p">,</span> <span class="n">Settings</span>
@@ -622,6 +651,8 @@ inject low level implementation into high level behavior.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Container</span><span class="o">.</span><span class="n">robot</span><span class="o">.</span><span class="n">work</span><span class="p">()</span>
 </code></pre></div>
 
+<h2 id="questions">Questions<a class="headerlink" href="#questions" title="Permanent link">&para;</a></h2>
+<p>If you have any questions, feel free to create an issue in our <a href="https://github.com/proofit404/dependencies/issues">Task Tracker</a>. We have the <a href="https://github.com/proofit404/dependencies/issues?q=is%3Aopen+is%3Aissue+label%3Aquestion">question label</a> exactly for this purpose.</p>
 <h2 id="license">License<a class="headerlink" href="#license" title="Permanent link">&para;</a></h2>
 <p>Dependencies library is offered under the two clause BSD license.</p>
 <p align="center">&mdash; ⭐️ &mdash;</p>
