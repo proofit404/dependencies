@@ -6,5 +6,4 @@ __pycache__/
 coverage.xml
 dist/
 htmlcov/
-node_modules/
 site/
