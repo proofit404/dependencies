@@ -93,6 +93,11 @@ export default async () => {
     return;
   }
 
+  if (hasFeatureLabel & !hasDocsCommit) {
+    fail("Issue marked as feature should have docs commit");
+    return;
+  }
+
   for (let label of [
     "blocked",
     "epic",
@@ -103,6 +108,16 @@ export default async () => {
   ]) {
     if (issueLabels.has(label)) {
       fail(`Issues marked as ${label} can not be implemented`);
+      return;
+    }
+  }
+
+  const issueText = issueJSON.data.body,
+    issueLines = issueText.split(/\r?\n/).map((line) => line.trim());
+
+  for (let line of issueLines) {
+    if (line.match(/^[-\+\*] \[[xX]\] /)) {
+      fail("Only issue marked as epic is allowed to have task list");
       return;
     }
   }
