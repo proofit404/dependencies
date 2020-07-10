@@ -100,7 +100,6 @@ export default async () => {
 
   for (let label of [
     "blocked",
-    "epic",
     "invalid",
     "needs-investigation",
     "question",
@@ -117,7 +116,7 @@ export default async () => {
 
   for (let line of issueLines) {
     if (line.match(/^[-\+\*] \[[xX]\] /)) {
-      fail("Only issue marked as epic is allowed to have task list");
+      fail("Create a milestone instead of the issue with the task list");
       return;
     }
   }
