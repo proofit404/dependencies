@@ -41,8 +41,8 @@ jobs:
       - script: tox -p auto
         env:
           CI_PYTEST_FLAGS: >-
-            --junitxml=junit-{envname}.xml -o junit_suite_name={envname}
-            -o junit_family=xunit2 -o junit_log_passing_tests=true
+            --junitxml=junit-{envname}.xml -o junit_suite_name={envname} -o
+            junit_family=xunit2 -o junit_log_passing_tests=true
           TOX_PARALLEL_NO_SPINNER: 1
         displayName: Run Tox.
       - task: PublishTestResults@2
