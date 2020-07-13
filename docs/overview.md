@@ -1,7 +1,7 @@
 # Overview
 
-`dependencies` library provides a nice DSL for specifying relations of
-your classes and make instantiation as simple as attribute access.
+`dependencies` library provides a nice DSL for specifying relations of your
+classes and make instantiation as simple as attribute access.
 
 ```pycon
 

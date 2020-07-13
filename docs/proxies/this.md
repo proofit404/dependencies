@@ -1,9 +1,9 @@
 # `this` proxy
 
-`this` is a declarative way to access attributes and items of other
-dependencies defined in the `Injector` subclasses. The Link is basically
-a pointer or an alias to another dependency in the same `Injector`, in
-nested `Injector` or in parent `Injector`.
+`this` is a declarative way to access attributes and items of other dependencies
+defined in the `Injector` subclasses. The Link is basically a pointer or an
+alias to another dependency in the same `Injector`, in nested `Injector` or in
+parent `Injector`.
 
 ```pycon
 
@@ -60,12 +60,12 @@ You can use this links as usual in the constructor arguments.
 
 ```
 
-Also, you can see, that you can define proxy a before the actual
-dependency it pointing to.
+Also, you can see, that you can define proxy a before the actual dependency it
+pointing to.
 
-You can point a link to the instance method. The actual instance will be
-built before resolving method access. This is a useful technique to hide
-whole class with its own state behind a single callable interface.
+You can point a link to the instance method. The actual instance will be built
+before resolving method access. This is a useful technique to hide whole class
+with its own state behind a single callable interface.
 
 ```pycon
 
@@ -84,14 +84,14 @@ whole class with its own state behind a single callable interface.
 
 ```
 
-You can see that `method` has access to the `Foo` instance. So it can
-call other methods of `Foo`. You can define dependencies of the `Foo`
-class in it constructor as usual.
+You can see that `method` has access to the `Foo` instance. So it can call other
+methods of `Foo`. You can define dependencies of the `Foo` class in it
+constructor as usual.
 
 ## Nested and parent injector access
 
-Links created with `this` objects can access attributes defined in the
-nested injector.
+Links created with `this` objects can access attributes defined in the nested
+injector.
 
 ```pycon
 
@@ -105,9 +105,8 @@ nested injector.
 
 ```
 
-Nested `Injector` subclasses **can** access attributes of the parent
-`Injector`. Use left shift operator to specify the number of levels to
-go upper scope.
+Nested `Injector` subclasses **can** access attributes of the parent `Injector`.
+Use left shift operator to specify the number of levels to go upper scope.
 
 ```pycon
 
@@ -123,9 +122,9 @@ go upper scope.
 
 ## Full example
 
-Let's define an application with all settings stored in the dictionary.
-In production, you can substitute this dictionary with Consul or
-ZooKeeper client and the rest of the application will be left untouched.
+Let's define an application with all settings stored in the dictionary. In
+production, you can substitute this dictionary with Consul or ZooKeeper client
+and the rest of the application will be left untouched.
 
 ```pycon
 

@@ -1,10 +1,10 @@
 # `Package` proxy
 
-`Package` object is a way to define injector scope with dependencies
-defined in other places (like modules and packages). You can point
-package object to the module, a variable defined in the module, a
-function defined in the module, a class defined in the module, any
-attribute of the class which was defined in this module.
+`Package` object is a way to define injector scope with dependencies defined in
+other places (like modules and packages). You can point package object to the
+module, a variable defined in the module, a function defined in the module, a
+class defined in the module, any attribute of the class which was defined in
+this module.
 
 ```pycon
 
@@ -14,11 +14,11 @@ attribute of the class which was defined in this module.
 
 ## Attributes
 
-A usual use case for the `Package` object is to replace havy import
-statements with attribute access.
+A usual use case for the `Package` object is to replace havy import statements
+with attribute access.
 
-If you have complex project structure, you will see a lot of code like
-this in your injectors.
+If you have complex project structure, you will see a lot of code like this in
+your injectors.
 
 ```pycon
 
@@ -53,8 +53,8 @@ To save some typing I tend to write this code like this
 
 ```
 
-If a lot of dependencies defined in the repositories module, you can
-set `Package` source to the repositories module itself.
+If a lot of dependencies defined in the repositories module, you can set
+`Package` source to the repositories module itself.
 
 ```pycon
 
@@ -68,10 +68,9 @@ set `Package` source to the repositories module itself.
 
 ## Classes
 
-If an attribute of the `Package` object point to the attribute of the
-class defined in some module, this class will be instantiated before
-attribute access is actually happen. You can inject bound methods with
-exactly one line.
+If an attribute of the `Package` object point to the attribute of the class
+defined in some module, this class will be instantiated before attribute access
+is actually happen. You can inject bound methods with exactly one line.
 
 ```pycon
 

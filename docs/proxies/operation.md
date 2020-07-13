@@ -1,7 +1,7 @@
 # `operation` proxy
 
-Operation is a way to define injectable functions easily. This functions
-can only call other dependencies and take no additional value arguments.
+Operation is a way to define injectable functions easily. This functions can
+only call other dependencies and take no additional value arguments.
 
 ```pycon
 
@@ -29,8 +29,8 @@ True
 
 ```
 
-If you want to pass additional value parameter to the function, add it
-to the injector with the `let` notation.
+If you want to pass additional value parameter to the function, add it to the
+injector with the `let` notation.
 
 ```pycon
 

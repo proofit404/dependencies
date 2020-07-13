@@ -2,41 +2,43 @@
 
 ### Features
 
-- remove contrib package ([5bfe041](https://github.com/proofit404/dependencies/commit/5bfe041f72bc82a4a24ea47599cf2bfbb8d13900)), closes [#192](https://github.com/proofit404/dependencies/issues/192)
+- remove contrib package
+  ([5bfe041](https://github.com/proofit404/dependencies/commit/5bfe041f72bc82a4a24ea47599cf2bfbb8d13900)),
+  closes [#192](https://github.com/proofit404/dependencies/issues/192)
 
 ### BREAKING CHANGES
 
-- Every time a new user asks me how to use their
-  favorite framework together with stories and dependencies I understand
-  that there is a missing module in the contrib package.
+- Every time a new user asks me how to use their favorite framework together
+  with stories and dependencies I understand that there is a missing module in
+  the contrib package.
 
 ## [1.0.1](https://github.com/proofit404/dependencies/compare/1.0.0...1.0.1) (2020-03-31)
 
 ### Bug Fixes
 
-- add **wrapped** attribute ([e3c7aa9](https://github.com/proofit404/dependencies/commit/e3c7aa98cec4b33146c98855ae851fa57c990367))
+- add **wrapped** attribute
+  ([e3c7aa9](https://github.com/proofit404/dependencies/commit/e3c7aa98cec4b33146c98855ae851fa57c990367))
 
 # 1.0.0 (2020-02-11)
 
 ### Bug Fixes
 
-- prevent generated changelog from style guide violation ([d3a472f](https://github.com/proofit404/dependencies/commit/d3a472f1779f443be0d9f3321c8451241ee723ff))
+- prevent generated changelog from style guide violation
+  ([d3a472f](https://github.com/proofit404/dependencies/commit/d3a472f1779f443be0d9f3321c8451241ee723ff))
 
 ## 0.15 (2018-07-21)
 
 - Support `in` checks in the `Injector` subclasses.
 - Add `operation` decorator to build injectable functions.
-- Add `Package` proxy to reduce import boilerplate in the `Injector`
-  definition.
+- Add `Package` proxy to reduce import boilerplate in the `Injector` definition.
 - Add Celery contrib to define tasks from `Injector` subclasses.
 - Add Py.Test contrib to define fixtures from `Injector` subclasses.
 - Add Django contrib to define views from `Injector` subclasses.
-- Add Django REST Framework contrib to define API views and model view
-  sets from `Injector` subclasses.
+- Add Django REST Framework contrib to define API views and model view sets from
+  `Injector` subclasses.
 - A class named attributes should end with `_class`.
 - Improved error messages for missing dependencies.
-- Raise `DependencyError` instead of `AttributeError` for missed
-  dependencies.
+- Raise `DependencyError` instead of `AttributeError` for missed dependencies.
 - Drop python 2.6 and 3.4 support.
 
 ## 0.14 (2018-04-13)
@@ -61,8 +63,8 @@
 - Twelve times speed up.
 - Protect from incorrect operations with attribute assignment.
 - Deny \*args and \*\*kwargs in the injectable classes.
-- Classes can be used as default argument values only if argument name
-  ends with `_cls`.
+- Classes can be used as default argument values only if argument name ends with
+  `_cls`.
 - Remove `six` library from install requires.
 
 ## 0.10 (2016-06-09)
@@ -79,8 +81,8 @@
 
 ## 0.7 (2016-06-04)
 
-- Raise `DependencyError` for mutual recursion in constructor
-  arguments and specified dependencies.
+- Raise `DependencyError` for mutual recursion in constructor arguments and
+  specified dependencies.
 - Show injected dependencies in the `dir` result.
 - Deny to instantiate `Injector` and its subclasses.
 
@@ -92,8 +94,8 @@
 
 ## 0.5 (2016-03-03)
 
-- Avoid attribute search recursion. This occurs with inheritance chain
-  length started at 3 and missing dependency on first level.
+- Avoid attribute search recursion. This occurs with inheritance chain length
+  started at 3 and missing dependency on first level.
 - Add `c` alias for `Injector` subclass access.
 - Add `let` factory to temporarily overwrite specified dependencies.
 
@@ -103,15 +105,15 @@
 
 ## 0.3 (2016-03-02)
 
-- Deprecate injectable mechanism. Injector may inject any arguments to
-  any classes. Injector now support multiple DI targets. All possible
-  targets now specified in the Injector attributes. Only single base
-  inheritance allowed for Injector subclasses.
+- Deprecate injectable mechanism. Injector may inject any arguments to any
+  classes. Injector now support multiple DI targets. All possible targets now
+  specified in the Injector attributes. Only single base inheritance allowed for
+  Injector subclasses.
 
 ## 0.2 (2016-02-13)
 
-- Allows to override dependencies specified with Injector by
-  inheritance from this Injector subclass.
+- Allows to override dependencies specified with Injector by inheritance from
+  this Injector subclass.
 
 ## 0.1 (2016-01-31)
 
