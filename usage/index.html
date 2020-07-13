@@ -683,8 +683,8 @@
                 
                 <h1 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h1>
 <h2 id="preparations">Preparations<a class="headerlink" href="#preparations" title="Permanent link">&para;</a></h2>
-<p>Before we start to inject dependencies, let's define code which needs
-these dependencies. Also, let's add some behavior to your robot.</p>
+<p>Before we start to inject dependencies, let's define code which needs these
+dependencies. Also, let's add some behavior to your robot.</p>
 <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Robot</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">servo</span><span class="p">,</span> <span class="n">controller</span><span class="p">,</span> <span class="n">settings</span><span class="p">):</span>
 <span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">servo</span> <span class="o">=</span> <span class="n">servo</span>
@@ -714,9 +714,9 @@ these dependencies. Also, let's add some behavior to your robot.</p>
 </code></pre></div>
 
 <p>We use constructor-based dependency injection here: we define necessary
-arguments and store them explicitly, for the sake of readability. This will
-help us to understand the execution path of your system. Attributes
-sourced from nowhere in your code aren't fun. Believe me.</p>
+arguments and store them explicitly, for the sake of readability. This will help
+us to understand the execution path of your system. Attributes sourced from
+nowhere in your code aren't fun. Believe me.</p>
 <p>Now, it's time to make this work in the real world.</p>
 <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">MechanicalMotor</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="k">def</span> <span class="nf">reverse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coordinate</span><span class="p">):</span>
@@ -730,7 +730,8 @@ sourced from nowhere in your code aren't fun. Believe me.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">production</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;max_point&#39;</span><span class="p">:</span> <span class="mf">0.01</span><span class="p">}</span>
 </code></pre></div>
 
-<p>So, we are close to scream "It's alive!" and, if we're lucky enough, run out of the building.</p>
+<p>So, we are close to scream "It's alive!" and, if we're lucky enough, run out of
+the building.</p>
 <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dependencies</span> <span class="kn">import</span> <span class="n">Injector</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Container</span><span class="p">(</span><span class="n">Injector</span><span class="p">):</span>
@@ -746,15 +747,18 @@ sourced from nowhere in your code aren't fun. Believe me.</p>
 
 <p>Congratulations! We've built our robot with dependency injection.</p>
 <h2 id="injection-rules">Injection rules<a class="headerlink" href="#injection-rules" title="Permanent link">&para;</a></h2>
-<p><code>Container</code> above is a dependency scope, and dependencies are defined as its attributes.
-When you access one of those attributes, the following happens:</p>
+<p><code>Container</code> above is a dependency scope, and dependencies are defined as its
+attributes. When you access one of those attributes, the following happens:</p>
 <ul>
-<li>If attribute value is a <code>class</code>, it will be instantiated. To make that possible, the library
-  will inspect its constructor's argument list and search current dependency scope for dependencies
-  with the same name.</li>
-<li>If attribute value is a <code>class</code> but attribute name ends with <code>_class</code> - then it will be returned as is. (For example, <code>Container.foo_class</code> will return the class stored in it, not its instance).</li>
+<li>If attribute value is a <code>class</code>, it will be instantiated. To make that
+  possible, the library will inspect its constructor's argument list and search
+  current dependency scope for dependencies with the same name.</li>
+<li>If attribute value is a <code>class</code> but attribute name ends with <code>_class</code> - then
+  it will be returned as is. (For example, <code>Container.foo_class</code> will return the
+  class stored in it, not its instance).</li>
 <li>Anything else is returned as is.</li>
-<li>If, during dependency search, we encounter another <code>class</code> - it will be instantiated along these rules, as well. The process is recursive.</li>
+<li>If, during dependency search, we encounter another <code>class</code> - it will be
+  instantiated along these rules, as well. The process is recursive.</li>
 </ul>
 <p>Here is a demonstration of rules above.</p>
 <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Foo</span><span class="p">:</span>
@@ -796,14 +800,16 @@ When you access one of those attributes, the following happens:</p>
 <li>In dependency scope, that argument resolves to <code>Baz</code> class;</li>
 <li>Which is a class - oh boy, we need to instantiate it as well;</li>
 <li>But its constructor requires an argument named <code>x</code>;</li>
-<li>Which resolves to <code>1</code> in the dependency scope, so we do not need to go any further.</li>
+<li>Which resolves to <code>1</code> in the dependency scope, so we do not need to go any
+  further.</li>
 </ul>
-<p>Having found that out, we effectively construct, execute, and return <code>Foo(two=Baz(x=1))</code>.</p>
+<p>Having found that out, we effectively construct, execute, and return
+<code>Foo(two=Baz(x=1))</code>.</p>
 <h3 id="calculation-rules">Calculation rules<a class="headerlink" href="#calculation-rules" title="Permanent link">&para;</a></h3>
 <p>Each dependency evaluates exactly once during injection process. If during
-dependency injection different classes have constructor argument with
-the same name, the corresponding dependency will be instantiated once and these
-two constructors will receive the same object. But this object only lives during one
+dependency injection different classes have constructor argument with the same
+name, the corresponding dependency will be instantiated once and these two
+constructors will receive the same object. But this object only lives during one
 injection process; another attribute access means a new object.</p>
 <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dependencies</span> <span class="kn">import</span> <span class="n">Injector</span>
 
@@ -842,8 +848,8 @@ injection process; another attribute access means a new object.</p>
 </code></pre></div>
 
 <h3 id="nested-injectors">Nested <code>Injectors</code><a class="headerlink" href="#nested-injectors" title="Permanent link">&para;</a></h3>
-<p>It is possible to inject <code>Injector</code> itself. <code>Injector</code> subclasses
-are provided as is, and calculate their attributes on first use.</p>
+<p>It is possible to inject <code>Injector</code> itself. <code>Injector</code> subclasses are provided
+as is, and calculate their attributes on first use.</p>
 <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dependencies</span> <span class="kn">import</span> <span class="n">Injector</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Container</span><span class="p">(</span><span class="n">Injector</span><span class="p">):</span>
@@ -892,16 +898,17 @@ are provided as is, and calculate their attributes on first use.</p>
 </code></pre></div>
 
 <h2 id="scope-extension">Scope extension<a class="headerlink" href="#scope-extension" title="Permanent link">&para;</a></h2>
-<p>You can define a dependency scope partially and then extend it; only in injection moment,
-meaning at the time of attribute access, you are required to have the complete scope.</p>
+<p>You can define a dependency scope partially and then extend it; only in
+injection moment, meaning at the time of attribute access, you are required to
+have the complete scope.</p>
 <p>There are two ways to extend dependency scopes:</p>
 <ul>
 <li>inheritance</li>
 <li><code>let</code> notation</li>
 </ul>
 <h3 id="inheritance">Inheritance<a class="headerlink" href="#inheritance" title="Permanent link">&para;</a></h3>
-<p>You can add additional dependencies or redefine existing ones in a
-scope subclass:</p>
+<p>You can add additional dependencies or redefine existing ones in a scope
+subclass:</p>
 <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Foo</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="k">pass</span>
 
@@ -929,9 +936,9 @@ scope subclass:</p>
 <span class="go">&lt;__main__.Foo object at 0x...&gt;</span>
 </code></pre></div>
 
-<p>We also provide <code>and</code> notation for in-place <code>Injector</code> composition.
-Example below is full equivalent to the previous one, but without
-intermediate class needed.</p>
+<p>We also provide <code>and</code> notation for in-place <code>Injector</code> composition. Example
+below is full equivalent to the previous one, but without intermediate class
+needed.</p>
 <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Scope1</span><span class="p">(</span><span class="n">Injector</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="n">foo</span> <span class="o">=</span> <span class="n">Foo</span>
 
@@ -943,8 +950,8 @@ intermediate class needed.</p>
 </code></pre></div>
 
 <h3 id="let-notation"><code>let</code> notation<a class="headerlink" href="#let-notation" title="Permanent link">&para;</a></h3>
-<p>You can temporary redefine a dependency for only one case. This is
-extremely useful for tests. Inject an assertion instead of one or more dependencies, and
+<p>You can temporary redefine a dependency for only one case. This is extremely
+useful for tests. Inject an assertion instead of one or more dependencies, and
 you will be able to test your system in all possible cases. It is, for example,
 possible to simulate database integrity error on concurrent access.</p>
 <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Scope</span><span class="p">(</span><span class="n">Injector</span><span class="p">):</span>
@@ -955,17 +962,16 @@ possible to simulate database integrity error on concurrent access.</p>
 <span class="go">&lt;__main__.Foo object at 0x...&gt;</span>
 </code></pre></div>
 
-<p>It is possible to build dependency scopes directly from dictionaries
-using <code>let</code> notation.</p>
+<p>It is possible to build dependency scopes directly from dictionaries using <code>let</code>
+notation.</p>
 <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">settings</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;host&#39;</span><span class="p">:</span> <span class="s1">&#39;localhost&#39;</span><span class="p">,</span> <span class="s1">&#39;port&#39;</span><span class="p">:</span> <span class="mi">1234</span><span class="p">}</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Scope</span> <span class="o">=</span> <span class="n">Injector</span><span class="o">.</span><span class="n">let</span><span class="p">(</span><span class="n">foo</span><span class="o">=</span><span class="n">Foo</span><span class="p">,</span> <span class="n">bar</span><span class="o">=</span><span class="n">Bar</span><span class="p">,</span> <span class="o">**</span><span class="n">settings</span><span class="p">)</span>
 </code></pre></div>
 
 <h2 id="hasattr-alternative"><code>hasattr</code> alternative<a class="headerlink" href="#hasattr-alternative" title="Permanent link">&para;</a></h2>
-<p><code>hasattr</code> works by attribute access, so it triggers dependency
-injection. If this is unnecessary side effect, <code>dependencies</code> provides
-alternative way.</p>
+<p><code>hasattr</code> works by attribute access, so it triggers dependency injection. If
+this is unnecessary side effect, <code>dependencies</code> provides alternative way.</p>
 <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Container</span><span class="p">(</span><span class="n">Injector</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="n">foo</span> <span class="o">=</span> <span class="mi">1</span>
 

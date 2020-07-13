@@ -560,8 +560,8 @@
                 
                 
                 <h1 id="operation-proxy"><code>operation</code> proxy<a class="headerlink" href="#operation-proxy" title="Permanent link">&para;</a></h1>
-<p>Operation is a way to define injectable functions easily. This functions
-can only call other dependencies and take no additional value arguments.</p>
+<p>Operation is a way to define injectable functions easily. This functions can
+only call other dependencies and take no additional value arguments.</p>
 <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dependencies</span> <span class="kn">import</span> <span class="n">Injector</span><span class="p">,</span> <span class="n">operation</span>
 </code></pre></div>
 
@@ -580,8 +580,8 @@ can only call other dependencies and take no additional value arguments.</p>
 <span class="go">True</span>
 </code></pre></div>
 
-<p>If you want to pass additional value parameter to the function, add it
-to the injector with the <code>let</code> notation.</p>
+<p>If you want to pass additional value parameter to the function, add it to the
+injector with the <code>let</code> notation.</p>
 <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Foo</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="k">def</span> <span class="nf">do</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">):</span>
 <span class="gp">... </span>        <span class="k">return</span> <span class="n">arg</span> <span class="o">+</span> <span class="mi">3</span>

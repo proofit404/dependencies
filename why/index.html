@@ -616,11 +616,10 @@
                 
                 
                 <h1 id="why-not">Why not...<a class="headerlink" href="#why-not" title="Permanent link">&para;</a></h1>
-<p>Here we will try to collect pros and cons of different approaches to
-make your code extendable and reusable.</p>
-<p>Let's imagine we have an order processing system. We want
-to implement order purchase feature. There is a lot of functionality
-to be built:</p>
+<p>Here we will try to collect pros and cons of different approaches to make your
+code extendable and reusable.</p>
+<p>Let's imagine we have an order processing system. We want to implement order
+purchase feature. There is a lot of functionality to be built:</p>
 <ul>
 <li>We should change our data,</li>
 <li>send a request to the payment processing system,</li>
@@ -650,35 +649,31 @@ to be built:</p>
 
 <p>It's a readable and straightforward solution. What can possibly go wrong?</p>
 <p>Problem is that this code is difficult to change and extend.</p>
-<p>For example, you need to add SMS and push notifications in addition to
-plain text emails. To do that, you'll have to add a handful of different
-conditions to this simple default path.</p>
-<p>Push notification to the mobile app should be written in Markdown
-format, SMS requires plain text, and email needs HTML in addition to
-plain text. Users should be able to choose their preferred notification
-method.</p>
+<p>For example, you need to add SMS and push notifications in addition to plain
+text emails. To do that, you'll have to add a handful of different conditions to
+this simple default path.</p>
+<p>Push notification to the mobile app should be written in Markdown format, SMS
+requires plain text, and email needs HTML in addition to plain text. Users
+should be able to choose their preferred notification method.</p>
 <p>How can we change the code above to match new requirements?</p>
-<p>We have problems on all three layers of the code: <code>purchase</code>,
-<code>notify_user</code> and <code>send_notification</code> functions have to be changed.</p>
+<p>We have problems on all three layers of the code: <code>purchase</code>, <code>notify_user</code> and
+<code>send_notification</code> functions have to be changed.</p>
 <ol>
-<li><strong>Add conditions to all parameters to all layers of the code.</strong>
-   This will end up with messy code which is even harder to extend. No
-   one wants <code>purchase</code> function to have 12 arguments. No one wants to
-   wonder why <code>send_email</code> function accepts phone number. No one wants
-   to read 7 <code>if</code> statements in the <code>notify_user</code> function when they
-   are about to add eighth condition.</li>
-<li><strong>Add context variable instead of another argument.</strong> This little
-   <code>ctx</code> argument instead of email address, phone number, product
-   price and shipment destination will save us a lot of typing between
-   function calls. But we still have bunch of <code>if</code> statements.</li>
-<li><strong>Copy-paste this module and re-implement each feature separately.</strong>
-   Each feature will be readable and simple on it's own, but you will
-   regret this decision when usage of <code>request_payment</code> or
-   <code>calculate_price</code> changes.</li>
+<li><strong>Add conditions to all parameters to all layers of the code.</strong> This will end
+   up with messy code which is even harder to extend. No one wants <code>purchase</code>
+   function to have 12 arguments. No one wants to wonder why <code>send_email</code>
+   function accepts phone number. No one wants to read 7 <code>if</code> statements in the
+   <code>notify_user</code> function when they are about to add eighth condition.</li>
+<li><strong>Add context variable instead of another argument.</strong> This little <code>ctx</code>
+   argument instead of email address, phone number, product price and shipment
+   destination will save us a lot of typing between function calls. But we still
+   have bunch of <code>if</code> statements.</li>
+<li><strong>Copy-paste this module and re-implement each feature separately.</strong> Each
+   feature will be readable and simple on it's own, but you will regret this
+   decision when usage of <code>request_payment</code> or <code>calculate_price</code> changes.</li>
 </ol>
-<p>But we still have the same problem. We can't substitute implementation
-details of low level code without changing high level policies. Let's
-try...</p>
+<p>But we still have the same problem. We can't substitute implementation details
+of low level code without changing high level policies. Let's try...</p>
 <h2 id="inheritance">Inheritance<a class="headerlink" href="#inheritance" title="Permanent link">&para;</a></h2>
 <p>Let's rewrite our functions into a class which we can subclass for different
 purposes.</p>
@@ -715,35 +710,34 @@ purposes.</p>
 <span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">send_email</span><span class="p">()</span>
 </code></pre></div>
 
-<p>At first glance, this class is a better solution than before. Indeed, this code has
-several advantages.</p>
+<p>At first glance, this class is a better solution than before. Indeed, this code
+has several advantages.</p>
 <ol>
-<li><strong>At first glance high level methods even more readable.</strong> There
-   are no nosy arguments or variables. Only nice named methods.</li>
-<li><strong>Simple code reuse.</strong> With inheritance, we can override any
-   method on any layer of abstraction in the system. We can add any
-   number of methods or attributes is the child classes. Looks like it
-   is a very reasonable approach.</li>
+<li><strong>At first glance high level methods even more readable.</strong> There are no nosy
+   arguments or variables. Only nice named methods.</li>
+<li><strong>Simple code reuse.</strong> With inheritance, we can override any method on any
+   layer of abstraction in the system. We can add any number of methods or
+   attributes is the child classes. Looks like it is a very reasonable approach.</li>
 </ol>
-<p>But this code hides quite a few problems underneath the false premise of understandability
-and cleanness.</p>
+<p>But this code hides quite a few problems underneath the false premise of
+understandability and cleanness.</p>
 <ol>
-<li><strong>God object.</strong> One class contains methods related to every single
-   layer of abstraction in the system. It's hard to manage two hundred
-   methods in the same class: one will process HTTP request, another
-   one will send email, and yet another one will write to the database. It's
-   hard to figure out what <em>exactly</em> this class does.</li>
-<li><strong>Bad state management.</strong> During the life time of a class instance
-   different methods change state of the class. When you read short
-   method somewhere inside email sender logic, you have no idea <em>from
-   where</em> attribute values came from and <em>when exactly</em> they were set. Hello
-   <code>print</code> statements to understand the code...</li>
+<li><strong>God object.</strong> One class contains methods related to every single layer of
+   abstraction in the system. It's hard to manage two hundred methods in the
+   same class: one will process HTTP request, another one will send email, and
+   yet another one will write to the database. It's hard to figure out what
+   <em>exactly</em> this class does.</li>
+<li><strong>Bad state management.</strong> During the life time of a class instance different
+   methods change state of the class. When you read short method somewhere
+   inside email sender logic, you have no idea <em>from where</em> attribute values
+   came from and <em>when exactly</em> they were set. Hello <code>print</code> statements to
+   understand the code...</li>
 </ol>
-<p>Let's reduce amount of logic in the class (responsibility of the class).
-Let's try...</p>
+<p>Let's reduce amount of logic in the class (responsibility of the class). Let's
+try...</p>
 <h2 id="mixins">Mixins<a class="headerlink" href="#mixins" title="Permanent link">&para;</a></h2>
-<p>We can split our God object into multiple classes and join it together
-later using multiple inheritance.</p>
+<p>We can split our God object into multiple classes and join it together later
+using multiple inheritance.</p>
 <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">OrderProcessingMixin</span><span class="p">:</span>
 <span class="gp">...</span>
 <span class="gp">... </span>    <span class="k">def</span> <span class="nf">create_order</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -780,24 +774,23 @@ later using multiple inheritance.</p>
 
 <p>Someone might say this is an improvement over one huge class.</p>
 <ol>
-<li><strong>All methods grouped in classes with the same
-   responsibility.</strong></li>
-<li><strong>Better code reuse.</strong> We can use the same notification mechanism
-   in different classes with just one line of code.</li>
+<li><strong>All methods grouped in classes with the same responsibility.</strong></li>
+<li><strong>Better code reuse.</strong> We can use the same notification mechanism in
+   different classes with just one line of code.</li>
 </ol>
 <p>But there are a lot of problems too. During a debugging session,</p>
 <ol>
 <li><strong>In the <code>get_notification_text</code> you have no idea who set up
    <code>payment_details</code>.</strong></li>
-<li><strong>In the <code>Order</code> class itself you see a bunch of low level methods
-   which are deep implementation details.</strong> What public method should
-   I call? When notification will be sent, exactly?</li>
+<li><strong>In the <code>Order</code> class itself you see a bunch of low level methods which are
+   deep implementation details.</strong> What public method should I call? When
+   notification will be sent, exactly?</li>
 </ol>
-<p>This code is much harder to understand than it should be. Even if it
-reusable, this complexity in too large for my head. Let's try...</p>
+<p>This code is much harder to understand than it should be. Even if it reusable,
+this complexity in too large for my head. Let's try...</p>
 <h2 id="composition">Composition<a class="headerlink" href="#composition" title="Permanent link">&para;</a></h2>
-<p>Composition is a powerful pattern of organizing code with proper code
-boundaries and clear dependency relationship.</p>
+<p>Composition is a powerful pattern of organizing code with proper code boundaries
+and clear dependency relationship.</p>
 <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">OrderProcessor</span><span class="p">:</span>
 <span class="gp">...</span>
 <span class="gp">... </span>    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">product</span><span class="p">):</span>
@@ -870,11 +863,11 @@ boundaries and clear dependency relationship.</p>
 
 <p>This code has a number of really good characteristics.</p>
 <ol>
-<li><strong>It's clear where things were defined.</strong> If you try to understand
-   what's wrong with your system, you can just use traceback. No nasty
-   code execution paths.</li>
-<li><strong>Your system becomes really configurable.</strong> You can <strong>inject</strong>
-   pretty much any implementation without changing high-level code.</li>
+<li><strong>It's clear where things were defined.</strong> If you try to understand what's
+   wrong with your system, you can just use traceback. No nasty code execution
+   paths.</li>
+<li><strong>Your system becomes really configurable.</strong> You can <strong>inject</strong> pretty much
+   any implementation without changing high-level code.</li>
 </ol>
 <p>But there one unfortunate consequence of this style</p>
 <ol>
@@ -897,9 +890,9 @@ boundaries and clear dependency relationship.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">OrderContainer</span><span class="o">.</span><span class="n">order</span><span class="o">.</span><span class="n">purchase</span><span class="p">(</span><span class="n">User</span><span class="p">(),</span> <span class="n">Product</span><span class="p">(),</span> <span class="n">ShipmentDetails</span><span class="p">())</span>
 </code></pre></div>
 
-<p>It helps you to reduce the boilerplate of the initiation stage. It
-doesn't require you to change your code. You still can instantiate
-your classes directly, if you don't like this library.</p>
+<p>It helps you to reduce the boilerplate of the initiation stage. It doesn't
+require you to change your code. You still can instantiate your classes
+directly, if you don't like this library.</p>
 <p align="center">&mdash; ⭐️ &mdash;</p>
 
 <p align="center"><i>The dependencies library is part of the SOLID python family.</i></p>

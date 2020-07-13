@@ -589,9 +589,8 @@
                 
                 <h1 id="faq">FAQ<a class="headerlink" href="#faq" title="Permanent link">&para;</a></h1>
 <h2 id="why-do-not-use-type-annotations">Why do not use type annotations?<a class="headerlink" href="#why-do-not-use-type-annotations" title="Permanent link">&para;</a></h2>
-<p>It is possible to look for types of <code>__init__</code> arguments instead of
-names. Obviously, code written in this style will look something like
-this:</p>
+<p>It is possible to look for types of <code>__init__</code> arguments instead of names.
+Obviously, code written in this style will look something like this:</p>
 <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">app.types</span> <span class="kn">import</span> <span class="n">TypedInjector</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">app.purchase</span> <span class="kn">import</span> <span class="p">(</span>
 <span class="gp">... </span>    <span class="n">AbstractPaymentService</span><span class="p">,</span> <span class="n">PaypalService</span><span class="p">,</span>
@@ -617,29 +616,27 @@ this:</p>
 
 <p>In our opinion, this makes code less declarative.</p>
 <ol>
-<li><strong>It's hard to tell how dependencies will be resolved.</strong> At the same
-   time, looking on container definition and a signature of the
-   <code>__init__</code> method can you easily say what arguments will be passed
-   to the constructor? You can't. You will need to inspect all superclasses of
-   each dependency registered in the container. With our <code>Injector</code>
-   approach, you don't have this problem. You will find arguments
-   right in the <code>Injector</code> subclass in one place.</li>
-<li><strong>It's a global mutable variable.</strong> Container definition can be
-   split into different files. This will make it harder to read. It's
-   very similar to the service locator. Many architect people consider
-   it an anti-pattern.</li>
-<li><strong>It hard to define multiple dependencies of the same type.</strong> For
-   example, your service needs two databases to work with. You need to
-   define two different classes for types signatures and then define
-   two different database classes. The same is necessary for these
-   classes arguments. Both of them needs a port to run. How would you
-   name it? <code>PrimaryDatabasePort</code> and <code>SecondaryDatabasePort</code> instead
-   of <code>int</code>? This leads to unnecessary boilerplate.</li>
+<li><strong>It's hard to tell how dependencies will be resolved.</strong> At the same time,
+   looking on container definition and a signature of the <code>__init__</code> method can
+   you easily say what arguments will be passed to the constructor? You can't.
+   You will need to inspect all superclasses of each dependency registered in
+   the container. With our <code>Injector</code> approach, you don't have this problem. You
+   will find arguments right in the <code>Injector</code> subclass in one place.</li>
+<li><strong>It's a global mutable variable.</strong> Container definition can be split into
+   different files. This will make it harder to read. It's very similar to the
+   service locator. Many architect people consider it an anti-pattern.</li>
+<li><strong>It hard to define multiple dependencies of the same type.</strong> For example,
+   your service needs two databases to work with. You need to define two
+   different classes for types signatures and then define two different database
+   classes. The same is necessary for these classes arguments. Both of them
+   needs a port to run. How would you name it? <code>PrimaryDatabasePort</code> and
+   <code>SecondaryDatabasePort</code> instead of <code>int</code>? This leads to unnecessary
+   boilerplate.</li>
 </ol>
 <h2 id="mixins-considered-harmful">Mixins considered harmful<a class="headerlink" href="#mixins-considered-harmful" title="Permanent link">&para;</a></h2>
-<p><code>dependencies</code> are compared with mixins often, since both
-solutions are ways to maximize code reuse. We already discussed this in
-the <a href="../why/#mixins">why</a> chapter. But let's return to it again:</p>
+<p><code>dependencies</code> are compared with mixins often, since both solutions are ways to
+maximize code reuse. We already discussed this in the <a href="../why/#mixins">why</a>
+chapter. But let's return to it again:</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Inheritance always breaks encapsulation.</p>
@@ -656,8 +653,8 @@ the <a href="../why/#mixins">why</a> chapter. But let's return to it again:</p>
 <span class="gp">... </span>        <span class="k">return</span> <span class="n">Response</span><span class="p">(</span><span class="n">serializer</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
 </code></pre></div>
 
-<p>Where were <code>get_object</code> and <code>get_serializer</code> defined? We have no idea.
-We believe the code below is way better in the sense of understandability:</p>
+<p>Where were <code>get_object</code> and <code>get_serializer</code> defined? We have no idea. We
+believe the code below is way better in the sense of understandability:</p>
 <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">RetrieveModel</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="sd">&quot;&quot;&quot;</span>
 <span class="gp">... </span><span class="sd">    Retrieve a model instance.</span>
@@ -673,8 +670,8 @@ We believe the code below is way better in the sense of understandability:</p>
 </code></pre></div>
 
 <h2 id="what-to-inject-and-what-not-to">What to inject, and what not to<a class="headerlink" href="#what-to-inject-and-what-not-to" title="Permanent link">&para;</a></h2>
-<p>It can be hard to draw the border between what should be injectable and
-what shouldn't be. Let's consider this typical example.</p>
+<p>It can be hard to draw the border between what should be injectable and what
+shouldn't be. Let's consider this typical example.</p>
 <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">requests</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">dependencies</span>
 
@@ -701,13 +698,11 @@ what shouldn't be. Let's consider this typical example.</p>
    <a href="http://docs.python-requests.org/">requests</a> library?</li>
 </ol>
 <p>In our opinion these are not the correct questions to ask.</p>
-<p>By injecting a certain library you add a <strong>hard</strong> dependency on its
-interfaces to the whole system. Migration to other libraries in the
-future can be painful.</p>
-<p>Also, this adds another <strong>hard</strong> dependency to the whole system. Your
-code depends on the structure of third-party API response. This makes
-the situation even worse. Migration to other third-party services will
-be painful, as well.</p>
+<p>By injecting a certain library you add a <strong>hard</strong> dependency on its interfaces
+to the whole system. Migration to other libraries in the future can be painful.</p>
+<p>Also, this adds another <strong>hard</strong> dependency to the whole system. Your code
+depends on the structure of third-party API response. This makes the situation
+even worse. Migration to other third-party services will be painful, as well.</p>
 <p>We believe that HTTP protocol itself is an implementation detail!</p>
 <p>We prefer to use dependency injection only on boundaries we control:</p>
 <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">dataclasses</span>

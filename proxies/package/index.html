@@ -574,19 +574,19 @@
                 
                 
                 <h1 id="package-proxy"><code>Package</code> proxy<a class="headerlink" href="#package-proxy" title="Permanent link">&para;</a></h1>
-<p><code>Package</code> object is a way to define injector scope with dependencies
-defined in other places (like modules and packages). You can point
-package object to the module, a variable defined in the module, a
-function defined in the module, a class defined in the module, any
-attribute of the class which was defined in this module.</p>
+<p><code>Package</code> object is a way to define injector scope with dependencies defined in
+other places (like modules and packages). You can point package object to the
+module, a variable defined in the module, a function defined in the module, a
+class defined in the module, any attribute of the class which was defined in
+this module.</p>
 <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dependencies</span> <span class="kn">import</span> <span class="n">Injector</span><span class="p">,</span> <span class="n">Package</span>
 </code></pre></div>
 
 <h2 id="attributes">Attributes<a class="headerlink" href="#attributes" title="Permanent link">&para;</a></h2>
-<p>A usual use case for the <code>Package</code> object is to replace havy import
-statements with attribute access.</p>
-<p>If you have complex project structure, you will see a lot of code like
-this in your injectors.</p>
+<p>A usual use case for the <code>Package</code> object is to replace havy import statements
+with attribute access.</p>
+<p>If you have complex project structure, you will see a lot of code like this in
+your injectors.</p>
 <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">app.repositories</span> <span class="kn">import</span> <span class="n">create_user</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># A lot of import statements here...</span>
 
@@ -609,8 +609,8 @@ this in your injectors.</p>
 <span class="gp">... </span>    <span class="c1"># A lot of assignment statements here...</span>
 </code></pre></div>
 
-<p>If a lot of dependencies defined in the repositories module, you can
-set <code>Package</code> source to the repositories module itself.</p>
+<p>If a lot of dependencies defined in the repositories module, you can set
+<code>Package</code> source to the repositories module itself.</p>
 <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">repositories</span> <span class="o">=</span> <span class="n">Package</span><span class="p">(</span><span class="s2">&quot;app.repositories&quot;</span><span class="p">)</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Container</span><span class="p">(</span><span class="n">Injector</span><span class="p">):</span>
@@ -619,10 +619,9 @@ set <code>Package</code> source to the repositories module itself.</p>
 </code></pre></div>
 
 <h2 id="classes">Classes<a class="headerlink" href="#classes" title="Permanent link">&para;</a></h2>
-<p>If an attribute of the <code>Package</code> object point to the attribute of the
-class defined in some module, this class will be instantiated before
-attribute access is actually happen. You can inject bound methods with
-exactly one line.</p>
+<p>If an attribute of the <code>Package</code> object point to the attribute of the class
+defined in some module, this class will be instantiated before attribute access
+is actually happen. You can inject bound methods with exactly one line.</p>
 <div class="highlight"><pre><span></span><code><span class="go"># app/calc.py</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Calc</span><span class="p">:</span>

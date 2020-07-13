@@ -616,39 +616,41 @@
                 <h1 id="200-2020-05-17"><a href="https://github.com/proofit404/dependencies/compare/1.0.1...2.0.0">2.0.0</a> (2020-05-17)<a class="headerlink" href="#200-2020-05-17" title="Permanent link">&para;</a></h1>
 <h3 id="features">Features<a class="headerlink" href="#features" title="Permanent link">&para;</a></h3>
 <ul>
-<li>remove contrib package (<a href="https://github.com/proofit404/dependencies/commit/5bfe041f72bc82a4a24ea47599cf2bfbb8d13900">5bfe041</a>), closes <a href="https://github.com/proofit404/dependencies/issues/192">#192</a></li>
+<li>remove contrib package
+  (<a href="https://github.com/proofit404/dependencies/commit/5bfe041f72bc82a4a24ea47599cf2bfbb8d13900">5bfe041</a>),
+  closes <a href="https://github.com/proofit404/dependencies/issues/192">#192</a></li>
 </ul>
 <h3 id="breaking-changes">BREAKING CHANGES<a class="headerlink" href="#breaking-changes" title="Permanent link">&para;</a></h3>
 <ul>
-<li>Every time a new user asks me how to use their
-  favorite framework together with stories and dependencies I understand
-  that there is a missing module in the contrib package.</li>
+<li>Every time a new user asks me how to use their favorite framework together
+  with stories and dependencies I understand that there is a missing module in
+  the contrib package.</li>
 </ul>
 <h2 id="101-2020-03-31"><a href="https://github.com/proofit404/dependencies/compare/1.0.0...1.0.1">1.0.1</a> (2020-03-31)<a class="headerlink" href="#101-2020-03-31" title="Permanent link">&para;</a></h2>
 <h3 id="bug-fixes">Bug Fixes<a class="headerlink" href="#bug-fixes" title="Permanent link">&para;</a></h3>
 <ul>
-<li>add <strong>wrapped</strong> attribute (<a href="https://github.com/proofit404/dependencies/commit/e3c7aa98cec4b33146c98855ae851fa57c990367">e3c7aa9</a>)</li>
+<li>add <strong>wrapped</strong> attribute
+  (<a href="https://github.com/proofit404/dependencies/commit/e3c7aa98cec4b33146c98855ae851fa57c990367">e3c7aa9</a>)</li>
 </ul>
 <h1 id="100-2020-02-11">1.0.0 (2020-02-11)<a class="headerlink" href="#100-2020-02-11" title="Permanent link">&para;</a></h1>
 <h3 id="bug-fixes_1">Bug Fixes<a class="headerlink" href="#bug-fixes_1" title="Permanent link">&para;</a></h3>
 <ul>
-<li>prevent generated changelog from style guide violation (<a href="https://github.com/proofit404/dependencies/commit/d3a472f1779f443be0d9f3321c8451241ee723ff">d3a472f</a>)</li>
+<li>prevent generated changelog from style guide violation
+  (<a href="https://github.com/proofit404/dependencies/commit/d3a472f1779f443be0d9f3321c8451241ee723ff">d3a472f</a>)</li>
 </ul>
 <h2 id="015-2018-07-21">0.15 (2018-07-21)<a class="headerlink" href="#015-2018-07-21" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Support <code>in</code> checks in the <code>Injector</code> subclasses.</li>
 <li>Add <code>operation</code> decorator to build injectable functions.</li>
-<li>Add <code>Package</code> proxy to reduce import boilerplate in the <code>Injector</code>
-  definition.</li>
+<li>Add <code>Package</code> proxy to reduce import boilerplate in the <code>Injector</code> definition.</li>
 <li>Add Celery contrib to define tasks from <code>Injector</code> subclasses.</li>
 <li>Add Py.Test contrib to define fixtures from <code>Injector</code> subclasses.</li>
 <li>Add Django contrib to define views from <code>Injector</code> subclasses.</li>
-<li>Add Django REST Framework contrib to define API views and model view
-  sets from <code>Injector</code> subclasses.</li>
+<li>Add Django REST Framework contrib to define API views and model view sets from
+  <code>Injector</code> subclasses.</li>
 <li>A class named attributes should end with <code>_class</code>.</li>
 <li>Improved error messages for missing dependencies.</li>
-<li>Raise <code>DependencyError</code> instead of <code>AttributeError</code> for missed
-  dependencies.</li>
+<li>Raise <code>DependencyError</code> instead of <code>AttributeError</code> for missed dependencies.</li>
 <li>Drop python 2.6 and 3.4 support.</li>
 </ul>
 <h2 id="014-2018-04-13">0.14 (2018-04-13)<a class="headerlink" href="#014-2018-04-13" title="Permanent link">&para;</a></h2>
@@ -673,8 +675,8 @@
 <li>Twelve times speed up.</li>
 <li>Protect from incorrect operations with attribute assignment.</li>
 <li>Deny *args and **kwargs in the injectable classes.</li>
-<li>Classes can be used as default argument values only if argument name
-  ends with <code>_cls</code>.</li>
+<li>Classes can be used as default argument values only if argument name ends with
+  <code>_cls</code>.</li>
 <li>Remove <code>six</code> library from install requires.</li>
 </ul>
 <h2 id="010-2016-06-09">0.10 (2016-06-09)<a class="headerlink" href="#010-2016-06-09" title="Permanent link">&para;</a></h2>
@@ -691,8 +693,8 @@
 </ul>
 <h2 id="07-2016-06-04">0.7 (2016-06-04)<a class="headerlink" href="#07-2016-06-04" title="Permanent link">&para;</a></h2>
 <ul>
-<li>Raise <code>DependencyError</code> for mutual recursion in constructor
-  arguments and specified dependencies.</li>
+<li>Raise <code>DependencyError</code> for mutual recursion in constructor arguments and
+  specified dependencies.</li>
 <li>Show injected dependencies in the <code>dir</code> result.</li>
 <li>Deny to instantiate <code>Injector</code> and its subclasses.</li>
 </ul>
@@ -704,8 +706,8 @@
 </ul>
 <h2 id="05-2016-03-03">0.5 (2016-03-03)<a class="headerlink" href="#05-2016-03-03" title="Permanent link">&para;</a></h2>
 <ul>
-<li>Avoid attribute search recursion. This occurs with inheritance chain
-  length started at 3 and missing dependency on first level.</li>
+<li>Avoid attribute search recursion. This occurs with inheritance chain length
+  started at 3 and missing dependency on first level.</li>
 <li>Add <code>c</code> alias for <code>Injector</code> subclass access.</li>
 <li>Add <code>let</code> factory to temporarily overwrite specified dependencies.</li>
 </ul>
@@ -715,15 +717,15 @@
 </ul>
 <h2 id="03-2016-03-02">0.3 (2016-03-02)<a class="headerlink" href="#03-2016-03-02" title="Permanent link">&para;</a></h2>
 <ul>
-<li>Deprecate injectable mechanism. Injector may inject any arguments to
-  any classes. Injector now support multiple DI targets. All possible
-  targets now specified in the Injector attributes. Only single base
-  inheritance allowed for Injector subclasses.</li>
+<li>Deprecate injectable mechanism. Injector may inject any arguments to any
+  classes. Injector now support multiple DI targets. All possible targets now
+  specified in the Injector attributes. Only single base inheritance allowed for
+  Injector subclasses.</li>
 </ul>
 <h2 id="02-2016-02-13">0.2 (2016-02-13)<a class="headerlink" href="#02-2016-02-13" title="Permanent link">&para;</a></h2>
 <ul>
-<li>Allows to override dependencies specified with Injector by
-  inheritance from this Injector subclass.</li>
+<li>Allows to override dependencies specified with Injector by inheritance from
+  this Injector subclass.</li>
 </ul>
 <h2 id="01-2016-01-31">0.1 (2016-01-31)<a class="headerlink" href="#01-2016-01-31" title="Permanent link">&para;</a></h2>
 <ul>

@@ -510,25 +510,26 @@
                 
                 
                 <h1 id="internals">Internals<a class="headerlink" href="#internals" title="Permanent link">&para;</a></h1>
-<p>There a lot of magic under the hood of this library. Metaclasses, dunder
-methods and <code>inspect</code> module all flying around.</p>
+<p>There a lot of magic under the hood of this library. Metaclasses, dunder methods
+and <code>inspect</code> module all flying around.</p>
 <p>When you define a class inherited from <code>Injector</code>:</p>
 <ol>
 <li>Metaclass walks through all attributes defined in the class.</li>
-<li>If an attribute is a <code>class</code>, we use <code>inspect</code> to analyse its
-   constructor and make note of the spec of its dependencies.</li>
-<li>At the end, it checks for circle links in the definition of the
-   constructors, to protect you from infinite recursion.</li>
+<li>If an attribute is a <code>class</code>, we use <code>inspect</code> to analyse its constructor and
+   make note of the spec of its dependencies.</li>
+<li>At the end, it checks for circle links in the definition of the constructors,
+   to protect you from infinite recursion.</li>
 </ol>
 <p>When you access an attribute of the class inherited from <code>Injector</code>:</p>
 <ol>
-<li><strong>getattr</strong> defined in the class (with metaclass) looks for the attribute value.</li>
+<li><strong>getattr</strong> defined in the class (with metaclass) looks for the attribute
+   value.</li>
 <li>If the value is not a class, it is returned as is.</li>
 <li>If it is a class, the metaclass looks for its spec. In the loop, it tries to
-   resolve each of constructor's arguments to match the spec, until all attributes
-   are resolved.</li>
-<li>If a found attribute is a class, we call <strong>getattr</strong> again looking for its spec
-   in the same loop without recursion.</li>
+   resolve each of constructor's arguments to match the spec, until all
+   attributes are resolved.</li>
+<li>If a found attribute is a class, we call <strong>getattr</strong> again looking for its
+   spec in the same loop without recursion.</li>
 </ol>
 <p align="center">&mdash; ⭐️ &mdash;</p>
 
