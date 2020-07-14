@@ -37,9 +37,10 @@ nav:
       - Implementation: implementation.md
       - FAQ: faq.md
       - Changelog: changelog.md
-  - Proxies:
-      - This: proxies/this.md
-      - Operation: proxies/operation.md
-      - Package: proxies/package.md
+  - Usage:
+      - This: this.md
+      - Package: package.md
+      - Operation: operation.md
+      - Value: value.md
   - Guides:
       - Attrs: attrs.md
