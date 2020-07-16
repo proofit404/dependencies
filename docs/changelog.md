@@ -1,3 +1,10 @@
+## [2.0.1](https://github.com/proofit404/dependencies/compare/2.0.0...2.0.1) (2020-07-16)
+
+
+### Bug Fixes
+
+* compatibility with typing module on Python 3.6 ([137741f](https://github.com/proofit404/dependencies/commit/137741fb29d69f6ffe22d949e05f9db06c706a38))
+
 # [2.0.0](https://github.com/proofit404/dependencies/compare/1.0.1...2.0.0) (2020-05-17)
 
 ### Features
