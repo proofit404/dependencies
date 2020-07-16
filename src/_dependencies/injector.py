@@ -16,7 +16,8 @@ class _InjectorType(_InjectorTypeType):
 
         if not bases:
             namespace["__dependencies__"] = {}
-            namespace["__wrapped__"] = None
+            namespace["__wrapped__"] = None  # Doctest module compatibility.
+            namespace["_subs_tree"] = None  # Typing module compatibility.
             return type.__new__(cls, class_name, bases, namespace)
 
         _check_inheritance(bases, Injector)
@@ -112,7 +113,7 @@ class _InjectorType(_InjectorTypeType):
     def __dir__(cls):
 
         parent = set(dir(cls.__base__))
-        current = set(cls.__dict__) - {"__dependencies__", "__wrapped__"}
+        current = set(cls.__dict__) - {"__dependencies__", "__wrapped__", "_subs_tree"}
         dependencies = set(cls.__dependencies__) - {"__parent__"}
         attributes = sorted(parent | current | dependencies)
         return attributes
