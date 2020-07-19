@@ -84,7 +84,7 @@ with its own state behind a single callable interface.
 
 ```
 
-You can see that `method` has access to the `Foo` instance. So it can call other
+You can see that `method` has access to the `Foo` instance. It can call other
 methods of `Foo`. You can define dependencies of the `Foo` class in it
 constructor as usual.
 

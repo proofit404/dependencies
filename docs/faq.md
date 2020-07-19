@@ -40,7 +40,7 @@ In our opinion, this makes code less declarative.
    the container. With our `Injector` approach, you don't have this problem. You
    will find arguments right in the `Injector` subclass in one place.
 2. **It's a global mutable variable.** Container definition can be split into
-   different files. This will make it harder to read. It's very similar to the
+   different files. This will make it harder to read. It's similar to the
    service locator. Many architect people consider it an anti-pattern.
 3. **It hard to define multiple dependencies of the same type.** For example,
    your service needs two databases to work with. You need to define two
