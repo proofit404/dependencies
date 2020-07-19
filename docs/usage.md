@@ -58,8 +58,8 @@ Now, it's time to make this work in the real world.
 
 ```
 
-So, we are close to scream "It's alive!" and, if we're lucky enough, run out of
-the building.
+We are close to scream "It's alive!" and, if we're lucky enough, run out of the
+building.
 
 ```pycon
 
@@ -136,7 +136,7 @@ Let's roll down what is happening here:
 
 - `Foo` class requires an argument named `two`;
 - In dependency scope, that argument resolves to `Baz` class;
-- Which is a class - oh boy, we need to instantiate it as well;
+- Which is a class - oh, we need to instantiate it as well;
 - But its constructor requires an argument named `x`;
 - Which resolves to `1` in the dependency scope, so we do not need to go any
   further.
@@ -252,7 +252,7 @@ You can define a dependency scope partially and then extend it; only in
 injection moment, meaning at the time of attribute access, you are required to
 have the complete scope.
 
-There are two ways to extend dependency scopes:
+It is possible to extend dependency scopes in two ways:
 
 - inheritance
 - `let` notation

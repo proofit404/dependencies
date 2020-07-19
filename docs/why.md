@@ -1,10 +1,10 @@
-# Why not...
+# Why not…
 
 Here we will try to collect pros and cons of different approaches to make your
 code extendable and reusable.
 
 Let's imagine we have an order processing system. We want to implement order
-purchase feature. There is a lot of functionality to be built:
+purchase feature. It is a lot of functionality to be built:
 
 - We should change our data,
 - send a request to the payment processing system,
@@ -68,7 +68,7 @@ We have problems on all three layers of the code: `purchase`, `notify_user` and
    decision when usage of `request_payment` or `calculate_price` changes.
 
 But we still have the same problem. We can't substitute implementation details
-of low level code without changing high level policies. Let's try...
+of low level code without changing high level policies. Let's try…
 
 ## Inheritance
 
@@ -114,11 +114,11 @@ purposes.
 At first glance, this class is a better solution than before. Indeed, this code
 has several advantages.
 
-1. **At first glance high level methods even more readable.** There are no nosy
-   arguments or variables. Only nice named methods.
+1. **At first glance high level methods even more readable.** Noisy arguments
+   and variables went away. Only methods with nice names stayed.
 2. **Simple code reuse.** With inheritance, we can override any method on any
    layer of abstraction in the system. We can add any number of methods or
-   attributes is the child classes. Looks like it is a very reasonable approach.
+   attributes is the child classes. Looks like it is a reasonable approach.
 
 But this code hides quite a few problems underneath the false premise of
 understandability and cleanness.
@@ -132,10 +132,10 @@ understandability and cleanness.
    methods change state of the class. When you read short method somewhere
    inside email sender logic, you have no idea _from where_ attribute values
    came from and _when exactly_ they were set. Hello `print` statements to
-   understand the code...
+   understand the code…
 
 Let's reduce amount of logic in the class (responsibility of the class). Let's
-try...
+try…
 
 ## Mixins
 
@@ -194,7 +194,7 @@ But there are a lot of problems too. During a debugging session,
    notification will be sent, exactly?
 
 This code is much harder to understand than it should be. Even if it reusable,
-this complexity in too large for my head. Let's try...
+this complexity in too large for my head. Let's try…
 
 ## Composition
 
@@ -284,9 +284,9 @@ This code has a number of really good characteristics.
 
 But there one unfortunate consequence of this style
 
-1. **There is too much boilerplate on the initiation stage.**
+1. **It is too much boilerplate on the initiation stage.**
 
-Let's try...
+Let's try…
 
 ## Dependencies
 
