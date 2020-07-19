@@ -17,7 +17,7 @@
     
     
       
-        <title>Overview - dependencies</title>
+        <title>Value - dependencies</title>
       
     
     
@@ -60,7 +60,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#overview" class="md-skip">
+        <a href="#value-proxy" class="md-skip">
           Skip to content
         </a>
       
@@ -88,7 +88,7 @@
           </span>
           <span class="md-header-nav__topic md-ellipsis">
             
-              Overview
+              Value
             
           </span>
         </div>
@@ -161,7 +161,7 @@
   
     <li class="md-tabs__item">
       
-        <a href=".." class="md-tabs__link md-tabs__link--active">
+        <a href=".." class="md-tabs__link">
           Home
         </a>
       
@@ -174,7 +174,7 @@
   
     <li class="md-tabs__item">
       
-        <a href="../this/" class="md-tabs__link">
+        <a href="../this/" class="md-tabs__link md-tabs__link--active">
           Usage
         </a>
       
@@ -237,12 +237,10 @@
       
       
 
-  
 
-
-  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+  <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-1" type="checkbox" id="nav-1" checked>
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-1" type="checkbox" id="nav-1">
     
     <label class="md-nav__link" for="nav-1">
       Home
@@ -288,20 +286,11 @@
           
           
 
-  
 
-
-  <li class="md-nav__item md-nav__item--active">
-    
-    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-    
-      
-    
-    
-    <a href="./" title="Overview" class="md-nav__link md-nav__link--active">
+  <li class="md-nav__item">
+    <a href="../overview/" title="Overview" class="md-nav__link">
       Overview
     </a>
-    
   </li>
 
         
@@ -374,10 +363,12 @@
       
       
 
+  
 
-  <li class="md-nav__item md-nav__item--nested">
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
     
-      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2">
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2" checked>
     
     <label class="md-nav__link" for="nav-2">
       Usage
@@ -435,11 +426,60 @@
           
           
 
+  
 
-  <li class="md-nav__item">
-    <a href="../value/" title="Value" class="md-nav__link">
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Value
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 9h14V7H3v2m0 4h14v-2H3v2m0 4h14v-2H3v2m16 0h2v-2h-2v2m0-10v2h2V7h-2m0 6h2v-2h-2v2z"/></svg>
+        </span>
+      </label>
+    
+    <a href="./" title="Value" class="md-nav__link md-nav__link--active">
       Value
     </a>
+    
+      
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#example" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#depending-on-result-of-the-proxy" class="md-nav__link">
+    Depending on result of the proxy
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+    
   </li>
 
         
@@ -507,6 +547,30 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#example" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#depending-on-result-of-the-proxy" class="md-nav__link">
+    Depending on result of the proxy
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -521,27 +585,62 @@
                   
                 
                 
-                <h1 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h1>
-<p><code>dependencies</code> library provides a nice DSL for specifying relations of your
-classes and make instantiation as simple as attribute access.</p>
-<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dependencies</span> <span class="kn">import</span> <span class="n">Injector</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">app.robot</span> <span class="kn">import</span> <span class="n">Robot</span><span class="p">,</span> <span class="n">Servo</span><span class="p">,</span> <span class="n">Amplifier</span><span class="p">,</span> <span class="n">Controller</span><span class="p">,</span> <span class="n">Settings</span>
+                <h1 id="value-proxy"><code>value</code> proxy<a class="headerlink" href="#value-proxy" title="Permanent link">&para;</a></h1>
+<p>Value proxy is a way to execute code <strong>during</strong> dependency injection process.
+Result of the function will be provided as a dependency for other attributes in
+the <code>Injector</code> subclass.</p>
+<h2 id="example">Example<a class="headerlink" href="#example" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dependencies</span> <span class="kn">import</span> <span class="n">Injector</span><span class="p">,</span> <span class="n">value</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Container</span><span class="p">(</span><span class="n">Injector</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="n">robot</span> <span class="o">=</span> <span class="n">Robot</span> <span class="c1"># Constructor of this class needs `servo`, `controller`, and `settings` arguments.</span>
-<span class="gp">... </span>    <span class="n">servo</span> <span class="o">=</span> <span class="n">Servo</span> <span class="c1"># Constructor of this class needs `amplifier` argument.</span>
-<span class="gp">... </span>    <span class="n">amplifier</span> <span class="o">=</span> <span class="n">Amplifier</span>
-<span class="gp">... </span>    <span class="n">controller</span> <span class="o">=</span> <span class="n">Controller</span>
-<span class="gp">... </span>    <span class="n">settings</span> <span class="o">=</span> <span class="n">Settings</span> <span class="c1"># Constructor of this class needs `environment` argument.</span>
-<span class="gp">... </span>    <span class="n">environment</span> <span class="o">=</span> <span class="s2">&quot;production&quot;</span>
+<span class="gp">... </span>    <span class="n">foo</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="gp">... </span>    <span class="n">bar</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="gp">... </span>    <span class="n">baz</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="nd">@value</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">quiz</span><span class="p">(</span><span class="n">foo</span><span class="p">,</span> <span class="n">bar</span><span class="p">,</span> <span class="n">baz</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="n">foo</span> <span class="o">+</span> <span class="n">bar</span> <span class="o">+</span> <span class="n">baz</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Container</span><span class="o">.</span><span class="n">robot</span><span class="o">.</span><span class="n">work</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1">#         `---&gt; This attribute access creates instances of `Controller`,</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1">#               `Amplifier`, `Settings`, `Servo`, and `Robot` classes</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1">#               in the proper order and calls each constructor with</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1">#               proper arguments.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Container</span><span class="o">.</span><span class="n">quiz</span>
+<span class="go">6</span>
 </code></pre></div>
 
+<h2 id="depending-on-result-of-the-proxy">Depending on result of the proxy<a class="headerlink" href="#depending-on-result-of-the-proxy" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Foo</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">quiz</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">quiz</span> <span class="o">=</span> <span class="n">quiz</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Bar</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">quiz</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">quiz</span> <span class="o">=</span> <span class="n">quiz</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Baz</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">foo</span><span class="p">,</span> <span class="n">bar</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">foo</span> <span class="o">=</span> <span class="n">foo</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">bar</span> <span class="o">=</span> <span class="n">bar</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Container</span><span class="p">(</span><span class="n">Injector</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">foo</span> <span class="o">=</span> <span class="n">Foo</span>
+<span class="gp">... </span>    <span class="n">bar</span> <span class="o">=</span> <span class="n">Bar</span>
+<span class="gp">... </span>    <span class="n">baz</span> <span class="o">=</span> <span class="n">Baz</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="nd">@value</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">quiz</span><span class="p">():</span>
+<span class="gp">... </span>        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;value executed&#39;</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="mi">3</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">baz</span> <span class="o">=</span> <span class="n">Container</span><span class="o">.</span><span class="n">baz</span>
+<span class="go">value executed</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">baz</span><span class="o">.</span><span class="n">foo</span><span class="o">.</span><span class="n">quiz</span>
+<span class="go">3</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">baz</span><span class="o">.</span><span class="n">bar</span><span class="o">.</span><span class="n">quiz</span>
+<span class="go">3</span>
+</code></pre></div>
+
+<p>As you can see <code>@value</code> decorated function was called only once even two objects
+depends on it.</p>
 <p align="center">&mdash; ⭐️ &mdash;</p>
 
 <p align="center"><i>The dependencies library is part of the SOLID python family.</i></p>
@@ -563,7 +662,7 @@ classes and make instantiation as simple as attribute access.</p>
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
         
-          <a href="../installation/" title="Installation" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../operation/" title="Operation" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-footer-nav__button md-icon">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
             </div>
@@ -572,19 +671,19 @@ classes and make instantiation as simple as attribute access.</p>
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                Installation
+                Operation
               </div>
             </div>
           </a>
         
         
-          <a href="../why/" title="Why" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../attrs/" title="Attrs" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-footer-nav__title">
               <div class="md-ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Why
+                Attrs
               </div>
             </div>
             <div class="md-footer-nav__button md-icon">
