@@ -742,8 +742,8 @@ nowhere in your code aren't fun. Believe me.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">production</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;max_point&#39;</span><span class="p">:</span> <span class="mf">0.01</span><span class="p">}</span>
 </code></pre></div>
 
-<p>So, we are close to scream "It's alive!" and, if we're lucky enough, run out of
-the building.</p>
+<p>We are close to scream "It's alive!" and, if we're lucky enough, run out of the
+building.</p>
 <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dependencies</span> <span class="kn">import</span> <span class="n">Injector</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Container</span><span class="p">(</span><span class="n">Injector</span><span class="p">):</span>
@@ -810,7 +810,7 @@ attributes. When you access one of those attributes, the following happens:</p>
 <ul>
 <li><code>Foo</code> class requires an argument named <code>two</code>;</li>
 <li>In dependency scope, that argument resolves to <code>Baz</code> class;</li>
-<li>Which is a class - oh boy, we need to instantiate it as well;</li>
+<li>Which is a class - oh, we need to instantiate it as well;</li>
 <li>But its constructor requires an argument named <code>x</code>;</li>
 <li>Which resolves to <code>1</code> in the dependency scope, so we do not need to go any
   further.</li>
@@ -913,7 +913,7 @@ as is, and calculate their attributes on first use.</p>
 <p>You can define a dependency scope partially and then extend it; only in
 injection moment, meaning at the time of attribute access, you are required to
 have the complete scope.</p>
-<p>There are two ways to extend dependency scopes:</p>
+<p>It is possible to extend dependency scopes in two ways:</p>
 <ul>
 <li>inheritance</li>
 <li><code>let</code> notation</li>

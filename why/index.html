@@ -627,11 +627,11 @@
                   
                 
                 
-                <h1 id="why-not">Why not...<a class="headerlink" href="#why-not" title="Permanent link">&para;</a></h1>
+                <h1 id="why-not">Why not…<a class="headerlink" href="#why-not" title="Permanent link">&para;</a></h1>
 <p>Here we will try to collect pros and cons of different approaches to make your
 code extendable and reusable.</p>
 <p>Let's imagine we have an order processing system. We want to implement order
-purchase feature. There is a lot of functionality to be built:</p>
+purchase feature. It is a lot of functionality to be built:</p>
 <ul>
 <li>We should change our data,</li>
 <li>send a request to the payment processing system,</li>
@@ -685,7 +685,7 @@ should be able to choose their preferred notification method.</p>
    decision when usage of <code>request_payment</code> or <code>calculate_price</code> changes.</li>
 </ol>
 <p>But we still have the same problem. We can't substitute implementation details
-of low level code without changing high level policies. Let's try...</p>
+of low level code without changing high level policies. Let's try…</p>
 <h2 id="inheritance">Inheritance<a class="headerlink" href="#inheritance" title="Permanent link">&para;</a></h2>
 <p>Let's rewrite our functions into a class which we can subclass for different
 purposes.</p>
@@ -725,11 +725,11 @@ purposes.</p>
 <p>At first glance, this class is a better solution than before. Indeed, this code
 has several advantages.</p>
 <ol>
-<li><strong>At first glance high level methods even more readable.</strong> There are no nosy
-   arguments or variables. Only nice named methods.</li>
+<li><strong>At first glance high level methods even more readable.</strong> Noisy arguments
+   and variables went away. Only methods with nice names stayed.</li>
 <li><strong>Simple code reuse.</strong> With inheritance, we can override any method on any
    layer of abstraction in the system. We can add any number of methods or
-   attributes is the child classes. Looks like it is a very reasonable approach.</li>
+   attributes is the child classes. Looks like it is a reasonable approach.</li>
 </ol>
 <p>But this code hides quite a few problems underneath the false premise of
 understandability and cleanness.</p>
@@ -743,10 +743,10 @@ understandability and cleanness.</p>
    methods change state of the class. When you read short method somewhere
    inside email sender logic, you have no idea <em>from where</em> attribute values
    came from and <em>when exactly</em> they were set. Hello <code>print</code> statements to
-   understand the code...</li>
+   understand the code…</li>
 </ol>
 <p>Let's reduce amount of logic in the class (responsibility of the class). Let's
-try...</p>
+try…</p>
 <h2 id="mixins">Mixins<a class="headerlink" href="#mixins" title="Permanent link">&para;</a></h2>
 <p>We can split our God object into multiple classes and join it together later
 using multiple inheritance.</p>
@@ -799,7 +799,7 @@ using multiple inheritance.</p>
    notification will be sent, exactly?</li>
 </ol>
 <p>This code is much harder to understand than it should be. Even if it reusable,
-this complexity in too large for my head. Let's try...</p>
+this complexity in too large for my head. Let's try…</p>
 <h2 id="composition">Composition<a class="headerlink" href="#composition" title="Permanent link">&para;</a></h2>
 <p>Composition is a powerful pattern of organizing code with proper code boundaries
 and clear dependency relationship.</p>
@@ -883,9 +883,9 @@ and clear dependency relationship.</p>
 </ol>
 <p>But there one unfortunate consequence of this style</p>
 <ol>
-<li><strong>There is too much boilerplate on the initiation stage.</strong></li>
+<li><strong>It is too much boilerplate on the initiation stage.</strong></li>
 </ol>
-<p>Let's try...</p>
+<p>Let's try…</p>
 <h2 id="dependencies">Dependencies<a class="headerlink" href="#dependencies" title="Permanent link">&para;</a></h2>
 <p>Here's where <code>dependencies</code> library comes in.</p>
 <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dependencies</span> <span class="kn">import</span> <span class="n">Injector</span>
