@@ -96,6 +96,24 @@ def test_tox_generative_environments_has_common_definition():
     assert tox_environments == tox_ini
 
 
+def test_single_line_settings_are_written_same_line():
+    """Single line tox settings should be written on the same line."""
+    single_line_settings = [
+        "isolated_build",
+        "basepython",
+        "skip_install",
+        "install_command",
+    ]
+
+    ini_parser = configparser.ConfigParser()
+    ini_parser.read("tox.ini")
+    for section in ini_parser.values():
+        for setting in single_line_settings:
+            value = section.get(setting)
+            if value is not None:
+                assert not value.startswith("\n")
+
+
 def test_tox_multiline_settings_are_written_next_line():
     """Multiline tox settings should be written starting next line."""
     multiline_settings = [
