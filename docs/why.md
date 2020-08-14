@@ -61,14 +61,15 @@ We have problems on all three layers of the code: `purchase`, `notify_user` and
    `notify_user` function when they are about to add eighth condition.
 2. **Add context variable instead of another argument.** This little `ctx`
    argument instead of email address, phone number, product price and shipment
-   destination will save us a lot of typing between function calls. But we still
-   have bunch of `if` statements.
+   destination will save us a lot of typing between function calls.
+   Unfortunately, we still have bunch of `if` statements.
 3. **Copy-paste this module and re-implement each feature separately.** Each
    feature will be readable and simple on it's own, but you will regret this
    decision when usage of `request_payment` or `calculate_price` changes.
 
-But we still have the same problem. We can't substitute implementation details
-of low level code without changing high level policies. Let's try…
+Unfortunately, we still have the same problem. We can't substitute
+implementation details of low level code without changing high level policies.
+Let's try…
 
 ## Inheritance
 
@@ -120,8 +121,8 @@ has several advantages.
    layer of abstraction in the system. We can add any number of methods or
    attributes is the child classes. Looks like it is a reasonable approach.
 
-But this code hides quite a few problems underneath the false premise of
-understandability and cleanness.
+Unfortunately, this code hides quite a few problems underneath the false premise
+of understandability and cleanness.
 
 1. **God object.** One class contains methods related to every single layer of
    abstraction in the system. It's hard to manage two hundred methods in the
@@ -185,7 +186,7 @@ Someone might say this is an improvement over one huge class.
 2. **Better code reuse.** We can use the same notification mechanism in
    different classes with just one line of code.
 
-But there are a lot of problems too. During a debugging session,
+Unfortunately, there are a lot of problems too. During a debugging session,
 
 1. **In the `get_notification_text` you have no idea who set up
    `payment_details`.**
@@ -282,7 +283,7 @@ This code has a number of really good characteristics.
 2. **Your system becomes really configurable.** You can **inject** pretty much
    any implementation without changing high-level code.
 
-But there one unfortunate consequence of this style
+Unfortunately, there one unfortunate consequence of this style
 
 1. **It is too much boilerplate on the initiation stage.**
 
