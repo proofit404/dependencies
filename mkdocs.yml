@@ -5,24 +5,29 @@ site_description: Dependency Injection for Humans.
 theme:
   name: material
   palette:
+    scheme: default
     primary: deep-purple
     accent: deep-purple
   icon:
     logo: material/language-python
+    repo: fontawesome/brands/github
   language: en
   features:
+    - instant
     - tabs
 repo_name: proofit404/dependencies
 repo_url: https://github.com/proofit404/dependencies
 edit_uri: ""
 markdown_extensions:
   - admonition
-  - codehilite:
-      guess_lang: false
   - toc:
       permalink: true
   - pymdownx.magiclink
+  - pymdownx.highlight
+  - pymdownx.inlinehilite
+  - pymdownx.keys
   - pymdownx.superfences
+  - pymdownx.tabbed
   - pymdownx.tasklist:
       custom_checkbox: true
 extra_javascript:
