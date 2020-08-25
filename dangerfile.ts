@@ -135,6 +135,9 @@ export default async () => {
     if (repoLabel.color !== "ededed") {
       fail(`The color of the ${repoLabel.name} should be 'ededed'`);
       return;
+    } else if (repoLabel.description !== "") {
+      fail(`The description of the ${repoLabel.name} should be empty`);
+      return;
     }
   }
 };
