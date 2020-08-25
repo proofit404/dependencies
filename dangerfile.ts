@@ -120,4 +120,21 @@ export default async () => {
       return;
     }
   }
+
+  const labelsJSON = await danger.github.api.issues.listLabelsForRepo({
+    owner: danger.github.thisPR.owner,
+    repo: danger.github.thisPR.repo,
+  });
+
+  if (labelsJSON.status !== 200) {
+    fail("Unable to check repository labels");
+    return;
+  }
+
+  for (let repoLabel of labelsJSON.data) {
+    if (repoLabel.color !== "ededed") {
+      fail(`The color of the ${repoLabel.name} should be 'ededed'`);
+      return;
+    }
+  }
 };
