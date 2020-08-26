@@ -131,12 +131,27 @@ export default async () => {
     return;
   }
 
+  const allowedLabels = new Set([
+    "blocked",
+    "bug",
+    "documentation",
+    "feature",
+    "invalid",
+    "needs-investigation",
+    "question",
+    "released",
+    "wontfix",
+  ]);
+
   for (let repoLabel of labelsJSON.data) {
     if (repoLabel.color !== "ededed") {
       fail(`The color of the ${repoLabel.name} should be 'ededed'`);
       return;
     } else if (repoLabel.description !== "") {
       fail(`The description of the ${repoLabel.name} should be empty`);
+      return;
+    } else if (!allowedLabels.has(repoLabel.name)) {
+      fail(`Unknown label ${repoLabel.name}`);
       return;
     }
   }
