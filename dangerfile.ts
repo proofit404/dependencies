@@ -47,8 +47,15 @@ export default async () => {
 
   const issueNumber = branchTest[1];
 
-  if (`Fix #${issueNumber}` !== danger.github.pr.body.trim()) {
-    fail("PR body should be 'Fix #N' where N is the issue number");
+  for (let commit of danger.git.commits) {
+    if (!commit.message.split(/\r?\n/)[0].endsWith(` #${issueNumber}`)) {
+      fail("The first line of each commit should ends with the issue number");
+      return;
+    }
+  }
+
+  if (danger.github.pr.body) {
+    fail("PR body should be empty");
     return;
   }
 
