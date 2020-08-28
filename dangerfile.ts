@@ -47,6 +47,9 @@ export default async () => {
     ),
     hasTestChanges = commitFiles.some((fileName) =>
       fileName.startsWith("tests/")
+    ),
+    hasSourceChanges = commitFiles.some((fileName) =>
+      fileName.startsWith("src/")
     );
 
   if (hasDocsCommit & !hasDocsChanges) {
@@ -56,6 +59,16 @@ export default async () => {
 
   if (hasTestCommit & !hasTestChanges) {
     fail("Commit with the 'test' type should change test files");
+    return;
+  }
+
+  if (hasFixCommit & !hasSourceChanges) {
+    fail("Commit with the 'fix' type should change source files");
+    return;
+  }
+
+  if (hasFeatureCommit & !hasSourceChanges) {
+    fail("Commit with the 'feat' type should change source files");
     return;
   }
 
