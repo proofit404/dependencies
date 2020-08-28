@@ -38,6 +38,18 @@ export default async () => {
     return;
   }
 
+  const commitFiles = danger.git.created_files
+      .concat(danger.git.modified_files)
+      .concat(danger.git.deleted_files),
+    hasDocsChanges = commitFiles.some(
+      (fileName) => fileName.startsWith("docs/") || fileName === "mkdocs.yml"
+    );
+
+  if (hasDocsCommit & !hasDocsChanges) {
+    fail("Commit with the 'docs' type should change documentation files");
+    return;
+  }
+
   const branchTest = danger.github.pr.head.ref.match(/^issue-(\d+)$/);
 
   if (!branchTest) {
