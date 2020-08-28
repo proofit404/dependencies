@@ -68,6 +68,11 @@ export default async () => {
     return;
   }
 
+  if (issueJSON.data.milestone.closed_at) {
+    fail("Issues of closed milestone can't be implemented");
+    return;
+  }
+
   if (issueJSON.data.assignee) {
     fail("Issue can't have an assignee");
     return;
@@ -157,6 +162,26 @@ export default async () => {
       return;
     } else if (!allowedLabels.has(repoLabel.name)) {
       fail(`Unknown label ${repoLabel.name}`);
+      return;
+    }
+  }
+
+  const milestonesJSON = await danger.github.api.issues.listMilestonesForRepo({
+    owner: danger.github.thisPR.owner,
+    repo: danger.github.thisPR.repo,
+  });
+
+  if (milestonesJSON.status !== 200) {
+    fail("Unable to check repository milestones");
+    return;
+  }
+
+  for (let milestone of milestonesJSON.data) {
+    if (milestone.description !== "") {
+      fail(`The description of the ${milestone.title} should be empty`);
+      return;
+    } else if (milestone.due_on) {
+      fail(`The due date of the ${milestone.title} should not be set`);
       return;
     }
   }
