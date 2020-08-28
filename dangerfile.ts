@@ -9,6 +9,11 @@ export default async () => {
     return;
   }
 
+  if (danger.github.pr.milestone) {
+    fail("PR is not allowed to have milestone");
+    return;
+  }
+
   if (danger.github.pr.assignee?.id !== danger.github.pr.user.id) {
     fail("Only PR author could be assigned to PR");
     return;
