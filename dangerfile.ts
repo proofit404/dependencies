@@ -31,7 +31,8 @@ export default async () => {
   const commitTypes = new Set(commitTest.map((commitMatch) => commitMatch[1])),
     hasFeatureCommit = commitTypes.has("feat"),
     hasFixCommit = commitTypes.has("fix"),
-    hasDocsCommit = commitTypes.has("docs");
+    hasDocsCommit = commitTypes.has("docs"),
+    hasTestCommit = commitTypes.has("test");
 
   if (commitTest.length !== commitTypes.size) {
     fail("PR can not contain commits with the same type");
@@ -43,10 +44,18 @@ export default async () => {
       .concat(danger.git.deleted_files),
     hasDocsChanges = commitFiles.some(
       (fileName) => fileName.startsWith("docs/") || fileName === "mkdocs.yml"
+    ),
+    hasTestChanges = commitFiles.some((fileName) =>
+      fileName.startsWith("tests/")
     );
 
   if (hasDocsCommit & !hasDocsChanges) {
     fail("Commit with the 'docs' type should change documentation files");
+    return;
+  }
+
+  if (hasTestCommit & !hasTestChanges) {
+    fail("Commit with the 'test' type should change test files");
     return;
   }
 
