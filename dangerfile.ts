@@ -109,9 +109,11 @@ export default async () => {
     return;
   }
 
-  if (issueJSON.data.milestone.closed_at) {
-    fail("Issues of closed milestone can't be implemented");
-    return;
+  if (issueJSON.data.milestone) {
+    if (issueJSON.data.milestone.closed_at) {
+      fail("Issues of closed milestone can't be implemented");
+      return;
+    }
   }
 
   if (issueJSON.data.assignee) {
