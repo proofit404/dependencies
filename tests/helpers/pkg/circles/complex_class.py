@@ -1,12 +1,11 @@
-# -*- coding: utf-8 -*-
-class Foo(object):
+class Foo:
     """A definition with circle error."""
 
     def __init__(self, bar):
         pass  # pragma: no cover
 
 
-class Bar(object):
+class Bar:
     """A definition with circle error."""
 
     def __init__(self, foo):

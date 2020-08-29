@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from _dependencies.attributes import _Attributes
 from _dependencies.spec import _make_dependency_spec
 

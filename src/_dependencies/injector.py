@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from _dependencies.attributes import _Replace
 from _dependencies.checks.circles import _check_circles
 from _dependencies.checks.injector import _check_attrs_redefinition

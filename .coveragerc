@@ -12,8 +12,6 @@ source =
 
 [paths]
 source =
-  .tox/py27/lib/python2.7/site-packages
-  .tox/py35/lib/python3.5/site-packages
   .tox/py36/lib/python3.6/site-packages
   .tox/py37/lib/python3.7/site-packages
   .tox/py38/lib/python3.8/site-packages

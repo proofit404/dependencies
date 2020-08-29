@@ -1,11 +1,10 @@
-# -*- coding: utf-8 -*-
 import importlib
 
 from _dependencies.attributes import _Replace
 from _dependencies.markers import lazy_import
 
 
-class Package(object):
+class Package:
     """Import given package during dependency injection.
 
     If it point to the class in the module, construct an instance of
@@ -33,7 +32,7 @@ def _make_package_spec(dependency):
     return lazy_import, _ImportSpec(dependency), [], 0
 
 
-class _ImportSpec(object):
+class _ImportSpec:
     def __init__(self, dependency):
 
         self.__name__ = dependency.__name__

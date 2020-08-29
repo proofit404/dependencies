@@ -66,7 +66,7 @@ Consider this code snippet:
 
 ```pycon
 
->>> class RetrieveModelMixin(object):
+>>> class RetrieveModelMixin:
 ...     """
 ...     Retrieve a model instance.
 ...     """
@@ -82,7 +82,7 @@ believe the code below is way better in the sense of understandability:
 
 ```pycon
 
->>> class RetrieveModel(object):
+>>> class RetrieveModel:
 ...     """
 ...     Retrieve a model instance.
 ...     """

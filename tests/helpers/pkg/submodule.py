@@ -1,5 +1,4 @@
-# -*- coding: utf-8 -*-
-class Foo(object):
+class Foo:
     """A dummy class for tests."""
 
     def do(self):
@@ -7,7 +6,7 @@ class Foo(object):
         return 1
 
 
-class Bar(object):
+class Bar:
     """A dummy class for tests."""
 
     def __init__(self, a, b):

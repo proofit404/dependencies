@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Tests related to the Injector subclasses."""
 from inspect import isclass
 
@@ -12,7 +11,7 @@ from helpers import CodeCollector
 def test_lambda_dependency():
     """Inject lambda function."""
 
-    class Foo(object):
+    class Foo:
         def __init__(self, add):
             self.add = add
 
@@ -29,7 +28,7 @@ def test_lambda_dependency():
 def test_function_dependency():
     """Inject regular function."""
 
-    class Foo(object):
+    class Foo:
         def __init__(self, add):
             self.add = add
 
@@ -49,7 +48,7 @@ def test_function_dependency():
 def test_inline_dependency():
     """Inject method defined inside Injector subclass."""
 
-    class Foo(object):
+    class Foo:
         def __init__(self, add):
             self.add = add
 
@@ -72,7 +71,7 @@ def test_class_dependency():
 
     """
 
-    class Foo(object):
+    class Foo:
         def __init__(self, add, bar):
             self.add = add
             self.bar = bar
@@ -80,7 +79,7 @@ def test_class_dependency():
         def do(self, x):
             return self.add(self.bar.go(x), self.bar.go(x))
 
-    class Bar(object):
+    class Bar:
         def __init__(self, mul):
             self.mul = mul
 
@@ -103,7 +102,7 @@ def test_do_not_instantiate_dependencies_ended_with_class():
 
     """
 
-    class Foo(object):
+    class Foo:
         pass
 
     class Bar(Injector):
@@ -115,7 +114,7 @@ def test_do_not_instantiate_dependencies_ended_with_class():
 def test_redefine_dependency():
     """We can redefine dependency by inheritance from the `Injector` subclass."""
 
-    class Foo(object):
+    class Foo:
         def __init__(self, add):
             self.add = add
 
@@ -140,7 +139,7 @@ def test_override_keyword_argument_if_dependency_was_specified():
 
     """
 
-    class Foo(object):
+    class Foo:
         def __init__(self, add, y=1):
             self.add = add
             self.y = y
@@ -164,7 +163,7 @@ def test_preserve_keyword_argument_if_dependency_was_missed():
 
     """
 
-    class Foo(object):
+    class Foo:
         def __init__(self, add, y=1):
             self.add = add
             self.y = y
@@ -187,7 +186,7 @@ def test_preserve_missed_keyword_argument_in_the_middle():
 
     """
 
-    class Foo(object):
+    class Foo:
         def __init__(self, x, y=1, z=2):
             self.x = x
             self.y = y
@@ -207,10 +206,10 @@ def test_preserve_missed_keyword_argument_in_the_middle():
 def test_class_named_argument_default_value():
     """Allow classes as default argument values if argument name ends with `_class`."""
 
-    class Foo(object):
+    class Foo:
         pass
 
-    class Bar(object):
+    class Bar:
         def __init__(self, foo_class=Foo):
             self.foo_class = foo_class
 
@@ -227,7 +226,7 @@ def test_injectable_without_its_own_init():
 
     """
 
-    class Foo(object):
+    class Foo:
         def do(self):
             return 1
 
@@ -240,7 +239,7 @@ def test_injectable_without_its_own_init():
 def test_injectable_with_parent_init():
     """Inject dependencies into object which parent class define `__init__`."""
 
-    class Foo(object):
+    class Foo:
         def __init__(self, x, y):
             self.x = x
             self.y = y
@@ -260,7 +259,7 @@ def test_injectable_with_parent_init():
 def test_injectable_with_parent_without_init():
     """Inject dependencies into object which parent doesn't define `__init__`."""
 
-    class Foo(object):
+    class Foo:
         pass
 
     class Bar(Foo):
@@ -306,11 +305,11 @@ def test_let_factory_resolve_not_overwritten_dependencies():
 def test_let_factory_on_injector_directly():
     """`let` method could be called on `Injector` directly."""
 
-    class Foo(object):
+    class Foo:
         def __init__(self, bar):
             self.bar = bar
 
-    class Bar(object):
+    class Bar:
         def __init__(self, baz):
             self.baz = baz
 
@@ -323,7 +322,7 @@ def test_let_factory_on_injector_directly():
 def test_show_common_class_attributes_with_dir():
     """`dir` show common class attributes."""
 
-    class Common(object):
+    class Common:
         pass
 
     class Foo(Injector):
@@ -448,7 +447,7 @@ def test_nested_injectors():
     def do_y(c, d):
         return c * d
 
-    class Call(object):
+    class Call:
         def __init__(self, foo, bar):
             self.foo = foo
             self.bar = bar
@@ -502,20 +501,20 @@ evaluate_classes = CodeCollector()
 def test_evaluate_dependencies_once(code):
     """Evaluate each node in the dependencies graph once."""
 
-    class A(object):
+    class A:
         def __init__(self, b, c):
             self.b = b
             self.c = c
 
-    class B(object):
+    class B:
         def __init__(self, d):
             self.d = d
 
-    class C(object):
+    class C:
         def __init__(self, d):
             self.d = d
 
-    class D(object):
+    class D:
         pass
 
     class Container(Injector):
@@ -548,14 +547,14 @@ multiple_inheritance = CodeCollector()
 def test_multiple_inheritance(code):
     """We can mix injector together."""
 
-    class Foo(object):
+    class Foo:
         pass
 
-    class Bar(object):
+    class Bar:
         def __init__(self, foo):
             self.foo = foo
 
-    class Baz(object):
+    class Baz:
         def __init__(self, bar):
             self.bar = bar
 
@@ -644,7 +643,7 @@ subclasses_only = CodeCollector()
 def test_multiple_inheritance_deny_regular_classes(code):
     """Only `Injector` subclasses are allowed to be used in the inheritance."""
 
-    class Foo(object):
+    class Foo:
         pass
 
     with pytest.raises(DependencyError) as exc_info:
@@ -764,7 +763,7 @@ def test_incomplete_dependencies_error(code):
 def _c4e7ecf75167():
     # Keyword arguments in the constructor.
 
-    class Bar(object):
+    class Bar:
         def __init__(self, test, two=2):
             pass  # pragma: no cover
 
@@ -778,7 +777,7 @@ def _c4e7ecf75167():
 def _dmsMgYqbsHgB():
     # Constructor argument with let notation.
 
-    class Bar(object):
+    class Bar:
         def __init__(self, test):
             pass  # pragma: no cover
 
@@ -821,7 +820,7 @@ deny_varargs = CodeCollector()
 def test_deny_arbitrary_argument_list(code):
     """Raise `DependencyError` if constructor have *args argument."""
 
-    class Foo(object):
+    class Foo:
         def __init__(self, *args):
             pass  # pragma: no cover
 
@@ -854,7 +853,7 @@ deny_kwargs = CodeCollector()
 def test_deny_arbitrary_keyword_arguments(code):
     """Raise `DependencyError` if constructor have **kwargs argument."""
 
-    class Foo(object):
+    class Foo:
         def __init__(self, **kwargs):
             pass  # pragma: no cover
 
@@ -887,7 +886,7 @@ deny_varargs_kwargs = CodeCollector()
 def test_deny_arbitrary_positional_and_keyword_arguments_together(code):
     """Raise `DependencyError` if constructor have *args and **kwargs argument."""
 
-    class Foo(object):
+    class Foo:
         def __init__(self, *args, **kwargs):
             pass  # pragma: no cover
 
@@ -995,10 +994,10 @@ def test_deny_classes_as_default_values(code):
 
     """
 
-    class Foo(object):
+    class Foo:
         pass
 
-    class Bar(object):
+    class Bar:
         def __init__(self, foo=Foo):
             pass  # pragma: no cover
 
@@ -1036,7 +1035,7 @@ cls_named_defaults = CodeCollector()
 def test_deny_non_classes_in_class_named_arguments(code):
     """If argument name ends with `_class`, it must have a class as it default value."""
 
-    class Bar(object):
+    class Bar:
         def __init__(self, foo_class=1):
             self.foo_class = foo_class
 

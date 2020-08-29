@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import functools
 
 from _dependencies.checks.operation import _check_class
@@ -7,7 +6,7 @@ from _dependencies.func import _make_func_spec
 from _dependencies.markers import injectable
 
 
-class Operation(object):
+class Operation:
     """Create callable class appropriated for dependency injection.
 
     Used as function decorator.
@@ -28,7 +27,7 @@ def _make_operation_spec(dependency):
     return injectable, _OperationSpec(function), args, have_defaults
 
 
-class _OperationSpec(object):
+class _OperationSpec:
     def __init__(self, func):
 
         self.func = func

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Tests related to the @operation proxy."""
 import pytest
 
@@ -79,7 +78,7 @@ def test_protect_against_classes():
     with pytest.raises(DependencyError) as exc_info:
 
         @operation
-        class Foo(object):
+        class Foo:
             pass
 
     assert str(exc_info.value) == "'operation' decorator can not be used on classes"

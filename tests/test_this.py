@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Tests related to the `this` proxy."""
 import pytest
 
@@ -14,7 +13,7 @@ from helpers import CodeCollector
 def test_attribute_getter():
     """We can describe attribute access in the `Injector` in declarative manner."""
 
-    class Foo(object):
+    class Foo:
         def __init__(self, one, two):
             self.one = one
             self.two = two
@@ -38,7 +37,7 @@ def test_attribute_getter():
 def test_attribute_getter_few_attributes():
     """We resolve attribute access until we find all specified attributes."""
 
-    class Foo(object):
+    class Foo:
         def __init__(self, one):
             self.one = one
 
@@ -168,7 +167,7 @@ def test_item_getter_non_printable_key():
 
     """
 
-    class Boom(object):
+    class Boom:
         def __init__(self, salt):
             self.salt = salt
 
@@ -190,10 +189,10 @@ def test_item_getter_non_printable_key():
 def test_attribute_access_after_item_getter():
     """Check we can use attribute access notation after item getter notation."""
 
-    class Foo(object):
+    class Foo:
         x = 1
 
-    class Bar(object):
+    class Bar:
         y = {"foo": Foo}
 
     class Container(Injector):

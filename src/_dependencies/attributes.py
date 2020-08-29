@@ -1,11 +1,10 @@
-# -*- coding: utf-8 -*-
 class _Replace(Exception):
     def __init__(self, dependency, attrs):
         self.dependency = dependency
         self.attrs = attrs
 
 
-class _Attributes(object):
+class _Attributes:
     def __init__(self, spec, attrs):
 
         self.spec = spec
