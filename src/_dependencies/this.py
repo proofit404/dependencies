@@ -1,10 +1,9 @@
-# -*- coding: utf-8 -*-
 from _dependencies import markers
 from _dependencies.checks.this import _check_expression
 from _dependencies.exceptions import DependencyError
 
 
-class This(object):
+class This:
     """Declare attribute and item access during dependency injection."""
 
     def __init__(self, expression):
@@ -36,7 +35,7 @@ def _make_this_spec(dependency):
     return markers.this, _ThisSpec(dependency), ["__self__"], 0
 
 
-class _ThisSpec(object):
+class _ThisSpec:
     def __init__(self, dependency):
 
         self.dependency = dependency

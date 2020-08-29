@@ -16,7 +16,6 @@ repos:
       - id: file-contents-sorter
         files: ^(.gitignore|.python-version)$
       - id: debug-statements
-      - id: fix-encoding-pragma
       - id: check-builtin-literals
         args:
           - --no-allow-dict-kwargs

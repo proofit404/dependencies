@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from doctest import testfile
 from glob import glob
 from sys import exit

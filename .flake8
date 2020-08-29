@@ -2,7 +2,6 @@
 max-line-length = 88
 eradicate-aggressive = True
 ban-relative-imports = True
-accept-encodings = utf-8
 ignore = D105, D107, E741, W503
 per-file-ignores =
   src/_dependencies/*.py: D100, D104

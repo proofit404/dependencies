@@ -1,26 +1,15 @@
-# -*- coding: utf-8 -*-
 """Tests related to the project configuration."""
 import collections
 import configparser
 import datetime
 import re
 import subprocess
-import sys
 
 import pytest
 import tomlkit
 import yaml
 
 import helpers
-
-# This is a little bit a workaround of the PyYaml library limitations.
-# It doesn't preserve the order of keys of the parsed dict.  It works
-# on recent Python versions where the order of keys is guaranteed by
-# dict implementation.  See https://github.com/yaml/pyyaml/issues/110
-# for more info.
-pytestmark = pytest.mark.skipif(
-    sys.version_info < (3, 6), reason="These tests rely on the order of the dict keys"
-)
 
 
 def test_all_pyenv_versions_in_tox_environments():

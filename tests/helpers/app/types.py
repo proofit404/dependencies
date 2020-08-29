@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from app.purchase import PaypalService
 from app.purchase import SMSService
 

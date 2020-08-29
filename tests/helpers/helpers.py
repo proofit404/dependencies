@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import configparser
 import re
 import textwrap
@@ -6,7 +5,7 @@ import textwrap
 import pytest
 
 
-class CodeCollector(object):
+class CodeCollector:
     """Dedicated decorator to use functions as Py.Test function parameters."""
 
     def __init__(self, name="code"):

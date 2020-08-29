@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Tests related to compatibility with standard typing python module."""
 import pytest
 

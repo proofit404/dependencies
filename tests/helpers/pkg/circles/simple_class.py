@@ -1,5 +1,4 @@
-# -*- coding: utf-8 -*-
-class Foo(object):
+class Foo:
     """A definition with circle error."""
 
     def __init__(self, foo):

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import inspect
 
 from _dependencies.classes import _make_init_spec

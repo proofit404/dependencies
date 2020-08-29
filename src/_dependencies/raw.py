@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from _dependencies.markers import injectable
 
 
@@ -7,7 +6,7 @@ def _make_raw_spec(dependency):
     return injectable, _RawSpec(dependency), [], 0
 
 
-class _RawSpec(object):
+class _RawSpec:
     def __init__(self, dependency):
 
         self.dependency = dependency

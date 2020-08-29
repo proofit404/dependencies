@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from _dependencies.func import _make_func_spec
 from _dependencies.markers import injectable
 
@@ -9,7 +8,7 @@ def _make_init_spec(dependency):
         return injectable, dependency, [], 0
     else:
         name = dependency.__name__ + "." + "__init__"
-        owner_message = "{cls!r} class".format(cls=dependency.__name__)
+        owner_message = f"{dependency.__name__!r} class"
         args, have_defaults = _make_func_spec(dependency.__init__, name, owner_message)
         return injectable, dependency, args[1:], have_defaults
 

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Dependency Injection for Humans."""
 from _dependencies.injector import Injector
 from _dependencies.operation import Operation as operation

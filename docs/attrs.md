@@ -17,7 +17,7 @@ Here is an example of how to use it together with `dependencies`.
 >>> from dependencies import Injector
 
 >>> @attrs
-... class Order(object):
+... class Order:
 ...     price = attrib()
 ...     items = attrib()
 

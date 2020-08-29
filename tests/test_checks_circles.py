@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Tests related to the circle detection in the injector definitions."""
 import pytest
 
@@ -56,7 +55,7 @@ def _e4b38a38de7e(Foo):
 def _nQpangWPMths():
     # Class.
 
-    class Foo(object):
+    class Foo:
         def __init__(self, foo):
             pass  # pragma: no cover
 
@@ -183,7 +182,7 @@ def _c039a81e8dce(Foo, Bar):
 def _kodOTZfScpDc():
     # Class.
 
-    class Foo(object):
+    class Foo:
         def __init__(self, bar):
             pass  # pragma: no cover
 
@@ -240,7 +239,7 @@ def _fkedDYYeueXo():
 def _uEevbDxHVHfN():
     # Class.
 
-    class Bar(object):
+    class Bar:
         def __init__(self, foo):
             pass  # pragma: no cover
 
@@ -369,7 +368,7 @@ def _d701f88a5c42(Foo, Bar, Baz):
 def _uVWBksfNYEDw():
     # Class.
 
-    class Foo(object):
+    class Foo:
         def __init__(self, bar):
             pass  # pragma: no cover
 
@@ -426,7 +425,7 @@ def _qOKmbpOgeDhk():
 def _oKtHawDksDNk():
     # Class.
 
-    class Bar(object):
+    class Bar:
         def __init__(self, baz):
             pass  # pragma: no cover
 
@@ -483,7 +482,7 @@ def _xgyyAISoreQV():
 def _uaOWixpAMVma():
     # Class.
 
-    class Baz(object):
+    class Baz:
         def __init__(self, foo):
             pass  # pragma: no cover
 

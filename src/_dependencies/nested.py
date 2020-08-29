@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import weakref
 
 from _dependencies.markers import injectable
@@ -10,7 +9,7 @@ def _make_nested_injector_spec(dependency):
     return nested_injector, _NestedInjectorSpec(dependency), ["__self__"], 0
 
 
-class _NestedInjectorSpec(object):
+class _NestedInjectorSpec:
     def __init__(self, injector):
 
         self.injector = injector

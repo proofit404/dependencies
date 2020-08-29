@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Tests related to the @value proxy."""
 import pytest
 
@@ -80,7 +79,7 @@ def test_protect_against_classes():
     with pytest.raises(DependencyError) as exc_info:
 
         @value
-        class Foo(object):
+        class Foo:
             pass  # pragma: no cover
 
     assert str(exc_info.value) == "'value' decorator can not be used on classes"
