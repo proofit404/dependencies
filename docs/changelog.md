@@ -1,3 +1,17 @@
+# [3.0.0](https://github.com/proofit404/dependencies/compare/2.0.1...3.0.0) (2020-08-30)
+
+
+### Code Refactoring
+
+* drop Python 2.7 and 3.4 support [#348](https://github.com/proofit404/dependencies/issues/348) ([360ad90](https://github.com/proofit404/dependencies/commit/360ad90b51063e5c14b4df9b643caee25aba4848))
+
+
+### BREAKING CHANGES
+
+* Due to the our new policy of enterprise user support
+we will drop abandoned version of python and libraries we are
+integrated with as soon as they reach official end of life.
+
 ## [2.0.1](https://github.com/proofit404/dependencies/compare/2.0.0...2.0.1) (2020-07-16)
 
 ### Bug Fixes
