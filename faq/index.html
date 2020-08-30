@@ -637,7 +637,7 @@ chapter. But let's return to it again:</p>
 </div>
 <p>Mixin class depends on attributes set in other classes.</p>
 <p>Consider this code snippet:</p>
-<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">RetrieveModelMixin</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">RetrieveModelMixin</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="sd">&quot;&quot;&quot;</span>
 <span class="gp">... </span><span class="sd">    Retrieve a model instance.</span>
 <span class="gp">... </span><span class="sd">    &quot;&quot;&quot;</span>
@@ -649,7 +649,7 @@ chapter. But let's return to it again:</p>
 
 <p>Where were <code>get_object</code> and <code>get_serializer</code> defined? We have no idea. We
 believe the code below is way better in the sense of understandability:</p>
-<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">RetrieveModel</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">RetrieveModel</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="sd">&quot;&quot;&quot;</span>
 <span class="gp">... </span><span class="sd">    Retrieve a model instance.</span>
 <span class="gp">... </span><span class="sd">    &quot;&quot;&quot;</span>
