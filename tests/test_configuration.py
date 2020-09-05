@@ -4,85 +4,46 @@ import configparser
 import datetime
 import re
 import subprocess
+import textwrap
 
-import pytest
 import tomlkit
 import yaml
 
-import helpers
 
-
-def test_all_pyenv_versions_in_tox_environments():
-    """Every version from pyenv lock file should be included into Tox."""
-    tox_environments = {
-        e.split("-")[0]
-        for e in subprocess.check_output(["tox", "-l"]).decode().splitlines()
-    }
-
-    pyenv_versions = [
-        "py{}{}".format(*v.split(".")[0:2])
-        for v in open(".python-version").read().splitlines()
-    ]
-
-    for version in pyenv_versions:
-        assert version in tox_environments
+def test_tox_environments_use_all_pyenv_versions():
+    """All python versions defined in .python-version file should be tested."""
+    versions = [f"py{major}{minor}" for major, minor in pyenv_versions()]
+    for version in versions:
+        assert version in tox_envlist()
 
 
 def test_tox_environments_use_max_base_python():
-    """Verify base Python version specified for Tox environments.
-
-    Every Tox environment with base Python version specified should
-    use max Python version.
-
-    Max Python version is assumed from the .python-versions file.
-
-    """
-    pyenv_version = max(
-        sorted(
-            "python{}.{}".format(*v.split(".")[0:2])
-            for v in open(".python-version").read().splitlines()
-        )
-    )
-    for _env, basepython in helpers.tox_info("basepython"):
-        assert basepython == pyenv_version
+    """Environments not related to tests should use latest python version."""
+    version = max(sorted(f"python{major}.{minor}" for major, minor in pyenv_versions()))
+    for basepython in tox_config_values("basepython"):
+        assert basepython.value == version
 
 
-def test_envlist_contains_all_tox_environments():
-    """The envlist setting should contains all tox environments.
-
-    It's not allowed to have tox environments defined without having them in the
-    envlist.
-
-    """
-    tox_environments = set(subprocess.check_output(["tox", "-l"]).decode().splitlines())
-
-    ini_parser = configparser.ConfigParser()
-    ini_parser.read("tox.ini")
-    tox_ini = {
-        k.replace("testenv:", "") for k in ini_parser if k.startswith("testenv:")
-    }
-
-    assert not tox_ini - tox_environments
+def test_tox_envlist_contains_all_tox_environments():
+    """It's not allowed to define environments without envlist."""
+    assert tox_envlist() == tox_config_environments()
 
 
-def test_tox_generative_environments_has_common_definition():
-    """Test envlist contains python environments together with plain testenv.
+def test_tox_no_default_environment():
+    """Each environment should have dedicated definition."""
+    assert "testenv" not in tox_ini()
 
-    The plain testenv definition is allowed only if envlist contains generative
-    environments.
 
-    """
-    tox_environments = {
-        "testenv"
-        for e in subprocess.check_output(["tox", "-l"]).decode().splitlines()
-        if re.match(r"\Apy\d{2}\Z", e.split("-")[0])
-    }
+def test_tox_no_factor_environments():
+    """Do not use environment factors."""
+    assert not any("-" in e for e in tox_envlist())
 
-    ini_parser = configparser.ConfigParser()
-    ini_parser.read("tox.ini")
-    tox_ini = {e for e in ini_parser if e == "testenv"}
 
-    assert tox_environments == tox_ini
+def test_tox_no_factor_deps():
+    """Deny to use factors in dependencies."""
+    for deps in tox_config_values("deps"):
+        for dep in deps.value.splitlines():
+            assert ":" not in dep
 
 
 def test_single_line_settings_are_written_same_line():
@@ -93,10 +54,7 @@ def test_single_line_settings_are_written_same_line():
         "skip_install",
         "install_command",
     ]
-
-    ini_parser = configparser.ConfigParser()
-    ini_parser.read("tox.ini")
-    for section in ini_parser.values():
+    for section in tox_ini().values():
         for setting in single_line_settings:
             value = section.get(setting)
             if value is not None:
@@ -113,10 +71,7 @@ def test_tox_multiline_settings_are_written_next_line():
         "envlist",
         "whitelist_externals",
     ]
-
-    ini_parser = configparser.ConfigParser()
-    ini_parser.read("tox.ini")
-    for section in ini_parser.values():
+    for section in tox_ini().values():
         for setting in multiline_settings:
             value = section.get(setting)
             if value is not None:
@@ -124,86 +79,56 @@ def test_tox_multiline_settings_are_written_next_line():
 
 
 def test_coverage_include_all_packages():
-    """Coverage source should include all packages.
+    """Code coverage should include all python packages."""
+    coverage_sources = coveragerc()["run"]["source"].strip().splitlines()
 
-    1. From the main pyproject.toml.
-    2. From test helpers pyproject.toml.
-    3. The tests package.
+    packages = set()
+    helpers = set()
 
-    """
-    ini_parser = configparser.ConfigParser()
-    ini_parser.read(".coveragerc")
-    coverage_sources = ini_parser["run"]["source"].strip().splitlines()
+    for f in git_files():
+        parts = [re.sub(r"\.py$", "", p) for p in f.split("/")]
+        if len(parts) > 1 and parts[0] == "src":
+            packages.add(parts[1])
+        if len(parts) > 2 and parts[0] == "tests" and parts[1] == "helpers":
+            helpers.add(parts[2])
 
-    pyproject_toml = tomlkit.loads(open("pyproject.toml").read())
-    packages = [
-        re.sub(r"\.py$", "", p["include"])
-        for p in pyproject_toml["tool"]["poetry"]["packages"]
-    ]
-
-    pyproject_toml = tomlkit.loads(open("tests/helpers/pyproject.toml").read())
-    helpers = [
-        re.sub(r"\.py$", "", p["include"])
-        for p in pyproject_toml["tool"]["poetry"]["packages"]
-    ]
-
-    assert coverage_sources == packages + helpers + ["tests"]
+    assert coverage_sources == sorted(packages) + sorted(helpers) + ["tests"]
 
 
 def test_coverage_paths_include_tox_environments():
-    """Coverage paths should include all tox environments."""
-    ini_parser = configparser.ConfigParser()
-    ini_parser.read(".coveragerc")
-    coverage_paths = ini_parser["paths"]["source"].strip().splitlines()
-
-    tox_environments = subprocess.check_output(["tox", "-l"]).decode().splitlines()
-    tox_ini = configparser.ConfigParser()
-    tox_ini.read("tox.ini")
+    """Coverage files should be merged together."""
     coverage_environments = [
-        e
-        for e in tox_environments
-        if "coverage run"
-        in tox_ini["testenv:" + e if "testenv:" + e in tox_ini else "testenv"][
-            "commands"
-        ]
+        env
+        for env, commands in tox_config_values("commands")
+        if "coverage run" in commands
     ]
     tox_paths = [
         ".tox/{name}/lib/{python}/site-packages".format(
             name=e,
-            python=tox_ini["testenv:" + e]["basepython"]
-            if "testenv:" + e in tox_ini
+            python=tox_ini()["testenv:" + e]["basepython"]
+            if "testenv:" + e in tox_ini()
             else re.sub(
-                r"py(?P<major>\d)(?P<minor>\d)",
-                r"python\g<major>.\g<minor>",
-                e.split("-")[0],
+                r"py(?P<major>\d)(?P<minor>\d)", r"python\g<major>.\g<minor>", e
             ),
         )
         for e in coverage_environments
     ]
-
+    coverage_paths = lines(coveragerc()["paths"]["source"])
     assert coverage_paths == tox_paths
 
 
 def test_coverage_environment_runs_at_the_end():
-    """Covarage report should runs after environments generating coverage."""
-    ini_parser = configparser.ConfigParser()
-    ini_parser.read("tox.ini")
-
-    envlist = helpers.tox_parse_envlist(ini_parser["tox"]["envlist"])
-
-    runs_coverage = [
+    """Coverage report runs after all environments collecting coverage."""
+    coverage_depends = [
         e
-        for e in envlist
-        if "coverage run"
-        in ini_parser["testenv:" + e if "testenv:" + e in ini_parser else "testenv"][
-            "commands"
-        ]
+        for p in tox_split_envlist(tox_ini()["testenv:coverage"]["depends"])
+        for e in tox_expand_names(p)
     ]
-
-    coverage_depends = helpers.tox_parse_envlist(
-        ini_parser["testenv:coverage"]["depends"]
-    )
-
+    runs_coverage = [
+        env
+        for env, commands in tox_config_values("commands")
+        if "coverage run" in commands
+    ]
     assert coverage_depends == runs_coverage
 
 
@@ -223,9 +148,7 @@ def test_ini_files_indentation():
 
 def test_lock_files_not_committed():
     """Lock files should not be committed to the git repository."""
-    git_files = subprocess.check_output(["git", "ls-files"]).decode().splitlines()
-    for lock_file in ["poetry.lock", "tests/helpers/poetry.lock"]:
-        assert lock_file not in git_files
+    assert "poetry.lock" not in git_files()
 
 
 def test_license_year():
@@ -249,79 +172,53 @@ def test_license_year():
 
 def test_tox_environments_are_ordered():
     """Tox environments definition should follow order of the envlist."""
-    tox_environments = subprocess.check_output(["tox", "-l"]).decode().splitlines()
-
     tox_ini = open("tox.ini").read()
-
     offsets = [
-        (tox_ini.find("testenv{}".format("" if re.match(r"py\d+", e) else ":" + e)), e)
-        for e in tox_environments
+        (re.search(fr"[testenv:(\w*,)?{e}(\w*,)?]", tox_ini).start(), e)
+        for e in tox_envlist()
     ]
-
     assert offsets == sorted(offsets, key=lambda key: key[0])
 
 
 def test_tox_deps_are_ordered():
     """Dependencies of tox environments should be in order."""
-    for _env, deps in helpers.tox_info("deps"):
-        deps = [d.split("==")[0] for d in deps.splitlines()]
-        ordered = [
-            deps[l[1]]
-            for l in sorted(
-                (
-                    [list(map(lambda x: x.strip().lower(), reversed(d.split(":")))), i]
-                    for i, d in enumerate(deps)
-                ),
-                key=lambda key: key[0],
-            )
-        ]
+    for deps in tox_config_values("deps"):
+        deps = lines(deps.value)
+        ordered = sorted(deps, key=lambda key: key.lower())
         assert deps == ordered
 
 
 def test_packages_are_ordered():
     """Packages of pyproject.toml files should be in order."""
-    for pyproject_toml in ["pyproject.toml", "tests/helpers/pyproject.toml"]:
-        pyproject_toml = tomlkit.loads(open(pyproject_toml).read())
-        packages = [
-            re.sub(r"\.py$", "", p["include"])
-            for p in pyproject_toml["tool"]["poetry"]["packages"]
-        ]
-        assert packages == sorted(packages)
+    packages = [p["include"] for p in pyproject_toml()["tool"]["poetry"]["packages"]]
+    assert packages == sorted(packages)
 
 
 def test_build_requires_are_ordered():
     """Build system requirements of pyproject.toml files should be in order."""
-    for pyproject_toml in ["pyproject.toml", "tests/helpers/pyproject.toml"]:
-        pyproject_toml = tomlkit.loads(open(pyproject_toml).read())
-        requires = pyproject_toml["build-system"]["requires"]
-        assert requires == sorted(requires)
+    requires = pyproject_toml()["build-system"]["requires"]
+    assert requires == sorted(requires)
 
 
 def test_flake8_per_file_ignores_are_ordered():
     """Flake8 per file ignores should be in order."""
-    ini_parser = configparser.ConfigParser()
-    ini_parser.read(".flake8")
     per_file_ignores = [
         l.strip()
-        for l in ini_parser["flake8"]["per-file-ignores"].strip().splitlines()
+        for l in lines(flake8()["flake8"]["per-file-ignores"])
         if not l.startswith("#")
     ]
     assert per_file_ignores == sorted(per_file_ignores)
 
 
-@pytest.mark.xfail
-def test_flake8_ignored_errors_are_ordered():  # pragma: no cover
+def test_flake8_ignored_errors_are_ordered():
     """Flake8 ignored error codes should be in order."""
-    ini_parser = configparser.ConfigParser()
-    ini_parser.read(".flake8")
-    ignore = ini_parser["flake8"]["ignore"].strip().split(", ")
+    ignore = flake8()["flake8"]["ignore"].strip().split(", ")
     assert ignore == sorted(ignore)
 
 
 def test_yamllint_ignored_patterns_are_ordered():
     """Yamllint ignored directory patterns should be in order."""
-    yamllint = yaml.safe_load(open(".yamllint").read())
-    ignore = [l.strip() for l in yamllint["ignore"].strip().splitlines()]
+    ignore = lines(yamllint()["ignore"])
     assert ignore == sorted(ignore)
 
 
@@ -330,19 +227,13 @@ def test_yamllint_ignored_patterns_are_ordered():
 
 def test_poetry_avoid_additional_dependencies():
     """Python package should not have any of additional dependencies."""
-    pyproject_toml = tomlkit.loads(open("pyproject.toml").read())
-    deps = list(pyproject_toml["tool"]["poetry"].get("dependencies", {}))
+    deps = list(pyproject_toml()["tool"]["poetry"]["dependencies"])
     assert deps == ["python"]
-
-    pyproject_toml = tomlkit.loads(open("tests/helpers/pyproject.toml").read())
-    deps = list(pyproject_toml["tool"]["poetry"].get("dependencies", {}))
-    assert not deps
 
 
 def test_pre_commit_hooks_avoid_additional_dependencies():
     """Additional dependencies of the pre-commit should not be used."""
-    pre_commit_config_yaml = yaml.safe_load(open(".pre-commit-config.yaml").read())
-    hooks = (hook for repo in pre_commit_config_yaml["repos"] for hook in repo["hooks"])
+    hooks = (hook for repo in pre_commit_yaml()["repos"] for hook in repo["hooks"])
     assert all("additional_dependencies" not in hook for hook in hooks)
 
 
@@ -351,26 +242,152 @@ def test_pre_commit_hooks_avoid_additional_dependencies():
 
 def test_tox_deps_not_pinned():
     """Dependencies of tox environments should not have versions."""
-    for _env, deps in helpers.tox_info("deps"):
-        deps = deps.splitlines()
-        deps = [d.split(":")[-1].strip().split("==") for d in deps]
-        versions = collections.defaultdict(list)
-        for d in deps:
-            versions[d[0]].append(d[-1] if d[1:] else "*")
-        for _package, v in versions.items():
-            assert v == ["*"] or len(v) >= 2
+    for deps in tox_config_values("deps"):
+        assert "=" not in deps.value
 
 
 def test_build_requires_not_pinned():
     """Build requirements of pyproject.toml files should not have versions."""
-    for pyproject_toml in ["pyproject.toml", "tests/helpers/pyproject.toml"]:
-        pyproject_toml = tomlkit.loads(open(pyproject_toml).read())
-        requires = pyproject_toml["build-system"]["requires"]
-        for require in requires:
-            assert len(re.split(r"=+", require)) == 1
+    requires = pyproject_toml()["build-system"]["requires"]
+    assert not any("=" in r for r in requires)
 
 
 def test_pre_commit_hooks_not_pinned():
     """Hook revisions of the pre-commit should not have versions."""
-    pre_commit_config_yaml = yaml.safe_load(open(".pre-commit-config.yaml").read())
-    assert all(repo["rev"] == "master" for repo in pre_commit_config_yaml["repos"])
+    assert all(repo["rev"] == "master" for repo in pre_commit_yaml()["repos"])
+
+
+# Utils.
+
+
+def tox_envlist():
+    """List tox environments using CLI tool."""
+    return [
+        e
+        for p in tox_split_envlist(tox_ini()["tox"]["envlist"])
+        for e in tox_expand_names(p)
+    ]
+
+
+def tox_split_envlist(string):
+    """Split envlist config string into list of strings.
+
+    This function will respect generative environments.
+
+    >>> tox_split_envlist('py{36,37},doctest,flake8')
+    ['py{36,37}', 'doctest', 'flake8']
+
+    """
+    escaped = string
+    while re.search(r"({[^,}]*),", escaped):
+        escaped = re.subn(r"({[^,}]*),", r"\1:", escaped)[0]
+    parts = escaped.split(",")
+    return [re.subn(r":", ",", p)[0].strip() for p in parts]
+
+
+def tox_expand_names(string):
+    """Expand environment name to list of environments.
+
+    >>> list(tox_expand_names('py{37,38}'))
+    ['py37', 'py38']
+
+    >>> list(tox_expand_names('doctest'))
+    ['doctest']
+
+    """
+    # It's an incomplete implementation and works with current config only.
+    if "{" not in string:
+        yield string
+    else:
+        parts = re.split(r"{|}", string)
+        index = [i for i, p in enumerate(parts) if "," in p][0]
+        subs = parts[index].split(",")
+        for s in subs:
+            yield "".join(parts[:index] + [s])
+
+
+def tox_config_environments():
+    """List tox environments defined in the INI file."""
+    return [
+        e
+        for k in tox_ini()
+        for e in tox_expand_names(tox_section_name(k))
+        if k not in {"tox", "DEFAULT"}
+    ]
+
+
+def tox_section_name(string):
+    """Convert config section name to the tox environment name."""
+    return re.sub(r"^testenv:", "", string)
+
+
+Variable = collections.namedtuple("Variable", ("env", "value"))
+
+
+def tox_config_values(variable):
+    """Get variable value from all sections in the tox.ini file."""
+    ini_parser = tox_ini()
+    for section in ini_parser:
+        if variable in ini_parser[section]:
+            value = text(ini_parser[section][variable])
+            for env in tox_expand_names(tox_section_name(section)):
+                yield Variable(env, value)
+
+
+def text(value):
+    """Get text value from the INI file."""
+    return textwrap.dedent(value.strip())
+
+
+def lines(value):
+    """Get lines of the multiline text from the INI file."""
+    return text(value).splitlines()
+
+
+def git_files():
+    """List committed files."""
+    return subprocess.check_output(["git", "ls-files"]).decode().splitlines()
+
+
+# Config files.
+
+
+def tox_ini():
+    """Parse tox.ini file."""
+    ini_parser = configparser.ConfigParser()
+    ini_parser.read("tox.ini")
+    return ini_parser
+
+
+def coveragerc():
+    """Parse .coveragerc file."""
+    ini_parser = configparser.ConfigParser()
+    ini_parser.read(".coveragerc")
+    return ini_parser
+
+
+def flake8():
+    """Parse .flake8 file."""
+    ini_parser = configparser.ConfigParser()
+    ini_parser.read(".flake8")
+    return ini_parser
+
+
+def yamllint():
+    """Parse .yamllint file."""
+    return yaml.safe_load(open(".yamllint").read())
+
+
+def pre_commit_yaml():
+    """Parse .pre-commit-config.yaml file."""
+    return yaml.safe_load(open(".pre-commit-config.yaml").read())
+
+
+def pyenv_versions():
+    """Parse .python-version file."""
+    return [v.split(".")[0:2] for v in open(".python-version").read().splitlines()]
+
+
+def pyproject_toml():
+    """Parse pyproject.toml file."""
+    return tomlkit.loads(open("pyproject.toml").read())
