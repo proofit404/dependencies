@@ -214,6 +214,13 @@ def test_tox_deps_are_ordered():
         assert deps == ordered
 
 
+def test_tox_whitelist_externals_are_ordered():
+    """Tox whitelist externals should be in order."""
+    for externals in tox_config_values("whitelist_externals"):
+        externals = lines(externals.value)
+        assert externals == sorted(externals)
+
+
 def test_packages_are_ordered():
     """Packages of pyproject.toml files should be in order."""
     packages = [p["include"] for p in pyproject_toml()["tool"]["poetry"]["packages"]]
