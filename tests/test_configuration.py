@@ -46,13 +46,13 @@ def test_tox_no_factor_deps():
             assert ":" not in dep
 
 
-def test_single_line_settings_are_written_same_line():
+def test_tox_single_line_settings_are_written_same_line():
     """Single line tox settings should be written on the same line."""
     single_line_settings = [
-        "isolated_build",
         "basepython",
-        "skip_install",
         "install_command",
+        "isolated_build",
+        "skip_install",
     ]
     for section in tox_ini().values():
         for setting in single_line_settings:
@@ -65,10 +65,10 @@ def test_tox_multiline_settings_are_written_next_line():
     """Multiline tox settings should be written starting next line."""
     multiline_settings = [
         "commands",
-        "commands_post",
         "depends",
         "deps",
         "envlist",
+        "setenv",
         "whitelist_externals",
     ]
     for section in tox_ini().values():
@@ -76,6 +76,25 @@ def test_tox_multiline_settings_are_written_next_line():
             value = section.get(setting)
             if value is not None:
                 assert value.startswith("\n") or not value
+
+
+def test_tox_no_unknown_settings():
+    """Deny to use unknown tox settings."""
+    known_settings = [
+        "basepython",
+        "commands",
+        "depends",
+        "deps",
+        "envlist",
+        "install_command",
+        "isolated_build",
+        "setenv",
+        "skip_install",
+        "whitelist_externals",
+    ]
+    for section in tox_ini().values():
+        for setting in section:
+            assert setting in known_settings
 
 
 def test_coverage_include_all_packages():
