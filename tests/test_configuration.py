@@ -132,6 +132,13 @@ def test_coverage_environment_runs_at_the_end():
     assert coverage_depends == runs_coverage
 
 
+def test_poetry_python_version_use_all_pyenv_versions():
+    """Supported python versions declaration should include all versions from pyenv."""
+    pyenv_version = " || ".join(f"{major}.{minor}" for major, minor in pyenv_versions())
+    poetry_version = pyproject_toml()["tool"]["poetry"]["dependencies"]["python"]
+    assert pyenv_version == poetry_version
+
+
 def test_ini_files_indentation():
     """INI files should have indentation level equals two spaces."""
     for ini_file in [
