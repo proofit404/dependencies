@@ -118,26 +118,18 @@ class _InjectorType(_InjectorTypeType):
         return attributes
 
 
-def __init__(self, *args, **kwargs):
+class Injector(metaclass=_InjectorType):
+    """Default dependencies specification DSL.
 
-    raise DependencyError("Do not instantiate Injector")
+    Classes inherited from this class may inject dependencies into classes specified in
+    it namespace.
 
+    """
 
-def let(cls, **kwargs):
-    """Produce new Injector with some dependencies overwritten."""
-    return type(cls.__name__, (cls,), kwargs)
+    def __init__(self, *args, **kwargs):
+        raise DependencyError("Do not instantiate Injector")
 
-
-injector_doc = """
-Default dependencies specification DSL.
-
-Classes inherited from this class may inject dependencies into classes
-specified in it namespace.
-"""
-
-
-Injector = _InjectorType(
-    "Injector",
-    (),
-    {"__init__": __init__, "__doc__": injector_doc, "let": classmethod(let)},
-)
+    @classmethod
+    def let(cls, **kwargs):
+        """Produce new Injector with some dependencies overwritten."""
+        return type(cls.__name__, (cls,), kwargs)
