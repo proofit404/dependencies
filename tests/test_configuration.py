@@ -146,6 +146,15 @@ def test_ini_files_indentation():
         assert not re.search(r"^ {3}", ini_text, re.MULTILINE)
 
 
+def test_ini_files_boolean_case():
+    """INI files should have boolean values written in lowercase."""
+    for ini_file in [tox_ini, coveragerc, flake8, importlinter, pytest_ini]:
+        for section in ini_file().values():
+            for value in section.values():
+                if value.lower() in {"true", "false"}:
+                    assert value == value.lower()
+
+
 def test_lock_files_not_committed():
     """Lock files should not be committed to the git repository."""
     assert "poetry.lock" not in git_files()
@@ -452,6 +461,20 @@ def flake8():
     """Parse .flake8 file."""
     ini_parser = configparser.ConfigParser()
     ini_parser.read(".flake8")
+    return ini_parser
+
+
+def importlinter():
+    """Parse .importlinter file."""
+    ini_parser = configparser.ConfigParser()
+    ini_parser.read(".importlinter")
+    return ini_parser
+
+
+def pytest_ini():
+    """Parse pytest.ini file."""
+    ini_parser = configparser.ConfigParser()
+    ini_parser.read("pytest.ini")
     return ini_parser
 
 
