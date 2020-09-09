@@ -180,6 +180,21 @@ def test_tox_environments_are_ordered():
     assert offsets == sorted(offsets, key=lambda key: key[0])
 
 
+def test_tox_settings_are_ordered():
+    """Tox settings definition should follow common order."""
+    tox_ini = open("tox.ini").read()
+    sections = []
+    for l in lines(tox_ini):
+        if l.startswith("["):
+            section = []
+            sections.append(section)
+        elif re.match(r"\S", l):
+            section.append(l.split("=")[0].strip())
+    for section in sections:
+        ordered = Settings().sort(section)
+        assert section == ordered
+
+
 def test_tox_deps_are_ordered():
     """Dependencies of tox environments should be in order."""
     for deps in tox_config_values("deps"):
@@ -319,6 +334,12 @@ class Settings:
         for name, kind in self.keys:
             if kind.is_text:
                 yield name
+
+    def sort(self, section):
+        """Sort list of settings name according to common order."""
+        keys = [k[0] for k in self.keys]
+        offsets = [(keys.index(k), k) for k in section]
+        return [e[1] for e in sorted(offsets, key=lambda e: e[0])]
 
 
 def tox_envlist():
