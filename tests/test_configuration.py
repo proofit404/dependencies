@@ -42,20 +42,14 @@ def test_tox_no_factor_environments():
 def test_tox_no_factor_deps():
     """Deny to use factors in dependencies."""
     for deps in tox_config_values("deps"):
-        for dep in deps.value.splitlines():
+        for dep in lines(deps.value):
             assert ":" not in dep
 
 
 def test_tox_single_line_settings_are_written_same_line():
     """Single line tox settings should be written on the same line."""
-    single_line_settings = [
-        "basepython",
-        "install_command",
-        "isolated_build",
-        "skip_install",
-    ]
     for section in tox_ini().values():
-        for setting in single_line_settings:
+        for setting in Settings().singleline():
             value = section.get(setting)
             if value is not None:
                 assert not value.startswith("\n")
@@ -63,16 +57,8 @@ def test_tox_single_line_settings_are_written_same_line():
 
 def test_tox_multiline_settings_are_written_next_line():
     """Multiline tox settings should be written starting next line."""
-    multiline_settings = [
-        "commands",
-        "depends",
-        "deps",
-        "envlist",
-        "setenv",
-        "whitelist_externals",
-    ]
     for section in tox_ini().values():
-        for setting in multiline_settings:
+        for setting in Settings().multiline():
             value = section.get(setting)
             if value is not None:
                 assert value.startswith("\n") or not value
@@ -80,21 +66,9 @@ def test_tox_multiline_settings_are_written_next_line():
 
 def test_tox_no_unknown_settings():
     """Deny to use unknown tox settings."""
-    known_settings = [
-        "basepython",
-        "commands",
-        "depends",
-        "deps",
-        "envlist",
-        "install_command",
-        "isolated_build",
-        "setenv",
-        "skip_install",
-        "whitelist_externals",
-    ]
     for section in tox_ini().values():
         for setting in section:
-            assert setting in known_settings
+            assert setting in Settings().known()
 
 
 def test_coverage_include_all_packages():
@@ -291,6 +265,60 @@ def test_pre_commit_hooks_not_pinned():
 
 
 # Utils.
+
+
+class Settings:
+    """Tox settings definition."""
+
+    # Types.
+
+    class Text:
+        """Text type."""
+
+        is_text = True
+
+    class String:
+        """String type."""
+
+        is_text = False
+
+    class Boolean:
+        """Boolean type."""
+
+        is_text = False
+
+    # Settings.
+
+    keys = [
+        ("envlist", Text),
+        ("isolated_build", Boolean),
+        ("basepython", String),
+        ("skip_install", Boolean),
+        ("install_command", String),
+        ("setenv", Text),
+        ("deps", Text),
+        ("commands", Text),
+        ("depends", Text),
+        ("whitelist_externals", Text),
+    ]
+
+    # Methods.
+
+    def known(self):
+        """Return a list of known tox settings."""
+        return [s[0] for s in self.keys]
+
+    def singleline(self):
+        """Return a list of tox settings which should be written on a single line."""
+        for name, kind in self.keys:
+            if not kind.is_text:
+                yield name
+
+    def multiline(self):
+        """Return a list of tox settings which should be written on multiple lines."""
+        for name, kind in self.keys:
+            if kind.is_text:
+                yield name
 
 
 def tox_envlist():
