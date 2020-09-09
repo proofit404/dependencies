@@ -479,11 +479,13 @@ def test_docstrings():
 
     """
     assert (
-        Injector.__doc__ == "\n"
-        "Default dependencies specification DSL.\n"
-        "\n"
-        "Classes inherited from this class may inject dependencies into classes\n"
-        "specified in it namespace.\n"
+        Injector.__doc__
+        == """Default dependencies specification DSL.
+
+    Classes inherited from this class may inject dependencies into classes specified in
+    it namespace.
+
+    """
     )
 
     class Foo(Injector):
