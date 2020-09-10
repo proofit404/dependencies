@@ -1,32 +1,27 @@
+[build-system]
+build-backend = "poetry.masonry.api"
+requires = ["poetry"]
+
 [tool.poetry]
-name = "dependencies"
-version = "3.0.0"
-
-description = "Dependency Injection for Humans"
-readme = "docs/index.md"
-license = "BSD-2-Clause"
-
-homepage = "https://pypi.org/project/dependencies/"
-repository = "https://github.com/proofit404/dependencies/"
-documentation = "https://proofit404.github.io/dependencies/"
-
 authors = ["Artem Malyshev <proofit404@gmail.com>"]
-
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
     "License :: OSI Approved :: BSD License",
     "Topic :: Software Development",
 ]
-
+description = "Dependency Injection for Humans"
+documentation = "https://proofit404.github.io/dependencies/"
+homepage = "https://pypi.org/project/dependencies/"
+license = "BSD-2-Clause"
+name = "dependencies"
 packages = [
     { include = "_dependencies", from = "src" },
     { include = "dependencies", from = "src" },
 ]
+readme = "docs/index.md"
+repository = "https://github.com/proofit404/dependencies/"
+version = "3.0.0"
 
 [tool.poetry.dependencies]
 python = "3.6 || 3.7 || 3.8"
-
-[build-system]
-requires = ["poetry"]
-build-backend = "poetry.masonry.api"
