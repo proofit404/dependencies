@@ -1,4 +1,4 @@
-export default async () => {
+export default async (): undefined => {
   if (danger.github.pr.commits > 3) {
     fail("PR has too much commits");
     return;
@@ -81,7 +81,7 @@ export default async () => {
 
   const issueNumber = branchTest[1];
 
-  for (let commit of danger.git.commits) {
+  for (const commit of danger.git.commits) {
     if (!commit.message.split(/\r?\n/)[0].endsWith(` #${issueNumber}`)) {
       fail("The first line of each commit should ends with the issue number");
       return;
@@ -151,7 +151,7 @@ export default async () => {
     return;
   }
 
-  for (let label of [
+  for (const label of [
     "blocked",
     "invalid",
     "needs-investigation",
@@ -167,8 +167,8 @@ export default async () => {
   const issueText = issueJSON.data.body,
     issueLines = issueText.split(/\r?\n/).map((line) => line.trim());
 
-  for (let line of issueLines) {
-    if (line.match(/^[-\+\*] \[[xX]\] /)) {
+  for (const line of issueLines) {
+    if (line.match(/^[*+-] \[[xX]\] /)) {
       fail("Create a milestone instead of the issue with the task list");
       return;
     }
@@ -196,7 +196,7 @@ export default async () => {
     "wontfix",
   ]);
 
-  for (let repoLabel of labelsJSON.data) {
+  for (const repoLabel of labelsJSON.data) {
     if (repoLabel.color !== "ededed") {
       fail(`The color of the ${repoLabel.name} should be 'ededed'`);
       return;
@@ -219,7 +219,7 @@ export default async () => {
     return;
   }
 
-  for (let milestone of milestonesJSON.data) {
+  for (const milestone of milestonesJSON.data) {
     if (milestone.description !== "") {
       fail(`The description of the ${milestone.title} should be empty`);
       return;
