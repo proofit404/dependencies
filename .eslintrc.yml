@@ -1,7 +1,16 @@
 ---
+extends:
+  - eslint:recommended
+  - plugin:json/recommended
+  - plugin:@typescript-eslint/recommended
 parserOptions:
   ecmaVersion: 6
 env:
   browser: true
+  node: true
 plugins:
-  - json
+  - "@typescript-eslint"
+overrides:
+  - parser: "@typescript-eslint/parser"
+    files:
+      - "*.ts"
