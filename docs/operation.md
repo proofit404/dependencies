@@ -30,7 +30,7 @@ True
 ```
 
 If you want to pass additional value parameter to the function, add it to the
-injector with the `let` notation.
+injector with the call.
 
 ```pycon
 
@@ -50,7 +50,7 @@ injector with the `let` notation.
 ...     def func(foo, bar, arg):
 ...         return foo.do(bar.do(arg))
 
->>> Container.let(arg=1).func()
+>>> Container(arg=1).func()
 6
 
 ```

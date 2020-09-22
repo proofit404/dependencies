@@ -36,16 +36,14 @@ nav:
   - Home:
       - Home: index.md
       - Installation: installation.md
-      - Overview: overview.md
-      - Why: why.md
-      - Usage: usage.md
-      - Implementation: implementation.md
-      - FAQ: faq.md
       - Changelog: changelog.md
   - Usage:
+      - Why: why.md
+      - Usage: usage.md
       - This: this.md
       - Package: package.md
       - Operation: operation.md
       - Value: value.md
+      - FAQ: faq.md
   - Guides:
       - Attrs: attrs.md
