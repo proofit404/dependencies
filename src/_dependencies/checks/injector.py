@@ -13,9 +13,3 @@ def _check_dunder_name(name):
 
     if name.startswith("__") and name.endswith("__"):
         raise DependencyError("Magic methods are not allowed")
-
-
-def _check_attrs_redefinition(name):
-
-    if name == "let":
-        raise DependencyError("'let' redefinition is not allowed")

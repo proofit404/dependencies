@@ -1,6 +1,5 @@
 from _dependencies.attributes import _Replace
 from _dependencies.checks.circles import _check_circles
-from _dependencies.checks.injector import _check_attrs_redefinition
 from _dependencies.checks.injector import _check_dunder_name
 from _dependencies.checks.injector import _check_inheritance
 from _dependencies.checks.loops import _check_loops
@@ -28,7 +27,6 @@ class _InjectorType(_InjectorTypeType):
                 pass
         for name in namespace:
             _check_dunder_name(name)
-            _check_attrs_redefinition(name)
         dependencies = {}
         for base in reversed(bases):
             dependencies.update(base.__dependencies__)
@@ -38,6 +36,10 @@ class _InjectorType(_InjectorTypeType):
         _check_circles(dependencies)
         ns["__dependencies__"] = dependencies
         return type.__new__(cls, class_name, bases, ns)
+
+    def __call__(cls, **kwargs):
+        """Produce new Injector with some dependencies overwritten."""
+        return type(cls.__name__, (cls,), kwargs)
 
     def __getattr__(cls, attrname):
         __tracebackhide__ = True
@@ -125,11 +127,3 @@ class Injector(metaclass=_InjectorType):
     it namespace.
 
     """
-
-    def __init__(self, *args, **kwargs):
-        raise DependencyError("Do not instantiate Injector")
-
-    @classmethod
-    def let(cls, **kwargs):
-        """Produce new Injector with some dependencies overwritten."""
-        return type(cls.__name__, (cls,), kwargs)
