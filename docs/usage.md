@@ -255,7 +255,7 @@ have the complete scope.
 It is possible to extend dependency scopes in two ways:
 
 - inheritance
-- `let` notation
+- call
 
 ### Inheritance
 
@@ -314,7 +314,7 @@ needed.
 
 ```
 
-### `let` notation
+### Call
 
 You can temporary redefine a dependency for only one case. This is extremely
 useful for tests. Inject an assertion instead of one or more dependencies, and
@@ -327,19 +327,18 @@ possible to simulate database integrity error on concurrent access.
 ...     foo = Foo
 ...     bar = Bar
 
->>> Scope.let(bar=Baz).foo  # doctest: +ELLIPSIS
+>>> Scope(bar=Baz).foo  # doctest: +ELLIPSIS
 <__main__.Foo object at 0x...>
 
 ```
 
-It is possible to build dependency scopes directly from dictionaries using `let`
-notation.
+It is possible to build dependency scopes directly from dictionaries using call.
 
 ```pycon
 
 >>> settings = {'host': 'localhost', 'port': 1234}
 
->>> Scope = Injector.let(foo=Foo, bar=Bar, **settings)
+>>> Scope = Injector(foo=Foo, bar=Bar, **settings)
 
 ```
 
