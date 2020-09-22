@@ -45,8 +45,8 @@ def _a6d9c893a92e(Foo):
 
 @circle_deps
 def _e4b38a38de7e(Foo):
-    # Let notation.
-    Summator = Injector.let(foo=Foo)
+    # Call keywords.
+    Summator = Injector(foo=Foo)
 
     Summator.foo
 
@@ -164,16 +164,16 @@ def _d9c4e136c92c(Foo, Bar):
 
 @complex_circle_deps
 def _b54832f696e9(Foo, Bar):
-    # Let notation.
-    Summator = Injector.let(foo=Foo, bar=Bar)
+    # Call keywords.
+    Summator = Injector(foo=Foo, bar=Bar)
 
     Summator.foo
 
 
 @complex_circle_deps
 def _c039a81e8dce(Foo, Bar):
-    # Let notation chain.
-    Summator = Injector.let(foo=Foo).let(bar=Bar)
+    # Call keywords chain.
+    Summator = Injector(foo=Foo)(bar=Bar)
 
     Summator.foo
 
@@ -350,16 +350,16 @@ def _fc13db5b9fda(Foo, Bar, Baz):
 
 @long_circle_deps
 def _c729e6952fee(Foo, Bar, Baz):
-    # Let notation.
-    Summator = Injector.let(foo=Foo, bar=Bar, baz=Baz)
+    # Call keywords.
+    Summator = Injector(foo=Foo, bar=Bar, baz=Baz)
 
     Summator.foo
 
 
 @long_circle_deps
 def _d701f88a5c42(Foo, Bar, Baz):
-    # Let notation chain.
-    Summator = Injector.let(foo=Foo).let(bar=Bar).let(baz=Baz)
+    # Call keywords chain.
+    Summator = Injector(foo=Foo)(bar=Bar)(baz=Baz)
 
     Summator.foo
 
