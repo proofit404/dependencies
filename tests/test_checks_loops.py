@@ -42,8 +42,8 @@ def _kSSnnkw6CNPx():
 
 @flat_injector
 def _n8NHZqiZN43Q():
-    # Let notation.  Link to self.
-    Injector.let(foo=this.foo).foo
+    # Call keywords.  Link to self.
+    Injector(foo=this.foo).foo
 
 
 @flat_injector
@@ -59,8 +59,8 @@ def _ai0hNOPGX2PI():
 
 @flat_injector
 def _ySnRrxW6M79T():
-    # Let notation.  Complex loop.
-    Injector.let(foo=this.bar, bar=this.foo).foo
+    # Call keywords.  Complex loop.
+    Injector(foo=this.bar, bar=this.foo).foo
 
 
 @flat_injector
@@ -77,8 +77,8 @@ def _yfTnHHhvBmrQ():
 
 @flat_injector
 def _ydZEbpRNlHEO():
-    # Let notation.  Long loop.
-    Injector.let(foo=this.bar, bar=this.baz, baz=this.foo).foo
+    # Call keywords.  Long loop.
+    Injector(foo=this.bar, bar=this.baz, baz=this.foo).foo
 
 
 # One level nesting.
@@ -116,8 +116,8 @@ def _eaK6IxW88SNh(sub):
 
 @one_level
 def _nWhKtJb16yg6(sub):
-    # Let notation.
-    Injector.let(foo=this.SubContainer.bar, SubContainer=sub).foo
+    # Call keywords.
+    Injector(foo=this.SubContainer.bar, SubContainer=sub).foo
 
 
 @subcontainer
@@ -132,8 +132,8 @@ def _jijKOYgyZHNz():
 
 @subcontainer
 def _nFibPCOxGsrX():
-    # Let notation.
-    return Injector.let(bar=(this << 1).foo)
+    # Call keywords.
+    return Injector(bar=(this << 1).foo)
 
 
 @subcontainer
@@ -187,8 +187,8 @@ def _mF4akoHlg84C(middle):
 
 @complex_two_levels
 def _bCw8LPUeVK6J(middle):
-    # Let notation.
-    Injector.let(foo=this.SubContainer.SubSubContainer.bar, SubContainer=middle).foo
+    # Call keywords.
+    Injector(foo=this.SubContainer.SubSubContainer.bar, SubContainer=middle).foo
 
 
 @complex_middle_container
@@ -203,8 +203,8 @@ def _yPFeGKPGXPIY(lowest):
 
 @complex_middle_container
 def _uIRpkBWARVOQ(lowest):
-    # Let notation.
-    return Injector.let(SubSubContainer=lowest)
+    # Call keywords.
+    return Injector(SubSubContainer=lowest)
 
 
 @complex_lowest_container
@@ -219,8 +219,8 @@ def _bJmCQECfcIzZ():
 
 @complex_lowest_container
 def _qzYMsyvxYFLe():
-    # Let notation.
-    return Injector.let(bar=(this << 2).foo)
+    # Call keywords.
+    return Injector(bar=(this << 2).foo)
 
 
 @complex_lowest_container
@@ -276,8 +276,8 @@ def _eHyErh9kExHG(middle):
 
 @long_two_levels
 def _q0KytyVbE2XA(middle):
-    # Let notation.
-    Injector.let(foo=this.SubContainer.baz, SubContainer=middle).foo
+    # Call keywords.
+    Injector(foo=this.SubContainer.baz, SubContainer=middle).foo
 
 
 @long_middle_container
@@ -293,8 +293,8 @@ def _mwcbtGunjMac(lowest):
 
 @long_middle_container
 def _aVJRixHNhChV(lowest):
-    # Let notation.
-    return Injector.let(baz=this.SubSubContainer.bar, SubSubContainer=lowest)
+    # Call keywords.
+    return Injector(baz=this.SubSubContainer.bar, SubSubContainer=lowest)
 
 
 @long_lowest_container
@@ -309,8 +309,8 @@ def _qRcNcKzedWaI():
 
 @long_lowest_container
 def _fiktpicgZWNS():
-    # Let notation.
-    return Injector.let(bar=(this << 2).foo)
+    # Call keywords.
+    return Injector(bar=(this << 2).foo)
 
 
 @long_lowest_container
@@ -365,8 +365,8 @@ def _vAyZepNGAUjY(sub1, sub2):
 
 @cross_injector_loops
 def _bLRoCCj9uNOp(sub1, sub2):
-    # Let notation.  Cross injector links.
-    Injector.let(SubContainer1=sub1, SubContainer2=sub2).SubContainer1.bar
+    # Call keywords.  Cross injector links.
+    Injector(SubContainer1=sub1, SubContainer2=sub2).SubContainer1.bar
 
 
 @subcontainer1
@@ -381,8 +381,8 @@ def _eiVzvYStvpNL():
 
 @subcontainer1
 def _elifFWSpshiv():
-    # Let notation.
-    return Injector.let(bar=(this << 1).SubContainer2.baz)
+    # Call keywords.
+    return Injector(bar=(this << 1).SubContainer2.baz)
 
 
 @subcontainer1
@@ -405,8 +405,8 @@ def _fFuLltxguVgC():
 
 @subcontainer2
 def _rRsNsCaBSxke():
-    # Let notation.
-    return Injector.let(baz=(this << 1).SubContainer1.bar)
+    # Call keywords.
+    return Injector(baz=(this << 1).SubContainer1.bar)
 
 
 @subcontainer2
@@ -451,9 +451,9 @@ def _oClqGRmWJAkA():
 
 @items.xfail
 def _t41yMywZuPhA():
-    # Let notation.
-    SubContainer = Injector.let(foo=(this << 1).bar["sub"].foo)
-    Injector.let(SubContainer=SubContainer, bar={"sub": SubContainer}).SubContainer.foo
+    # Call keywords.
+    SubContainer = Injector(foo=(this << 1).bar["sub"].foo)
+    Injector(SubContainer=SubContainer, bar={"sub": SubContainer}).SubContainer.foo
 
 
 def test_false_positive_loop_lookup_protection():

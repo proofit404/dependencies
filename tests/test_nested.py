@@ -33,8 +33,8 @@ def _ac7814095628(sub):
 
 @parent_attr
 def _f607abc82079(sub):
-    # Let notation.
-    return Injector.let(foo=1, SubContainer=sub)
+    # Call keywords.
+    return Injector(foo=1, SubContainer=sub)
 
 
 @subcontainer
@@ -49,8 +49,8 @@ def _iGphUpthTooT():
 
 @subcontainer
 def _nurKbeeqoNCn():
-    # Let notation.
-    return Injector.let(bar=(this << 1).foo)
+    # Call keywords.
+    return Injector(bar=(this << 1).foo)
 
 
 @subcontainer
@@ -91,8 +91,8 @@ def _e477afc961b6(middle):
 
 @few_parent_attr
 def _c4ed4c61e154(middle):
-    # Let notation.
-    return Injector.let(foo=1, SubContainer=middle)
+    # Call keywords.
+    return Injector(foo=1, SubContainer=middle)
 
 
 @middle_container
@@ -107,8 +107,8 @@ def _hjVHyztckQNe(lowest):
 
 @middle_container
 def _gYijGKMqAbZN(lowest):
-    # Let notation.
-    return Injector.let(SubSubContainer=lowest)
+    # Call keywords.
+    return Injector(SubSubContainer=lowest)
 
 
 @lowest_container
@@ -123,8 +123,8 @@ def _pDqnxaJFVRcS():
 
 @lowest_container
 def _heSHjuBBFVLp():
-    # Let notation.
-    return Injector.let(bar=(this << 2).foo)
+    # Call keywords.
+    return Injector(bar=(this << 2).foo)
 
 
 @lowest_container

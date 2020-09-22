@@ -233,14 +233,14 @@ def _c147d398f4be():
 
 @direct_proxy
 def _a37783b6d1ad():
-    # Let notation.
-    Injector.let(foo=this)
+    # Call keywords.
+    Injector(foo=this)
 
 
 @direct_proxy
 def _bd05271fb831():
-    # Let notation with parent access.
-    Injector.let(foo=(this << 1))
+    # Call keywords with parent access.
+    Injector(foo=(this << 1))
 
 
 def test_this_deny_non_integers():
@@ -319,14 +319,14 @@ def _bUICVObtDZ4I():
 
 @too_many
 def _ww6xNI4YrNr6():
-    # Let notation.
-    Injector.let(foo=(this << 1).bar).foo
+    # Call keywords.
+    Injector(foo=(this << 1).bar).foo
 
 
 @too_many
 def _rN3suiVzhqMM():
-    # Let notation with nested layer.
-    Injector.let(SubContainer=Injector.let(foo=(this << 2).bar)).SubContainer.foo
+    # Call keywords with nested layer.
+    Injector(SubContainer=Injector(foo=(this << 2).bar)).SubContainer.foo
 
 
 attribute_error = CodeCollector()
@@ -376,11 +376,11 @@ def _yOEj1qQfsXHy():
 
 @attribute_error
 def _vnmkIELBH3MN():
-    # Let notation.
-    Injector.let(foo=this.bar).foo
+    # Call keywords.
+    Injector(foo=this.bar).foo
 
 
 @attribute_error
 def _pG9M52ZRQr2S():
-    # Let notation with nested layer.
-    Injector.let(SubContainer=Injector.let(foo=(this << 1).bar)).SubContainer.foo
+    # Call keywords with nested layer.
+    Injector(SubContainer=Injector(foo=(this << 1).bar)).SubContainer.foo

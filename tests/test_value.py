@@ -70,8 +70,8 @@ def _sUIvAUUeQIde(arg):
 
 @deny_method
 def _nVlMKQghCDAQ(arg):
-    # Let notation.
-    Injector.let(method=arg)
+    # Call keywords.
+    Injector(method=arg)
 
 
 def test_protect_against_classes():
@@ -133,5 +133,5 @@ def _pqwvsBqbIiXg(arg):
 
 @deny_kwargs
 def _jbfjlQveNjrZ(arg):
-    # Let notation.
-    Injector.let(func=arg)
+    # Call keywords.
+    Injector(func=arg)

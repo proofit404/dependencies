@@ -272,38 +272,38 @@ def test_injectable_with_parent_without_init():
     assert Baz.bar.add() == 3
 
 
-# Let notation.
+# Call keywords.
 
 
-def test_let_factory():
-    """`Injector` subclass can produce its own subclasses with `let` factory."""
+def test_call():
+    """`Injector` subclass can produce its own subclasses with call."""
 
     class Foo(Injector):
         pass
 
-    assert issubclass(Foo.let(), Foo)
+    assert issubclass(Foo(), Foo)
 
 
-def test_let_factory_overwrite_dependencies():
-    """`Injector.let` produce `Injector` subclass with overwritten dependencies."""
-
-    class Foo(Injector):
-        bar = 1
-
-    assert Foo.let(bar=2).bar == 2
-
-
-def test_let_factory_resolve_not_overwritten_dependencies():
-    """`Injector.let` can resolve dependencies it doesn't touch."""
+def test_call_overwrite_dependencies():
+    """`Injector()` produce `Injector` subclass with overwritten dependencies."""
 
     class Foo(Injector):
         bar = 1
 
-    assert Foo.let(baz=2).bar == 1
+    assert Foo(bar=2).bar == 2
 
 
-def test_let_factory_on_injector_directly():
-    """`let` method could be called on `Injector` directly."""
+def test_call_resolve_not_overwritten_dependencies():
+    """`Injector()` can resolve dependencies it doesn't touch."""
+
+    class Foo(Injector):
+        bar = 1
+
+    assert Foo(baz=2).bar == 1
+
+
+def test_call_on_injector_directly():
+    """`Injector` could be called directly."""
 
     class Foo:
         def __init__(self, bar):
@@ -313,7 +313,7 @@ def test_let_factory_on_injector_directly():
         def __init__(self, baz):
             self.baz = baz
 
-    assert Injector.let(foo=Foo, bar=Bar, baz=1).foo.bar.baz == 1
+    assert Injector(foo=Foo, bar=Bar, baz=1).foo.bar.baz == 1
 
 
 # Dir.
@@ -328,7 +328,7 @@ def test_show_common_class_attributes_with_dir():
     class Foo(Injector):
         pass
 
-    assert dir(Common) + ["let"] == dir(Foo)
+    assert dir(Common) == dir(Foo)
 
 
 def test_show_injected_dependencies_with_dir():
@@ -353,14 +353,14 @@ def test_show_injected_dependencies_with_dir_once():
     assert dir(Bar).count("x") == 1
 
 
-def test_show_let_dependencies_with_dir():
-    """`dir` show dependencies injected with `let`."""
-    assert "x" in dir(Injector.let(x=1))
+def test_show_call_dependencies_with_dir():
+    """`dir` show dependencies injected with call."""
+    assert "x" in dir(Injector(x=1))
 
     class Foo(Injector):
         pass
 
-    assert "x" in dir(Foo.let(x=1))
+    assert "x" in dir(Foo(x=1))
 
 
 def test_omit_parent_link_in_dir_listing():
@@ -407,8 +407,8 @@ def _fXxRX4KFUc8q():
 
 @attribute_assignment
 def _pHfF0rbEjCsV():
-    # Let notation.
-    Container = Injector.let()
+    # Call keywords.
+    Container = Injector()
     Container.foo = 1
 
 
@@ -424,15 +424,15 @@ def _xhZaIhujf34t():
 
 @attribute_assignment
 def _jShuBfttg97c():
-    # Delete attribute let notation.
-    Container = Injector.let(foo=1)
+    # Delete attribute from call.
+    Container = Injector(foo=1)
     del Container.foo
 
 
 @attribute_assignment
 def _tQeRzD5ZsyTm():
     # Delete attribute from `Injector` directly.
-    del Injector.let
+    del Injector.foo
 
 
 # Nested injectors.
@@ -692,7 +692,7 @@ def _e78bf771747c():
 
 @deny_magic_methods
 def _e34b88041f64():
-    # Let notation.
+    # Call keywords.
 
     class Foo(Injector):
         pass
@@ -700,7 +700,7 @@ def _e34b88041f64():
     def eq(self, other):
         pass  # pragma: no cover
 
-    Foo.let(__eq__=eq)
+    Foo(__eq__=eq)
 
 
 attribute_error = CodeCollector()
@@ -730,20 +730,20 @@ def _c58b054bfcd0():
 
 @attribute_error
 def _f9c50c81e8c9():
-    # Let notation.
-    Foo = Injector.let()
+    # Call keywords.
+    Foo = Injector()
 
     Foo.test
 
 
 @attribute_error
 def _e2f16596a652():
-    # Let notation from subclass.
+    # Call keywords from subclass.
 
     class Foo(Injector):
         pass
 
-    Foo.let().test
+    Foo().test
 
 
 incomplete_dependencies = CodeCollector()
@@ -777,13 +777,13 @@ def _c4e7ecf75167():
 
 @incomplete_dependencies
 def _dmsMgYqbsHgB():
-    # Constructor argument with let notation.
+    # Constructor argument with call.
 
     class Bar:
         def __init__(self, test):
             pass  # pragma: no cover
 
-    Foo = Injector.let(bar=Bar)
+    Foo = Injector(bar=Bar)
 
     Foo.bar
 
@@ -811,8 +811,8 @@ def _gwufxYkhURAF():
 
 @has_attribute
 def _zlZoLka31ndk():
-    # Let notation.
-    return Injector.let(foo=1)
+    # Call keywords.
+    return Injector(foo=1)
 
 
 deny_varargs = CodeCollector()
@@ -844,8 +844,8 @@ def _dfe1c22c641e(Foo):
 
 @deny_varargs
 def _f7ef2aa82c18(Foo):
-    # Let notation.
-    Injector.let(foo=Foo, args=(1, 2, 3))
+    # Call keywords.
+    Injector(foo=Foo, args=(1, 2, 3))
 
 
 deny_kwargs = CodeCollector()
@@ -877,8 +877,8 @@ def _e281099be65d(Foo):
 
 @deny_kwargs
 def _bcf7c5881b2c(Foo):
-    # Let notation.
-    Injector.let(foo=Foo, kwargs={"start": 5})
+    # Call keywords.
+    Injector(foo=Foo, kwargs={"start": 5})
 
 
 deny_varargs_kwargs = CodeCollector()
@@ -911,8 +911,8 @@ def _efbf07f8deb6(Foo):
 
 @deny_varargs_kwargs
 def _c4362558f312(Foo):
-    # Let notation.
-    Injector.let(foo=Foo, args=(1, 2, 3), kwargs={"start": 5})
+    # Call keywords.
+    Injector(foo=Foo, args=(1, 2, 3), kwargs={"start": 5})
 
 
 cls_named_arguments = CodeCollector()
@@ -956,8 +956,8 @@ def _dad79637580d(Foo, Bar):
 
 @cls_named_arguments
 def _bccb4f621e70(Foo, Bar):
-    # Let notation.
-    Injector.let(bar=Bar)
+    # Call keywords.
+    Injector(bar=Bar)
 
 
 cls_named_defaults = CodeCollector()
@@ -988,5 +988,5 @@ def _a8cd70341d3d(Bar):
 
 @cls_named_defaults
 def _b859e98f2913(Bar):
-    # Let notation.
-    Injector.let(bar=Bar)
+    # Call keywords.
+    Injector(bar=Bar)
