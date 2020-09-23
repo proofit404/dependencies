@@ -1,16 +1,16 @@
-from _dependencies.func import _make_func_spec
+from _dependencies.func import _make_method_spec
 from _dependencies.markers import injectable
 
 
 def _make_init_spec(dependency):
 
     if _using_object_init(dependency):
-        return injectable, dependency, [], 0
+        return injectable, dependency, {}
     else:
         name = dependency.__name__ + "." + "__init__"
         owner_message = f"{dependency.__name__!r} class"
-        args, have_defaults = _make_func_spec(dependency.__init__, name, owner_message)
-        return injectable, dependency, args[1:], have_defaults
+        args = _make_method_spec(dependency.__init__, name, owner_message)
+        return injectable, dependency, args
 
 
 def _using_object_init(cls):

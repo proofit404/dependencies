@@ -32,7 +32,7 @@ this = This(())
 def _make_this_spec(dependency):
 
     _check_expression(dependency)
-    return markers.this, _ThisSpec(dependency), ["__self__"], 0
+    return markers.this, _ThisSpec(dependency), {"__self__": False}
 
 
 class _ThisSpec:

@@ -1,21 +1,20 @@
-import inspect
+from inspect import isclass
 
 from _dependencies.exceptions import DependencyError
 
 
-def _check_cls_arguments(argnames, defaults, owner_message):
+def _check_argument_default(argument, value, owner_message):
 
-    for argument, value in zip(reversed(argnames), reversed(defaults)):
-        expect_class = argument.endswith("_class")
-        is_class = inspect.isclass(value)
-        if expect_class and not is_class:
-            message = "{0!r} default value should be a class"
-            raise DependencyError(message.format(argument))
-        if not expect_class and is_class:
-            message = default_class_value_template.format(
-                owner_message=owner_message, argument=argument, value=value.__name__
-            )
-            raise DependencyError(message)
+    expect_class = argument.endswith("_class")
+    is_class = isclass(value)
+    if expect_class and not is_class:
+        message = "{0!r} default value should be a class"
+        raise DependencyError(message.format(argument))
+    if not expect_class and is_class:
+        message = default_class_value_template.format(
+            owner_message=owner_message, argument=argument, value=value.__name__
+        )
+        raise DependencyError(message)
 
 
 def _check_varargs(name, varargs, kwargs):

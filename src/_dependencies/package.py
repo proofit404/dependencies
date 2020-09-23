@@ -1,4 +1,4 @@
-import importlib
+from importlib import import_module
 
 from _dependencies.attributes import _Replace
 from _dependencies.markers import lazy_import
@@ -29,7 +29,7 @@ class Package:
 
 def _make_package_spec(dependency):
 
-    return lazy_import, _ImportSpec(dependency), [], 0
+    return lazy_import, _ImportSpec(dependency), {}
 
 
 class _ImportSpec:
@@ -41,14 +41,14 @@ class _ImportSpec:
     def __call__(self):
 
         module = self.__name__
-        result = importlib.import_module(module)
+        result = import_module(module)
         index = 0
 
         for attr in self.__attrs__:
             index += 1
             try:
                 module += "." + attr
-                result = importlib.import_module(module)
+                result = import_module(module)
             except ImportError:
                 result = getattr(result, attr)
                 break
