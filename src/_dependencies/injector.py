@@ -68,7 +68,7 @@ class _InjectorType(_InjectorTypeType):
                     )
                 raise DependencyError(message)
 
-            marker, attribute, args, have_defaults = spec
+            marker, attribute, args = spec
 
             if set(args).issubset(cached):
                 kwargs = {k: cache[k] for k in args if k in cache}
@@ -86,11 +86,11 @@ class _InjectorType(_InjectorTypeType):
                 have_default = False
                 continue
 
-            for n, arg in enumerate(args, 1):
+            for arg in args:
                 if arg not in cached:
                     attrs_stack.append(current_attr)
                     current_attr = arg
-                    have_default = False if n < have_defaults else True
+                    have_default = args[arg]
                     break
 
         return cache[attrname]

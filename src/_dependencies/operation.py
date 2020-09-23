@@ -1,4 +1,4 @@
-import functools
+from functools import partial
 
 from _dependencies.checks.operation import _check_class
 from _dependencies.checks.operation import _check_method
@@ -22,9 +22,9 @@ class Operation:
 def _make_operation_spec(dependency):
 
     function = dependency.__function__
-    args, have_defaults = _make_func_spec(function, function.__name__, "")
+    args = _make_func_spec(function, function.__name__, "")
     _check_method(args)
-    return injectable, _OperationSpec(function), args, have_defaults
+    return injectable, _OperationSpec(function), args
 
 
 class _OperationSpec:
@@ -34,7 +34,7 @@ class _OperationSpec:
 
     def __call__(self, **kwargs):
 
-        return functools.partial(self.func, **kwargs)
+        return partial(self.func, **kwargs)
 
     @property
     def __name__(self):

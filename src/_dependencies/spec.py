@@ -1,4 +1,4 @@
-import inspect
+from inspect import isclass
 
 from _dependencies.classes import _make_init_spec
 from _dependencies.nested import _make_nested_injector_spec
@@ -21,7 +21,7 @@ def _make_dependency_spec(name, dependency):
 
     if isinstance(dependency, _InjectorTypeType):
         return _make_nested_injector_spec(dependency)
-    elif inspect.isclass(dependency) and not name.endswith("_class"):
+    elif isclass(dependency) and not name.endswith("_class"):
         return _make_init_spec(dependency)
     elif isinstance(dependency, This):
         return _make_this_spec(dependency)
