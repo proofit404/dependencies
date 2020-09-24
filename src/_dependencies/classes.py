@@ -8,8 +8,8 @@ def _make_init_spec(dependency):
         return injectable, dependency, {}
     else:
         name = dependency.__name__ + "." + "__init__"
-        owner_message = f"{dependency.__name__!r} class"
-        args = _make_method_spec(dependency.__init__, name, owner_message)
+        owner = f"{dependency.__name__!r} class"
+        args = _make_method_spec(dependency.__init__, name, owner)
         return injectable, dependency, args
 
 
