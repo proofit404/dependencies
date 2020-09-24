@@ -181,10 +181,12 @@ def _btt8ue2wjjra():
 
 
 cls_named_arguments = CodeCollector()
+arguments_defs = CodeCollector("bar")
 
 
 @cls_named_arguments.parametrize
-def test_deny_classes_as_default_values(code):
+@arguments_defs.parametrize
+def test_deny_classes_as_default_values(code, bar):
     """Verify constructor default arguments against naming conventions.
 
     If argument name doesn't ends with `_class`, its default value can't be a class.
@@ -194,49 +196,86 @@ def test_deny_classes_as_default_values(code):
     class Foo:
         pass
 
-    class Bar:
-        def __init__(self, foo=Foo):
-            pass  # pragma: no cover
-
     with pytest.raises(DependencyError) as exc_info:
-        code(Foo, Bar)
+        code(bar(Foo))
 
     message = str(exc_info.value)
-    expected_message = """
+
+    expected_class = """
 'Bar' class has a default value of 'foo' argument set to 'Foo' class.
 
 You should either change the name of the argument into 'foo_class'
 or set the default value to an instance of that class.
 """.strip()
-    assert message == expected_message
+
+    expected_operation = """
+'func' operation has a default value of 'foo' argument set to 'Foo' class.
+
+You should either change the name of the argument into 'foo_class'
+or set the default value to an instance of that class.
+""".strip()
+
+    expected_value = """
+'func' value has a default value of 'foo' argument set to 'Foo' class.
+
+You should either change the name of the argument into 'foo_class'
+or set the default value to an instance of that class.
+""".strip()
+
+    assert message in {expected_class, expected_operation, expected_value}
 
 
 @cls_named_arguments
-def _dad79637580d(Foo, Bar):
+def _dad79637580d(Bar):
     class Container(Injector):
         bar = Bar
 
 
 @cls_named_arguments
-def _bccb4f621e70(Foo, Bar):
+def _bccb4f621e70(Bar):
     Injector(bar=Bar)
 
 
+@arguments_defs
+def _sxd25ppy5ypj(Foo):
+    class Bar:
+        def __init__(self, foo=Foo):
+            pass  # pragma: no cover
+
+    return Bar
+
+
+@arguments_defs
+def _ayjw79dr577x(Foo):
+    @operation
+    def func(foo=Foo):
+        pass  # pragma: no cover
+
+    return func
+
+
+@arguments_defs
+def _oafemes7wcku(Foo):
+    @value
+    def func(foo=Foo):
+        pass  # pragma: no cover
+
+    return func
+
+
 cls_named_defaults = CodeCollector()
+defaults_defs = CodeCollector("bar")
 
 
 @cls_named_defaults.parametrize
-def test_deny_non_classes_in_class_named_arguments(code):
+@defaults_defs.parametrize
+def test_deny_non_classes_in_class_named_arguments(code, bar):
     """If argument name ends with `_class`, it must have a class as it default value."""
-
-    class Bar:
-        def __init__(self, foo_class=1):
-            self.foo_class = foo_class
-
     with pytest.raises(DependencyError) as exc_info:
-        code(Bar)
+        code(bar())
 
     message = str(exc_info.value)
+
     assert message == "'foo_class' default value should be a class"
 
 
@@ -249,3 +288,30 @@ def _a8cd70341d3d(Bar):
 @cls_named_defaults
 def _b859e98f2913(Bar):
     Injector(bar=Bar)
+
+
+@defaults_defs
+def _x53iiy9oyx4i():
+    class Bar:
+        def __init__(self, foo_class=1):
+            pass  # pragma: no cover
+
+    return Bar
+
+
+@defaults_defs
+def _dwj3xheytfiz():
+    @operation
+    def func(foo_class=1):
+        pass  # pragma: no cover
+
+    return func
+
+
+@defaults_defs
+def _zkh2hnjhe149():
+    @value
+    def func(foo_class=1):
+        pass  # pragma: no cover
+
+    return func
