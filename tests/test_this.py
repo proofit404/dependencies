@@ -7,9 +7,6 @@ from dependencies.exceptions import DependencyError
 from helpers import CodeCollector
 
 
-# Declarative attribute access.
-
-
 def test_attribute_getter():
     """We can describe attribute access in the `Injector` in declarative manner."""
 
@@ -51,9 +48,6 @@ def test_attribute_getter_few_attributes():
     assert Container.foo == 1
 
 
-# Item access.
-
-
 item_access = CodeCollector()
 
 
@@ -66,8 +60,6 @@ def test_item_getter(code):
 
 @item_access
 def _ce642f492941():
-    # Get item with string key.
-
     class Container(Injector):
         foo = {"one": 1}
         one = this.foo["one"]
@@ -79,8 +71,6 @@ def _ce642f492941():
 
 @item_access
 def _ffa208dc1130():
-    # Get items as many times as we want.
-
     class Container(Injector):
         foo = {"one": {"two": 1}}
         two = this.foo["one"]["two"]
@@ -92,8 +82,6 @@ def _ffa208dc1130():
 
 @item_access
 def _e5c358190fef():
-    # Get item from the outer container.
-
     class Container(Injector):
         foo = {"bar": {"baz": 1}}
 
@@ -107,8 +95,6 @@ def _e5c358190fef():
 
 @item_access
 def _ab4cdbf60b2f():
-    # Get item from the outer container of any depth level.
-
     class Container(Injector):
         foo = {"bar": {"baz": 1}}
 
@@ -123,8 +109,6 @@ def _ab4cdbf60b2f():
 
 @item_access
 def _be332433b74d():
-    # Get items from list.
-
     class Container(Injector):
         foo = [1, 2, 3]
         bar = this.foo[0]
@@ -136,8 +120,6 @@ def _be332433b74d():
 
 @item_access
 def _fe150d5ebe93():
-    # Get items from dict with digit keys.
-
     class Container(Injector):
         foo = {2: 1}
         bar = this.foo[2]
@@ -149,8 +131,6 @@ def _fe150d5ebe93():
 
 @item_access
 def _dc4fedcd09d8():
-    # Get items from dict with tuple keys.
-
     class Container(Injector):
         foo = {("x", 1): 1}
         bar = this.foo[("x", 1)]
@@ -202,47 +182,6 @@ def test_attribute_access_after_item_getter():
     assert Container.baz == 1
 
 
-direct_proxy = CodeCollector()
-
-
-@direct_proxy.parametrize
-def test_deny_this_without_attribute_access(code):
-    """`this` object can't be used as a dependency directly."""
-    with pytest.raises(DependencyError) as exc_info:
-        code()
-
-    message = str(exc_info.value)
-    assert message == "You can not use 'this' directly in the 'Injector'"
-
-
-@direct_proxy
-def _b648b6f6a712():
-    # Declarative injector.
-
-    class Container(Injector):
-        foo = this
-
-
-@direct_proxy
-def _c147d398f4be():
-    # Declarative injector with parent access.
-
-    class Container(Injector):
-        foo = this << 1
-
-
-@direct_proxy
-def _a37783b6d1ad():
-    # Call keywords.
-    Injector(foo=this)
-
-
-@direct_proxy
-def _bd05271fb831():
-    # Call keywords with parent access.
-    Injector(foo=(this << 1))
-
-
 def test_this_deny_non_integers():
     """We can't shift `this` with non number argument."""
     with pytest.raises(ValueError, match=".*") as exc_info:
@@ -265,13 +204,11 @@ def test_this_deny_negative_integers(code):
 
 @negative_integers
 def _xsJWb2lx6EMs():
-    # Minus one.
     this << -1
 
 
 @negative_integers
 def _nvm3ybp98vGm():
-    # Zero.
     this << 0
 
 
@@ -296,8 +233,6 @@ def test_require_more_parents_that_injector_actually_has(code):
 
 @too_many
 def _s6lduD7BJpxW():
-    # Declarative Injector.
-
     class Container(Injector):
 
         foo = (this << 1).bar
@@ -307,8 +242,6 @@ def _s6lduD7BJpxW():
 
 @too_many
 def _bUICVObtDZ4I():
-    # Declarative Injected with nested layer.
-
     class Container(Injector):
         class SubContainer(Injector):
 
@@ -319,13 +252,11 @@ def _bUICVObtDZ4I():
 
 @too_many
 def _ww6xNI4YrNr6():
-    # Call keywords.
     Injector(foo=(this << 1).bar).foo
 
 
 @too_many
 def _rN3suiVzhqMM():
-    # Call keywords with nested layer.
     Injector(SubContainer=Injector(foo=(this << 2).bar)).SubContainer.foo
 
 
@@ -353,8 +284,6 @@ def test_attribute_error_on_parent_access(code):
 
 @attribute_error
 def _t1jn9RI9v42t():
-    # Declarative Injector.
-
     class Container(Injector):
 
         foo = this.bar
@@ -364,8 +293,6 @@ def _t1jn9RI9v42t():
 
 @attribute_error
 def _yOEj1qQfsXHy():
-    # Declarative Injected with nested layer.
-
     class Container(Injector):
         class SubContainer(Injector):
 
@@ -376,11 +303,9 @@ def _yOEj1qQfsXHy():
 
 @attribute_error
 def _vnmkIELBH3MN():
-    # Call keywords.
     Injector(foo=this.bar).foo
 
 
 @attribute_error
 def _pG9M52ZRQr2S():
-    # Call keywords with nested layer.
     Injector(SubContainer=Injector(foo=(this << 1).bar)).SubContainer.foo

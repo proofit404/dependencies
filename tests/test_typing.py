@@ -3,6 +3,7 @@ import pytest
 
 from dependencies import Injector
 
+
 typing = pytest.importorskip("typing")
 
 
