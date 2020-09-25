@@ -176,9 +176,6 @@ def test_license_year():
             assert year == current_year
 
 
-# Definition order.
-
-
 def test_tox_environments_are_ordered():
     """Tox environments definition should follow order of the envlist."""
     tox_ini = open("tox.ini").read()
@@ -253,9 +250,6 @@ def test_yamllint_ignored_patterns_are_ordered():
     assert ignore == sorted(ignore)
 
 
-# Additional dependencies.
-
-
 def test_poetry_avoid_additional_dependencies():
     """Python package should not have any of additional dependencies."""
     deps = list(pyproject_toml()["tool"]["poetry"]["dependencies"])
@@ -266,9 +260,6 @@ def test_pre_commit_hooks_avoid_additional_dependencies():
     """Additional dependencies of the pre-commit should not be used."""
     hooks = (hook for repo in pre_commit_yaml()["repos"] for hook in repo["hooks"])
     assert all("additional_dependencies" not in hook for hook in hooks)
-
-
-# Version pinning.
 
 
 def test_tox_deps_not_pinned():
@@ -288,13 +279,8 @@ def test_pre_commit_hooks_not_pinned():
     assert all(repo["rev"] == "master" for repo in pre_commit_yaml()["repos"])
 
 
-# Utils.
-
-
 class Settings:
     """Tox settings definition."""
-
-    # Types.
 
     class Text:
         """Text type."""
@@ -311,8 +297,6 @@ class Settings:
 
         is_text = False
 
-    # Settings.
-
     keys = [
         ("envlist", Text),
         ("isolated_build", Boolean),
@@ -325,8 +309,6 @@ class Settings:
         ("depends", Text),
         ("whitelist_externals", Text),
     ]
-
-    # Methods.
 
     def known(self):
         """Return a list of known tox settings."""
@@ -386,7 +368,6 @@ def tox_expand_names(string):
     ['doctest']
 
     """
-    # It's an incomplete implementation and works with current config only.
     if "{" not in string:
         yield string
     else:
@@ -438,9 +419,6 @@ def lines(value):
 def git_files():
     """List committed files."""
     return subprocess.check_output(["git", "ls-files"]).decode().splitlines()
-
-
-# Config files.
 
 
 def tox_ini():

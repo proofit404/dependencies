@@ -5,9 +5,6 @@ from dependencies import this
 from helpers import CodeCollector
 
 
-# Parent container access.
-
-
 parent_attr = CodeCollector()
 subcontainer = CodeCollector("sub")
 
@@ -22,8 +19,6 @@ def test_attribute_getter_parent_access(code, sub):
 
 @parent_attr
 def _ac7814095628(sub):
-    # Declarative injector.
-
     class Container(Injector):
         foo = 1
         SubContainer = sub
@@ -33,14 +28,11 @@ def _ac7814095628(sub):
 
 @parent_attr
 def _f607abc82079(sub):
-    # Call keywords.
     return Injector(foo=1, SubContainer=sub)
 
 
 @subcontainer
 def _iGphUpthTooT():
-    # Declarative injector.
-
     class SubContainer(Injector):
         bar = (this << 1).foo
 
@@ -49,19 +41,14 @@ def _iGphUpthTooT():
 
 @subcontainer
 def _nurKbeeqoNCn():
-    # Call keywords.
     return Injector(bar=(this << 1).foo)
 
 
 @subcontainer
 def _hHytjZxQjNPQ():
-    # Package link.
     pkg = Package("pkg")
 
     return pkg.injected.SubContainer
-
-
-# Few parent container access.
 
 
 few_parent_attr = CodeCollector()
@@ -80,8 +67,6 @@ def test_attribute_getter_few_parents(code, middle, lowest):
 
 @few_parent_attr
 def _e477afc961b6(middle):
-    # Declarative injector.
-
     class Container(Injector):
         foo = 1
         SubContainer = middle
@@ -91,14 +76,11 @@ def _e477afc961b6(middle):
 
 @few_parent_attr
 def _c4ed4c61e154(middle):
-    # Call keywords.
     return Injector(foo=1, SubContainer=middle)
 
 
 @middle_container
 def _hjVHyztckQNe(lowest):
-    # Declarative injector.
-
     class SubContainer(Injector):
         SubSubContainer = lowest
 
@@ -107,14 +89,11 @@ def _hjVHyztckQNe(lowest):
 
 @middle_container
 def _gYijGKMqAbZN(lowest):
-    # Call keywords.
     return Injector(SubSubContainer=lowest)
 
 
 @lowest_container
 def _pDqnxaJFVRcS():
-    # Declarative injector.
-
     class SubSubContainer(Injector):
         bar = (this << 2).foo
 
@@ -123,19 +102,14 @@ def _pDqnxaJFVRcS():
 
 @lowest_container
 def _heSHjuBBFVLp():
-    # Call keywords.
     return Injector(bar=(this << 2).foo)
 
 
 @lowest_container
 def _mVVyoyBmvQwc():
-    # Package link.
     pkg = Package("pkg")
 
     return pkg.injected.SubSubContainer
-
-
-# Reusable nested containers.
 
 
 def test_one_subcontainer_multiple_parents():

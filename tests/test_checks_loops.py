@@ -8,9 +8,6 @@ from dependencies.exceptions import DependencyError
 from helpers import CodeCollector
 
 
-# Flat injector.
-
-
 flat_injector = CodeCollector()
 
 
@@ -32,8 +29,6 @@ def test_circle_links(code):
 
 @flat_injector
 def _kSSnnkw6CNPx():
-    # Declarative injector.  Link to self.
-
     class Container(Injector):
         foo = this.foo
 
@@ -42,14 +37,11 @@ def _kSSnnkw6CNPx():
 
 @flat_injector
 def _n8NHZqiZN43Q():
-    # Call keywords.  Link to self.
     Injector(foo=this.foo).foo
 
 
 @flat_injector
 def _ai0hNOPGX2PI():
-    # Declarative injector.  Complex loop.
-
     class Container(Injector):
         foo = this.bar
         bar = this.foo
@@ -59,14 +51,11 @@ def _ai0hNOPGX2PI():
 
 @flat_injector
 def _ySnRrxW6M79T():
-    # Call keywords.  Complex loop.
     Injector(foo=this.bar, bar=this.foo).foo
 
 
 @flat_injector
 def _yfTnHHhvBmrQ():
-    # Declarative injector.  Long loop.
-
     class Container(Injector):
         foo = this.bar
         bar = this.baz
@@ -77,11 +66,7 @@ def _yfTnHHhvBmrQ():
 
 @flat_injector
 def _ydZEbpRNlHEO():
-    # Call keywords.  Long loop.
     Injector(foo=this.bar, bar=this.baz, baz=this.foo).foo
-
-
-# One level nesting.
 
 
 one_level = CodeCollector()
@@ -105,8 +90,6 @@ def test_circle_links_one_level(code, sub):
 
 @one_level
 def _eaK6IxW88SNh(sub):
-    # Declarative injector.
-
     class Container(Injector):
         foo = this.SubContainer.bar
         SubContainer = sub
@@ -116,14 +99,11 @@ def _eaK6IxW88SNh(sub):
 
 @one_level
 def _nWhKtJb16yg6(sub):
-    # Call keywords.
     Injector(foo=this.SubContainer.bar, SubContainer=sub).foo
 
 
 @subcontainer
 def _jijKOYgyZHNz():
-    # Declarative injector.
-
     class SubContainer(Injector):
         bar = (this << 1).foo
 
@@ -132,19 +112,14 @@ def _jijKOYgyZHNz():
 
 @subcontainer
 def _nFibPCOxGsrX():
-    # Call keywords.
     return Injector(bar=(this << 1).foo)
 
 
 @subcontainer
 def _utUTZLLngouR():
-    # Package link.
     pkg = Package("pkg")
 
     return pkg.injected.SubContainer
-
-
-# Two level nesting with complex loop.
 
 
 complex_two_levels = CodeCollector()
@@ -176,8 +151,6 @@ def test_circle_links_two_level_complex_loop(code, middle, lowest):
 
 @complex_two_levels
 def _mF4akoHlg84C(middle):
-    # Declarative injector.
-
     class Container(Injector):
         foo = this.SubContainer.SubSubContainer.bar
         SubContainer = middle
@@ -187,14 +160,11 @@ def _mF4akoHlg84C(middle):
 
 @complex_two_levels
 def _bCw8LPUeVK6J(middle):
-    # Call keywords.
     Injector(foo=this.SubContainer.SubSubContainer.bar, SubContainer=middle).foo
 
 
 @complex_middle_container
 def _yPFeGKPGXPIY(lowest):
-    # Declarative injector.
-
     class SubContainer(Injector):
         SubSubContainer = lowest
 
@@ -203,14 +173,11 @@ def _yPFeGKPGXPIY(lowest):
 
 @complex_middle_container
 def _uIRpkBWARVOQ(lowest):
-    # Call keywords.
     return Injector(SubSubContainer=lowest)
 
 
 @complex_lowest_container
 def _bJmCQECfcIzZ():
-    # Declarative injector.
-
     class SubSubContainer(Injector):
         bar = (this << 2).foo
 
@@ -219,19 +186,14 @@ def _bJmCQECfcIzZ():
 
 @complex_lowest_container
 def _qzYMsyvxYFLe():
-    # Call keywords.
     return Injector(bar=(this << 2).foo)
 
 
 @complex_lowest_container
 def _epoadTufdhne():
-    # Package link.
     pkg = Package("pkg")
 
     return pkg.injected.SubSubContainer
-
-
-# Two level nesting with long loop.
 
 
 long_two_levels = CodeCollector()
@@ -265,8 +227,6 @@ def test_circle_links_two_level_long_loop(code, middle, lowest):
 
 @long_two_levels
 def _eHyErh9kExHG(middle):
-    # Declarative injector.
-
     class Container(Injector):
         foo = this.SubContainer.baz
         SubContainer = middle
@@ -276,14 +236,11 @@ def _eHyErh9kExHG(middle):
 
 @long_two_levels
 def _q0KytyVbE2XA(middle):
-    # Call keywords.
     Injector(foo=this.SubContainer.baz, SubContainer=middle).foo
 
 
 @long_middle_container
 def _mwcbtGunjMac(lowest):
-    # Declarative injector.
-
     class SubContainer(Injector):
         baz = this.SubSubContainer.bar
         SubSubContainer = lowest
@@ -293,14 +250,11 @@ def _mwcbtGunjMac(lowest):
 
 @long_middle_container
 def _aVJRixHNhChV(lowest):
-    # Call keywords.
     return Injector(baz=this.SubSubContainer.bar, SubSubContainer=lowest)
 
 
 @long_lowest_container
 def _qRcNcKzedWaI():
-    # Declarative injector.
-
     class SubSubContainer(Injector):
         bar = (this << 2).foo
 
@@ -309,19 +263,14 @@ def _qRcNcKzedWaI():
 
 @long_lowest_container
 def _fiktpicgZWNS():
-    # Call keywords.
     return Injector(bar=(this << 2).foo)
 
 
 @long_lowest_container
 def _uugFwsWbfgXg():
-    # Package link.
     pkg = Package("pkg")
 
     return pkg.injected.SubSubContainer
-
-
-# Cross injector loops.
 
 
 cross_injector_loops = CodeCollector()
@@ -354,8 +303,6 @@ def test_cross_injector_loops(code, sub1, sub2):
 
 @cross_injector_loops
 def _vAyZepNGAUjY(sub1, sub2):
-    # Declarative injector.
-
     class Container(Injector):
         SubContainer1 = sub1
         SubContainer2 = sub2
@@ -365,14 +312,11 @@ def _vAyZepNGAUjY(sub1, sub2):
 
 @cross_injector_loops
 def _bLRoCCj9uNOp(sub1, sub2):
-    # Call keywords.  Cross injector links.
     Injector(SubContainer1=sub1, SubContainer2=sub2).SubContainer1.bar
 
 
 @subcontainer1
 def _eiVzvYStvpNL():
-    # Declarative injector.
-
     class SubContainer1(Injector):
         bar = (this << 1).SubContainer2.baz
 
@@ -381,13 +325,11 @@ def _eiVzvYStvpNL():
 
 @subcontainer1
 def _elifFWSpshiv():
-    # Call keywords.
     return Injector(bar=(this << 1).SubContainer2.baz)
 
 
 @subcontainer1
 def _yavnvOrgKYNS():
-    # Package link.
     pkg = Package("pkg")
 
     return pkg.injected.SubContainer1
@@ -395,8 +337,6 @@ def _yavnvOrgKYNS():
 
 @subcontainer2
 def _fFuLltxguVgC():
-    # Declarative injector.
-
     class SubContainer2(Injector):
         baz = (this << 1).SubContainer1.bar
 
@@ -405,19 +345,14 @@ def _fFuLltxguVgC():
 
 @subcontainer2
 def _rRsNsCaBSxke():
-    # Call keywords.
     return Injector(baz=(this << 1).SubContainer1.bar)
 
 
 @subcontainer2
 def _xVeDBvAxsNYP():
-    # Package link.
     pkg = Package("pkg")
 
     return pkg.injected.SubContainer2
-
-
-# Loops created with item access.
 
 
 items = CodeCollector()
@@ -437,8 +372,6 @@ def test_item_access_loops(code):
 
 @items.xfail
 def _oClqGRmWJAkA():
-    # Declarative injector.
-
     class Container(Injector):
         class SubContainer(Injector):
 
@@ -451,7 +384,6 @@ def _oClqGRmWJAkA():
 
 @items.xfail
 def _t41yMywZuPhA():
-    # Call keywords.
     SubContainer = Injector(foo=(this << 1).bar["sub"].foo)
     Injector(SubContainer=SubContainer, bar={"sub": SubContainer}).SubContainer.foo
 

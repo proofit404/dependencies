@@ -272,9 +272,6 @@ def test_injectable_with_parent_without_init():
     assert Baz.bar.add() == 3
 
 
-# Call keywords.
-
-
 def test_call():
     """`Injector` subclass can produce its own subclasses with call."""
 
@@ -314,9 +311,6 @@ def test_call_on_injector_directly():
             self.baz = baz
 
     assert Injector(foo=Foo, bar=Bar, baz=1).foo.bar.baz == 1
-
-
-# Dir.
 
 
 def test_show_common_class_attributes_with_dir():
@@ -391,8 +385,6 @@ def test_deny_injector_changes(code):
 
 @attribute_assignment
 def _mvT9oyJdXhzh():
-    # Attribute assignment.
-
     class Container(Injector):
         pass
 
@@ -401,21 +393,17 @@ def _mvT9oyJdXhzh():
 
 @attribute_assignment
 def _fXxRX4KFUc8q():
-    # Direct assignmet to the `Injector`.
     Injector.foo = 1
 
 
 @attribute_assignment
 def _pHfF0rbEjCsV():
-    # Call keywords.
     Container = Injector()
     Container.foo = 1
 
 
 @attribute_assignment
 def _xhZaIhujf34t():
-    # Delete attribute.
-
     class Container(Injector):
         foo = 1
 
@@ -424,18 +412,13 @@ def _xhZaIhujf34t():
 
 @attribute_assignment
 def _jShuBfttg97c():
-    # Delete attribute from call.
     Container = Injector(foo=1)
     del Container.foo
 
 
 @attribute_assignment
 def _tQeRzD5ZsyTm():
-    # Delete attribute from `Injector` directly.
     del Injector.foo
-
-
-# Nested injectors.
 
 
 def test_nested_injectors():
@@ -467,9 +450,6 @@ def test_nested_injectors():
         do = Call
 
     assert Baz.do(1, 2, 3) == 9
-
-
-# Docstrings.
 
 
 def test_docstrings():
@@ -530,14 +510,12 @@ def test_evaluate_dependencies_once(code):
 
 @evaluate_classes
 def _ea4367450e47(Container):
-    # Each dependency evaluated once during injection.
     x = Container.a
     assert x.b.d is x.c.d
 
 
 @evaluate_classes
 def _dd91602f3455(Container):
-    # We reevaluate each dependency for different injections.
     assert Container.a.b.d is not Container.a.b.d
     assert Container.a.b.d is not Container.a.c.d
 
@@ -574,8 +552,6 @@ def test_multiple_inheritance(code):
 
 @multiple_inheritance
 def _edf946cc6077(Foo, FooContainer, BarContainer, BazContainer):
-    # Inheritance.
-
     class Container(FooContainer, BarContainer, BazContainer):
         pass
 
@@ -584,7 +560,6 @@ def _edf946cc6077(Foo, FooContainer, BarContainer, BazContainer):
 
 @multiple_inheritance
 def _efdc426cd096(Foo, FooContainer, BarContainer, BazContainer):
-    # Inplace creation.
     assert isinstance((FooContainer & BarContainer & BazContainer).baz.bar.foo, Foo)
 
 
@@ -614,8 +589,6 @@ def test_multiple_inheritance_injectors_order(code):
 
 @inheritance_order
 def _aa10c7747a1f(Container1, Container2, Container3):
-    # Inheritance.
-
     class Foo(Container1, Container2, Container3):
         pass
 
@@ -624,8 +597,6 @@ def _aa10c7747a1f(Container1, Container2, Container3):
 
 @inheritance_order
 def _e056e22f3fd5(Container1, Container2, Container3):
-    # Inheritance with own attributes.
-
     class Foo(Container1, Container2, Container3):
         x = 4
 
@@ -634,73 +605,7 @@ def _e056e22f3fd5(Container1, Container2, Container3):
 
 @inheritance_order
 def _d851e0414bdf(Container1, Container2, Container3):
-    # Inplace creation.
     assert (Container1 & Container2 & Container3).x == 1
-
-
-subclasses_only = CodeCollector()
-
-
-@subclasses_only.parametrize
-def test_multiple_inheritance_deny_regular_classes(code):
-    """Only `Injector` subclasses are allowed to be used in the inheritance."""
-
-    class Foo:
-        pass
-
-    with pytest.raises(DependencyError) as exc_info:
-        code(Foo)
-
-    message = str(exc_info.value)
-    assert message == "Multiple inheritance is allowed for Injector subclasses only"
-
-
-@subclasses_only
-def _f1583394f1a6(Foo):
-    # Inheritance.
-
-    class Bar(Injector, Foo):
-        pass
-
-
-@subclasses_only
-def _b51814725d07(Foo):
-    # Inplace creation.
-    Injector & Foo
-
-
-deny_magic_methods = CodeCollector()
-
-
-@deny_magic_methods.parametrize
-def test_deny_magic_methods_injection(code):
-    """`Injector` doesn't accept magic methods."""
-    with pytest.raises(DependencyError) as exc_info:
-        code()
-
-    assert str(exc_info.value) == "Magic methods are not allowed"
-
-
-@deny_magic_methods
-def _e78bf771747c():
-    # Declarative injector.
-
-    class Bar(Injector):
-        def __eq__(self, other):
-            pass  # pragma: no cover
-
-
-@deny_magic_methods
-def _e34b88041f64():
-    # Call keywords.
-
-    class Foo(Injector):
-        pass
-
-    def eq(self, other):
-        pass  # pragma: no cover
-
-    Foo(__eq__=eq)
 
 
 attribute_error = CodeCollector()
@@ -720,8 +625,6 @@ def test_attribute_error(code):
 
 @attribute_error
 def _c58b054bfcd0():
-    # Declarative injector.
-
     class Foo(Injector):
         pass
 
@@ -730,7 +633,6 @@ def _c58b054bfcd0():
 
 @attribute_error
 def _f9c50c81e8c9():
-    # Call keywords.
     Foo = Injector()
 
     Foo.test
@@ -738,8 +640,6 @@ def _f9c50c81e8c9():
 
 @attribute_error
 def _e2f16596a652():
-    # Call keywords from subclass.
-
     class Foo(Injector):
         pass
 
@@ -763,8 +663,6 @@ def test_incomplete_dependencies_error(code):
 
 @incomplete_dependencies
 def _c4e7ecf75167():
-    # Keyword arguments in the constructor.
-
     class Bar:
         def __init__(self, test, two=2):
             pass  # pragma: no cover
@@ -777,8 +675,6 @@ def _c4e7ecf75167():
 
 @incomplete_dependencies
 def _dmsMgYqbsHgB():
-    # Constructor argument with call.
-
     class Bar:
         def __init__(self, test):
             pass  # pragma: no cover
@@ -801,8 +697,6 @@ def test_has_attribute(code):
 
 @has_attribute
 def _gwufxYkhURAF():
-    # Declarative injector.
-
     class Container(Injector):
         foo = 1
 
@@ -811,182 +705,4 @@ def _gwufxYkhURAF():
 
 @has_attribute
 def _zlZoLka31ndk():
-    # Call keywords.
     return Injector(foo=1)
-
-
-deny_varargs = CodeCollector()
-
-
-@deny_varargs.parametrize
-def test_deny_arbitrary_argument_list(code):
-    """Raise `DependencyError` if constructor have *args argument."""
-
-    class Foo:
-        def __init__(self, *args):
-            pass  # pragma: no cover
-
-    with pytest.raises(DependencyError) as exc_info:
-        code(Foo)
-
-    message = str(exc_info.value)
-    assert message == "Foo.__init__ have arbitrary argument list"
-
-
-@deny_varargs
-def _dfe1c22c641e(Foo):
-    # Declarative injector.
-
-    class Summator(Injector):
-        foo = Foo
-        args = (1, 2, 3)
-
-
-@deny_varargs
-def _f7ef2aa82c18(Foo):
-    # Call keywords.
-    Injector(foo=Foo, args=(1, 2, 3))
-
-
-deny_kwargs = CodeCollector()
-
-
-@deny_kwargs.parametrize
-def test_deny_arbitrary_keyword_arguments(code):
-    """Raise `DependencyError` if constructor have **kwargs argument."""
-
-    class Foo:
-        def __init__(self, **kwargs):
-            pass  # pragma: no cover
-
-    with pytest.raises(DependencyError) as exc_info:
-        code(Foo)
-
-    message = str(exc_info.value)
-    assert message == "Foo.__init__ have arbitrary keyword arguments"
-
-
-@deny_kwargs
-def _e281099be65d(Foo):
-    # Declarative injector.
-
-    class Summator(Injector):
-        foo = Foo
-        kwargs = {"start": 5}
-
-
-@deny_kwargs
-def _bcf7c5881b2c(Foo):
-    # Call keywords.
-    Injector(foo=Foo, kwargs={"start": 5})
-
-
-deny_varargs_kwargs = CodeCollector()
-
-
-@deny_varargs_kwargs.parametrize
-def test_deny_arbitrary_positional_and_keyword_arguments_together(code):
-    """Raise `DependencyError` if constructor have *args and **kwargs argument."""
-
-    class Foo:
-        def __init__(self, *args, **kwargs):
-            pass  # pragma: no cover
-
-    with pytest.raises(DependencyError) as exc_info:
-        code(Foo)
-
-    message = str(exc_info.value)
-    assert message == "Foo.__init__ have arbitrary argument list and keyword arguments"
-
-
-@deny_varargs_kwargs
-def _efbf07f8deb6(Foo):
-    # Declarative injector.
-
-    class Summator(Injector):
-        foo = Foo
-        args = (1, 2, 3)
-        kwargs = {"start": 5}
-
-
-@deny_varargs_kwargs
-def _c4362558f312(Foo):
-    # Call keywords.
-    Injector(foo=Foo, args=(1, 2, 3), kwargs={"start": 5})
-
-
-cls_named_arguments = CodeCollector()
-
-
-@cls_named_arguments.parametrize
-def test_deny_classes_as_default_values(code):
-    """Verify constructor default arguments against naming conventions.
-
-    If argument name doesn't ends with `_class`, its default value can't be a class.
-
-    """
-
-    class Foo:
-        pass
-
-    class Bar:
-        def __init__(self, foo=Foo):
-            pass  # pragma: no cover
-
-    with pytest.raises(DependencyError) as exc_info:
-        code(Foo, Bar)
-
-    message = str(exc_info.value)
-    expected_message = """
-'Bar' class has a default value of 'foo' argument set to 'Foo' class.
-
-You should either change the name of the argument into 'foo_class'
-or set the default value to an instance of that class.
-""".strip()
-    assert message == expected_message
-
-
-@cls_named_arguments
-def _dad79637580d(Foo, Bar):
-    # Declarative injector.
-
-    class Container(Injector):
-        bar = Bar
-
-
-@cls_named_arguments
-def _bccb4f621e70(Foo, Bar):
-    # Call keywords.
-    Injector(bar=Bar)
-
-
-cls_named_defaults = CodeCollector()
-
-
-@cls_named_defaults.parametrize
-def test_deny_non_classes_in_class_named_arguments(code):
-    """If argument name ends with `_class`, it must have a class as it default value."""
-
-    class Bar:
-        def __init__(self, foo_class=1):
-            self.foo_class = foo_class
-
-    with pytest.raises(DependencyError) as exc_info:
-        code(Bar)
-
-    message = str(exc_info.value)
-    assert message == "'foo_class' default value should be a class"
-
-
-@cls_named_defaults
-def _a8cd70341d3d(Bar):
-    # Declarative injector.
-
-    class Container(Injector):
-        bar = Bar
-
-
-@cls_named_defaults
-def _b859e98f2913(Bar):
-    # Call keywords.
-    Injector(bar=Bar)
