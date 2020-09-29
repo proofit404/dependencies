@@ -31,15 +31,6 @@ class CodeCollector:
         self._add(args)
         return f
 
-    def xfail(self, *args):
-        """Mark function as a test parameter with expected failure."""
-        assert self._is_complete(args)
-        f = args[-1]
-        self._validate(f)
-        self._remember(f)
-        self._add(pytest.param(args, marks=pytest.mark.xfail))
-        return f
-
     def _is_complete(self, args):
         return len(self.names) == len(args)
 

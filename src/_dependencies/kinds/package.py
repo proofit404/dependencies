@@ -1,7 +1,8 @@
 from importlib import import_module
 
-from _dependencies.attributes import _Replace
-from _dependencies.markers import lazy_import
+from _dependencies.kinds.attributes import _Attributes
+from _dependencies.replace import _Replace
+from _dependencies.spec import _Spec
 
 
 class Package:
@@ -16,30 +17,29 @@ class Package:
     """
 
     def __init__(self, name):
-
         self.__name__ = name
         self.__attrs__ = ()
 
     def __getattr__(self, attrname):
-
         result = Package(self.__name__)
         result.__attrs__ = self.__attrs__ + (attrname,)
         return result
 
 
-def _make_package_spec(dependency):
+def _is_package(name, dependency):
+    return isinstance(dependency, Package)
 
-    return lazy_import, _ImportSpec(dependency), {}, set(), set()
+
+def _build_package_spec(name, dependency):
+    return _Spec(_ImportFactory(dependency), {}, set(), set())
 
 
-class _ImportSpec:
+class _ImportFactory:
     def __init__(self, dependency):
-
         self.__name__ = dependency.__name__
         self.__attrs__ = dependency.__attrs__
 
     def __call__(self):
-
         module = self.__name__
         result = import_module(module)
         index = 0
@@ -52,5 +52,4 @@ class _ImportSpec:
             except ImportError:
                 result = getattr(result, attr)
                 break
-
-        raise _Replace(result, self.__attrs__[index:])
+        raise _Replace(_Attributes(result, self.__attrs__[index:]))

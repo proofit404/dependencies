@@ -2,7 +2,6 @@ from _dependencies.exceptions import DependencyError
 
 
 def _check_expression(dependency):
-
     if not any(
         symbol
         for kind, symbol in dependency.__expression__

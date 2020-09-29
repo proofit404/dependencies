@@ -4,7 +4,17 @@ from _dependencies.checks.func import _check_argument_default
 from _dependencies.checks.func import _check_varargs
 
 
-def _make_callable_spec(func, funcname, owner):
+def _function_args(func, funcname, owner):
+    arguments = _args(func, funcname, owner)
+    return _separate(arguments)
+
+
+def _method_args(func, funcname, owner):
+    arguments = _args(func, funcname, owner)
+    return _separate(arguments[1:])
+
+
+def _args(func, funcname, owner):
     args = []
     varargs = kwargs = None
     for name, param in signature(func).parameters.items():
@@ -20,7 +30,7 @@ def _make_callable_spec(func, funcname, owner):
     return args
 
 
-def _split_argument_spec(arguments):
+def _separate(arguments):
     args = {}
     required = set()
     optional = set()
@@ -29,13 +39,3 @@ def _split_argument_spec(arguments):
         target = optional if have_default else required
         target.add(name)
     return args, required, optional
-
-
-def _make_func_spec(func, funcname, owner):
-    arguments = _make_callable_spec(func, funcname, owner)
-    return _split_argument_spec(arguments)
-
-
-def _make_method_spec(func, funcname, owner):
-    arguments = _make_callable_spec(func, funcname, owner)
-    return _split_argument_spec(arguments[1:])

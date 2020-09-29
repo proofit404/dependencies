@@ -125,7 +125,7 @@ def test_redefine_dependency():
 
     class Summator(Injector):
         foo = Foo
-        add = lambda x, y: x + y  # noqa: E731
+        add = lambda x, y: x + y  # noqa: E731  # pragma: no cover
 
     class WrongSummator(Summator):
         add = lambda x, y: x - y  # noqa: E731
@@ -600,7 +600,7 @@ def _irfiju659gxv():
 def _ibVipQjYw41T():
     @operation
     def a(b, c):
-        pass
+        pass  # pragma: no cover
 
     return a
 
@@ -627,7 +627,7 @@ def _n9K1km2utmbt():
 def _pGfVZxOasrJc():
     @operation
     def b(d):
-        pass
+        pass  # pragma: no cover
 
     return b
 
@@ -654,7 +654,7 @@ def _k6pJn1sVihhd():
 def _mfOvey7viBCe():
     @operation
     def c(d):
-        pass
+        pass  # pragma: no cover
 
     return c
 
