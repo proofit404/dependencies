@@ -90,7 +90,7 @@ That's why descriptor found in the injection scope will be treated as an error.
 ...     attribute = Descriptor()
 Traceback (most recent call last):
   ...
-_dependencies.exceptions.DependencyError: 'Container.attribute' contains descriptor.
+_dependencies.exceptions.DependencyError: Attribute 'attribute' contains descriptor.
 <BLANKLINE>
 Descriptors usage will be confusing inside Injector subclasses.
 <BLANKLINE>
@@ -105,7 +105,7 @@ Use @value decorator instead, if you really need inject descriptor instance some
 ...         return 1
 Traceback (most recent call last):
   ...
-_dependencies.exceptions.DependencyError: 'Container.attribute' contains descriptor.
+_dependencies.exceptions.DependencyError: Attribute 'attribute' contains descriptor.
 <BLANKLINE>
 Descriptors usage will be confusing inside Injector subclasses.
 <BLANKLINE>

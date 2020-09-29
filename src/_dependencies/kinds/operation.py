@@ -2,8 +2,8 @@ from functools import partial
 
 from _dependencies.checks.operation import _check_class
 from _dependencies.checks.operation import _check_method
-from _dependencies.func import _make_func_spec
-from _dependencies.markers import injectable
+from _dependencies.injectable import _function_args
+from _dependencies.spec import _Spec
 
 
 class Operation:
@@ -14,31 +14,26 @@ class Operation:
     """
 
     def __init__(self, function):
-
         _check_class(function)
         self.__function__ = function
 
 
-def _make_operation_spec(dependency):
+def _is_operation(name, dependency):
+    return isinstance(dependency, Operation)
 
+
+def _build_operation_spec(name, dependency):
     function = dependency.__function__
     name = function.__name__
     owner = f"{name!r} operation"
-    args, required, optional = _make_func_spec(function, name, owner)
+    args, required, optional = _function_args(function, name, owner)
     _check_method(args)
-    return injectable, _OperationSpec(function), args, required, optional
+    return _Spec(_OperationFactory(function), args, required, optional)
 
 
-class _OperationSpec:
+class _OperationFactory:
     def __init__(self, func):
-
         self.func = func
 
     def __call__(self, **kwargs):
-
         return partial(self.func, **kwargs)
-
-    @property
-    def __name__(self):
-
-        return self.func.__name__

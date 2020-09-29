@@ -4,7 +4,6 @@ from _dependencies.exceptions import DependencyError
 
 
 def _check_argument_default(argument, value, owner):
-
     expect_class = argument.endswith("_class")
     is_class = isclass(value)
     if expect_class and not is_class:
@@ -18,7 +17,6 @@ def _check_argument_default(argument, value, owner):
 
 
 def _check_varargs(name, varargs, kwargs):
-
     if varargs and kwargs:
         message = "{0} have arbitrary argument list and keyword arguments"
         raise DependencyError(message.format(name))
