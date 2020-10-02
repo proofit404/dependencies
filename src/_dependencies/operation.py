@@ -24,9 +24,9 @@ def _make_operation_spec(dependency):
     function = dependency.__function__
     name = function.__name__
     owner = f"{name!r} operation"
-    args = _make_func_spec(function, name, owner)
+    args, required, optional = _make_func_spec(function, name, owner)
     _check_method(args)
-    return injectable, _OperationSpec(function), args
+    return injectable, _OperationSpec(function), args, required, optional
 
 
 class _OperationSpec:

@@ -5,12 +5,12 @@ from _dependencies.markers import injectable
 def _make_init_spec(dependency):
 
     if _using_object_init(dependency):
-        return injectable, dependency, {}
+        return injectable, dependency, {}, set(), set()
     else:
         name = dependency.__name__ + "." + "__init__"
         owner = f"{dependency.__name__!r} class"
-        args = _make_method_spec(dependency.__init__, name, owner)
-        return injectable, dependency, args
+        args, required, optional = _make_method_spec(dependency.__init__, name, owner)
+        return injectable, dependency, args, required, optional
 
 
 def _using_object_init(cls):
