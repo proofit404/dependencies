@@ -1,3 +1,5 @@
+from collections import deque
+
 from _dependencies.attributes import _Replace
 from _dependencies.checks.circles import _check_circles
 from _dependencies.checks.injector import _check_dunder_name
@@ -44,56 +46,43 @@ class _InjectorType(_InjectorTypeType):
     def __getattr__(cls, attrname):
         __tracebackhide__ = True
 
-        cache, cached = {"__self__": cls}, {"__self__"}
-        current_attr, attrs_stack = attrname, [attrname]
-        have_default = False
+        state = _State(cls, attrname)
 
-        while attrname not in cache:
+        while attrname not in state.cache:
 
-            spec = cls.__dependencies__.get(current_attr)
+            spec = cls.__dependencies__.get(state.current)
 
             if spec is None:
-                if have_default:
-                    cached.add(current_attr)
-                    current_attr = attrs_stack.pop()
-                    have_default = False
+                if state.have_default:
+                    state.pop()
                     continue
-                if len(attrs_stack) > 1:
+                if state.full():
                     message = "{!r} can not resolve attribute {!r} while building {!r}".format(  # noqa: E501
-                        cls.__name__, current_attr, attrs_stack.pop()
+                        cls.__name__, state.current, state.stack.pop()[0]
                     )
                 else:
                     message = "{!r} can not resolve attribute {!r}".format(
-                        cls.__name__, current_attr
+                        cls.__name__, state.current
                     )
                 raise DependencyError(message)
 
             marker, attribute, args = spec
 
-            if set(args).issubset(cached):
-                kwargs = {k: cache[k] for k in args if k in cache}
-
+            if state.resolved(args):
                 try:
-                    cache[current_attr] = attribute(**kwargs)
+                    state.store(attribute(**state.kwargs(args)))
                 except _Replace as replace:
-                    _deep_replace_dependency(cls, current_attr, replace)
+                    _deep_replace_dependency(cls, state.current, replace)
                     _check_loops(cls.__name__, cls.__dependencies__)
                     _check_circles(cls.__dependencies__)
-                    continue
-
-                cached.add(current_attr)
-                current_attr = attrs_stack.pop()
-                have_default = False
                 continue
 
-            for arg in args:
-                if arg not in cached:
-                    attrs_stack.append(current_attr)
-                    current_attr = arg
-                    have_default = args[arg]
+            for arg, default in args.items():
+                if state.should(arg, default):
+                    state.add(arg, default)
                     break
 
-        return cache[attrname]
+        return state.cache[attrname]
 
     def __setattr__(cls, attrname, value):
 
@@ -118,6 +107,45 @@ class _InjectorType(_InjectorTypeType):
         dependencies = set(cls.__dependencies__) - {"__parent__"}
         attributes = sorted(parent | current | dependencies)
         return attributes
+
+
+class _State:
+    def __init__(self, injector, attrname):
+        self.cache = {"__self__": injector}
+        self.tried = set()
+        self.stack = deque()
+        self.current = attrname
+        self.have_default = False
+
+    def add(self, current, have_default):
+        self.stack.append((self.current, self.have_default))
+        self.current = current
+        self.have_default = have_default
+
+    def pop(self):
+        self.tried.add(self.current)
+        try:
+            self.current, self.have_default = self.stack.pop()
+        except IndexError:
+            pass
+
+    def store(self, value):
+        self.cache[self.current] = value
+        self.pop()
+
+    def resolved(self, args):
+        has_required = {k for k, v in args.items() if not v} <= self.cache.keys()
+        tried_defaults = {k for k, v in args.items() if v} <= self.tried
+        return has_required and tried_defaults
+
+    def kwargs(self, args):
+        return {k: self.cache[k] for k in args if k in self.cache}
+
+    def should(self, arg, have_default):
+        return arg not in self.tried or (arg not in self.cache and not have_default)
+
+    def full(self):
+        return len(self.stack) > 0
 
 
 class Injector(metaclass=_InjectorType):
