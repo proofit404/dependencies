@@ -1,20 +1,21 @@
 # [4.0.0](https://github.com/proofit404/dependencies/compare/3.0.0...4.0.0) (2020-10-01)
 
-
 ### Bug Fixes
 
-* correct default argument error message [#239](https://github.com/proofit404/dependencies/issues/239) ([1d7c436](https://github.com/proofit404/dependencies/commit/1d7c4364749609fb87399f6e5ddee099e8885824))
-
+- correct default argument error message
+  [#239](https://github.com/proofit404/dependencies/issues/239)
+  ([1d7c436](https://github.com/proofit404/dependencies/commit/1d7c4364749609fb87399f6e5ddee099e8885824))
 
 ### Features
 
-* replace let attribute with call [#315](https://github.com/proofit404/dependencies/issues/315) ([1c84ea9](https://github.com/proofit404/dependencies/commit/1c84ea96ed3bef1b7f57b219a743b98a3837e9ca))
-
+- replace let attribute with call
+  [#315](https://github.com/proofit404/dependencies/issues/315)
+  ([1c84ea9](https://github.com/proofit404/dependencies/commit/1c84ea96ed3bef1b7f57b219a743b98a3837e9ca))
 
 ### BREAKING CHANGES
 
-* `let` attribute was removed.  Use `Injector()`
-instead of obsolete `Injector.let()`.
+- `let` attribute was removed. Use `Injector()` instead of obsolete
+  `Injector.let()`.
 
 # [3.0.0](https://github.com/proofit404/dependencies/compare/2.0.1...3.0.0) (2020-08-30)
 
