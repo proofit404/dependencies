@@ -203,6 +203,36 @@ def test_preserve_missed_keyword_argument_in_the_middle():
     assert Container.foo.do() == 7
 
 
+def test_no_reuse_default_value_between_dependencies():
+    """Deny to reuse default value of keyword argument in another dependency.
+
+    Default argument of one dependency should not affect an argument of another
+    dependency with the same name.
+
+    """
+
+    class Foo:
+        def __init__(self, bar, x, y):
+            pass
+
+    class Bar:
+        def __init__(self, x, y=1):
+            pass
+
+    class Container(Injector):
+        foo = Foo
+        bar = Bar
+        x = 1
+
+    with pytest.raises(DependencyError) as exc_info:
+        Container.foo
+
+    assert (
+        str(exc_info.value)
+        == "'Container' can not resolve attribute 'y' while building 'foo'"
+    )
+
+
 def test_class_named_argument_default_value():
     """Allow classes as default argument values if argument name ends with `_class`."""
 
