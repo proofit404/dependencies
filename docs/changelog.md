@@ -1,3 +1,10 @@
+## [4.0.1](https://github.com/proofit404/dependencies/compare/4.0.0...4.0.1) (2020-10-02)
+
+
+### Bug Fixes
+
+* handle shadowed default arguments [#240](https://github.com/proofit404/dependencies/issues/240) ([04f795f](https://github.com/proofit404/dependencies/commit/04f795f1cbb3d4820d2ce0ea58f2aed93610e0e3))
+
 # [4.0.0](https://github.com/proofit404/dependencies/compare/3.0.0...4.0.0) (2020-10-01)
 
 ### Bug Fixes
