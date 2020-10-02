@@ -67,5 +67,5 @@ def _nested_dependencies(parent, spec):
 
     result = {}
     result.update(spec[1].__dependencies__)
-    result.update({"__parent__": (injectable, parent, [], 0)})
+    result.update({"__parent__": (injectable, parent, {}, set(), set())})
     return result

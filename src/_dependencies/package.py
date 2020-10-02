@@ -29,7 +29,7 @@ class Package:
 
 def _make_package_spec(dependency):
 
-    return lazy_import, _ImportSpec(dependency), {}
+    return lazy_import, _ImportSpec(dependency), {}, set(), set()
 
 
 class _ImportSpec:

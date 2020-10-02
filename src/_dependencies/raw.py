@@ -3,7 +3,7 @@ from _dependencies.markers import injectable
 
 def _make_raw_spec(dependency):
 
-    return injectable, _RawSpec(dependency), {}
+    return injectable, _RawSpec(dependency), {}, set(), set()
 
 
 class _RawSpec:

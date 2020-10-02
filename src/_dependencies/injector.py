@@ -66,9 +66,9 @@ class _InjectorType(_InjectorTypeType):
                     )
                 raise DependencyError(message)
 
-            marker, attribute, args = spec
+            marker, attribute, args, required, optional = spec
 
-            if state.resolved(args):
+            if state.resolved(required, optional):
                 try:
                     state.store(attribute(**state.kwargs(args)))
                 except _Replace as replace:
@@ -133,10 +133,10 @@ class _State:
         self.cache[self.current] = value
         self.pop()
 
-    def resolved(self, args):
-        has_required = {k for k, v in args.items() if not v} <= self.cache.keys()
-        tried_defaults = {k for k, v in args.items() if v} <= self.tried
-        return has_required and tried_defaults
+    def resolved(self, required, optional):
+        has_required = required <= self.cache.keys()
+        tried_optional = optional <= self.tried
+        return has_required and tried_optional
 
     def kwargs(self, args):
         return {k: self.cache[k] for k in args if k in self.cache}

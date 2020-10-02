@@ -24,6 +24,6 @@ def _make_value_spec(dependency):
     function = dependency.__function__
     name = function.__name__
     owner = f"{name!r} value"
-    args = _make_func_spec(function, name, owner)
+    args, required, optional = _make_func_spec(function, name, owner)
     _check_method(args)
-    return injectable, function, args
+    return injectable, function, args, required, optional

@@ -20,11 +20,22 @@ def _make_callable_spec(func, funcname, owner):
     return args
 
 
+def _split_argument_spec(arguments):
+    args = {}
+    required = set()
+    optional = set()
+    for name, have_default in arguments:
+        args[name] = have_default
+        target = optional if have_default else required
+        target.add(name)
+    return args, required, optional
+
+
 def _make_func_spec(func, funcname, owner):
-    args = _make_callable_spec(func, funcname, owner)
-    return dict(args)
+    arguments = _make_callable_spec(func, funcname, owner)
+    return _split_argument_spec(arguments)
 
 
 def _make_method_spec(func, funcname, owner):
-    args = _make_callable_spec(func, funcname, owner)
-    return dict(args[1:])
+    arguments = _make_callable_spec(func, funcname, owner)
+    return _split_argument_spec(arguments[1:])
