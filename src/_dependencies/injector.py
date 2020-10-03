@@ -2,6 +2,7 @@ from collections import deque
 
 from _dependencies.attributes import _Replace
 from _dependencies.checks.circles import _check_circles
+from _dependencies.checks.injector import _check_descriptor
 from _dependencies.checks.injector import _check_dunder_name
 from _dependencies.checks.injector import _check_extension_scope
 from _dependencies.checks.injector import _check_inheritance
@@ -29,12 +30,12 @@ class _InjectorType(_InjectorTypeType):
             except KeyError:
                 pass
         _check_extension_scope(bases, namespace)
-        for name in namespace:
-            _check_dunder_name(name)
         dependencies = {}
         for base in reversed(bases):
             dependencies.update(base.__dependencies__)
         for name, dep in namespace.items():
+            _check_dunder_name(name)
+            _check_descriptor(class_name, name, dep)
             dependencies[name] = _make_dependency_spec(name, dep)
         _check_loops(class_name, dependencies)
         _check_circles(dependencies)
@@ -74,6 +75,7 @@ class _InjectorType(_InjectorTypeType):
                 try:
                     state.store(attribute(**state.kwargs(args)))
                 except _Replace as replace:
+                    _check_descriptor(cls.__name__, state.current, replace.dependency)
                     _deep_replace_dependency(cls, state.current, replace)
                     _check_loops(cls.__name__, cls.__dependencies__)
                     _check_circles(cls.__dependencies__)
