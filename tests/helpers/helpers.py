@@ -45,10 +45,9 @@ class CodeCollector:
     def _validate(self, f):
         _validate_function(f)
         _validate_uniqueness(f, self.seen)
-        function_name = f.__name__
-        _validate_length(function_name)
-        _validate_prefix(function_name)
-        _validate_tail(function_name)
+        _validate_length(f)
+        _validate_prefix(f)
+        _validate_tail(f)
         _validate_assert_statement(f)
 
     def _remember(self, f):
@@ -88,37 +87,45 @@ def _validate_function(function):
 
 def _validate_uniqueness(function, seen):
     if function.__name__ in seen:  # pragma: no cover
-        raise Exception(f"{function.__name__} was already collected")
+        suggested = _suggest()
+        message = repeated_template.format(
+            function_name=function.__name__, suggested=suggested
+        )
+        raise Exception(message)
 
 
-def _validate_length(name):
-    if len(name) != 13:  # pragma: no cover
-        raise Exception(f"{name} should be 13 characters long")
+def _validate_length(function):
+    if len(function.__name__) != 13:  # pragma: no cover
+        suggested = _suggest()
+        message = wrong_length_template.format(
+            function_name=function.__name__, suggested=suggested
+        )
+        raise Exception(message)
 
 
-def _validate_prefix(name):
-    if not name.startswith("_"):  # pragma: no cover
-        raise Exception(f"{name} should be a private function")
+def _validate_prefix(function):
+    if not function.__name__.startswith("_"):  # pragma: no cover
+        suggested = _suggest()
+        message = wrong_prefix_template.format(
+            function_name=function.__name__, suggested=suggested
+        )
+        raise Exception(message)
 
 
-def _validate_tail(name):
-    for char in name[1:]:
+def _validate_tail(function):
+    for char in function.__name__[1:]:
         if char not in string.ascii_letters + string.digits:  # pragma: no cover
             suggested = _suggest()
             message = wrong_name_template.format(
-                function_name=name, suggested=suggested
+                function_name=function.__name__, suggested=suggested
             )
             raise Exception(message)
 
 
 def _suggest():  # pragma: no cover
-    return (
-        "_"
-        + random.choice(string.ascii_lowercase)
-        + "".join(
-            random.choice(string.ascii_letters + string.digits) for _ in range(11)
-        )
-    )
+    head = random.choice(string.ascii_lowercase)
+    tail = (random.choice(string.ascii_letters + string.digits) for _ in range(11))
+    return "_" + head + "".join(tail)
 
 
 def _validate_assert_statement(function):
@@ -129,6 +136,27 @@ def _validate_assert_statement(function):
 
 
 # Messages.
+
+
+repeated_template = """
+{function_name} was already collected.
+
+How about {suggested!r}
+""".strip()
+
+
+wrong_length_template = """
+{function_name} should be 13 characters long.
+
+How about {suggested!r}
+""".strip()
+
+
+wrong_prefix_template = """
+{function_name} should be a private function.
+
+How about {suggested!r}
+""".strip()
 
 
 wrong_name_template = """
