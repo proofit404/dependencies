@@ -37,6 +37,9 @@ jobs:
             junit_family=xunit2 -o junit_log_passing_tests=true
           TOX_PARALLEL_NO_SPINNER: 1
         displayName: Run Tox.
+      - script: .tox/mutmut/bin/mutmut junitxml > junit-mutmut.xml
+        condition: always()
+        displayName: Generate mutmut report.
       - task: PublishTestResults@2
         condition: always()
         inputs:
@@ -45,13 +48,13 @@ jobs:
         displayName: Publish test results.
       - script: .tox/coverage/bin/coverage xml
         condition: always()
-        displayName: Generate coverage.xml data.
+        displayName: Generate coverage report.
       - task: PublishCodeCoverageResults@1
         condition: always()
         inputs:
           codeCoverageTool: cobertura
           summaryFileLocation: coverage.xml
-        displayName: Publish coverage.xml data.
+        displayName: Publish coverage report.
       - script: |
           npm install --no-save --no-package-lock danger typescript
         condition: eq(variables['Build.Reason'], 'PullRequest')
