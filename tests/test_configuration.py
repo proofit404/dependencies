@@ -2,6 +2,7 @@
 import collections
 import configparser
 import datetime
+import itertools
 import re
 import subprocess
 import textwrap
@@ -88,28 +89,6 @@ def test_coverage_include_all_packages():
     assert coverage_sources == sorted(packages) + sorted(helpers) + ["tests"]
 
 
-def test_coverage_paths_include_tox_environments():
-    """Coverage files should be merged together."""
-    coverage_environments = [
-        env
-        for env, commands in tox_config_values("commands")
-        if "coverage run" in commands
-    ]
-    tox_paths = [
-        ".tox/{name}/lib/{python}/site-packages".format(
-            name=e,
-            python=tox_ini()["testenv:" + e]["basepython"]
-            if "testenv:" + e in tox_ini()
-            else re.sub(
-                r"py(?P<major>\d)(?P<minor>\d)", r"python\g<major>.\g<minor>", e
-            ),
-        )
-        for e in coverage_environments
-    ]
-    coverage_paths = lines(coveragerc()["paths"]["source"])
-    assert coverage_paths == tox_paths
-
-
 def test_coverage_environment_runs_at_the_end():
     """Coverage report runs after all environments collecting coverage."""
     coverage_depends = [
@@ -150,11 +129,12 @@ def test_ini_files_indentation():
 
 def test_ini_files_boolean_case():
     """INI files should have boolean values written in lowercase."""
-    for ini_file in [tox_ini, coveragerc, flake8, importlinter, pytest_ini]:
-        for section in ini_file().values():
-            for value in section.values():
-                if value.lower() in {"true", "false"}:
-                    assert value == value.lower()
+    ini_files = [tox_ini, coveragerc, flake8, importlinter, pytest_ini]
+    sections = itertools.chain.from_iterable(ini().values() for ini in ini_files)
+    values = itertools.chain.from_iterable(section.values() for section in sections)
+    for value in values:
+        if value.lower() in {"true", "false"}:
+            assert value == value.lower()
 
 
 def test_lock_files_not_committed():
@@ -304,6 +284,7 @@ class Settings:
         ("isolated_build", Boolean),
         ("basepython", String),
         ("skip_install", Boolean),
+        ("ignore_outcome", Boolean),
         ("install_command", String),
         ("setenv", Text),
         ("deps", Text),

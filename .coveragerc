@@ -12,7 +12,5 @@ source =
 
 [paths]
 source =
-  .tox/py36/lib/python3.6/site-packages
-  .tox/py37/lib/python3.7/site-packages
-  .tox/py38/lib/python3.8/site-packages
-  .tox/doctest/lib/python3.8/site-packages
+  src
+  .tox/*/site-packages
