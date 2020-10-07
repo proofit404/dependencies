@@ -13,7 +13,8 @@ module.exports = {
     [
       "@semantic-release/exec",
       {
-        prepareCmd: "poetry version ${nextRelease.version} && poetry build",
+        prepareCmd:
+          "tox -e prettier -- --write && poetry version ${nextRelease.version} && poetry build",
         publishCmd: "poetry publish",
       },
     ],
