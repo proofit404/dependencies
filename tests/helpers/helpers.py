@@ -1,4 +1,7 @@
+import functools
+import inspect
 import random
+import re
 import string
 
 import pytest
@@ -7,39 +10,85 @@ import pytest
 class CodeCollector:
     """Dedicated decorator to use functions as Py.Test function parameters."""
 
-    def __init__(self, name="code"):
-        self.name = name
+    seen = set()
+
+    def __init__(self, *names):
+        self.names = names or ("code",)
         self.collected = []
 
     def parametrize(self, test_func):
         """Parametrize decorated test function with collected functions."""
-        return pytest.mark.parametrize(self.name, iter(self.collected))(test_func)
+        return pytest.mark.parametrize(self.names, _Iterable(self.collected))(test_func)
 
-    def __call__(self, f):
+    def __call__(self, *args):
         """Mark decorated function as a test parameter."""
+        if not self._is_complete(args):
+            return functools.partial(self.__call__, *args)
+        f = args[-1]
         self._validate(f)
-        return self._add(f)
+        self._remember(f)
+        self._add(args)
+        return f
 
-    def xfail(self, f):
+    def xfail(self, *args):
         """Mark function as a test parameter with expected failure."""
+        assert self._is_complete(args)
+        f = args[-1]
         self._validate(f)
-        return self._add(pytest.param(f, marks=pytest.mark.xfail))
+        self._remember(f)
+        self._add(pytest.param(args, marks=pytest.mark.xfail))
+        return f
+
+    def _is_complete(self, args):
+        return len(self.names) == len(args)
 
     def _validate(self, f):
+        _validate_function(f)
+        _validate_uniqueness(f, self.seen)
         function_name = f.__name__
-        _validate_uniqueness(function_name, self.collected)
         _validate_length(function_name)
         _validate_prefix(function_name)
         _validate_tail(function_name)
+        _validate_assert_statement(f)
+
+    def _remember(self, f):
+        self.seen.add(f.__name__)
 
     def _add(self, arg):
         self.collected.append(arg)
-        return arg
 
 
-def _validate_uniqueness(name, collection):
-    if name in collection:  # pragma: no cover
-        raise Exception(f"{name} was already collected")
+class _Iterable:
+    def __init__(self, data):
+        self.data = data
+
+    def __iter__(self):
+        return _Iterator(self.data)
+
+
+class _Iterator:
+    def __init__(self, data):
+        self.data = data
+        self.state = iter(data)
+
+    def __next__(self):
+        _validate_collected(self.data)
+        return next(self.state)
+
+
+def _validate_collected(collected):
+    if not collected:  # pragma: no cover
+        raise Exception("No functions was collected")
+
+
+def _validate_function(function):
+    if not callable(function):  # pragma: no cover
+        raise Exception("Last argument should be a function")
+
+
+def _validate_uniqueness(function, seen):
+    if function.__name__ in seen:  # pragma: no cover
+        raise Exception(f"{function.__name__} was already collected")
 
 
 def _validate_length(name):
@@ -72,6 +121,13 @@ def _suggest():  # pragma: no cover
     )
 
 
+def _validate_assert_statement(function):
+    source = inspect.getsource(function)
+    if re.search(r"\bassert\b", source):  # pragma: no cover
+        message = assert_found_template.format(function_name=function.__name__)
+        raise Exception(message)
+
+
 # Messages.
 
 
@@ -79,4 +135,11 @@ wrong_name_template = """
 {function_name} should a have random name.
 
 How about {suggested!r}
+""".strip()
+
+
+assert_found_template = """
+{function_name} contains assert statement.
+
+All assert statements should be placed in the parametrized test.
 """.strip()
