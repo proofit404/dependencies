@@ -11,7 +11,7 @@
       
       
       <link rel="shortcut icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-6.0.1">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-6.0.2">
     
     
       
@@ -209,7 +209,7 @@
 
 
   <li class="md-nav__item">
-    <a href=".." title="Home" class="md-nav__link">
+    <a href=".." class="md-nav__link">
       Home
     </a>
   </li>
@@ -221,7 +221,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../installation/" title="Installation" class="md-nav__link">
+    <a href="../installation/" class="md-nav__link">
       Installation
     </a>
   </li>
@@ -233,7 +233,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../changelog/" title="Changelog" class="md-nav__link">
+    <a href="../changelog/" class="md-nav__link">
       Changelog
     </a>
   </li>
@@ -273,7 +273,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../why/" title="Why" class="md-nav__link">
+    <a href="../why/" class="md-nav__link">
       Why
     </a>
   </li>
@@ -285,7 +285,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../usage/" title="Usage" class="md-nav__link">
+    <a href="../usage/" class="md-nav__link">
       Usage
     </a>
   </li>
@@ -297,7 +297,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../this/" title="This" class="md-nav__link">
+    <a href="../this/" class="md-nav__link">
       This
     </a>
   </li>
@@ -322,7 +322,7 @@
         <span class="md-nav__icon md-icon"></span>
       </label>
     
-    <a href="./" title="Package" class="md-nav__link md-nav__link--active">
+    <a href="./" class="md-nav__link md-nav__link--active">
       Package
     </a>
     
@@ -366,7 +366,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../operation/" title="Operation" class="md-nav__link">
+    <a href="../operation/" class="md-nav__link">
       Operation
     </a>
   </li>
@@ -378,7 +378,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../value/" title="Value" class="md-nav__link">
+    <a href="../value/" class="md-nav__link">
       Value
     </a>
   </li>
@@ -390,7 +390,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../faq/" title="FAQ" class="md-nav__link">
+    <a href="../faq/" class="md-nav__link">
       FAQ
     </a>
   </li>
@@ -428,7 +428,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../attrs/" title="Attrs" class="md-nav__link">
+    <a href="../attrs/" class="md-nav__link">
       Attrs
     </a>
   </li>
@@ -497,7 +497,6 @@ class defined in the module, any attribute of the class which was defined in
 this module.</p>
 <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dependencies</span> <span class="kn">import</span> <span class="n">Injector</span><span class="p">,</span> <span class="n">Package</span>
 </code></pre></div>
-
 <h2 id="attributes">Attributes<a class="headerlink" href="#attributes" title="Permanent link">&para;</a></h2>
 <p>A usual use case for the <code>Package</code> object is to replace havy import statements
 with attribute access.</p>
@@ -510,13 +509,11 @@ your injectors.</p>
 <span class="gp">... </span>    <span class="n">persist_user</span> <span class="o">=</span> <span class="n">create_user</span>
 <span class="gp">... </span>    <span class="c1"># A lot of assignment statements here...</span>
 </code></pre></div>
-
 <p>To save some typing I tend to write this code like this</p>
 <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Container</span><span class="p">(</span><span class="n">Injector</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="kn">from</span> <span class="nn">app.repositories</span> <span class="kn">import</span> <span class="n">create_user</span> <span class="k">as</span> <span class="n">persist_user</span>
 <span class="gp">... </span>    <span class="c1"># A lot of import statements here...</span>
 </code></pre></div>
-
 <p><code>Package</code> can help to deal with this inconsistency</p>
 <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">app</span> <span class="o">=</span> <span class="n">Package</span><span class="p">(</span><span class="s2">&quot;app&quot;</span><span class="p">)</span>
 
@@ -524,7 +521,6 @@ your injectors.</p>
 <span class="gp">... </span>    <span class="n">persist_user</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">repositories</span><span class="o">.</span><span class="n">create_user</span>
 <span class="gp">... </span>    <span class="c1"># A lot of assignment statements here...</span>
 </code></pre></div>
-
 <p>If a lot of dependencies defined in the repositories module, you can set
 <code>Package</code> source to the repositories module itself.</p>
 <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">repositories</span> <span class="o">=</span> <span class="n">Package</span><span class="p">(</span><span class="s2">&quot;app.repositories&quot;</span><span class="p">)</span>
@@ -533,7 +529,6 @@ your injectors.</p>
 <span class="gp">... </span>    <span class="n">persist_user</span> <span class="o">=</span> <span class="n">repositories</span><span class="o">.</span><span class="n">create_user</span>
 <span class="gp">... </span>    <span class="c1"># A lot of assignment statements here...</span>
 </code></pre></div>
-
 <h2 id="classes">Classes<a class="headerlink" href="#classes" title="Permanent link">&para;</a></h2>
 <p>If an attribute of the <code>Package</code> object point to the attribute of the class
 defined in some module, this class will be instantiated before attribute access
@@ -560,7 +555,6 @@ is actually happen. You can inject bound methods with exactly one line.</p>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">Container</span><span class="o">.</span><span class="n">foo</span><span class="p">()</span> <span class="o">==</span> <span class="mi">3</span>
 </code></pre></div>
-
 <p>The injector definition above is equivalent to the longuer version:</p>
 <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dependencies</span> <span class="kn">import</span> <span class="n">this</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">app.calc</span> <span class="kn">import</span> <span class="n">Calc</span>
@@ -573,9 +567,7 @@ is actually happen. You can inject bound methods with exactly one line.</p>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">Container</span><span class="o">.</span><span class="n">foo</span><span class="p">()</span> <span class="o">==</span> <span class="mi">3</span>
 </code></pre></div>
-
 <p align="center">&mdash; ⭐️ &mdash;</p>
-
 <p align="center"><i>The dependencies library is part of the SOLID python family.</i></p>
                 
               
@@ -595,7 +587,7 @@ is actually happen. You can inject bound methods with exactly one line.</p>
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
         
-          <a href="../this/" title="This" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../this/" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-footer-nav__button md-icon">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
             </div>
@@ -610,7 +602,7 @@ is actually happen. You can inject bound methods with exactly one line.</p>
           </a>
         
         
-          <a href="../operation/" title="Operation" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../operation/" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-footer-nav__title">
               <div class="md-ellipsis">
                 <span class="md-footer-nav__direction">
@@ -644,7 +636,7 @@ is actually happen. You can inject bound methods with exactly one line.</p>
     </div>
     
       <script src="../assets/javascripts/vendor.77e55a48.min.js"></script>
-      <script src="../assets/javascripts/bundle.aa3f9871.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
+      <script src="../assets/javascripts/bundle.9554a270.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
       
       <script>
         app = initialize({

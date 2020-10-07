@@ -11,7 +11,7 @@
       
       
       <link rel="shortcut icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-6.0.1">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-6.0.2">
     
     
       
@@ -209,7 +209,7 @@
 
 
   <li class="md-nav__item">
-    <a href=".." title="Home" class="md-nav__link">
+    <a href=".." class="md-nav__link">
       Home
     </a>
   </li>
@@ -221,7 +221,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../installation/" title="Installation" class="md-nav__link">
+    <a href="../installation/" class="md-nav__link">
       Installation
     </a>
   </li>
@@ -233,7 +233,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../changelog/" title="Changelog" class="md-nav__link">
+    <a href="../changelog/" class="md-nav__link">
       Changelog
     </a>
   </li>
@@ -273,7 +273,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../why/" title="Why" class="md-nav__link">
+    <a href="../why/" class="md-nav__link">
       Why
     </a>
   </li>
@@ -298,7 +298,7 @@
         <span class="md-nav__icon md-icon"></span>
       </label>
     
-    <a href="./" title="Usage" class="md-nav__link md-nav__link--active">
+    <a href="./" class="md-nav__link md-nav__link--active">
       Usage
     </a>
     
@@ -396,7 +396,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../this/" title="This" class="md-nav__link">
+    <a href="../this/" class="md-nav__link">
       This
     </a>
   </li>
@@ -408,7 +408,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../package/" title="Package" class="md-nav__link">
+    <a href="../package/" class="md-nav__link">
       Package
     </a>
   </li>
@@ -420,7 +420,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../operation/" title="Operation" class="md-nav__link">
+    <a href="../operation/" class="md-nav__link">
       Operation
     </a>
   </li>
@@ -432,7 +432,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../value/" title="Value" class="md-nav__link">
+    <a href="../value/" class="md-nav__link">
       Value
     </a>
   </li>
@@ -444,7 +444,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../faq/" title="FAQ" class="md-nav__link">
+    <a href="../faq/" class="md-nav__link">
       FAQ
     </a>
   </li>
@@ -482,7 +482,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../attrs/" title="Attrs" class="md-nav__link">
+    <a href="../attrs/" class="md-nav__link">
       Attrs
     </a>
   </li>
@@ -628,7 +628,6 @@ dependencies. Also, let's add some behavior to your robot.</p>
 <span class="gp">... </span>            <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">y</span> <span class="o">&gt;</span> <span class="n">max_point</span><span class="p">:</span>
 <span class="gp">... </span>                <span class="bp">self</span><span class="o">.</span><span class="n">servo</span><span class="o">.</span><span class="n">reverse</span><span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
 </code></pre></div>
-
 <p>We use constructor-based dependency injection here: we define necessary
 arguments and store them explicitly, for the sake of readability. This will help
 us to understand the execution path of your system. Attributes sourced from
@@ -645,7 +644,6 @@ nowhere in your code aren't fun. Believe me.</p>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">production</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;max_point&#39;</span><span class="p">:</span> <span class="mf">0.01</span><span class="p">}</span>
 </code></pre></div>
-
 <p>We are close to scream "It's alive!" and, if we're lucky enough, run out of the
 building.</p>
 <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dependencies</span> <span class="kn">import</span> <span class="n">Injector</span>
@@ -660,7 +658,6 @@ building.</p>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">robot</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 </code></pre></div>
-
 <p>Congratulations! We've built our robot with dependency injection.</p>
 <h2 id="injection-rules">Injection rules<a class="headerlink" href="#injection-rules" title="Permanent link">&para;</a></h2>
 <p><code>Container</code> above is a dependency scope, and dependencies are defined as its
@@ -709,7 +706,6 @@ attributes. When you access one of those attributes, the following happens:</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Scope</span><span class="o">.</span><span class="n">foo</span><span class="o">.</span><span class="n">two</span><span class="o">.</span><span class="n">x</span>
 <span class="go">1</span>
 </code></pre></div>
-
 <p>Let's roll down what is happening here:</p>
 <ul>
 <li><code>Foo</code> class requires an argument named <code>two</code>;</li>
@@ -762,7 +758,6 @@ injection process; another attribute access means a new object.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Container</span><span class="o">.</span><span class="n">bar</span><span class="o">.</span><span class="n">x</span> <span class="ow">is</span> <span class="n">Container</span><span class="o">.</span><span class="n">bar</span><span class="o">.</span><span class="n">x</span>
 <span class="go">False</span>
 </code></pre></div>
-
 <h3 id="nested-injectors">Nested <code>Injectors</code><a class="headerlink" href="#nested-injectors" title="Permanent link">&para;</a></h3>
 <p>It is possible to inject <code>Injector</code> itself. <code>Injector</code> subclasses are provided
 as is, and calculate their attributes on first use.</p>
@@ -812,7 +807,6 @@ as is, and calculate their attributes on first use.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Container</span><span class="o">.</span><span class="n">foo</span><span class="o">.</span><span class="n">bar</span><span class="o">.</span><span class="n">baz</span><span class="o">.</span><span class="n">func</span><span class="p">()</span>
 <span class="go">1</span>
 </code></pre></div>
-
 <h2 id="scope-extension">Scope extension<a class="headerlink" href="#scope-extension" title="Permanent link">&para;</a></h2>
 <p>You can define a dependency scope partially and then extend it; only in
 injection moment, meaning at the time of attribute access, you are required to
@@ -837,7 +831,6 @@ subclass:</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ChildScope</span><span class="o">.</span><span class="n">foo</span>  <span class="c1"># doctest: +ELLIPSIS</span>
 <span class="go">&lt;__main__.Foo object at 0x...&gt;</span>
 </code></pre></div>
-
 <p>Multiple inheritance is allowed as well.</p>
 <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Scope1</span><span class="p">(</span><span class="n">Injector</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="n">foo</span> <span class="o">=</span> <span class="n">Foo</span>
@@ -851,7 +844,6 @@ subclass:</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ChildScope</span><span class="o">.</span><span class="n">foo</span>  <span class="c1"># doctest: +ELLIPSIS</span>
 <span class="go">&lt;__main__.Foo object at 0x...&gt;</span>
 </code></pre></div>
-
 <p>We also provide <code>and</code> notation for in-place <code>Injector</code> composition. Example
 below is full equivalent to the previous one, but without intermediate class
 needed.</p>
@@ -864,7 +856,6 @@ needed.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="p">(</span><span class="n">Scope1</span> <span class="o">&amp;</span> <span class="n">Scope2</span><span class="p">)</span><span class="o">.</span><span class="n">foo</span>  <span class="c1"># doctest: +ELLIPSIS</span>
 <span class="go">&lt;__main__.Foo object at 0x...&gt;</span>
 </code></pre></div>
-
 <h3 id="call">Call<a class="headerlink" href="#call" title="Permanent link">&para;</a></h3>
 <p>You can temporary redefine a dependency for only one case. This is extremely
 useful for tests. Inject an assertion instead of one or more dependencies, and
@@ -877,13 +868,11 @@ possible to simulate database integrity error on concurrent access.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Scope</span><span class="p">(</span><span class="n">bar</span><span class="o">=</span><span class="n">Baz</span><span class="p">)</span><span class="o">.</span><span class="n">foo</span>  <span class="c1"># doctest: +ELLIPSIS</span>
 <span class="go">&lt;__main__.Foo object at 0x...&gt;</span>
 </code></pre></div>
-
 <p>It is possible to build dependency scopes directly from dictionaries using call.</p>
 <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">settings</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;host&#39;</span><span class="p">:</span> <span class="s1">&#39;localhost&#39;</span><span class="p">,</span> <span class="s1">&#39;port&#39;</span><span class="p">:</span> <span class="mi">1234</span><span class="p">}</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Scope</span> <span class="o">=</span> <span class="n">Injector</span><span class="p">(</span><span class="n">foo</span><span class="o">=</span><span class="n">Foo</span><span class="p">,</span> <span class="n">bar</span><span class="o">=</span><span class="n">Bar</span><span class="p">,</span> <span class="o">**</span><span class="n">settings</span><span class="p">)</span>
 </code></pre></div>
-
 <h2 id="hasattr-alternative"><code>hasattr</code> alternative<a class="headerlink" href="#hasattr-alternative" title="Permanent link">&para;</a></h2>
 <p><code>hasattr</code> works by attribute access, so it triggers dependency injection. If
 this is unnecessary side effect, <code>dependencies</code> provides alternative way.</p>
@@ -893,9 +882,7 @@ this is unnecessary side effect, <code>dependencies</code> provides alternative 
 <span class="gp">&gt;&gt;&gt; </span><span class="s1">&#39;foo&#39;</span> <span class="ow">in</span> <span class="n">Container</span>
 <span class="go">True</span>
 </code></pre></div>
-
 <p align="center">&mdash; ⭐️ &mdash;</p>
-
 <p align="center"><i>The dependencies library is part of the SOLID python family.</i></p>
                 
               
@@ -915,7 +902,7 @@ this is unnecessary side effect, <code>dependencies</code> provides alternative 
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
         
-          <a href="../why/" title="Why" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../why/" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-footer-nav__button md-icon">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
             </div>
@@ -930,7 +917,7 @@ this is unnecessary side effect, <code>dependencies</code> provides alternative 
           </a>
         
         
-          <a href="../this/" title="This" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../this/" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-footer-nav__title">
               <div class="md-ellipsis">
                 <span class="md-footer-nav__direction">
@@ -964,7 +951,7 @@ this is unnecessary side effect, <code>dependencies</code> provides alternative 
     </div>
     
       <script src="../assets/javascripts/vendor.77e55a48.min.js"></script>
-      <script src="../assets/javascripts/bundle.aa3f9871.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
+      <script src="../assets/javascripts/bundle.9554a270.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
       
       <script>
         app = initialize({

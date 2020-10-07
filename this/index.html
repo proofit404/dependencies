@@ -11,7 +11,7 @@
       
       
       <link rel="shortcut icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-6.0.1">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-6.0.2">
     
     
       
@@ -209,7 +209,7 @@
 
 
   <li class="md-nav__item">
-    <a href=".." title="Home" class="md-nav__link">
+    <a href=".." class="md-nav__link">
       Home
     </a>
   </li>
@@ -221,7 +221,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../installation/" title="Installation" class="md-nav__link">
+    <a href="../installation/" class="md-nav__link">
       Installation
     </a>
   </li>
@@ -233,7 +233,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../changelog/" title="Changelog" class="md-nav__link">
+    <a href="../changelog/" class="md-nav__link">
       Changelog
     </a>
   </li>
@@ -273,7 +273,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../why/" title="Why" class="md-nav__link">
+    <a href="../why/" class="md-nav__link">
       Why
     </a>
   </li>
@@ -285,7 +285,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../usage/" title="Usage" class="md-nav__link">
+    <a href="../usage/" class="md-nav__link">
       Usage
     </a>
   </li>
@@ -310,7 +310,7 @@
         <span class="md-nav__icon md-icon"></span>
       </label>
     
-    <a href="./" title="This" class="md-nav__link md-nav__link--active">
+    <a href="./" class="md-nav__link md-nav__link--active">
       This
     </a>
     
@@ -361,7 +361,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../package/" title="Package" class="md-nav__link">
+    <a href="../package/" class="md-nav__link">
       Package
     </a>
   </li>
@@ -373,7 +373,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../operation/" title="Operation" class="md-nav__link">
+    <a href="../operation/" class="md-nav__link">
       Operation
     </a>
   </li>
@@ -385,7 +385,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../value/" title="Value" class="md-nav__link">
+    <a href="../value/" class="md-nav__link">
       Value
     </a>
   </li>
@@ -397,7 +397,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../faq/" title="FAQ" class="md-nav__link">
+    <a href="../faq/" class="md-nav__link">
       FAQ
     </a>
   </li>
@@ -435,7 +435,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../attrs/" title="Attrs" class="md-nav__link">
+    <a href="../attrs/" class="md-nav__link">
       Attrs
     </a>
   </li>
@@ -510,7 +510,6 @@ alias to another dependency in the same <code>Injector</code>, in nested <code>I
 parent <code>Injector</code>.</p>
 <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dependencies</span> <span class="kn">import</span> <span class="n">Injector</span><span class="p">,</span> <span class="n">this</span>
 </code></pre></div>
-
 <h2 id="simple-links">Simple links<a class="headerlink" href="#simple-links" title="Permanent link">&para;</a></h2>
 <p>For example, you can create simple aliases.</p>
 <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Container</span><span class="p">(</span><span class="n">Injector</span><span class="p">):</span>
@@ -520,7 +519,6 @@ parent <code>Injector</code>.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Container</span><span class="o">.</span><span class="n">bar</span>
 <span class="go">1</span>
 </code></pre></div>
-
 <p>You can use item access on dependencies defined in <code>Injector</code> subclass.</p>
 <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Container</span><span class="p">(</span><span class="n">Injector</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="n">foo</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
@@ -529,7 +527,6 @@ parent <code>Injector</code>.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Container</span><span class="o">.</span><span class="n">bar</span>
 <span class="go">1</span>
 </code></pre></div>
-
 <p>Tuple, list, set and everything that supports iterable protocol are also
 supported.</p>
 <p>You can use this links as usual in the constructor arguments.</p>
@@ -545,7 +542,6 @@ supported.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Container</span><span class="o">.</span><span class="n">foo</span><span class="o">.</span><span class="n">bar</span>
 <span class="go">1</span>
 </code></pre></div>
-
 <p>Also, you can see, that you can define proxy a before the actual dependency it
 pointing to.</p>
 <p>You can point a link to the instance method. The actual instance will be built
@@ -564,7 +560,6 @@ with its own state behind a single callable interface.</p>
 <span class="go">&lt;__main__.Foo object at 0x...&gt;</span>
 <span class="go">1</span>
 </code></pre></div>
-
 <p>You can see that <code>method</code> has access to the <code>Foo</code> instance. It can call other
 methods of <code>Foo</code>. You can define dependencies of the <code>Foo</code> class in it
 constructor as usual.</p>
@@ -579,7 +574,6 @@ injector.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Container</span><span class="o">.</span><span class="n">foo</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 <span class="go">3</span>
 </code></pre></div>
-
 <p>Nested <code>Injector</code> subclasses <strong>can</strong> access attributes of the parent <code>Injector</code>.
 Use left shift operator to specify the number of levels to go upper scope.</p>
 <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Container</span><span class="p">(</span><span class="n">Injector</span><span class="p">):</span>
@@ -590,7 +584,6 @@ Use left shift operator to specify the number of levels to go upper scope.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Container</span><span class="o">.</span><span class="n">Bar</span><span class="o">.</span><span class="n">baz</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 <span class="go">3</span>
 </code></pre></div>
-
 <h2 id="full-example">Full example<a class="headerlink" href="#full-example" title="Permanent link">&para;</a></h2>
 <p>Let's define an application with all settings stored in the dictionary. In
 production, you can substitute this dictionary with Consul or ZooKeeper client
@@ -651,9 +644,7 @@ and the rest of the application will be left untouched.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Container</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">port</span>
 <span class="go">6782</span>
 </code></pre></div>
-
 <p align="center">&mdash; ⭐️ &mdash;</p>
-
 <p align="center"><i>The dependencies library is part of the SOLID python family.</i></p>
                 
               
@@ -673,7 +664,7 @@ and the rest of the application will be left untouched.</p>
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
         
-          <a href="../usage/" title="Usage" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../usage/" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-footer-nav__button md-icon">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
             </div>
@@ -688,7 +679,7 @@ and the rest of the application will be left untouched.</p>
           </a>
         
         
-          <a href="../package/" title="Package" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../package/" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-footer-nav__title">
               <div class="md-ellipsis">
                 <span class="md-footer-nav__direction">
@@ -722,7 +713,7 @@ and the rest of the application will be left untouched.</p>
     </div>
     
       <script src="../assets/javascripts/vendor.77e55a48.min.js"></script>
-      <script src="../assets/javascripts/bundle.aa3f9871.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
+      <script src="../assets/javascripts/bundle.9554a270.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
       
       <script>
         app = initialize({
