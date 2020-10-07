@@ -213,7 +213,7 @@ def test_no_reuse_default_value_between_dependencies():
 
     class Foo:
         def __init__(self, bar, x, y):
-            pass
+            pass  # pragma: no cover
 
     class Bar:
         def __init__(self, x, y=1):
@@ -506,11 +506,7 @@ def test_docstrings():
     assert Foo.__doc__ == "New container."
 
 
-evaluate_classes = CodeCollector()
-
-
-@evaluate_classes.parametrize
-def test_evaluate_dependencies_once(code):
+def test_evaluate_dependencies_once():
     """Evaluate each node in the dependencies graph once."""
 
     class A:
@@ -535,19 +531,12 @@ def test_evaluate_dependencies_once(code):
         c = C
         d = D
 
-    code(Container)
-
-
-@evaluate_classes
-def _ea4367450e47(Container):
-    x = Container.a
-    assert x.b.d is x.c.d
-
-
-@evaluate_classes
-def _dd91602f3455(Container):
     assert Container.a.b.d is not Container.a.b.d
     assert Container.a.b.d is not Container.a.c.d
+
+    x = Container.a
+
+    assert x.b.d is x.c.d
 
 
 multiple_inheritance = CodeCollector()
@@ -577,27 +566,29 @@ def test_multiple_inheritance(code):
     class BazContainer(Injector):
         baz = Baz
 
-    code(Foo, FooContainer, BarContainer, BazContainer)
+    foo = code(FooContainer, BarContainer, BazContainer)
+
+    assert isinstance(foo, Foo)
 
 
 @multiple_inheritance
-def _edf946cc6077(Foo, FooContainer, BarContainer, BazContainer):
+def _edf946cc6077(FooContainer, BarContainer, BazContainer):
     class Container(FooContainer, BarContainer, BazContainer):
         pass
 
-    assert isinstance(Container.baz.bar.foo, Foo)
+    return Container.baz.bar.foo
 
 
 @multiple_inheritance
-def _efdc426cd096(Foo, FooContainer, BarContainer, BazContainer):
-    assert isinstance((FooContainer & BarContainer & BazContainer).baz.bar.foo, Foo)
+def _efdc426cd096(FooContainer, BarContainer, BazContainer):
+    return (FooContainer & BarContainer & BazContainer).baz.bar.foo
 
 
-inheritance_order = CodeCollector()
+inheritance_order = CodeCollector("expected", "code")
 
 
 @inheritance_order.parametrize
-def test_multiple_inheritance_injectors_order(code):
+def test_multiple_inheritance_injectors_order(expected, code):
     """Order of `Injector` subclasses should affect injection result.
 
     `Injector` which comes first in the subclass bases or inplace creation must have
@@ -614,28 +605,30 @@ def test_multiple_inheritance_injectors_order(code):
     class Container3(Injector):
         x = 3
 
-    code(Container1, Container2, Container3)
+    value = code(Container1, Container2, Container3)
+
+    assert expected == value
 
 
-@inheritance_order
+@inheritance_order(1)
 def _aa10c7747a1f(Container1, Container2, Container3):
     class Foo(Container1, Container2, Container3):
         pass
 
-    assert Foo.x == 1
+    return Foo.x
 
 
-@inheritance_order
+@inheritance_order(4)
 def _e056e22f3fd5(Container1, Container2, Container3):
     class Foo(Container1, Container2, Container3):
         x = 4
 
-    assert Foo.x == 4
+    return Foo.x
 
 
-@inheritance_order
+@inheritance_order(1)
 def _d851e0414bdf(Container1, Container2, Container3):
-    assert (Container1 & Container2 & Container3).x == 1
+    return (Container1 & Container2 & Container3).x
 
 
 attribute_error = CodeCollector()
