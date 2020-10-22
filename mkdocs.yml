@@ -47,3 +47,4 @@ nav:
       - FAQ: faq.md
   - Guides:
       - Attrs: attrs.md
+      - Descriptors: descriptors.md
