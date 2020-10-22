@@ -1,4 +1,6 @@
 """Tests related to the loops detection in the injector definition."""
+from itertools import product
+
 import pytest
 
 from dependencies import Injector
@@ -17,14 +19,10 @@ def test_circle_links(code):
     with pytest.raises(DependencyError) as exc_info:
         code()
 
-    assert str(exc_info.value) in {
-        "'foo' is a circle link in the 'Container' injector",
-        "'foo' is a circle link in the 'Injector' injector",
-        "'bar' is a circle link in the 'Container' injector",
-        "'bar' is a circle link in the 'Injector' injector",
-        "'baz' is a circle link in the 'Container' injector",
-        "'baz' is a circle link in the 'Injector' injector",
-    }
+    assert str(exc_info.value) in (
+        f"{a!r} is a circle link in the {b!r} injector"
+        for a, b in product(["foo", "bar", "baz"], ["Container", "Injector"])
+    )
 
 
 @flat_injector
@@ -80,12 +78,10 @@ def test_circle_links_one_level(code, sub):
     with pytest.raises(DependencyError) as exc_info:
         code(sub())
 
-    assert str(exc_info.value) in {
-        "'foo' is a circle link in the 'Container' injector",
-        "'foo' is a circle link in the 'Injector' injector",
-        "'bar' is a circle link in the 'Container' injector",
-        "'bar' is a circle link in the 'Injector' injector",
-    }
+    assert str(exc_info.value) in (
+        f"{a!r} is a circle link in the {b!r} injector"
+        for a, b in product(["foo", "bar"], ["Container", "Injector"])
+    )
 
 
 @one_level
@@ -140,13 +136,10 @@ def test_circle_links_two_level_complex_loop(code, middle, lowest):
     with pytest.raises(DependencyError) as exc_info:
         code(middle(lowest()))
 
-    assert str(exc_info.value) in {
-        "'foo' is a circle link in the 'Container' injector",
-        "'foo' is a circle link in the 'Injector' injector",
-        "'bar' is a circle link in the 'Container' injector",
-        "'bar' is a circle link in the 'SubContainer' injector",
-        "'bar' is a circle link in the 'Injector' injector",
-    }
+    assert str(exc_info.value) in (
+        f"{a!r} is a circle link in the {b!r} injector"
+        for a, b in product(["foo", "bar"], ["Container", "SubContainer", "Injector"])
+    )
 
 
 @complex_two_levels
@@ -213,16 +206,12 @@ def test_circle_links_two_level_long_loop(code, middle, lowest):
     with pytest.raises(DependencyError) as exc_info:
         code(middle(lowest()))
 
-    assert str(exc_info.value) in {
-        "'foo' is a circle link in the 'Container' injector",
-        "'foo' is a circle link in the 'Injector' injector",
-        "'bar' is a circle link in the 'Container' injector",
-        "'bar' is a circle link in the 'SubContainer' injector",
-        "'bar' is a circle link in the 'Injector' injector",
-        "'baz' is a circle link in the 'Container' injector",
-        "'baz' is a circle link in the 'SubContainer' injector",
-        "'baz' is a circle link in the 'Injector' injector",
-    }
+    assert str(exc_info.value) in (
+        f"{a!r} is a circle link in the {b!r} injector"
+        for a, b in product(
+            ["foo", "bar", "baz"], ["Container", "SubContainer", "Injector"]
+        )
+    )
 
 
 @long_two_levels
@@ -291,14 +280,10 @@ def test_cross_injector_loops(code, sub1, sub2):
     with pytest.raises(DependencyError) as exc_info:
         code(sub1(), sub2())
 
-    assert str(exc_info.value) in {
-        "'foo' is a circle link in the 'Container' injector",
-        "'foo' is a circle link in the 'Injector' injector",
-        "'bar' is a circle link in the 'Container' injector",
-        "'bar' is a circle link in the 'Injector' injector",
-        "'baz' is a circle link in the 'Container' injector",
-        "'baz' is a circle link in the 'Injector' injector",
-    }
+    assert str(exc_info.value) in (
+        f"{a!r} is a circle link in the {b!r} injector"
+        for a, b in product(["foo", "bar", "baz"], ["Container", "Injector"])
+    )
 
 
 @cross_injector_loops
@@ -364,10 +349,10 @@ def test_item_access_loops(code):
     with pytest.raises(DependencyError) as exc_info:
         code()
 
-    assert str(exc_info.value) in {
-        "'foo' is a circle link in the 'Container' injector",
-        "'foo' is a circle link in the 'Injector' injector",
-    }
+    assert str(exc_info.value) in (
+        f"{a!r} is a circle link in the {b!r} injector"
+        for a, b in product(["foo"], ["Container", "Injector"])
+    )
 
 
 @items.xfail

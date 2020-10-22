@@ -55,10 +55,47 @@ def _e78bf771747c():
 
 @deny_magic_methods
 def _e34b88041f64():
-    class Foo(Injector):
-        pass
-
     def eq(self, other):
         pass  # pragma: no cover
 
-    Foo(__eq__=eq)
+    Injector(__eq__=eq)
+
+
+deny_empty_scope = CodeCollector()
+
+
+@deny_empty_scope.parametrize
+def test_deny_empty_scope_extension(code):
+    """`Injector` subclasses can't extend scope with empty subset."""
+    with pytest.raises(DependencyError) as exc_info:
+        code()
+
+    assert str(exc_info.value) == "Extension scope can not be empty"
+
+
+@deny_empty_scope
+def _fQl3MI95Y1Zi():
+    class Container(Injector):
+        pass
+
+
+@deny_empty_scope
+def _pdnQASIDVq2V():
+    Injector()
+
+
+@deny_empty_scope
+def _aWNEsKRIx12r():
+    class Container(Injector):
+        x = 1
+
+    class SubContainer(Container):
+        pass
+
+
+@deny_empty_scope
+def _myj1ZoubR68j():
+    class Container(Injector):
+        x = 1
+
+    Container()

@@ -3,6 +3,7 @@ from collections import deque
 from _dependencies.attributes import _Replace
 from _dependencies.checks.circles import _check_circles
 from _dependencies.checks.injector import _check_dunder_name
+from _dependencies.checks.injector import _check_extension_scope
 from _dependencies.checks.injector import _check_inheritance
 from _dependencies.checks.loops import _check_loops
 from _dependencies.exceptions import DependencyError
@@ -27,6 +28,7 @@ class _InjectorType(_InjectorTypeType):
                 ns[attr] = namespace.pop(attr)
             except KeyError:
                 pass
+        _check_extension_scope(bases, namespace)
         for name in namespace:
             _check_dunder_name(name)
         dependencies = {}
