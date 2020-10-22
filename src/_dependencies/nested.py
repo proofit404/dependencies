@@ -22,7 +22,7 @@ class _NestedInjectorSpec:
 
     def __call__(self, __self__):
 
-        subclass = type(self.injector.__name__, (self.injector,), {})
+        subclass = type(self.injector.__name__, (self.injector,), _NonEmptyNamespace())
         parent = injectable, ref(__self__), {}, set(), set()
         subclass.__dependencies__["__parent__"] = parent
         return subclass
@@ -31,3 +31,8 @@ class _NestedInjectorSpec:
     def __dependencies__(self):
 
         return self.injector.__dependencies__
+
+
+class _NonEmptyNamespace(dict):
+    def __bool__(self):
+        return True

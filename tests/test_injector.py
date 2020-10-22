@@ -306,9 +306,9 @@ def test_call():
     """`Injector` subclass can produce its own subclasses with call."""
 
     class Foo(Injector):
-        pass
+        x = 1
 
-    assert issubclass(Foo(), Foo)
+    assert issubclass(Foo(y=2), Foo)
 
 
 def test_call_overwrite_dependencies():
@@ -347,10 +347,10 @@ def test_show_common_class_attributes_with_dir():
     """`dir` show common class attributes."""
 
     class Common:
-        pass
+        x = 1
 
     class Foo(Injector):
-        pass
+        x = 1
 
     assert dir(Common) == dir(Foo)
 
@@ -382,7 +382,7 @@ def test_show_call_dependencies_with_dir():
     assert "x" in dir(Injector(x=1))
 
     class Foo(Injector):
-        pass
+        y = 2
 
     assert "x" in dir(Foo(x=1))
 
@@ -396,7 +396,7 @@ def test_omit_parent_link_in_dir_listing():
 
     class Foo(Injector):
         class Bar(Injector):
-            pass
+            x = 1
 
     assert "__parent__" not in dir(Foo.Bar)
 
@@ -416,7 +416,7 @@ def test_deny_injector_changes(code):
 @attribute_assignment
 def _mvT9oyJdXhzh():
     class Container(Injector):
-        pass
+        x = 1
 
     Container.foo = 1
 
@@ -428,7 +428,7 @@ def _fXxRX4KFUc8q():
 
 @attribute_assignment
 def _pHfF0rbEjCsV():
-    Container = Injector()
+    Container = Injector(x=1)
     Container.foo = 1
 
 
@@ -501,7 +501,7 @@ def test_docstrings():
     class Foo(Injector):
         """New container."""
 
-        pass
+        x = 1
 
     assert Foo.__doc__ == "New container."
 
@@ -649,14 +649,14 @@ def test_attribute_error(code):
 @attribute_error
 def _c58b054bfcd0():
     class Foo(Injector):
-        pass
+        x = 1
 
     Foo.test
 
 
 @attribute_error
 def _f9c50c81e8c9():
-    Foo = Injector()
+    Foo = Injector(x=1)
 
     Foo.test
 
@@ -664,9 +664,9 @@ def _f9c50c81e8c9():
 @attribute_error
 def _e2f16596a652():
     class Foo(Injector):
-        pass
+        x = 1
 
-    Foo().test
+    Foo(y=2).test
 
 
 incomplete_dependencies = CodeCollector()
