@@ -311,8 +311,22 @@ needed.
 >>> (Scope1 & Scope2).foo  # doctest: +ELLIPSIS
 <__main__.Foo object at 0x...>
 
-
 ```
+
+!!! note
+
+    Extension scope should not be empty.  You can't inherit from
+    `Injector` just to have `pass` keyword as the body of the class.
+
+    ```pycon
+
+    >>> class Container(Injector):
+    ...     pass
+    Traceback (most recent call last):
+      ...
+    _dependencies.exceptions.DependencyError: Extension scope can not be empty
+
+    ```
 
 ### Call
 
