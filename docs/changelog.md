@@ -1,3 +1,11 @@
+# [4.1.0](https://github.com/proofit404/dependencies/compare/4.0.1...4.1.0) (2020-10-23)
+
+### Features
+
+- deny to use empty extension scope
+  [#398](https://github.com/proofit404/dependencies/issues/398)
+  ([18fb528](https://github.com/proofit404/dependencies/commit/18fb5286f6ba6343592461629257ed628713c113))
+
 ## [4.0.1](https://github.com/proofit404/dependencies/compare/4.0.0...4.0.1) (2020-10-02)
 
 ### Bug Fixes
