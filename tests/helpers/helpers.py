@@ -18,7 +18,8 @@ class CodeCollector:
 
     def parametrize(self, test_func):
         """Parametrize decorated test function with collected functions."""
-        return pytest.mark.parametrize(self.names, _Iterable(self.collected))(test_func)
+        iterable = _Iterable(test_func.__name__, self.collected)
+        return pytest.mark.parametrize(self.names, iterable)(test_func)
 
     def __call__(self, *args):
         """Mark decorated function as a test parameter."""
@@ -58,26 +59,31 @@ class CodeCollector:
 
 
 class _Iterable:
-    def __init__(self, data):
+    def __init__(self, test_name, data):
+        self.test_name = test_name
         self.data = data
 
     def __iter__(self):
-        return _Iterator(self.data)
+        return _Iterator(self.test_name, self.data)
 
 
 class _Iterator:
-    def __init__(self, data):
+    def __init__(self, test_name, data):
+        self.test_name = test_name
         self.data = data
         self.state = iter(data)
 
     def __next__(self):
-        _validate_collected(self.data)
+        _validate_collected(self.test_name, self.data)
         return next(self.state)
 
 
-def _validate_collected(collected):
+def _validate_collected(test_name, collected):
     if not collected:  # pragma: no cover
         raise Exception("No functions was collected")
+    elif len(collected) == 1:  # pragma: no cover
+        message = single_item_collected.format(test_func=test_name)
+        raise Exception(message)
 
 
 def _validate_function(function):
@@ -136,6 +142,15 @@ def _validate_assert_statement(function):
 
 
 # Messages.
+
+
+single_item_collected = """
+Only one function was collected as test parameter.
+
+Collect more functions or inline parameter inside test.
+
+Inspect {test_func!r} definition.
+""".strip()
 
 
 repeated_template = """

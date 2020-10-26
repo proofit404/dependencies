@@ -172,7 +172,6 @@ def test_package_provides_lazy_loading(code):
 
 @self_pointer
 def _dmldmoXCFIBG():
-
     self_pointer = Package("examples.self_pointer")
 
     class Container(Injector):
@@ -180,3 +179,9 @@ def _dmldmoXCFIBG():
         foo = self_pointer.Container.foo
 
     return Container
+
+
+@self_pointer
+def _pRX4SSAbG8iO():
+    examples = Package("examples")
+    return Injector(foo=examples.self_pointer.Container.foo)
