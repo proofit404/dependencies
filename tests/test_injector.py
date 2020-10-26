@@ -4,6 +4,8 @@ from inspect import isclass
 import pytest
 
 from dependencies import Injector
+from dependencies import operation
+from dependencies import value
 from dependencies.exceptions import DependencyError
 from helpers import CodeCollector
 
@@ -537,6 +539,133 @@ def test_evaluate_dependencies_once():
     x = Container.a
 
     assert x.b.d is x.c.d
+
+
+evaluate_once = CodeCollector()
+evaluate_once_a = CodeCollector("a")
+evaluate_once_b = CodeCollector("b")
+evaluate_once_c = CodeCollector("c")
+
+
+@evaluate_once.parametrize
+@evaluate_once_a.parametrize
+@evaluate_once_b.parametrize
+@evaluate_once_c.parametrize
+def test_evaluate_once_different_types(code, a, b, c):
+    """Evaluate each node in the dependencies graph once.
+
+    Arguments of dependencies of different types should be evaluated once. This rules
+    applies to classes, @operation, @value. This is a variation of the test above
+    written against all necessary inputs.
+
+    """
+    times = []
+
+    class D:
+        def __init__(self):
+            times.append(1)
+
+    Container = code(a(), b(), c(), D)
+    assert sum(times) == 0
+    Container.a
+    assert sum(times) == 1
+
+
+@evaluate_once
+def _rNYf35g94V1B(A, B, C, D):
+    class Container(Injector):
+        a = A
+        b = B
+        c = C
+        d = D
+
+    return Container
+
+
+@evaluate_once
+def _uf0ibIiz0aIl(A, B, C, D):
+    return Injector(a=A, b=B, c=C, d=D)
+
+
+@evaluate_once_a
+def _irfiju659gxv():
+    class A:
+        def __init__(self, b, c):
+            pass
+
+    return A
+
+
+@evaluate_once_a
+def _ibVipQjYw41T():
+    @operation
+    def a(b, c):
+        pass
+
+    return a
+
+
+@evaluate_once_a
+def _eik35aKD1khF():
+    @value
+    def a(b, c):
+        pass
+
+    return a
+
+
+@evaluate_once_b
+def _n9K1km2utmbt():
+    class B:
+        def __init__(self, d):
+            pass
+
+    return B
+
+
+@evaluate_once_b
+def _pGfVZxOasrJc():
+    @operation
+    def b(d):
+        pass
+
+    return b
+
+
+@evaluate_once_b
+def _mtGW5dk9BMBw():
+    @value
+    def b(d):
+        pass
+
+    return b
+
+
+@evaluate_once_c
+def _k6pJn1sVihhd():
+    class C:
+        def __init__(self, d):
+            pass
+
+    return C
+
+
+@evaluate_once_c
+def _mfOvey7viBCe():
+    @operation
+    def c(d):
+        pass
+
+    return c
+
+
+@evaluate_once_c
+def _z7bIvBpQsr4H():
+    @value
+    def c(d):
+        pass
+
+    return c
 
 
 multiple_inheritance = CodeCollector()
