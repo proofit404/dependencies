@@ -2,7 +2,7 @@ from dependencies import Injector
 from dependencies import Package
 
 
-current = Package("pkg.self_pointer")
+current = Package("examples.self_pointer")
 
 
 class Container(Injector):

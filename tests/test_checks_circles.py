@@ -74,23 +74,23 @@ def _kHqAxHovWKtI():
 
 @circle_defs
 def _xoGkuXokhXpZ():
-    pkg = Package("pkg")
+    examples = Package("examples")
 
-    return pkg.circles.simple_class.Foo
+    return examples.circles.simple_class.Foo
 
 
 @circle_defs
 def _xdKqGtGJWEbR():
-    pkg = Package("pkg")
+    examples = Package("examples")
 
-    return pkg.circles.simple_operation.Foo
+    return examples.circles.simple_operation.Foo
 
 
 @circle_defs
 def _jIhFqCwKXFvv():
-    pkg = Package("pkg")
+    examples = Package("examples")
 
-    return pkg.circles.simple_value.Foo
+    return examples.circles.simple_value.Foo
 
 
 complex_circle_deps = CodeCollector()
@@ -183,23 +183,23 @@ def _zklaYlyBZsEj():
 
 @complex_circle_defs_foo
 def _xPLfwwcZNyyX():
-    pkg = Package("pkg")
+    examples = Package("examples")
 
-    return pkg.circles.complex_class.Foo
+    return examples.circles.complex_class.Foo
 
 
 @complex_circle_defs_foo
 def _nGROhaBTCNSO():
-    pkg = Package("pkg")
+    examples = Package("examples")
 
-    return pkg.circles.complex_operation.Foo
+    return examples.circles.complex_operation.Foo
 
 
 @complex_circle_defs_foo
 def _fkedDYYeueXo():
-    pkg = Package("pkg")
+    examples = Package("examples")
 
-    return pkg.circles.complex_value.Foo
+    return examples.circles.complex_value.Foo
 
 
 @complex_circle_defs_bar
@@ -231,23 +231,23 @@ def _aerRHoDXUNeV():
 
 @complex_circle_defs_bar
 def _trvcvfPoOBEv():
-    pkg = Package("pkg")
+    examples = Package("examples")
 
-    return pkg.circles.complex_class.Bar
+    return examples.circles.complex_class.Bar
 
 
 @complex_circle_defs_bar
 def _sHybukyZpyjf():
-    pkg = Package("pkg")
+    examples = Package("examples")
 
-    return pkg.circles.complex_operation.Bar
+    return examples.circles.complex_operation.Bar
 
 
 @complex_circle_defs_bar
 def _lNsNBNCTHPFX():
-    pkg = Package("pkg")
+    examples = Package("examples")
 
-    return pkg.circles.complex_value.Bar
+    return examples.circles.complex_value.Bar
 
 
 long_circle_deps = CodeCollector()
@@ -342,23 +342,23 @@ def _rwJmLRVuVSqm():
 
 @long_circle_defs_foo
 def _zAYYjvSPmIhZ():
-    pkg = Package("pkg")
+    examples = Package("examples")
 
-    return pkg.circles.long_class.Foo
+    return examples.circles.long_class.Foo
 
 
 @long_circle_defs_foo
 def _xreTaLNoZeDz():
-    pkg = Package("pkg")
+    examples = Package("examples")
 
-    return pkg.circles.long_operation.Foo
+    return examples.circles.long_operation.Foo
 
 
 @long_circle_defs_foo
 def _qOKmbpOgeDhk():
-    pkg = Package("pkg")
+    examples = Package("examples")
 
-    return pkg.circles.long_value.Foo
+    return examples.circles.long_value.Foo
 
 
 @long_circle_defs_bar
@@ -390,23 +390,23 @@ def _mLsXYSzlYPRO():
 
 @long_circle_defs_bar
 def _pYMumhKUCBUy():
-    pkg = Package("pkg")
+    examples = Package("examples")
 
-    return pkg.circles.long_class.Bar
+    return examples.circles.long_class.Bar
 
 
 @long_circle_defs_bar
 def _lCQgCPevBZXs():
-    pkg = Package("pkg")
+    examples = Package("examples")
 
-    return pkg.circles.long_operation.Bar
+    return examples.circles.long_operation.Bar
 
 
 @long_circle_defs_bar
 def _xgyyAISoreQV():
-    pkg = Package("pkg")
+    examples = Package("examples")
 
-    return pkg.circles.long_value.Bar
+    return examples.circles.long_value.Bar
 
 
 @long_circle_defs_baz
@@ -438,20 +438,20 @@ def _xjpTxDebbpnm():
 
 @long_circle_defs_baz
 def _ydSPPkZGDwPJ():
-    pkg = Package("pkg")
+    examples = Package("examples")
 
-    return pkg.circles.long_class.Baz
+    return examples.circles.long_class.Baz
 
 
 @long_circle_defs_baz
 def _rxFZQwocGmhN():
-    pkg = Package("pkg")
+    examples = Package("examples")
 
-    return pkg.circles.long_operation.Baz
+    return examples.circles.long_operation.Baz
 
 
 @long_circle_defs_baz
 def _eFMMMVDBKCFU():
-    pkg = Package("pkg")
+    examples = Package("examples")
 
-    return pkg.circles.long_value.Baz
+    return examples.circles.long_value.Baz
