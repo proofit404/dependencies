@@ -46,9 +46,9 @@ def _nurKbeeqoNCn():
 
 @subcontainer
 def _hHytjZxQjNPQ():
-    pkg = Package("pkg")
+    examples = Package("examples")
 
-    return pkg.injected.SubContainer
+    return examples.injected.SubContainer
 
 
 few_parent_attr = CodeCollector()
@@ -107,9 +107,9 @@ def _heSHjuBBFVLp():
 
 @lowest_container
 def _mVVyoyBmvQwc():
-    pkg = Package("pkg")
+    examples = Package("examples")
 
-    return pkg.injected.SubSubContainer
+    return examples.injected.SubSubContainer
 
 
 def test_one_subcontainer_multiple_parents():

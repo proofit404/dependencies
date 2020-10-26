@@ -113,9 +113,9 @@ def _nFibPCOxGsrX():
 
 @subcontainer
 def _utUTZLLngouR():
-    pkg = Package("pkg")
+    examples = Package("examples")
 
-    return pkg.injected.SubContainer
+    return examples.injected.SubContainer
 
 
 complex_two_levels = CodeCollector()
@@ -184,9 +184,9 @@ def _qzYMsyvxYFLe():
 
 @complex_lowest_container
 def _epoadTufdhne():
-    pkg = Package("pkg")
+    examples = Package("examples")
 
-    return pkg.injected.SubSubContainer
+    return examples.injected.SubSubContainer
 
 
 long_two_levels = CodeCollector()
@@ -257,9 +257,9 @@ def _fiktpicgZWNS():
 
 @long_lowest_container
 def _uugFwsWbfgXg():
-    pkg = Package("pkg")
+    examples = Package("examples")
 
-    return pkg.injected.SubSubContainer
+    return examples.injected.SubSubContainer
 
 
 cross_injector_loops = CodeCollector()
@@ -315,9 +315,9 @@ def _elifFWSpshiv():
 
 @subcontainer1
 def _yavnvOrgKYNS():
-    pkg = Package("pkg")
+    examples = Package("examples")
 
-    return pkg.injected.SubContainer1
+    return examples.injected.SubContainer1
 
 
 @subcontainer2
@@ -335,9 +335,9 @@ def _rRsNsCaBSxke():
 
 @subcontainer2
 def _xVeDBvAxsNYP():
-    pkg = Package("pkg")
+    examples = Package("examples")
 
-    return pkg.injected.SubContainer2
+    return examples.injected.SubContainer2
 
 
 items = CodeCollector()

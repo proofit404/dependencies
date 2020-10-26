@@ -5,9 +5,9 @@ source =
   _dependencies
   dependencies
   app
+  examples
   helpers
   mddoctest
-  pkg
   tests
 
 [paths]

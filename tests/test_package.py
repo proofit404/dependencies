@@ -25,7 +25,7 @@ def test_provide_an_instance(code):
     """Package attribute access should provide an instance when refer to a class."""
     Container = code()
 
-    from pkg.submodule import Foo, Bar
+    from examples.submodule import Foo, Bar
 
     assert isinstance(Container.instance, Foo) or isinstance(Container.instance, Bar)
     assert hasattr(Container.instance, "do")
@@ -68,7 +68,7 @@ def test_provide_a_class(code):
     """
     Container = code()
 
-    from pkg.submodule import Foo
+    from examples.submodule import Foo
 
     assert inspect.isclass(Container.keep_class)
     assert Container.keep_class is Foo
@@ -76,27 +76,27 @@ def test_provide_a_class(code):
 
 @package_definitions
 def _rQlPiacYOKsN():
-    pkg = Package("pkg")
+    examples = Package("examples")
 
     class Container(Injector):
-        itself = pkg
-        submodule = pkg.submodule
-        instance = pkg.submodule.Foo
-        instance_method = pkg.submodule.Foo.do
-        function = pkg.submodule.function
-        variable = pkg.submodule.variable
-        keep_class = pkg.submodule.Foo
+        itself = examples
+        submodule = examples.submodule
+        instance = examples.submodule.Foo
+        instance_method = examples.submodule.Foo.do
+        function = examples.submodule.function
+        variable = examples.submodule.variable
+        keep_class = examples.submodule.Foo
 
     return Container
 
 
 @package_definitions
 def _uHSfYcZjGSJQ():
-    pkg = Package("pkg")
-    sub = Package("pkg.submodule")
+    examples = Package("examples")
+    sub = Package("examples.submodule")
 
     class Container(Injector):
-        itself = pkg
+        itself = examples
         submodule = sub
         instance = sub.Bar
         instance_method = sub.Bar.do
@@ -130,12 +130,12 @@ def test_point_to_injector(code):
 
 @injector_pointer
 def _zprTYSyMkLEC():
-    pkg = Package("pkg")
+    examples = Package("examples")
 
     class Container(Injector):
 
-        foo = pkg.injected.Container.foo
-        bar = pkg.injected.Container.bar
+        foo = examples.injected.Container.foo
+        bar = examples.injected.Container.bar
         baz = 2
 
     return Container
@@ -143,7 +143,7 @@ def _zprTYSyMkLEC():
 
 @injector_pointer
 def _dqXJgFoftQja():
-    injected = Package("pkg.injected")
+    injected = Package("examples.injected")
 
     class Container(Injector):
 
@@ -173,7 +173,7 @@ def test_package_provides_lazy_loading(code):
 @self_pointer
 def _dmldmoXCFIBG():
 
-    self_pointer = Package("pkg.self_pointer")
+    self_pointer = Package("examples.self_pointer")
 
     class Container(Injector):
 
