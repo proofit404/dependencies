@@ -4,4 +4,9 @@ window.addEventListener("load", () => {
       element.innerText = "";
     }
   });
+  document.querySelectorAll("span.c1").forEach((element) => {
+    if (element.innerText.startsWith("# doctest:")) {
+      element.innerText = "";
+    }
+  });
 });
