@@ -2,6 +2,12 @@
 build-backend = "poetry.masonry.api"
 requires = ["poetry"]
 
+[tool.flakehell.exceptions."**/*.py"]
+"*" = ["-*"]
+
+[tool.flakehell.plugins]
+"*" = ["+*"]
+
 [tool.poetry]
 authors = ["Artem Malyshev <proofit404@gmail.com>"]
 classifiers = [
