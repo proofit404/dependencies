@@ -18,6 +18,8 @@ class _InjectorType(_InjectorTypeType):
         if not bases:
             namespace["__dependencies__"] = {}
             namespace["__wrapped__"] = None  # Doctest module compatibility.
+            namespace["__signature__"] = None  # mkautodocs compatibility.
+            namespace["_partialmethod"] = None  # mkautodocs compatibility.
             namespace["_subs_tree"] = None  # Typing module compatibility.
             return type.__new__(cls, class_name, bases, namespace)
 
