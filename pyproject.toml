@@ -4,12 +4,6 @@ requires = ["poetry"]
 
 [tool.poetry]
 authors = ["Artem Malyshev <proofit404@gmail.com>"]
-classifiers = [
-    "Development Status :: 5 - Production/Stable",
-    "Intended Audience :: Developers",
-    "License :: OSI Approved :: BSD License",
-    "Topic :: Software Development",
-]
 description = "Dependency Injection for Humans"
 documentation = "https://proofit404.github.io/dependencies/"
 homepage = "https://pypi.org/project/dependencies/"
