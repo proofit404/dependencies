@@ -10,6 +10,12 @@ import tomlkit
 import yaml
 
 
+def _azure_release_use_max_base_python():
+    version = max(sorted(f"{major}.{minor}" for major, minor in _pyenv_versions()))
+    installed = _azure_pipelines("jobs", 1, "steps", 0, "inputs", "versionSpec")
+    assert version == installed
+
+
 def _tox_environments_use_all_pyenv_versions():
     versions = [f"py{major}{minor}" for major, minor in _pyenv_versions()]
     for version in versions:
@@ -345,6 +351,13 @@ def _git_files():
     return subprocess.check_output(["git", "ls-files"]).decode().splitlines()
 
 
+def _azure_pipelines(*items):
+    result = yaml.safe_load(open("azure-pipelines.yml").read())
+    for item in items:
+        result = result[item]
+    return result
+
+
 def _tox_ini():
     ini_parser = configparser.ConfigParser()
     ini_parser.read("tox.ini")
@@ -392,6 +405,7 @@ def _pyproject_toml():
 
 
 def _main():
+    _azure_release_use_max_base_python()
     _tox_environments_use_all_pyenv_versions()
     _tox_environments_use_max_base_python()
     _tox_envlist_contains_all_tox_environments()
