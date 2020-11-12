@@ -1,10 +1,7 @@
 """Tests related to compatibility with standard typing python module."""
-import pytest
+import typing
 
 from dependencies import Injector
-
-
-typing = pytest.importorskip("typing")
 
 
 typing.Type[Injector]
