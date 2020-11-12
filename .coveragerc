@@ -5,6 +5,7 @@ source =
   _dependencies
   dependencies
   app
+  configuration
   examples
   helpers
   mddoctest
