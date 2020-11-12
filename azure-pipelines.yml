@@ -8,16 +8,16 @@ jobs:
     steps:
       - task: UsePythonVersion@0
         inputs:
-          versionSpec: "3.6"
-        displayName: Install Python 3.6.
-      - task: UsePythonVersion@0
-        inputs:
           versionSpec: "3.7"
         displayName: Install Python 3.7.
       - task: UsePythonVersion@0
         inputs:
           versionSpec: "3.8"
         displayName: Install Python 3.8.
+      - task: UsePythonVersion@0
+        inputs:
+          versionSpec: "3.9"
+        displayName: Install Python 3.9.
       - task: NodeTool@0
         inputs:
           versionSpec: "12.x"
@@ -36,10 +36,11 @@ jobs:
             --junitxml=junit-{envname}.xml -o junit_suite_name={envname} -o
             junit_family=xunit2 -o junit_log_passing_tests=true
           TOX_PARALLEL_NO_SPINNER: 1
+          TOX_SKIP_ENV: mutmut
         displayName: Run Tox.
-      - script: .tox/mutmut/bin/mutmut junitxml > junit-mutmut.xml
-        condition: always()
-        displayName: Generate mutmut report.
+      # - script: .tox/mutmut/bin/mutmut junitxml > junit-mutmut.xml
+      #   condition: always()
+      #   displayName: Generate mutmut report.
       - task: PublishTestResults@2
         condition: always()
         inputs:
