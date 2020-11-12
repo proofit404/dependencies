@@ -1,3 +1,15 @@
+# [5.0.0](https://github.com/proofit404/dependencies/compare/4.1.0...5.0.0) (2020-11-12)
+
+### Build System
+
+- add python 3.9 support
+  [#410](https://github.com/proofit404/dependencies/issues/410)
+  ([a9526bb](https://github.com/proofit404/dependencies/commit/a9526bbb237a6a143a18e47ed4dc27e08fa7b049))
+
+### BREAKING CHANGES
+
+- drop python 3.6 support.
+
 # [4.1.0](https://github.com/proofit404/dependencies/compare/4.0.1...4.1.0) (2020-10-23)
 
 ### Features
