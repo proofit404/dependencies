@@ -34,6 +34,10 @@ export default async (): undefined => {
     hasDocsCommit = commitTypes.has("docs"),
     hasTestCommit = commitTypes.has("test");
 
+  const hasBreakingCommit = danger.git.commits
+    .map((commit) => commit.message.match(/\sBREAKING CHANGES?:\s/g))
+    .some((match) => match);
+
   if (commitTest.length !== commitTypes.size) {
     fail("PR can not contain commits with the same type");
     return;
@@ -122,12 +126,20 @@ export default async (): undefined => {
   }
 
   const issueLabels = new Set(issueJSON.data.labels.map((label) => label.name)),
+    hasIncompatibleLabel = issueLabels.has("backward incompatible"),
     hasFeatureLabel = issueLabels.has("feature"),
     hasBugLabel = issueLabels.has("bug"),
     hasDocumentationLabel = issueLabels.has("documentation");
 
   if (hasFeatureLabel & hasBugLabel) {
     fail("An issue can't be a bug and a feature simultaneously");
+    return;
+  }
+
+  if (hasIncompatibleLabel & hasBreakingCommit) {
+    fail(
+      "Only issue marked as backward incompatible is allowed to have breaking changes"
+    );
     return;
   }
 
@@ -154,7 +166,7 @@ export default async (): undefined => {
   for (const label of [
     "blocked",
     "invalid",
-    "needs-investigation",
+    "needs investigation",
     "question",
     "wontfix",
   ]) {
@@ -185,12 +197,13 @@ export default async (): undefined => {
   }
 
   const allowedLabels = new Set([
+    "backward incompatible",
     "blocked",
     "bug",
     "documentation",
     "feature",
     "invalid",
-    "needs-investigation",
+    "needs investigation",
     "question",
     "released",
     "wontfix",
