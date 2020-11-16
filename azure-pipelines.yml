@@ -18,6 +18,10 @@ jobs:
         inputs:
           versionSpec: "3.9"
         displayName: Install Python 3.9.
+      - task: UsePythonVersion@0
+        inputs:
+          versionSpec: pypy3
+        displayName: Install PyPy.
       - task: NodeTool@0
         inputs:
           versionSpec: "12.x"
