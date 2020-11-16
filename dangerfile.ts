@@ -49,11 +49,11 @@ export default async (): undefined => {
     hasDocsChanges = commitFiles.some(
       (fileName) => fileName.startsWith("docs/") || fileName === "mkdocs.yml"
     ),
-    hasTestChanges = commitFiles.some((fileName) =>
-      fileName.startsWith("tests/")
+    hasTestChanges = commitFiles.some(
+      (fileName) => fileName.startsWith("tests/") || fileName === "pytest.ini"
     ),
-    hasSourceChanges = commitFiles.some((fileName) =>
-      fileName.startsWith("src/")
+    hasSourceChanges = commitFiles.some(
+      (fileName) => fileName.startsWith("src/") || fileName === "pyproject.toml"
     );
 
   if (hasDocsCommit & !hasDocsChanges) {
