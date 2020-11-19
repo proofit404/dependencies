@@ -10,22 +10,71 @@ import tomlkit
 import yaml
 
 
+def _main():
+    _azure_install_python_interpreters()
+    _azure_release_use_max_base_python()
+    _tox_environments_use_all_pyenv_versions()
+    _tox_environments_use_max_base_python()
+    _tox_envlist_contains_all_tox_environments()
+    _tox_no_default_environment()
+    _tox_no_factor_environments()
+    _tox_no_factor_deps()
+    _tox_single_line_settings_are_written_same_line()
+    _tox_multiline_settings_are_written_next_line()
+    _tox_no_unknown_settings()
+    _coverage_include_all_packages()
+    _coverage_environment_runs_at_the_end()
+    _poetry_python_version_use_all_pyenv_versions()
+    _ini_files_indentation()
+    _ini_files_boolean_case()
+    _lock_files_not_committed()
+    _license_year()
+    _tox_environments_are_ordered()
+    _tox_settings_are_ordered()
+    _tox_deps_are_ordered()
+    _tox_whitelist_externals_are_ordered()
+    _packages_are_ordered()
+    _build_requires_are_ordered()
+    _flake8_per_file_ignores_are_ordered()
+    _flake8_ignored_errors_are_ordered()
+    _yamllint_ignored_patterns_are_ordered()
+    _poetry_avoid_additional_dependencies()
+    _pre_commit_hooks_avoid_additional_dependencies()
+    _tox_deps_not_pinned()
+    _build_requires_not_pinned()
+    _pre_commit_hooks_not_pinned()
+
+
+def _azure_install_python_interpreters():
+    versions = [
+        f"{major}.{minor}" if interpreter == "cpython" else f"{interpreter}{major}"
+        for interpreter, (major, minor) in _pyenv_interpreters()
+    ]
+    installed = [
+        s["inputs"]["versionSpec"]
+        for s in _azure_pipelines("jobs", 0, "steps")
+        if s.get("task") == "UsePythonVersion@0"
+    ]
+    assert versions == installed
+
+
 def _azure_release_use_max_base_python():
-    version = max(sorted(f"{major}.{minor}" for major, minor in _pyenv_versions()))
+    version = max(f"{major}.{minor}" for major, minor in _pyenv_versions())
     installed = _azure_pipelines("jobs", 1, "steps", 0, "inputs", "versionSpec")
     assert version == installed
 
 
 def _tox_environments_use_all_pyenv_versions():
-    versions = [f"py{major}{minor}" for major, minor in _pyenv_versions()]
+    versions = [
+        f"py{major}{minor}" if interpreter == "cpython" else f"{interpreter}{major}"
+        for interpreter, (major, minor) in _pyenv_interpreters()
+    ]
     for version in versions:
         assert version in _tox_envlist()
 
 
 def _tox_environments_use_max_base_python():
-    version = max(
-        sorted(f"python{major}.{minor}" for major, minor in _pyenv_versions())
-    )
+    version = max(f"python{major}.{minor}" for major, minor in _pyenv_versions())
     for basepython in _tox_config_values("basepython"):
         assert basepython.value == version
 
@@ -290,7 +339,7 @@ def _tox_envlist():
 
 
 def _tox_split_envlist(string):
-    # => tox_split_envlist('py{36,37},doctest,flake8')
+    # => _tox_split_envlist('py{36,37},doctest,flake8')
     # -> ['py{36,37}', 'doctest', 'flake8']
     escaped = string
     while re.search(r"({[^,}]*),", escaped):
@@ -300,9 +349,9 @@ def _tox_split_envlist(string):
 
 
 def _tox_expand_names(string):
-    # => list(_tox_expand_names('py{37,38}'))
+    # => _tox_expand_names('py{37,38}')
     # -> ['py37', 'py38']
-    # => list(_tox_expand_names('doctest'))
+    # => _tox_expand_names('doctest')
     # -> ['doctest']
     if "{" not in string:
         yield string
@@ -397,45 +446,19 @@ def _pre_commit_yaml():
 
 
 def _pyenv_versions():
-    return [v.split(".")[0:2] for v in open(".python-version").read().splitlines()]
+    return sorted(v[1] for v in _pyenv_interpreters())
+
+
+def _pyenv_interpreters():
+    for v in open(".python-version").read().splitlines():
+        m = re.match(r"^([a-z]+)?([0-9.]+)", v)
+        interpreter = m.group(1) or "cpython"
+        version = m.group(2).split(".")[0:2]
+        yield interpreter, version
 
 
 def _pyproject_toml():
     return tomlkit.loads(open("pyproject.toml").read())
-
-
-def _main():
-    _azure_release_use_max_base_python()
-    _tox_environments_use_all_pyenv_versions()
-    _tox_environments_use_max_base_python()
-    _tox_envlist_contains_all_tox_environments()
-    _tox_no_default_environment()
-    _tox_no_factor_environments()
-    _tox_no_factor_deps()
-    _tox_single_line_settings_are_written_same_line()
-    _tox_multiline_settings_are_written_next_line()
-    _tox_no_unknown_settings()
-    _coverage_include_all_packages()
-    _coverage_environment_runs_at_the_end()
-    _poetry_python_version_use_all_pyenv_versions()
-    _ini_files_indentation()
-    _ini_files_boolean_case()
-    _lock_files_not_committed()
-    _license_year()
-    _tox_environments_are_ordered()
-    _tox_settings_are_ordered()
-    _tox_deps_are_ordered()
-    _tox_whitelist_externals_are_ordered()
-    _packages_are_ordered()
-    _build_requires_are_ordered()
-    _flake8_per_file_ignores_are_ordered()
-    _flake8_ignored_errors_are_ordered()
-    _yamllint_ignored_patterns_are_ordered()
-    _poetry_avoid_additional_dependencies()
-    _pre_commit_hooks_avoid_additional_dependencies()
-    _tox_deps_not_pinned()
-    _build_requires_not_pinned()
-    _pre_commit_hooks_not_pinned()
 
 
 if __name__ == "__main__":  # pragma: no branch
