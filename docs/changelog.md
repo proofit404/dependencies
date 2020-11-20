@@ -1,3 +1,11 @@
+# [5.1.0](https://github.com/proofit404/dependencies/compare/5.0.0...5.1.0) (2020-11-20)
+
+### Features
+
+- support pypy interpreter
+  [#42](https://github.com/proofit404/dependencies/issues/42)
+  ([bb454e7](https://github.com/proofit404/dependencies/commit/bb454e7038f9d180342bd6e4ccfb43ce33b6452a))
+
 # [5.0.0](https://github.com/proofit404/dependencies/compare/4.1.0...5.0.0) (2020-11-12)
 
 ### Build System
