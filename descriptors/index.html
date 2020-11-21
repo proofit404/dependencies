@@ -16,7 +16,7 @@
     
     
       
-        <title>Package - dependencies</title>
+        <title>Descriptors - dependencies</title>
       
     
     
@@ -63,7 +63,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#package-proxy" class="md-skip">
+        <a href="#descriptors" class="md-skip">
           Skip to content
         </a>
       
@@ -93,7 +93,7 @@
           </span>
           <span class="md-header-nav__topic md-ellipsis">
             
-              Package
+              Descriptors
             
           </span>
         </div>
@@ -178,9 +178,7 @@
     <li class="md-tabs__item">
       
       
-        
-      
-      <a href="../why/" class="md-tabs__link md-tabs__link--active">
+      <a href="../why/" class="md-tabs__link">
         Usage
       </a>
     </li>
@@ -193,7 +191,9 @@
     <li class="md-tabs__item">
       
       
-      <a href="../attrs/" class="md-tabs__link">
+        
+      
+      <a href="../attrs/" class="md-tabs__link md-tabs__link--active">
         Guides
       </a>
     </li>
@@ -305,12 +305,10 @@
       
       
 
-  
 
-
-  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+  <li class="md-nav__item md-nav__item--nested">
     
-    <input class="md-nav__toggle md-toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2" checked>
+    <input class="md-nav__toggle md-toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2" >
     <label class="md-nav__link" for="nav-2">
       Usage
       <span class="md-nav__icon md-icon"></span>
@@ -363,56 +361,11 @@
           
           
 
-  
 
-
-  <li class="md-nav__item md-nav__item--active">
-    
-    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-    
-      
-    
-    
-      <label class="md-nav__link md-nav__link--active" for="__toc">
-        Package
-        <span class="md-nav__icon md-icon"></span>
-      </label>
-    
-    <a href="./" class="md-nav__link md-nav__link--active">
+  <li class="md-nav__item">
+    <a href="../package/" class="md-nav__link">
       Package
     </a>
-    
-      
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#attributes" class="md-nav__link">
-    Attributes
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#classes" class="md-nav__link">
-    Classes
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-    
   </li>
 
         
@@ -461,10 +414,12 @@
       
       
 
+  
 
-  <li class="md-nav__item md-nav__item--nested">
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
     
-    <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3" >
+    <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3" checked>
     <label class="md-nav__link" for="nav-3">
       Guides
       <span class="md-nav__icon md-icon"></span>
@@ -493,11 +448,56 @@
           
           
 
+  
 
-  <li class="md-nav__item">
-    <a href="../descriptors/" class="md-nav__link">
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Descriptors
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+    
+    <a href="./" class="md-nav__link md-nav__link--active">
       Descriptors
     </a>
+    
+      
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#inconsistency-with-dependencies" class="md-nav__link">
+    Inconsistency with dependencies
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#inject-descriptors-anyway" class="md-nav__link">
+    Inject descriptors anyway
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+    
   </li>
 
         
@@ -530,15 +530,15 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#attributes" class="md-nav__link">
-    Attributes
+  <a href="#inconsistency-with-dependencies" class="md-nav__link">
+    Inconsistency with dependencies
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#classes" class="md-nav__link">
-    Classes
+  <a href="#inject-descriptors-anyway" class="md-nav__link">
+    Inject descriptors anyway
   </a>
   
 </li>
@@ -556,83 +556,126 @@
               
                 
                 
-                <h1 id="package-proxy"><code>Package</code> proxy<a class="headerlink" href="#package-proxy" title="Permanent link">&para;</a></h1>
-<p><code>Package</code> object is a way to define injector scope with dependencies defined in
-other places (like modules and packages). You can point package object to the
-module, a variable defined in the module, a function defined in the module, a
-class defined in the module, any attribute of the class which was defined in
-this module.</p>
-<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dependencies</span> <span class="kn">import</span> <span class="n">Injector</span><span class="p">,</span> <span class="n">Package</span>
-</code></pre></div>
-<h2 id="attributes">Attributes<a class="headerlink" href="#attributes" title="Permanent link">&para;</a></h2>
-<p>A usual use case for the <code>Package</code> object is to replace havy import statements
-with attribute access.</p>
-<p>If you have complex project structure, you will see a lot of code like this in
-your injectors.</p>
-<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">app.repositories</span> <span class="kn">import</span> <span class="n">create_user</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># A lot of import statements here...</span>
-
-<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Container</span><span class="p">(</span><span class="n">Injector</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="n">persist_user</span> <span class="o">=</span> <span class="n">create_user</span>
-<span class="gp">... </span>    <span class="c1"># A lot of assignment statements here...</span>
-</code></pre></div>
-<p>To save some typing I tend to write this code like this</p>
-<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Container</span><span class="p">(</span><span class="n">Injector</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="kn">from</span> <span class="nn">app.repositories</span> <span class="kn">import</span> <span class="n">create_user</span> <span class="k">as</span> <span class="n">persist_user</span>
-<span class="gp">... </span>    <span class="c1"># A lot of import statements here...</span>
-</code></pre></div>
-<p><code>Package</code> can help to deal with this inconsistency</p>
-<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">app</span> <span class="o">=</span> <span class="n">Package</span><span class="p">(</span><span class="s2">&quot;app&quot;</span><span class="p">)</span>
-
-<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Container</span><span class="p">(</span><span class="n">Injector</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="n">persist_user</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">repositories</span><span class="o">.</span><span class="n">create_user</span>
-<span class="gp">... </span>    <span class="c1"># A lot of assignment statements here...</span>
-</code></pre></div>
-<p>If a lot of dependencies defined in the repositories module, you can set
-<code>Package</code> source to the repositories module itself.</p>
-<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">repositories</span> <span class="o">=</span> <span class="n">Package</span><span class="p">(</span><span class="s2">&quot;app.repositories&quot;</span><span class="p">)</span>
-
-<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Container</span><span class="p">(</span><span class="n">Injector</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="n">persist_user</span> <span class="o">=</span> <span class="n">repositories</span><span class="o">.</span><span class="n">create_user</span>
-<span class="gp">... </span>    <span class="c1"># A lot of assignment statements here...</span>
-</code></pre></div>
-<h2 id="classes">Classes<a class="headerlink" href="#classes" title="Permanent link">&para;</a></h2>
-<p>If an attribute of the <code>Package</code> object point to the attribute of the class
-defined in some module, this class will be instantiated before attribute access
-is actually happen. You can inject bound methods with exactly one line.</p>
-<div class="highlight"><pre><span></span><code><span class="go"># app/calc.py</span>
-
-<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Calc</span><span class="p">:</span>
+                <h1 id="descriptors">Descriptors<a class="headerlink" href="#descriptors" title="Permanent link">&para;</a></h1>
+<p>Descriptors is a powerful feature of the python language. It allows an object to
+know in attribute of what other object it is stored. Python will know an object
+is a descriptor if it implements descriptor protocol. In other words, if it
+defines <code>__get__</code>, <code>__set__</code>, and <code>__delete__</code> methods.</p>
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Descriptor</span><span class="p">:</span>
 <span class="gp">...</span>
-<span class="gp">... </span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
-<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="n">a</span>
-<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">b</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="fm">__get__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance</span><span class="p">,</span> <span class="n">klass</span><span class="p">):</span>
 <span class="gp">...</span>
-<span class="gp">... </span>    <span class="k">def</span> <span class="nf">do</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="gp">... </span>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span>
+<span class="gp">... </span>        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;=&gt;&#39;</span><span class="p">,</span> <span class="n">instance</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;=&gt;&#39;</span><span class="p">,</span> <span class="n">klass</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="mi">1</span>
 
-<span class="go"># app/base.py</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Holder</span><span class="p">:</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="n">attribute</span> <span class="o">=</span> <span class="n">Descriptor</span><span class="p">()</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">calc</span> <span class="o">=</span> <span class="n">Package</span><span class="p">(</span><span class="s2">&quot;app.calc&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Holder</span><span class="p">()</span><span class="o">.</span><span class="n">attribute</span>  <span class="c1"># doctest: +ELLIPSIS</span>
+<span class="go">=&gt; &lt;__main__.Holder object at 0x...&gt;</span>
+<span class="go">=&gt; &lt;class &#39;__main__.Holder&#39;&gt;</span>
+<span class="go">1</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Container</span><span class="p">(</span><span class="n">Injector</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="n">foo</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">Calc</span><span class="o">.</span><span class="n">do</span>
-<span class="gp">... </span>    <span class="n">a</span> <span class="o">=</span> <span class="mi">1</span>
-<span class="gp">... </span>    <span class="n">b</span> <span class="o">=</span> <span class="mi">2</span>
-
-<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">Container</span><span class="o">.</span><span class="n">foo</span><span class="p">()</span> <span class="o">==</span> <span class="mi">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Holder</span><span class="o">.</span><span class="n">attribute</span>
+<span class="go">=&gt; None</span>
+<span class="go">=&gt; &lt;class &#39;__main__.Holder&#39;&gt;</span>
+<span class="go">1</span>
 </code></pre></div>
-<p>The injector definition above is equivalent to the longuer version:</p>
-<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dependencies</span> <span class="kn">import</span> <span class="n">this</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">app.calc</span> <span class="kn">import</span> <span class="n">Calc</span>
+<p>Probably, you don't write code like that frequently. But a lot of your code uses
+descriptors already. For example, <code>@property</code> decorator and fields of Django
+models are implemented as descriptors.</p>
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="nd">@property</span>
+<span class="gp">... </span><span class="k">def</span> <span class="nf">attribute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="mi">1</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">hasattr</span><span class="p">(</span><span class="n">attribute</span><span class="p">,</span> <span class="s1">&#39;__get__&#39;</span><span class="p">)</span>
+<span class="go">True</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">hasattr</span><span class="p">(</span><span class="n">attribute</span><span class="p">,</span> <span class="s1">&#39;__set__&#39;</span><span class="p">)</span>
+<span class="go">True</span>
+</code></pre></div>
+<h2 id="inconsistency-with-dependencies">Inconsistency with <code>dependencies</code><a class="headerlink" href="#inconsistency-with-dependencies" title="Permanent link">&para;</a></h2>
+<p>As you already noticed descriptors could be assigned only at class definition
+time. Descriptor protocol will not be used in case you assign descriptor object
+to the object attribute.</p>
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Wrong</span><span class="p">:</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attribute</span><span class="p">):</span>
+<span class="gp">...</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">attribute</span> <span class="o">=</span> <span class="n">attribute</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Wrong</span><span class="p">(</span><span class="n">Descriptor</span><span class="p">())</span><span class="o">.</span><span class="n">attribute</span>  <span class="c1"># doctest: +ELLIPSIS</span>
+<span class="go">&lt;__main__.Descriptor object at 0x...&gt;</span>
+</code></pre></div>
+<p>The code above does not execute <code>__get__</code> method. It returns descriptor object
+as is.</p>
+<p>Most of the times <code>dependencies</code> library used to build instances of objects.
+That's why specifying descriptor as a dependency of some object would be a
+suspicious operation to do.</p>
+<ol>
+<li><strong>You will not have access to the <code>Injector</code> class it self.</strong></li>
+<li><strong>You will not have access to the object descriptor was passed to.</strong></li>
+</ol>
+<p>That's why descriptor found in the injection scope will be treated as an error.</p>
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dependencies</span> <span class="kn">import</span> <span class="n">Injector</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Container</span><span class="p">(</span><span class="n">Injector</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="n">foo</span> <span class="o">=</span> <span class="n">this</span><span class="o">.</span><span class="n">tmp</span><span class="o">.</span><span class="n">do</span>
-<span class="gp">... </span>    <span class="n">tmp</span> <span class="o">=</span> <span class="n">Calc</span>
-<span class="gp">... </span>    <span class="n">a</span> <span class="o">=</span> <span class="mi">1</span>
-<span class="gp">... </span>    <span class="n">b</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="n">wrong</span> <span class="o">=</span> <span class="n">Wrong</span>
+<span class="gp">... </span>    <span class="n">attribute</span> <span class="o">=</span> <span class="n">Descriptor</span><span class="p">()</span>
+<span class="gt">Traceback (most recent call last):</span>
+  <span class="c">...</span>
+<span class="gr">_dependencies.exceptions.DependencyError</span>: <span class="n">&#39;Container.attribute&#39; contains descriptor.</span>
+<span class="go">&lt;BLANKLINE&gt;</span>
+<span class="go">Descriptors usage will be confusing inside Injector subclasses.</span>
+<span class="go">&lt;BLANKLINE&gt;</span>
+<span class="go">Use @value decorator instead, if you really need inject descriptor instance somewhere.</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">Container</span><span class="o">.</span><span class="n">foo</span><span class="p">()</span> <span class="o">==</span> <span class="mi">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Container</span><span class="p">(</span><span class="n">Injector</span><span class="p">):</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="n">wrong</span> <span class="o">=</span> <span class="n">Wrong</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="nd">@property</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">attribute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="mi">1</span>
+<span class="gt">Traceback (most recent call last):</span>
+  <span class="c">...</span>
+<span class="gr">_dependencies.exceptions.DependencyError</span>: <span class="n">&#39;Container.attribute&#39; contains descriptor.</span>
+<span class="go">&lt;BLANKLINE&gt;</span>
+<span class="go">Descriptors usage will be confusing inside Injector subclasses.</span>
+<span class="go">&lt;BLANKLINE&gt;</span>
+<span class="go">Use @value decorator instead, if you really need inject descriptor instance somewhere.</span>
+</code></pre></div>
+<h2 id="inject-descriptors-anyway">Inject descriptors anyway<a class="headerlink" href="#inject-descriptors-anyway" title="Permanent link">&para;</a></h2>
+<p>As we explain earlier, using descriptors in the injection scope is a user error
+is most cases. You <strong>don't</strong> need a workaround until you're doing something
+really strange like defining classes during dependency injection process or
+accessing <code>Injector</code> attributes during class definition process.</p>
+<p>If you decided to bypass this restriction, you can use <code>@value</code> to hide the
+nature of an object.</p>
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dependencies</span> <span class="kn">import</span> <span class="n">value</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Container</span><span class="p">(</span><span class="n">Injector</span><span class="p">):</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="nd">@value</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">attribute</span><span class="p">():</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="n">Descriptor</span><span class="p">()</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Strange</span><span class="p">:</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="n">attribute</span> <span class="o">=</span> <span class="n">Container</span><span class="o">.</span><span class="n">attribute</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Strange</span><span class="p">()</span><span class="o">.</span><span class="n">attribute</span>  <span class="c1"># doctest: +ELLIPSIS</span>
+<span class="go">=&gt; &lt;__main__.Strange object at 0x...&gt;</span>
+<span class="go">=&gt; &lt;class &#39;__main__.Strange&#39;&gt;</span>
+<span class="go">1</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Strange</span><span class="o">.</span><span class="n">attribute</span>
+<span class="go">=&gt; None</span>
+<span class="go">=&gt; &lt;class &#39;__main__.Strange&#39;&gt;</span>
+<span class="go">1</span>
 </code></pre></div>
 <p align="center">&mdash; ⭐️ &mdash;</p>
 <p align="center"><i>The dependencies library is part of the SOLID python family.</i></p>
@@ -654,7 +697,7 @@ is actually happen. You can inject bound methods with exactly one line.</p>
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
         
-          <a href="../this/" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../attrs/" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-footer-nav__button md-icon">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
             </div>
@@ -663,25 +706,11 @@ is actually happen. You can inject bound methods with exactly one line.</p>
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                This
+                Attrs
               </div>
             </div>
           </a>
         
-        
-          <a href="../operation/" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
-            <div class="md-footer-nav__title">
-              <div class="md-ellipsis">
-                <span class="md-footer-nav__direction">
-                  Next
-                </span>
-                Operation
-              </div>
-            </div>
-            <div class="md-footer-nav__button md-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
-            </div>
-          </a>
         
       </nav>
     </div>
