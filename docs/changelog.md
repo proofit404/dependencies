@@ -1,3 +1,11 @@
+# [5.2.0](https://github.com/proofit404/dependencies/compare/5.1.0...5.2.0) (2020-11-21)
+
+### Features
+
+- support descriptor protocol
+  [#25](https://github.com/proofit404/dependencies/issues/25)
+  ([66111b5](https://github.com/proofit404/dependencies/commit/66111b5c4ef257c114c39984585239277fe067ca))
+
 # [5.1.0](https://github.com/proofit404/dependencies/compare/5.0.0...5.1.0) (2020-11-20)
 
 ### Features
