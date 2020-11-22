@@ -1,11 +1,14 @@
 from doctest import testfile
 from glob import glob
+from os import environ
 from sys import exit
 
 import responses
 
 
 def _setup():
+    environ["FRONTEND_URL"] = "https://example.com/frontend"
+    environ["BACKEND_URL"] = "https://example.com/backend"
     responses.add(
         responses.GET,
         "http://api.com/users/1/",
