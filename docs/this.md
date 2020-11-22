@@ -186,5 +186,49 @@ and the rest of the application will be left untouched.
 
 ```
 
+## Environment variables
+
+It is possible to access environment variables during dependency injection
+process. If a class has a dependency in it's constructor, you can pass a value
+from environment variable to the constructor using `this` proxy.
+
+```pycon
+
+>>> import os
+
+>>> class App:
+...
+...     def __init__(self, config):
+...
+...         self.config = config
+...
+...     def __repr__(self):
+...
+...         return f'App({self.config!r})'
+
+>>> class Config:
+...
+...     def __init__(self, frontend_url, backend_url):
+...
+...         self.frontend_url = frontend_url
+...         self.backend_url = backend_url
+...
+...     def __repr__(self):
+...
+...         return f'Config({self.frontend_url!r}, {self.backend_url!r})'
+
+>>> class Container(Injector):
+...
+...     app = App
+...     config = Config
+...     frontend_url = this.environ['FRONTEND_URL']
+...     backend_url = this.environ['BACKEND_URL']
+...     environ = os.environ
+
+>>> Container.app
+App(Config('https://example.com/frontend', 'https://example.com/backend'))
+
+```
+
 <p align="center">&mdash; ⭐️ &mdash;</p>
 <p align="center"><i>The dependencies library is part of the SOLID python family.</i></p>
