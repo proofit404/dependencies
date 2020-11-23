@@ -12,7 +12,7 @@
       
       
       <link rel="shortcut icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-6.1.5">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-6.1.6">
     
     
       
@@ -20,7 +20,7 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.21aed14c.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.6910b76c.min.css">
       
         
         <link rel="stylesheet" href="../assets/stylesheets/palette.196e0c26.min.css">
@@ -404,6 +404,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#environment-variables" class="md-nav__link">
+    Environment variables
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -553,6 +560,13 @@
         <li class="md-nav__item">
   <a href="#full-example" class="md-nav__link">
     Full example
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#environment-variables" class="md-nav__link">
+    Environment variables
   </a>
   
 </li>
@@ -711,6 +725,44 @@ and the rest of the application will be left untouched.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Container</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">port</span>
 <span class="go">6782</span>
 </code></pre></div>
+<h2 id="environment-variables">Environment variables<a class="headerlink" href="#environment-variables" title="Permanent link">&para;</a></h2>
+<p>It is possible to access environment variables during dependency injection
+process. If a class has a dependency in it's constructor, you can pass a value
+from environment variable to the constructor using <code>this</code> proxy.</p>
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">os</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">App</span><span class="p">:</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+<span class="gp">...</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">config</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="gp">...</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;App(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="si">!r}</span><span class="s1">)&#39;</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frontend_url</span><span class="p">,</span> <span class="n">backend_url</span><span class="p">):</span>
+<span class="gp">...</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">frontend_url</span> <span class="o">=</span> <span class="n">frontend_url</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">backend_url</span> <span class="o">=</span> <span class="n">backend_url</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="gp">...</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;Config(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">frontend_url</span><span class="si">!r}</span><span class="s1">, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">backend_url</span><span class="si">!r}</span><span class="s1">)&#39;</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Container</span><span class="p">(</span><span class="n">Injector</span><span class="p">):</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="n">app</span> <span class="o">=</span> <span class="n">App</span>
+<span class="gp">... </span>    <span class="n">config</span> <span class="o">=</span> <span class="n">Config</span>
+<span class="gp">... </span>    <span class="n">frontend_url</span> <span class="o">=</span> <span class="n">this</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;FRONTEND_URL&#39;</span><span class="p">]</span>
+<span class="gp">... </span>    <span class="n">backend_url</span> <span class="o">=</span> <span class="n">this</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;BACKEND_URL&#39;</span><span class="p">]</span>
+<span class="gp">... </span>    <span class="n">environ</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Container</span><span class="o">.</span><span class="n">app</span>
+<span class="go">App(Config(&#39;https://example.com/frontend&#39;, &#39;https://example.com/backend&#39;))</span>
+</code></pre></div>
 <p align="center">&mdash; ⭐️ &mdash;</p>
 <p align="center"><i>The dependencies library is part of the SOLID python family.</i></p>
                 
@@ -779,8 +831,8 @@ and the rest of the application will be left untouched.</p>
       
     </div>
     
-      <script src="../assets/javascripts/vendor.7e0ee788.min.js"></script>
-      <script src="../assets/javascripts/bundle.b3a72adc.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
+      <script src="../assets/javascripts/vendor.fd16492e.min.js"></script>
+      <script src="../assets/javascripts/bundle.7836ba4d.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
       
       <script>
         app = initialize({
