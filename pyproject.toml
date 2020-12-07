@@ -1,6 +1,6 @@
 [build-system]
-build-backend = "poetry.masonry.api"
-requires = ["poetry"]
+build-backend = "poetry.core.masonry.api"
+requires = ["poetry-core"]
 
 [tool.poetry]
 authors = ["Artem Malyshev <proofit404@gmail.com>"]
