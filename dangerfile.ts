@@ -136,7 +136,7 @@ export default async (): undefined => {
     return;
   }
 
-  if (hasIncompatibleLabel & hasBreakingCommit) {
+  if (hasIncompatibleLabel ^ hasBreakingCommit) {
     fail(
       "Only issue marked as backward incompatible is allowed to have breaking changes"
     );
