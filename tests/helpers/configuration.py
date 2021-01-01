@@ -305,6 +305,7 @@ class _Settings:
         ("ignore_outcome", _Boolean),
         ("install_command", _String),
         ("setenv", _Text),
+        ("passenv", _Text),
         ("deps", _Text),
         ("commands", _Text),
         ("depends", _Text),
