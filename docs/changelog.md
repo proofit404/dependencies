@@ -128,7 +128,8 @@
 
 - Support `in` checks in the `Injector` subclasses.
 - Add `operation` decorator to build injectable functions.
-- Add `Package` proxy to reduce import boilerplate in the `Injector` definition.
+- Add `Package` object to reduce import boilerplate in the `Injector`
+  definition.
 - Add Celery contrib to define tasks from `Injector` subclasses.
 - Add Py.Test contrib to define fixtures from `Injector` subclasses.
 - Add Django contrib to define views from `Injector` subclasses.
@@ -141,7 +142,7 @@
 
 ## 0.14 (2018-04-13)
 
-- Add `this` proxy object for aliases and cross injector links.
+- Add `this` object for aliases and cross injector links.
 - Deprecate attribute assignment and `use` decorator.
 - Release under BSD license.
 

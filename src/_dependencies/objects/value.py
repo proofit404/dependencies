@@ -1,5 +1,6 @@
-from _dependencies.checks.value import _check_class
-from _dependencies.checks.value import _check_method
+from inspect import isclass
+
+from _dependencies.exceptions import DependencyError
 from _dependencies.injectable import _function_args
 from _dependencies.spec import _Spec
 
@@ -18,6 +19,9 @@ class Value:
         self.__function__ = function
 
 
+value = Value
+
+
 def _is_value(name, dependency):
     return isinstance(dependency, Value)
 
@@ -29,3 +33,13 @@ def _build_value_spec(name, dependency):
     args, required, optional = _function_args(function, name, owner)
     _check_method(args)
     return _Spec(function, args, required, optional)
+
+
+def _check_class(function):
+    if isclass(function):
+        raise DependencyError("'value' decorator can not be used on classes")
+
+
+def _check_method(arguments):
+    if "self" in arguments:
+        raise DependencyError("'value' decorator can not be used on methods")

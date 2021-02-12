@@ -1,6 +1,6 @@
 from importlib import import_module
 
-from _dependencies.kinds.attributes import _Attributes
+from _dependencies.objects.attributes import _Attributes
 from _dependencies.replace import _Replace
 from _dependencies.spec import _Spec
 

@@ -1,4 +1,4 @@
-"""Tests related to the Package() proxy."""
+"""Tests related to the Package object."""
 import inspect
 
 import pytest

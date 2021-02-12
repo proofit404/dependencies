@@ -1,24 +1,21 @@
-from functools import wraps
-
-from _dependencies.checks.descriptor import _check_descriptor
-from _dependencies.kinds.attributes import _build_attributes_spec
-from _dependencies.kinds.attributes import _is_attributes
-from _dependencies.kinds.classes import _build_class_spec
-from _dependencies.kinds.classes import _is_class
-from _dependencies.kinds.nested import _build_nested_injector_spec
-from _dependencies.kinds.nested import _is_nested_injector
-from _dependencies.kinds.package import _build_package_spec
-from _dependencies.kinds.package import _is_package
-from _dependencies.kinds.raw import _build_raw_spec
-from _dependencies.kinds.raw import _is_raw
-from _dependencies.kinds.this import _build_this_spec
-from _dependencies.kinds.this import _is_this
-from _dependencies.kinds.value import _build_value_spec
-from _dependencies.kinds.value import _is_value
+from _dependencies.objects.attributes import _build_attributes_spec
+from _dependencies.objects.attributes import _is_attributes
+from _dependencies.objects.classes import _build_class_spec
+from _dependencies.objects.classes import _is_class
+from _dependencies.objects.data import _build_data_spec
+from _dependencies.objects.data import _is_data
+from _dependencies.objects.descriptor import _is_descriptor
+from _dependencies.objects.nested import _build_nested_injector_spec
+from _dependencies.objects.nested import _is_nested_injector
+from _dependencies.objects.package import _build_package_spec
+from _dependencies.objects.package import _is_package
+from _dependencies.objects.this import _build_this_spec
+from _dependencies.objects.this import _is_this
+from _dependencies.objects.value import _build_value_spec
+from _dependencies.objects.value import _is_value
 
 
 def _recursive(builder):
-    @wraps(builder)
     def wrapper(name, dependency):
         state = builder(name, dependency)
         while True:
@@ -33,14 +30,14 @@ def _recursive(builder):
 
 
 conditions = (
-    (_check_descriptor, None),
+    (_is_descriptor, None),
     (_is_attributes, _recursive(_build_attributes_spec)),
     (_is_nested_injector, _build_nested_injector_spec),
     (_is_class, _build_class_spec),
     (_is_this, _build_this_spec),
     (_is_package, _build_package_spec),
     (_is_value, _build_value_spec),
-    (_is_raw, _build_raw_spec),
+    (_is_data, _build_data_spec),
 )
 
 

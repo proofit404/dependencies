@@ -1,4 +1,4 @@
-"""Tests related to the Injector subclasses."""
+"""Tests related to the Injector classes."""
 from inspect import isclass
 
 import pytest
@@ -19,11 +19,11 @@ def test_lambda_dependency():
         def do(self, x):
             return self.add(x, x)
 
-    class Summator(Injector):
+    class Container(Injector):
         foo = Foo
         add = lambda x, y: x + y  # noqa: E731
 
-    assert Summator.foo.do(1) == 2
+    assert Container.foo.do(1) == 2
 
 
 def test_function_dependency():
@@ -39,11 +39,11 @@ def test_function_dependency():
     def plus(x, y):
         return x + y
 
-    class Summator(Injector):
+    class Container(Injector):
         foo = Foo
         add = plus
 
-    assert Summator.foo.do(1) == 2
+    assert Container.foo.do(1) == 2
 
 
 def test_inline_dependency():
@@ -56,13 +56,13 @@ def test_inline_dependency():
         def do(self, x):
             return self.add(x, x)
 
-    class Summator(Injector):
+    class Container(Injector):
         foo = Foo
 
         def add(x, y):
             return x + y
 
-    assert Summator.foo.do(1) == 2
+    assert Container.foo.do(1) == 2
 
 
 def test_class_dependency():
@@ -87,13 +87,13 @@ def test_class_dependency():
         def go(self, x):
             return self.mul(x, x)
 
-    class Summator(Injector):
+    class Container(Injector):
         foo = Foo
         bar = Bar
         add = lambda x, y: x + y  # noqa: E731
         mul = lambda x, y: x * y  # noqa: E731
 
-    assert Summator.foo.do(2) == 8
+    assert Container.foo.do(2) == 8
 
 
 def test_do_not_instantiate_dependencies_ended_with_class():
@@ -122,14 +122,14 @@ def test_redefine_dependency():
         def do(self, x):
             return self.add(x, x)
 
-    class Summator(Injector):
+    class Container(Injector):
         foo = Foo
         add = lambda x, y: x + y  # noqa: E731  # pragma: no cover
 
-    class WrongSummator(Summator):
+    class WrongContainer(Container):
         add = lambda x, y: x - y  # noqa: E731
 
-    assert WrongSummator.foo.do(1) == 0
+    assert WrongContainer.foo.do(1) == 0
 
 
 def test_override_keyword_argument_if_dependency_was_specified():
@@ -148,12 +148,12 @@ def test_override_keyword_argument_if_dependency_was_specified():
         def do(self, x):
             return self.add(x, self.y)
 
-    class Summator(Injector):
+    class Container(Injector):
         foo = Foo
         add = lambda x, y: x + y  # noqa: E731
         y = 2
 
-    assert Summator.foo.do(1) == 3
+    assert Container.foo.do(1) == 3
 
 
 def test_preserve_keyword_argument_if_dependency_was_missed():
@@ -172,11 +172,11 @@ def test_preserve_keyword_argument_if_dependency_was_missed():
         def do(self, x):
             return self.add(x, self.y)
 
-    class Summator(Injector):
+    class Container(Injector):
         foo = Foo
         add = lambda x, y: x + y  # noqa: E731
 
-    assert Summator.foo.do(1) == 2
+    assert Container.foo.do(1) == 2
 
 
 def test_preserve_missed_keyword_argument_in_the_middle():
@@ -830,3 +830,98 @@ def _gwufxYkhURAF():
 @has_attribute
 def _zlZoLka31ndk():
     return Injector(foo=1)
+
+
+subclasses_only = CodeCollector()
+
+
+@subclasses_only.parametrize
+def test_multiple_inheritance_deny_regular_classes(code):
+    """Only `Injector` subclasses are allowed to be used in the inheritance."""
+
+    class Foo:
+        pass
+
+    with pytest.raises(DependencyError) as exc_info:
+        code(Foo)
+
+    message = str(exc_info.value)
+    assert message == "Multiple inheritance is allowed for Injector subclasses only"
+
+
+@subclasses_only
+def _f1583394f1a6(Foo):
+    class Bar(Injector, Foo):
+        pass
+
+
+@subclasses_only
+def _b51814725d07(Foo):
+    Injector & Foo
+
+
+deny_magic_methods = CodeCollector()
+
+
+@deny_magic_methods.parametrize
+def test_deny_magic_methods_injection(code):
+    """`Injector` doesn't accept magic methods."""
+    with pytest.raises(DependencyError) as exc_info:
+        code()
+
+    assert str(exc_info.value) == "Magic methods are not allowed"
+
+
+@deny_magic_methods
+def _e78bf771747c():
+    class Bar(Injector):
+        def __eq__(self, other):
+            pass  # pragma: no cover
+
+
+@deny_magic_methods
+def _e34b88041f64():
+    def eq(self, other):
+        pass  # pragma: no cover
+
+    Injector(__eq__=eq)
+
+
+deny_empty_scope = CodeCollector()
+
+
+@deny_empty_scope.parametrize
+def test_deny_empty_scope_extension(code):
+    """`Injector` subclasses can't extend scope with empty subset."""
+    with pytest.raises(DependencyError) as exc_info:
+        code()
+
+    assert str(exc_info.value) == "Extension scope can not be empty"
+
+
+@deny_empty_scope
+def _fQl3MI95Y1Zi():
+    class Container(Injector):
+        pass
+
+
+@deny_empty_scope
+def _pdnQASIDVq2V():
+    Injector()
+
+
+@deny_empty_scope
+def _aWNEsKRIx12r():
+    class Container(Injector):
+        x = 1
+
+    class SubContainer(Container):
+        pass
+
+
+@deny_empty_scope
+def _myj1ZoubR68j():
+    class Container(Injector):
+        x = 1
+
+    Container()

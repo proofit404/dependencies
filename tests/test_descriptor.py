@@ -1,4 +1,4 @@
-"""Tests related to descriptor checks."""
+"""Tests related to descriptor objects."""
 import pytest
 
 from dependencies import Injector

@@ -1,4 +1,4 @@
-# `this` proxy
+# `this` object
 
 `this` is a declarative way to access attributes and items of other dependencies
 defined in the `Injector` subclasses. The Link is basically a pointer or an
@@ -60,8 +60,8 @@ You can use this links as usual in the constructor arguments.
 
 ```
 
-Also, you can see, that you can define proxy a before the actual dependency it
-pointing to.
+You may notice that it is possible to define `this` object before the dependency
+it point to.
 
 You can point a link to the instance method. The actual instance will be built
 before resolving method access. This is a useful technique to hide whole class
@@ -190,7 +190,7 @@ and the rest of the application will be left untouched.
 
 It is possible to access environment variables during dependency injection
 process. If a class has a dependency in it's constructor, you can pass a value
-from environment variable to the constructor using `this` proxy.
+from environment variable to the constructor using `this` object.
 
 ```pycon
 
