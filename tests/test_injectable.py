@@ -1,4 +1,4 @@
-"""Tests related to the function checks."""
+"""Tests related to injectable objects."""
 import pytest
 
 from dependencies import Injector
@@ -27,7 +27,7 @@ def test_deny_arbitrary_argument_list(code, foo):
 
 @deny_varargs
 def _dfe1c22c641e(Foo):
-    class Summator(Injector):
+    class Container(Injector):
         foo = Foo
         args = (1, 2, 3)
 
@@ -75,7 +75,7 @@ def test_deny_arbitrary_keyword_arguments(code, foo):
 
 @deny_kwargs
 def _e281099be65d(Foo):
-    class Summator(Injector):
+    class Container(Injector):
         foo = Foo
         kwargs = {"start": 5}
 
@@ -123,7 +123,7 @@ def test_deny_arbitrary_positional_and_keyword_arguments_together(code, foo):
 
 @deny_varargs_kwargs
 def _efbf07f8deb6(Foo):
-    class Summator(Injector):
+    class Container(Injector):
         foo = Foo
         args = (1, 2, 3)
         kwargs = {"start": 5}

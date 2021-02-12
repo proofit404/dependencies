@@ -42,7 +42,7 @@ dependencies passed to its arguments. Result of the function was stored in the
 injection scope under the same `quiz` name. We received value from `quiz` name
 from the injection scope.
 
-## Depending on result of the proxy
+## Depending on the value
 
 ```pycon
 

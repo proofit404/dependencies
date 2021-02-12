@@ -4,7 +4,7 @@ from inspect import ismethoddescriptor
 from _dependencies.exceptions import DependencyError
 
 
-def _check_descriptor(name, dependency):
+def _is_descriptor(name, dependency):
     if ismethoddescriptor(dependency) or isdatadescriptor(dependency):
         message = descriptor_template.format(name=name)
         raise DependencyError(message)

@@ -1,4 +1,3 @@
-from _dependencies.checks.this import _check_expression
 from _dependencies.exceptions import DependencyError
 from _dependencies.spec import _Spec
 
@@ -30,18 +29,19 @@ def _is_this(name, dependency):
 
 
 def _build_this_spec(name, dependency):
-    _check_expression(dependency)
-    return _Spec(_ThisFactory(dependency), {"__self__": False}, {"__self__"}, set())
+    expression = dependency.__expression__
+    _check_expression(expression)
+    return _Spec(_ThisFactory(expression), {"__self__": False}, {"__self__"}, set())
 
 
 class _ThisFactory:
-    def __init__(self, dependency):
-        self.dependency = dependency
+    def __init__(self, expression):
+        self.expression = expression
 
     def __call__(self, __self__):
         result = __self__
-        for op, symbol in self.dependency.__expression__:
-            result = ops[op](result, symbol)
+        for operator, symbol in self.expression:
+            result = operators[operator](result, symbol)
         return result
 
 
@@ -61,7 +61,16 @@ def _get_item(instance, name):
     return instance[name]
 
 
-ops = {
+operators = {
     ".": _get_attribute,
     "[]": _get_item,
 }
+
+
+def _check_expression(expression):
+    if not any(
+        symbol
+        for operator, symbol in expression
+        if operator == "." and symbol != "__parent__"
+    ):
+        raise DependencyError("You can not use 'this' directly in the 'Injector'")

@@ -1,4 +1,4 @@
-# `Package` proxy
+# `Package` object
 
 `Package` object is a way to define injector scope with dependencies defined in
 other places (like modules and packages). You can point package object to the

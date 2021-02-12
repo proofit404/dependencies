@@ -1,8 +1,6 @@
-from _dependencies.checks.injector import _check_extension_scope
-from _dependencies.checks.injector import _check_inheritance
 from _dependencies.exceptions import DependencyError
 from _dependencies.graph import _Graph
-from _dependencies.kinds.nested import _InjectorTypeType
+from _dependencies.objects.nested import _InjectorTypeType
 from _dependencies.resolve import _Resolver
 from _dependencies.state import _State
 
@@ -10,9 +8,11 @@ from _dependencies.state import _State
 class _InjectorType(_InjectorTypeType):
     def __new__(cls, class_name, bases, namespace):
         if not bases:
-            namespace["__dependencies__"] = _Graph(class_name)
-            namespace["__wrapped__"] = None  # Doctest module compatibility.
-            namespace["_subs_tree"] = None  # Typing module compatibility.
+            namespace["__dependencies__"] = _Graph()
+            # Doctest module compatibility.
+            namespace["__wrapped__"] = None  # pragma: no mutate
+            # Typing module compatibility.
+            namespace["_subs_tree"] = None  # pragma: no mutate
             return type.__new__(cls, class_name, bases, namespace)
 
         _check_inheritance(bases, Injector)
@@ -20,7 +20,7 @@ class _InjectorType(_InjectorTypeType):
         for attr in ("__module__", "__doc__", "__weakref__", "__qualname__"):
             _transfer(namespace, ns, attr)
         _check_extension_scope(bases, namespace)
-        dependencies = _Graph(class_name)
+        dependencies = _Graph()
         for base in reversed(bases):
             dependencies.update(base.__dependencies__)
         for name, dep in namespace.items():
@@ -61,6 +61,18 @@ def _transfer(from_namespace, to_namespace, attr):
         to_namespace[attr] = from_namespace.pop(attr)
     except KeyError:
         pass
+
+
+def _check_inheritance(bases, injector):
+    for base in bases:
+        if not issubclass(base, injector):
+            message = "Multiple inheritance is allowed for Injector subclasses only"
+            raise DependencyError(message)
+
+
+def _check_extension_scope(bases, namespace):
+    if len(bases) == 1 and not namespace:
+        raise DependencyError("Extension scope can not be empty")
 
 
 class Injector(metaclass=_InjectorType):

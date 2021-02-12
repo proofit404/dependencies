@@ -1,10 +1,9 @@
 from _dependencies.analyze import _make_dependency_spec
-from _dependencies.checks.injector import _check_dunder_name
+from _dependencies.exceptions import DependencyError
 
 
 class _Graph:
-    def __init__(self, in_class):
-        self.in_class = in_class
+    def __init__(self):
         self.specs = {}
 
     def get(self, name):
@@ -19,3 +18,8 @@ class _Graph:
 
     def update(self, graph):
         self.specs.update(graph.specs)
+
+
+def _check_dunder_name(name):
+    if name.startswith("__") and name.endswith("__"):
+        raise DependencyError("Magic methods are not allowed")
