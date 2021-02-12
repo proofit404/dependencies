@@ -1,3 +1,17 @@
+# [6.0.0](https://github.com/proofit404/dependencies/compare/5.2.0...6.0.0) (2021-02-12)
+
+### Features
+
+- deprecate [@operation](https://github.com/operation) object
+  [#457](https://github.com/proofit404/dependencies/issues/457)
+  ([917b62f](https://github.com/proofit404/dependencies/commit/917b62fae0e76aec2ca1fe7f6178d484820cce97))
+
+### BREAKING CHANGES
+
+- @operation object was removed. You could replace it with @value object
+  returning inner function. This inner function would use it's closure to
+  resolve injected dependencies.
+
 # [5.2.0](https://github.com/proofit404/dependencies/compare/5.1.0...5.2.0) (2020-11-21)
 
 ### Features
