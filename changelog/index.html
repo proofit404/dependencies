@@ -64,7 +64,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#520-2020-11-21" class="md-skip">
+        <a href="#600-2021-02-12" class="md-skip">
           Skip to content
         </a>
       
@@ -348,6 +348,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#breaking-changes" class="md-nav__link">
+    BREAKING CHANGES
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -430,18 +437,6 @@
     <li class="md-nav__item">
       <a href="../package/" class="md-nav__link">
         Package
-      </a>
-    </li>
-  
-
-          
-            
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../operation/" class="md-nav__link">
-        Operation
       </a>
     </li>
   
@@ -563,6 +558,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#breaking-changes" class="md-nav__link">
+    BREAKING CHANGES
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -576,15 +578,28 @@
               
                 
                 
-                <h1 id="520-2020-11-21"><a href="https://github.com/proofit404/dependencies/compare/5.1.0...5.2.0">5.2.0</a> (2020-11-21)<a class="headerlink" href="#520-2020-11-21" title="Permanent link">&para;</a></h1>
+                <h1 id="600-2021-02-12"><a href="https://github.com/proofit404/dependencies/compare/5.2.0...6.0.0">6.0.0</a> (2021-02-12)<a class="headerlink" href="#600-2021-02-12" title="Permanent link">&para;</a></h1>
 <h3 id="features">Features<a class="headerlink" href="#features" title="Permanent link">&para;</a></h3>
+<ul>
+<li>deprecate <a href="https://github.com/operation">@operation</a> object
+  <a href="https://github.com/proofit404/dependencies/issues/457">#457</a>
+  (<a href="https://github.com/proofit404/dependencies/commit/917b62fae0e76aec2ca1fe7f6178d484820cce97">917b62f</a>)</li>
+</ul>
+<h3 id="breaking-changes">BREAKING CHANGES<a class="headerlink" href="#breaking-changes" title="Permanent link">&para;</a></h3>
+<ul>
+<li>@operation object was removed. You could replace it with @value object
+  returning inner function. This inner function would use it's closure to
+  resolve injected dependencies.</li>
+</ul>
+<h1 id="520-2020-11-21"><a href="https://github.com/proofit404/dependencies/compare/5.1.0...5.2.0">5.2.0</a> (2020-11-21)<a class="headerlink" href="#520-2020-11-21" title="Permanent link">&para;</a></h1>
+<h3 id="features_1">Features<a class="headerlink" href="#features_1" title="Permanent link">&para;</a></h3>
 <ul>
 <li>support descriptor protocol
   <a href="https://github.com/proofit404/dependencies/issues/25">#25</a>
   (<a href="https://github.com/proofit404/dependencies/commit/66111b5c4ef257c114c39984585239277fe067ca">66111b5</a>)</li>
 </ul>
 <h1 id="510-2020-11-20"><a href="https://github.com/proofit404/dependencies/compare/5.0.0...5.1.0">5.1.0</a> (2020-11-20)<a class="headerlink" href="#510-2020-11-20" title="Permanent link">&para;</a></h1>
-<h3 id="features_1">Features<a class="headerlink" href="#features_1" title="Permanent link">&para;</a></h3>
+<h3 id="features_2">Features<a class="headerlink" href="#features_2" title="Permanent link">&para;</a></h3>
 <ul>
 <li>support pypy interpreter
   <a href="https://github.com/proofit404/dependencies/issues/42">#42</a>
@@ -597,12 +612,12 @@
   <a href="https://github.com/proofit404/dependencies/issues/410">#410</a>
   (<a href="https://github.com/proofit404/dependencies/commit/a9526bbb237a6a143a18e47ed4dc27e08fa7b049">a9526bb</a>)</li>
 </ul>
-<h3 id="breaking-changes">BREAKING CHANGES<a class="headerlink" href="#breaking-changes" title="Permanent link">&para;</a></h3>
+<h3 id="breaking-changes_1">BREAKING CHANGES<a class="headerlink" href="#breaking-changes_1" title="Permanent link">&para;</a></h3>
 <ul>
 <li>drop python 3.6 support.</li>
 </ul>
 <h1 id="410-2020-10-23"><a href="https://github.com/proofit404/dependencies/compare/4.0.1...4.1.0">4.1.0</a> (2020-10-23)<a class="headerlink" href="#410-2020-10-23" title="Permanent link">&para;</a></h1>
-<h3 id="features_2">Features<a class="headerlink" href="#features_2" title="Permanent link">&para;</a></h3>
+<h3 id="features_3">Features<a class="headerlink" href="#features_3" title="Permanent link">&para;</a></h3>
 <ul>
 <li>deny to use empty extension scope
   <a href="https://github.com/proofit404/dependencies/issues/398">#398</a>
@@ -622,13 +637,13 @@
   <a href="https://github.com/proofit404/dependencies/issues/239">#239</a>
   (<a href="https://github.com/proofit404/dependencies/commit/1d7c4364749609fb87399f6e5ddee099e8885824">1d7c436</a>)</li>
 </ul>
-<h3 id="features_3">Features<a class="headerlink" href="#features_3" title="Permanent link">&para;</a></h3>
+<h3 id="features_4">Features<a class="headerlink" href="#features_4" title="Permanent link">&para;</a></h3>
 <ul>
 <li>replace let attribute with call
   <a href="https://github.com/proofit404/dependencies/issues/315">#315</a>
   (<a href="https://github.com/proofit404/dependencies/commit/1c84ea96ed3bef1b7f57b219a743b98a3837e9ca">1c84ea9</a>)</li>
 </ul>
-<h3 id="breaking-changes_1">BREAKING CHANGES<a class="headerlink" href="#breaking-changes_1" title="Permanent link">&para;</a></h3>
+<h3 id="breaking-changes_2">BREAKING CHANGES<a class="headerlink" href="#breaking-changes_2" title="Permanent link">&para;</a></h3>
 <ul>
 <li><code>let</code> attribute was removed. Use <code>Injector()</code> instead of obsolete
   <code>Injector.let()</code>.</li>
@@ -640,7 +655,7 @@
   <a href="https://github.com/proofit404/dependencies/issues/348">#348</a>
   (<a href="https://github.com/proofit404/dependencies/commit/360ad90b51063e5c14b4df9b643caee25aba4848">360ad90</a>)</li>
 </ul>
-<h3 id="breaking-changes_2">BREAKING CHANGES<a class="headerlink" href="#breaking-changes_2" title="Permanent link">&para;</a></h3>
+<h3 id="breaking-changes_3">BREAKING CHANGES<a class="headerlink" href="#breaking-changes_3" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Due to the our new policy of enterprise user support we will drop abandoned
   version of python and libraries we are integrated with as soon as they reach
@@ -653,13 +668,13 @@
   (<a href="https://github.com/proofit404/dependencies/commit/137741fb29d69f6ffe22d949e05f9db06c706a38">137741f</a>)</li>
 </ul>
 <h1 id="200-2020-05-17"><a href="https://github.com/proofit404/dependencies/compare/1.0.1...2.0.0">2.0.0</a> (2020-05-17)<a class="headerlink" href="#200-2020-05-17" title="Permanent link">&para;</a></h1>
-<h3 id="features_4">Features<a class="headerlink" href="#features_4" title="Permanent link">&para;</a></h3>
+<h3 id="features_5">Features<a class="headerlink" href="#features_5" title="Permanent link">&para;</a></h3>
 <ul>
 <li>remove contrib package
   (<a href="https://github.com/proofit404/dependencies/commit/5bfe041f72bc82a4a24ea47599cf2bfbb8d13900">5bfe041</a>),
   closes <a href="https://github.com/proofit404/dependencies/issues/192">#192</a></li>
 </ul>
-<h3 id="breaking-changes_3">BREAKING CHANGES<a class="headerlink" href="#breaking-changes_3" title="Permanent link">&para;</a></h3>
+<h3 id="breaking-changes_4">BREAKING CHANGES<a class="headerlink" href="#breaking-changes_4" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Every time a new user asks me how to use their favorite framework together
   with stories and dependencies I understand that there is a missing module in
