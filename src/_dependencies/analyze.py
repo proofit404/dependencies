@@ -7,8 +7,6 @@ from _dependencies.kinds.classes import _build_class_spec
 from _dependencies.kinds.classes import _is_class
 from _dependencies.kinds.nested import _build_nested_injector_spec
 from _dependencies.kinds.nested import _is_nested_injector
-from _dependencies.kinds.operation import _build_operation_spec
-from _dependencies.kinds.operation import _is_operation
 from _dependencies.kinds.package import _build_package_spec
 from _dependencies.kinds.package import _is_package
 from _dependencies.kinds.raw import _build_raw_spec
@@ -41,7 +39,6 @@ conditions = (
     (_is_class, _build_class_spec),
     (_is_this, _build_this_spec),
     (_is_package, _build_package_spec),
-    (_is_operation, _build_operation_spec),
     (_is_value, _build_value_spec),
     (_is_raw, _build_raw_spec),
 )

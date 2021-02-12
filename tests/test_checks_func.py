@@ -2,7 +2,6 @@
 import pytest
 
 from dependencies import Injector
-from dependencies import operation
 from dependencies import value
 from dependencies.exceptions import DependencyError
 from helpers import CodeCollector
@@ -45,15 +44,6 @@ def _xkebooxhls7f():
             pass  # pragma: no cover
 
     return Foo
-
-
-@varargs_defs
-def _u69ddou3olnl():
-    @operation
-    def func(*args):
-        pass  # pragma: no cover
-
-    return func
 
 
 @varargs_defs
@@ -102,15 +92,6 @@ def _gvhotc3zgfuq():
             pass  # pragma: no cover
 
     return Foo
-
-
-@kwargs_defs
-def _d0li35b2qiaw():
-    @operation
-    def func(**kwargs):
-        pass  # pragma: no cover
-
-    return func
 
 
 @kwargs_defs
@@ -163,15 +144,6 @@ def _qyy5p4ah11qj():
 
 
 @varargs_kwargs_defs
-def _q3o6g5va9wtj():
-    @operation
-    def func(*args, **kwargs):
-        pass  # pragma: no cover
-
-    return func
-
-
-@varargs_kwargs_defs
 def _btt8ue2wjjra():
     @value
     def func(*args, **kwargs):
@@ -208,13 +180,6 @@ You should either change the name of the argument into 'foo_class'
 or set the default value to an instance of that class.
 """.strip()
 
-    expected_operation = """
-'func' operation has a default value of 'foo' argument set to 'Foo' class.
-
-You should either change the name of the argument into 'foo_class'
-or set the default value to an instance of that class.
-""".strip()
-
     expected_value = """
 'func' value has a default value of 'foo' argument set to 'Foo' class.
 
@@ -222,7 +187,7 @@ You should either change the name of the argument into 'foo_class'
 or set the default value to an instance of that class.
 """.strip()
 
-    assert message in {expected_class, expected_operation, expected_value}
+    assert message in {expected_class, expected_value}
 
 
 @cls_named_arguments
@@ -243,15 +208,6 @@ def _sxd25ppy5ypj(Foo):
             pass  # pragma: no cover
 
     return Bar
-
-
-@arguments_defs
-def _ayjw79dr577x(Foo):
-    @operation
-    def func(foo=Foo):
-        pass  # pragma: no cover
-
-    return func
 
 
 @arguments_defs
@@ -297,15 +253,6 @@ def _x53iiy9oyx4i():
             pass  # pragma: no cover
 
     return Bar
-
-
-@defaults_defs
-def _dwj3xheytfiz():
-    @operation
-    def func(foo_class=1):
-        pass  # pragma: no cover
-
-    return func
 
 
 @defaults_defs

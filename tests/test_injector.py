@@ -4,7 +4,6 @@ from inspect import isclass
 import pytest
 
 from dependencies import Injector
-from dependencies import operation
 from dependencies import value
 from dependencies.exceptions import DependencyError
 from helpers import CodeCollector
@@ -555,8 +554,8 @@ def test_evaluate_once_different_types(code, a, b, c):
     """Evaluate each node in the dependencies graph once.
 
     Arguments of dependencies of different types should be evaluated once. This rules
-    applies to classes, @operation, @value. This is a variation of the test above
-    written against all necessary inputs.
+    applies to classes and @value objects. This is a variation of the test above written
+    against all necessary inputs.
 
     """
     times = []
@@ -597,15 +596,6 @@ def _irfiju659gxv():
 
 
 @evaluate_once_a
-def _ibVipQjYw41T():
-    @operation
-    def a(b, c):
-        pass  # pragma: no cover
-
-    return a
-
-
-@evaluate_once_a
 def _eik35aKD1khF():
     @value
     def a(b, c):
@@ -624,15 +614,6 @@ def _n9K1km2utmbt():
 
 
 @evaluate_once_b
-def _pGfVZxOasrJc():
-    @operation
-    def b(d):
-        pass  # pragma: no cover
-
-    return b
-
-
-@evaluate_once_b
 def _mtGW5dk9BMBw():
     @value
     def b(d):
@@ -648,15 +629,6 @@ def _k6pJn1sVihhd():
             pass
 
     return C
-
-
-@evaluate_once_c
-def _mfOvey7viBCe():
-    @operation
-    def c(d):
-        pass  # pragma: no cover
-
-    return c
 
 
 @evaluate_once_c
