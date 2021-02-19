@@ -1,7 +1,7 @@
 ---
 strict: true
 site_name: dependencies
-site_description: Dependency Injection for Humans.
+site_description: Constructor injection designed with OOP in mind.
 theme:
   name: material
   palette:

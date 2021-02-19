@@ -1,4 +1,4 @@
-"""Dependency Injection for Humans."""
+"""Constructor injection designed with OOP in mind."""
 from _dependencies.injector import Injector
 from _dependencies.objects.package import Package
 from _dependencies.objects.this import this
