@@ -9,8 +9,8 @@ classifiers = [
     "Programming Language :: Python :: Implementation :: PyPy",
 ]
 description = "Constructor injection designed with OOP in mind."
-documentation = "https://proofit404.github.io/dependencies/"
-homepage = "https://pypi.org/project/dependencies/"
+documentation = "https://proofit404.github.io/dependencies"
+homepage = "https://pypi.org/project/dependencies"
 license = "BSD-2-Clause"
 name = "dependencies"
 packages = [
@@ -18,12 +18,12 @@ packages = [
     { include = "dependencies", from = "src" },
 ]
 readme = "docs/index.md"
-repository = "https://github.com/proofit404/dependencies/"
+repository = "https://github.com/proofit404/dependencies"
 version = "6.0.0"
 
 [tool.poetry.dependencies]
 python = "~3.6 || ~3.7 || ~3.8 || ~3.9"
 
 [tool.poetry.urls]
-Changelog = "https://proofit404.github.io/dependencies/changelog/"
+Changelog = "https://proofit404.github.io/dependencies/changelog"
 Issues = "https://github.com/proofit404/dependencies/issues"

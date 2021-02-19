@@ -2,13 +2,13 @@
 
 [![azure-devops-builds](https://img.shields.io/azure-devops/build/proofit404/dependencies/2?style=flat-square)](https://dev.azure.com/proofit404/dependencies/_build/latest?definitionId=2&branchName=master)
 [![azure-devops-coverage](https://img.shields.io/azure-devops/coverage/proofit404/dependencies/2?style=flat-square)](https://dev.azure.com/proofit404/dependencies/_build/latest?definitionId=2&branchName=master)
-[![pypi](https://img.shields.io/pypi/v/dependencies?style=flat-square)](https://pypi.python.org/pypi/dependencies/)
+[![pypi](https://img.shields.io/pypi/v/dependencies?style=flat-square)](https://pypi.org/project/dependencies)
 [![conda](https://img.shields.io/conda/vn/conda-forge/dependencies?style=flat-square)](https://anaconda.org/conda-forge/dependencies)
-[![python](https://img.shields.io/pypi/pyversions/dependencies?style=flat-square)](https://pypi.python.org/pypi/dependencies/)
+[![python](https://img.shields.io/pypi/pyversions/dependencies?style=flat-square)](https://pypi.org/project/dependencies)
 
 Constructor injection designed with OOP in mind.
 
-**[Documentation](https://proofit404.github.io/dependencies/) |
+**[Documentation](https://proofit404.github.io/dependencies) |
 [Source Code](https://github.com/proofit404/dependencies) |
 [Task Tracker](https://github.com/proofit404/dependencies/issues)**
 
@@ -89,7 +89,7 @@ interested in it.
 
 ## License
 
-Dependencies library is offered under the two clause BSD license.
+`dependencies` library is offered under the two clause BSD license.
 
 <p align="center">&mdash; ⭐️ &mdash;</p>
 <p align="center"><i>The dependencies library is part of the SOLID python family.</i></p>

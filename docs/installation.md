@@ -1,6 +1,6 @@
 # Installation
 
-The dependencies library is available on PyPI.
+The `dependencies` library is available on PyPI.
 
 To install it run:
 
