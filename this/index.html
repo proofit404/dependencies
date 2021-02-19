@@ -64,7 +64,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#this-proxy" class="md-skip">
+        <a href="#this-object" class="md-skip">
           Skip to content
         </a>
       
@@ -606,7 +606,7 @@
               
                 
                 
-                <h1 id="this-proxy"><code>this</code> proxy<a class="headerlink" href="#this-proxy" title="Permanent link">&para;</a></h1>
+                <h1 id="this-object"><code>this</code> object<a class="headerlink" href="#this-object" title="Permanent link">&para;</a></h1>
 <p><code>this</code> is a declarative way to access attributes and items of other dependencies
 defined in the <code>Injector</code> subclasses. The Link is basically a pointer or an
 alias to another dependency in the same <code>Injector</code>, in nested <code>Injector</code> or in
@@ -645,8 +645,8 @@ supported.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Container</span><span class="o">.</span><span class="n">foo</span><span class="o">.</span><span class="n">bar</span>
 <span class="go">1</span>
 </code></pre></div>
-<p>Also, you can see, that you can define proxy a before the actual dependency it
-pointing to.</p>
+<p>You may notice that it is possible to define <code>this</code> object before the dependency
+it point to.</p>
 <p>You can point a link to the instance method. The actual instance will be built
 before resolving method access. This is a useful technique to hide whole class
 with its own state behind a single callable interface.</p>
@@ -750,7 +750,7 @@ and the rest of the application will be left untouched.</p>
 <h2 id="environment-variables">Environment variables<a class="headerlink" href="#environment-variables" title="Permanent link">&para;</a></h2>
 <p>It is possible to access environment variables during dependency injection
 process. If a class has a dependency in it's constructor, you can pass a value
-from environment variable to the constructor using <code>this</code> proxy.</p>
+from environment variable to the constructor using <code>this</code> object.</p>
 <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">os</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">App</span><span class="p">:</span>
