@@ -1,0 +1,25 @@
+{
+  "template": "https://github.com/proofit404/python-library-template",
+  "commit": "91c58be4f39dc18d82893b9c0530d66772f2f5b6",
+  "context": {
+    "cookiecutter": {
+      "project_name": "dependencies",
+      "public_module_name": "dependencies",
+      "private_module_name": "_dependencies",
+      "exception_name": "DependencyError",
+      "project_version": "6.0.0",
+      "project_description": "Constructor injection designed with OOP in mind.",
+      "author_name": "Artem Malyshev",
+      "author_email": "proofit404@gmail.com",
+      "github_user": "proofit404",
+      "github_repository": "https://github.com/proofit404/dependencies",
+      "issues_url": "https://github.com/proofit404/dependencies/issues",
+      "documentation_url": "https://proofit404.github.io/dependencies",
+      "changelog_url": "https://proofit404.github.io/dependencies/changelog",
+      "pypi_project": "https://pypi.org/project/dependencies",
+      "azure_definition_id": "2",
+      "_template": "https://github.com/proofit404/python-library-template"
+    }
+  },
+  "directory": null
+}
