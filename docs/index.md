@@ -6,7 +6,7 @@
 [![conda](https://img.shields.io/conda/vn/conda-forge/dependencies?style=flat-square)](https://anaconda.org/conda-forge/dependencies)
 [![python](https://img.shields.io/pypi/pyversions/dependencies?style=flat-square)](https://pypi.python.org/pypi/dependencies/)
 
-Dependency Injection for Humans.
+Constructor injection designed with OOP in mind.
 
 **[Documentation](https://proofit404.github.io/dependencies/) |
 [Source Code](https://github.com/proofit404/dependencies) |
