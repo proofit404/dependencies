@@ -1,3 +1,11 @@
+## [6.0.1](https://github.com/proofit404/dependencies/compare/6.0.0...6.0.1) (2021-02-20)
+
+### Bug Fixes
+
+- custom error message for enumerations
+  [#121](https://github.com/proofit404/dependencies/issues/121)
+  ([30cf46e](https://github.com/proofit404/dependencies/commit/30cf46e7b2a6724c17ae928d24641c1490e363b0))
+
 # [6.0.0](https://github.com/proofit404/dependencies/compare/5.2.0...6.0.0) (2021-02-12)
 
 ### Features
