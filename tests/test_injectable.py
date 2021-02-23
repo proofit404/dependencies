@@ -20,8 +20,8 @@ def test_deny_arbitrary_argument_list(code, foo):
 
     message = str(exc_info.value)
     assert message in {
-        "Foo.__init__ have arbitrary argument list",
-        "func have arbitrary argument list",
+        "'Foo.__init__' have variable-length positional arguments",
+        "'func' have variable-length positional arguments",
     }
 
 
@@ -68,8 +68,8 @@ def test_deny_arbitrary_keyword_arguments(code, foo):
 
     message = str(exc_info.value)
     assert message in {
-        "Foo.__init__ have arbitrary keyword arguments",
-        "func have arbitrary keyword arguments",
+        "'Foo.__init__' have variable-length keyword arguments",
+        "'func' have variable-length keyword arguments",
     }
 
 
@@ -98,55 +98,6 @@ def _gvhotc3zgfuq():
 def _hmshyccwnhsw():
     @value
     def func(**kwargs):
-        pass  # pragma: no cover
-
-    return func
-
-
-deny_varargs_kwargs = CodeCollector()
-varargs_kwargs_defs = CodeCollector("foo")
-
-
-@deny_varargs_kwargs.parametrize
-@varargs_kwargs_defs.parametrize
-def test_deny_arbitrary_positional_and_keyword_arguments_together(code, foo):
-    """Raise `DependencyError` if constructor have *args and **kwargs argument."""
-    with pytest.raises(DependencyError) as exc_info:
-        code(foo())
-
-    message = str(exc_info.value)
-    assert message in {
-        "Foo.__init__ have arbitrary argument list and keyword arguments",
-        "func have arbitrary argument list and keyword arguments",
-    }
-
-
-@deny_varargs_kwargs
-def _efbf07f8deb6(Foo):
-    class Container(Injector):
-        foo = Foo
-        args = (1, 2, 3)
-        kwargs = {"start": 5}
-
-
-@deny_varargs_kwargs
-def _c4362558f312(Foo):
-    Injector(foo=Foo, args=(1, 2, 3), kwargs={"start": 5})
-
-
-@varargs_kwargs_defs
-def _qyy5p4ah11qj():
-    class Foo:
-        def __init__(self, *args, **kwargs):
-            pass  # pragma: no cover
-
-    return Foo
-
-
-@varargs_kwargs_defs
-def _btt8ue2wjjra():
-    @value
-    def func(*args, **kwargs):
         pass  # pragma: no cover
 
     return func
