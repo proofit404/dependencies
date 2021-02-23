@@ -33,7 +33,6 @@ class _InjectorType(_InjectorTypeType):
         return type(cls.__name__, (cls,), kwargs)
 
     def __getattr__(cls, attrname):
-        __tracebackhide__ = True
         return _Resolver(cls, _State(cls, attrname)).resolve(attrname)
 
     def __setattr__(cls, attrname, value):

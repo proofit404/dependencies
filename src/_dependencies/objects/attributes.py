@@ -27,7 +27,6 @@ class _AttributesFactory:
         self.attrs = attrs
 
     def __call__(self, **kwargs):
-        __tracebackhide__ = True
         result = self.factory(**kwargs)
         for attr in self.attrs:
             result = getattr(result, attr)

@@ -16,17 +16,19 @@ def _method_args(func, funcname, owner):
 
 def _args(func, funcname, owner):
     args = []
-    varargs = kwargs = None
     for name, param in signature(func).parameters.items():
         have_default = param.default is not param.empty
         args.append((name, have_default))
         if have_default:
             _check_argument_default(name, param.default, owner)
         if param.kind is param.VAR_POSITIONAL:
-            varargs = True
+            raise DependencyError(
+                f"{funcname!r} have variable-length positional arguments"
+            )
         if param.kind is param.VAR_KEYWORD:
-            kwargs = True
-    _check_varargs(funcname, varargs, kwargs)
+            raise DependencyError(
+                f"{funcname!r} have variable-length keyword arguments"
+            )
     return args
 
 
@@ -52,18 +54,6 @@ def _check_argument_default(argument, value, owner):
             owner=owner, argument=argument, value=value.__name__
         )
         raise DependencyError(message)
-
-
-def _check_varargs(name, varargs, kwargs):
-    if varargs and kwargs:
-        message = "{0} have arbitrary argument list and keyword arguments"
-        raise DependencyError(message.format(name))
-    elif varargs:
-        message = "{0} have arbitrary argument list"
-        raise DependencyError(message.format(name))
-    elif kwargs:
-        message = "{0} have arbitrary keyword arguments"
-        raise DependencyError(message.format(name))
 
 
 # Messages.
