@@ -3,6 +3,7 @@ import pytest
 
 from collector import CodeCollector
 from dependencies import Injector
+from dependencies import Package
 from dependencies import value
 from dependencies.exceptions import DependencyError
 
@@ -13,7 +14,7 @@ varargs_defs = CodeCollector("foo")
 
 @deny_varargs.parametrize
 @varargs_defs.parametrize
-def test_deny_arbitrary_argument_list(code, foo):
+def test_deny_variable_length_positional_arguments(code, foo):
     """Raise `DependencyError` if constructor have *args argument."""
 
     class Baz:
@@ -68,7 +69,7 @@ kwargs_defs = CodeCollector("foo")
 
 @deny_kwargs.parametrize
 @kwargs_defs.parametrize
-def test_deny_arbitrary_keyword_arguments(code, foo):
+def test_deny_variable_length_keyword_arguments(code, foo):
     """Raise `DependencyError` if constructor have **kwargs argument."""
 
     class Baz:
@@ -115,6 +116,67 @@ def _hmshyccwnhsw():
         raise RuntimeError
 
     return func
+
+
+deny_positional_only_arguments = CodeCollector()
+positional_only_arguments_defs = CodeCollector("foo")
+
+
+@deny_positional_only_arguments.parametrize
+@positional_only_arguments_defs.parametrize
+def test_deny_positional_only_arguments(code, foo):
+    """We can not inject positional-only arguments."""
+    with pytest.raises(DependencyError) as exc_info:
+        code(foo())
+
+    message = str(exc_info.value)
+    assert message in {
+        "'Foo.__init__' have positional-only arguments",
+        "'foo' have positional-only arguments",
+    }
+
+
+@deny_positional_only_arguments
+def _b81wVbPL16QR(Foo):
+    class Container(Injector):
+        foo = Foo
+
+    Container.foo
+
+
+@deny_positional_only_arguments
+def _bF3JriFujPqf(Foo):
+    Injector(foo=Foo).foo
+
+
+@positional_only_arguments_defs
+def _rPiy4i9XVvzb():
+    class Foo:
+        def __init__(self, a, /, b):
+            raise RuntimeError
+
+    return Foo
+
+
+@positional_only_arguments_defs
+def _hw5TnOooZVOG():
+    @value
+    def foo(a, /, b):
+        raise RuntimeError
+
+    return foo
+
+
+@positional_only_arguments_defs
+def _dQ7tFVMvSYmF():
+    examples = Package("examples")
+    return examples.positional_only.Foo
+
+
+@positional_only_arguments_defs
+def _h79dcovVgStH():
+    examples = Package("examples")
+    return examples.positional_only.foo
 
 
 cls_named_arguments = CodeCollector()

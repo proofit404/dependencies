@@ -1,4 +1,5 @@
 from inspect import isclass
+from inspect import Parameter
 from inspect import signature
 
 from _dependencies.exceptions import DependencyError
@@ -16,17 +17,18 @@ def _method_args(func, funcname, owner):
 
 def _args(func, funcname, owner):
     args = []
-    message_positional = f"{funcname!r} have variable-length positional arguments"
-    message_keyword = f"{funcname!r} have variable-length keyword arguments"
+    errors = {
+        Parameter.VAR_POSITIONAL: "{!r} have variable-length positional arguments",
+        Parameter.VAR_KEYWORD: "{!r} have variable-length keyword arguments",
+        Parameter.POSITIONAL_ONLY: "{!r} have positional-only arguments",
+    }
     for name, param in signature(func).parameters.items():
         have_default = param.default is not param.empty
         args.append((name, have_default))
         if have_default:
             _check_argument_default(name, param.default, owner)
-        if param.kind is param.VAR_POSITIONAL:
-            raise DependencyError(message_positional)
-        if param.kind is param.VAR_KEYWORD:
-            raise DependencyError(message_keyword)
+        if param.kind in errors:
+            raise DependencyError(errors[param.kind].format(funcname))
     return args
 
 
