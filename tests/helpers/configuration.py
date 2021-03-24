@@ -328,7 +328,6 @@ class _Settings:
         ("isolated_build", _Boolean),
         ("basepython", _String),
         ("skip_install", _Boolean),
-        ("ignore_outcome", _Boolean),
         ("install_command", _String),
         ("setenv", _Text),
         ("passenv", _Text),

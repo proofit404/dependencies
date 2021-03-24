@@ -49,11 +49,10 @@ jobs:
             --junitxml=junit-{envname}.xml -o junit_suite_name={envname} -o
             junit_family=xunit2 -o junit_log_passing_tests=true
           TOX_PARALLEL_NO_SPINNER: 1
-          TOX_SKIP_ENV: mutmut
         displayName: Run Tox.
-      # - script: .tox/mutmut/bin/mutmut junitxml > junit-mutmut.xml
-      #   condition: always()
-      #   displayName: Generate mutmut report.
+      - script: .tox/mutmut/bin/mutmut junitxml > junit-mutmut.xml
+        condition: always()
+        displayName: Generate mutmut report.
       - task: PublishTestResults@2
         condition: always()
         inputs:
