@@ -17,7 +17,7 @@
       "documentation_url": "https://proofit404.github.io/dependencies",
       "changelog_url": "https://proofit404.github.io/dependencies/changelog",
       "pypi_project": "https://pypi.org/project/dependencies",
-      "azure_definition_id": "2",
+      "azure_definition_id": "15",
       "_template": "https://github.com/proofit404/python-library-template"
     }
   },

@@ -1,7 +1,7 @@
 # Dependencies
 
-[![azure-devops-builds](https://img.shields.io/azure-devops/build/proofit404/dependencies/2?style=flat-square)](https://dev.azure.com/proofit404/dependencies/_build/latest?definitionId=2&branchName=master)
-[![azure-devops-coverage](https://img.shields.io/azure-devops/coverage/proofit404/dependencies/2?style=flat-square)](https://dev.azure.com/proofit404/dependencies/_build/latest?definitionId=2&branchName=master)
+[![azure-devops-builds](https://img.shields.io/azure-devops/build/proofit404/dependencies/15?style=flat-square)](https://dev.azure.com/proofit404/dependencies/_build/latest?definitionId=15&branchName=master)
+[![azure-devops-coverage](https://img.shields.io/azure-devops/coverage/proofit404/dependencies/15?style=flat-square)](https://dev.azure.com/proofit404/dependencies/_build/latest?definitionId=15&branchName=master)
 [![pypi](https://img.shields.io/pypi/v/dependencies?style=flat-square)](https://pypi.org/project/dependencies)
 [![conda](https://img.shields.io/conda/vn/conda-forge/dependencies?style=flat-square)](https://anaconda.org/conda-forge/dependencies)
 [![python](https://img.shields.io/pypi/pyversions/dependencies?style=flat-square)](https://pypi.org/project/dependencies)

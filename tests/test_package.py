@@ -57,7 +57,7 @@ def test_provide_a_variable(code):
     assert Container.variable == 1
 
 
-@pytest.mark.xfail
+@pytest.mark.xfail()
 @package_definitions.parametrize
 def test_provide_a_class(code):
     """Package class-named attributes should provide classes.
@@ -113,7 +113,7 @@ def _uHSfYcZjGSJQ():
 injector_pointer = CodeCollector()
 
 
-@pytest.mark.xfail
+@pytest.mark.xfail()
 @injector_pointer.parametrize
 def test_point_to_injector(code):
     """Package attribute access should provide Injector classes as is.
