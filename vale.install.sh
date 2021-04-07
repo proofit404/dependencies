@@ -18,6 +18,8 @@ curl -L -O https://github.com/errata-ai/Joblint/releases/latest/download/Joblint
 unzip -d styles Joblint.zip
 rm Joblint.zip
 
+rm styles/Joblint/Acronyms.yml # Workaround for errata-ai/Joblint#1 issue.
+
 cat > .vale.ini <<EOF
 StylesPath = styles
 

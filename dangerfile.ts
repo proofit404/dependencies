@@ -35,7 +35,7 @@ export default async (): undefined => {
     hasTestCommit = commitTypes.has("test");
 
   const hasBreakingCommit = danger.git.commits
-    .map((commit) => commit.message.match(/\sBREAKING CHANGES?:\s/g))
+    .map((commit) => commit.message.match(/\sBREAKING CHANGE:\s/g))
     .some((match) => match);
 
   if (commitTest.length !== commitTypes.size) {
