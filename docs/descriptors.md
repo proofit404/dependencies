@@ -8,16 +8,15 @@ defines `__get__`, `__set__`, and `__delete__` methods.
 ```pycon
 
 >>> class Descriptor:
-...
 ...     def __get__(self, instance, klass):
-...
-...         print('=>', instance)
-...         print('=>', klass)
+...         print("=>", instance)
+...         print("=>", klass)
 ...         return 1
+...
 
 >>> class Holder:
-...
 ...     attribute = Descriptor()
+...
 
 >>> Holder().attribute  # doctest: +ELLIPSIS
 => <__main__.Holder object at 0x...>
@@ -149,5 +148,5 @@ nature of an object.
 
 ```
 
-<p align="center">&mdash; ⭐️ &mdash;</p>
-<p align="center"><i>The dependencies library is part of the SOLID python family.</i></p>
+<p align="center">&mdash; ⭐ &mdash;</p>
+<p align="center"><i>The <code>dependencies</code> library is part of the SOLID python family.</i></p>

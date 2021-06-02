@@ -12,27 +12,25 @@ dependencies. Also, let's add some behavior to your robot.
 ...         self.servo = servo
 ...         self.controller = controller
 ...         self.settings = settings
-...
 ...     def run(self):
 ...         while True:
 ...             events = self.accept_events()
 ...             if not events:
 ...                 break
 ...             self.process(events)
-...
 ...     def accept_events(self):
 ...         # We can inject methods.
 ...         return self.controller()
-...
 ...     def process(self, events):
 ...         # We can inject dictionaries.
-...         max_point = self.settings['max_point']
+...         max_point = self.settings["max_point"]
 ...         for event in events:
 ...             if event.x > max_point:
 ...                 # We can inject objects.
-...                 self.servo.reverse('x')
+...                 self.servo.reverse("x")
 ...             if event.y > max_point:
-...                 self.servo.reverse('y')
+...                 self.servo.reverse("y")
+...
 
 ```
 
@@ -371,5 +369,5 @@ True
 
 ```
 
-<p align="center">&mdash; ⭐️ &mdash;</p>
-<p align="center"><i>The dependencies library is part of the SOLID python family.</i></p>
+<p align="center">&mdash; ⭐ &mdash;</p>
+<p align="center"><i>The <code>dependencies</code> library is part of the SOLID python family.</i></p>

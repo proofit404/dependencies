@@ -17,23 +17,23 @@ Let's do it with simple functions.
 ```pycon
 
 >>> def purchase(user, product, shipment_details):
-...
 ...     order = create_order(user, product)
 ...     final_price = calculate_price(order, shipment_details)
 ...     payment_details = request_payment(user, shipment_details)
 ...     notify_user(user, payment_details)
+...
 
 >>> def notify_user(user, payment_details):
-...
 ...     log_notification(user, payment_details)
 ...     subject = get_notification_subject(payment_details)
 ...     message = get_notification_text(user, payment_details)
 ...     send_notification(user, subject, message)
+...
 
 >>> def send_notification(user, subject, message):
-...
 ...     email = get_user_email(user)
 ...     send_email(email, subject, message)
+...
 
 ```
 
@@ -314,5 +314,5 @@ It helps you to reduce the boilerplate of the initiation stage. It doesn't
 require you to change your code. You still can instantiate your classes
 directly, if you don't like this library.
 
-<p align="center">&mdash; ⭐️ &mdash;</p>
-<p align="center"><i>The dependencies library is part of the SOLID python family.</i></p>
+<p align="center">&mdash; ⭐ &mdash;</p>
+<p align="center"><i>The <code>dependencies</code> library is part of the SOLID python family.</i></p>

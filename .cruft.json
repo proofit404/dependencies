@@ -1,13 +1,12 @@
 {
   "template": "https://github.com/proofit404/python-library-template",
-  "commit": "da847ad6c9ab570eaeb8a6729a79b51c4c99d64d",
+  "commit": "36fa85bee196f541970a154c3d04e6ffea841087",
   "context": {
     "cookiecutter": {
       "project_name": "dependencies",
       "public_module_name": "dependencies",
       "private_module_name": "_dependencies",
       "exception_name": "DependencyError",
-      "project_version": "6.0.0",
       "project_description": "Constructor injection designed with OOP in mind.",
       "author_name": "Artem Malyshev",
       "author_email": "proofit404@gmail.com",
@@ -16,8 +15,15 @@
       "issues_url": "https://github.com/proofit404/dependencies/issues",
       "documentation_url": "https://proofit404.github.io/dependencies",
       "changelog_url": "https://proofit404.github.io/dependencies/changelog",
+      "twitter_url": "https://twitter.com/proofit404",
       "pypi_project": "https://pypi.org/project/dependencies",
       "azure_definition_id": "15",
+      "azure_build_url": "https://dev.azure.com/proofit404/dependencies/_build/latest?definitionId=15&branchName=master",
+      "azure_build_badge_url": "https://img.shields.io/azure-devops/build/proofit404/dependencies/15?style=flat-square",
+      "azure_coverage_url": "https://dev.azure.com/proofit404/dependencies/_build/latest?definitionId=15&branchName=master",
+      "azure_coverage_badge_url": "https://img.shields.io/azure-devops/coverage/proofit404/dependencies/15?style=flat-square",
+      "pypi_badge_url": "https://img.shields.io/pypi/v/dependencies?style=flat-square",
+      "python_version_badge_url": "https://img.shields.io/pypi/pyversions/dependencies?style=flat-square",
       "_template": "https://github.com/proofit404/python-library-template"
     }
   },

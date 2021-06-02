@@ -26,10 +26,10 @@ scope where value object was defined.
 ...     foo = 1
 ...     bar = 2
 ...     baz = 3
-...
 ...     @value
 ...     def quiz(foo, bar, baz):
 ...         return foo + bar + baz
+...
 
 >>> Container.quiz
 6
@@ -90,5 +90,5 @@ be injected in corresponding argument of `Foo` and `Bar` constructors.
 As you can see `@value` decorated function was called only once even two objects
 depends on it.
 
-<p align="center">&mdash; ⭐️ &mdash;</p>
-<p align="center"><i>The dependencies library is part of the SOLID python family.</i></p>
+<p align="center">&mdash; ⭐ &mdash;</p>
+<p align="center"><i>The <code>dependencies</code> library is part of the SOLID python family.</i></p>

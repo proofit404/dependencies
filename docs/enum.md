@@ -19,17 +19,19 @@ injection scope.
 ...     processed = auto()
 ...     rejected = auto()
 ...     done = auto()
+...
 
 >>> class Order:
 ...     def __init__(self, status):
 ...         self.status = status
-...
 ...     def __repr__(self):
-...         return f'Order({self.status!r})'
+...         return f"Order({self.status!r})"
+...
 
 >>> class Container(Injector):
 ...     order = Order
 ...     status = Status.new
+...
 
 >>> Container.order
 Order(<Status.new: 1>)
@@ -69,5 +71,5 @@ Using enumeration classes in class-named attributes are still allowed.
 
 As you can see, no exception was raised above.
 
-<p align="center">&mdash; ⭐️ &mdash;</p>
-<p align="center"><i>The dependencies library is part of the SOLID python family.</i></p>
+<p align="center">&mdash; ⭐ &mdash;</p>
+<p align="center"><i>The <code>dependencies</code> library is part of the SOLID python family.</i></p>

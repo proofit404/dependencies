@@ -9,12 +9,13 @@ Obviously, code written in this style will look something like this:
 
 >>> from app.types import TypedInjector
 >>> from app.purchase import (
-...     AbstractPaymentService, PaypalService,
-...     AbstractNotificationService, SMSService
+...     AbstractPaymentService,
+...     PaypalService,
+...     AbstractNotificationService,
+...     SMSService,
 ... )
 
 >>> class PurchaseService:
-...
 ...     def __init__(
 ...         self,
 ...         payments: AbstractPaymentService,
@@ -22,6 +23,7 @@ Obviously, code written in this style will look something like this:
 ...     ):
 ...         self.payments = payments
 ...         self.notifications = notifications
+...
 
 >>> container = TypedInjector()
 >>> container.register(SMSService)
@@ -177,5 +179,5 @@ We prefer to use dependency injection only on boundaries we control:
 
 ```
 
-<p align="center">&mdash; ⭐️ &mdash;</p>
-<p align="center"><i>The dependencies library is part of the SOLID python family.</i></p>
+<p align="center">&mdash; ⭐ &mdash;</p>
+<p align="center"><i>The <code>dependencies</code> library is part of the SOLID python family.</i></p>
