@@ -12,11 +12,9 @@ defines `__get__`, `__set__`, and `__delete__` methods.
 ...         print("=>", instance)
 ...         print("=>", klass)
 ...         return 1
-...
 
 >>> class Holder:
 ...     attribute = Descriptor()
-...
 
 >>> Holder().attribute  # doctest: +ELLIPSIS
 => <__main__.Holder object at 0x...>

@@ -21,19 +21,16 @@ Let's do it with simple functions.
 ...     final_price = calculate_price(order, shipment_details)
 ...     payment_details = request_payment(user, shipment_details)
 ...     notify_user(user, payment_details)
-...
 
 >>> def notify_user(user, payment_details):
 ...     log_notification(user, payment_details)
 ...     subject = get_notification_subject(payment_details)
 ...     message = get_notification_text(user, payment_details)
 ...     send_notification(user, subject, message)
-...
 
 >>> def send_notification(user, subject, message):
 ...     email = get_user_email(user)
 ...     send_email(email, subject, message)
-...
 
 ```
 

@@ -12,15 +12,18 @@ dependencies. Also, let's add some behavior to your robot.
 ...         self.servo = servo
 ...         self.controller = controller
 ...         self.settings = settings
+...
 ...     def run(self):
 ...         while True:
 ...             events = self.accept_events()
 ...             if not events:
 ...                 break
 ...             self.process(events)
+...
 ...     def accept_events(self):
 ...         # We can inject methods.
 ...         return self.controller()
+...
 ...     def process(self, events):
 ...         # We can inject dictionaries.
 ...         max_point = self.settings["max_point"]
@@ -30,7 +33,6 @@ dependencies. Also, let's add some behavior to your robot.
 ...                 self.servo.reverse("x")
 ...             if event.y > max_point:
 ...                 self.servo.reverse("y")
-...
 
 ```
 

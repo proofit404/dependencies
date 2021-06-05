@@ -19,19 +19,17 @@ injection scope.
 ...     processed = auto()
 ...     rejected = auto()
 ...     done = auto()
-...
 
 >>> class Order:
 ...     def __init__(self, status):
 ...         self.status = status
+...
 ...     def __repr__(self):
 ...         return f"Order({self.status!r})"
-...
 
 >>> class Container(Injector):
 ...     order = Order
 ...     status = Status.new
-...
 
 >>> Container.order
 Order(<Status.new: 1>)

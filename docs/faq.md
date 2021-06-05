@@ -23,7 +23,6 @@ Obviously, code written in this style will look something like this:
 ...     ):
 ...         self.payments = payments
 ...         self.notifications = notifications
-...
 
 >>> container = TypedInjector()
 >>> container.register(SMSService)

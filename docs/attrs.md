@@ -20,13 +20,11 @@ Here is an example of how to use it together with `dependencies`.
 ... class Order:
 ...     price = attrib()
 ...     items = attrib()
-...
 
 >>> class Container(Injector):
 ...     order = Order
 ...     price = (799, 99)
 ...     items = ["amplifier", "servo"]
-...
 
 >>> Container.order
 Order(price=(799, 99), items=['amplifier', 'servo'])

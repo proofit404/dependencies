@@ -26,10 +26,10 @@ scope where value object was defined.
 ...     foo = 1
 ...     bar = 2
 ...     baz = 3
+...
 ...     @value
 ...     def quiz(foo, bar, baz):
 ...         return foo + bar + baz
-...
 
 >>> Container.quiz
 6
