@@ -87,6 +87,10 @@ jobs:
           versionSpec: "12.x"
         displayName: Install NodeJS.
       - script: |
+          git config --local user.name "Artem Malyshev"
+          git config --local user.email "proofit404@gmail.com"
+        displayName: Tweak git settings.
+      - script: |
           git remote set-branches origin master
           git fetch --quiet
           git checkout master --quiet
@@ -106,7 +110,7 @@ jobs:
       - script: |
           npx semantic-release
         env:
-          POETRY_PYPI_TOKEN_PYPI: $(POETRY_PYPI_TOKEN_PYPI)
+          POETRY_PYPI_TOKEN_PYPI: $(SEMANTIC_RELEASE_PYPI_TOKEN)
           GITHUB_TOKEN: $(SEMANTIC_RELEASE_GITHUB_TOKEN)
         displayName: Release package.
       - script: |
