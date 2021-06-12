@@ -2,6 +2,7 @@
 strict: true
 site_name: dependencies
 site_description: Constructor injection designed with OOP in mind.
+site_url: https://proofit404.github.io/dependencies
 theme:
   name: material
   palette:
