@@ -4,6 +4,7 @@ from inspect import isclass
 import pytest
 
 from dependencies import Injector
+from dependencies import this
 from dependencies import value
 from dependencies.exceptions import DependencyError
 from helpers import CodeCollector
@@ -656,6 +657,182 @@ def _s7pP3oP4L3pZ(times):
         times.append(1)
 
     return d
+
+
+evaluate_once_nested = CodeCollector()
+evaluate_once_nested_a = CodeCollector("a")
+evaluate_once_nested_b = CodeCollector("b")
+evaluate_once_nested_c = CodeCollector("c")
+evaluate_once_nested_d = CodeCollector("d")
+evaluate_once_nested_e = CodeCollector("e")
+
+
+@evaluate_once_nested.parametrize
+@evaluate_once_nested_a.parametrize
+@evaluate_once_nested_b.parametrize
+@evaluate_once_nested_c.parametrize
+@evaluate_once_nested_d.parametrize
+@evaluate_once_nested_e.parametrize
+def test_evaluate_once_nested_container(code, a, b, c, d, e):
+    """Evaluate each node in the dependencies graph once.
+
+    This example focus on evaluating dependencies once when they do spread between
+    different levels of nesting and point into each other with `this` expression.
+
+    """
+    d_times = []
+    e_times = []
+
+    class Root:
+        def __init__(self, a):
+            self.a = a
+
+    Container = code(Root, a(), b(), c(), d(d_times), e(e_times))
+    assert sum(d_times) == 0
+    assert sum(e_times) == 0
+    Container.root.a
+    assert sum(d_times) == 1
+    assert sum(e_times) == 1
+
+
+@evaluate_once_nested
+def _jz4WmFNvuMvA(Root, A, B, C, D, E):
+    class Container(Injector):
+        root = Root
+        a = A
+        b = this.Nested.b
+        d = this.Nested.d
+        e = E
+
+        class Nested(Injector):
+            b = B
+            c = this.Nested.c
+            d = this.Nested.d
+            e = (this << 1).e
+
+            class Nested(Injector):
+                c = C
+                d = this.Nested.d
+                e = (this << 2).e
+
+                class Nested(Injector):
+                    d = D
+                    e = (this << 3).e
+
+    return Container
+
+
+@evaluate_once_nested
+def _eM4Wsqhs9ZgY(Root, A, B, C, D, E):
+    return Injector(
+        root=Root,
+        a=A,
+        b=this.Nested.b,
+        d=this.Nested.d,
+        e=E,
+        Nested=Injector(
+            b=B,
+            c=this.Nested.c,
+            d=this.Nested.d,
+            e=(this << 1).e,
+            Nested=Injector(
+                c=C,
+                d=this.Nested.d,
+                e=(this << 2).e,
+                Nested=Injector(d=D, e=(this << 3).e),
+            ),
+        ),
+    )
+
+
+@evaluate_once_nested_a
+def _fxNSkQOelDSi():
+    class A:
+        def __init__(self, b, d, e):
+            pass
+
+    return A
+
+
+@evaluate_once_nested_a
+def _kNI9K2bXIDtb():
+    @value
+    def a(b, d, e):
+        pass
+
+    return a
+
+
+@evaluate_once_nested_b
+def _mK1iiIfP4aJx():
+    class B:
+        def __init__(self, c, d, e):
+            pass
+
+    return B
+
+
+@evaluate_once_nested_b
+def _tbtPIyWKAnm9():
+    @value
+    def b(c, d, e):
+        pass
+
+    return b
+
+
+@evaluate_once_nested_c
+def _dhUanzFtSGz8():
+    class C:
+        def __init__(self, d, e):
+            pass
+
+    return C
+
+
+@evaluate_once_nested_c
+def _u48SjCngqrsn():
+    @value
+    def c(d, e):
+        pass
+
+    return c
+
+
+@evaluate_once_nested_d
+def _hU4RLEy6zD8M(times):
+    class D:
+        def __init__(self, e):
+            times.append(1)
+
+    return D
+
+
+@evaluate_once_nested_d
+def _zLrf3TSoKacA(times):
+    @value
+    def d(e):
+        times.append(1)
+
+    return d
+
+
+@evaluate_once_nested_e
+def _gn5dOH5wCCKx(times):
+    class E:
+        def __init__(self):
+            times.append(1)
+
+    return E
+
+
+@evaluate_once_nested_e
+def _qDSvtJ7LHoNl(times):
+    @value
+    def e():
+        times.append(1)
+
+    return e
 
 
 multiple_inheritance = CodeCollector()
