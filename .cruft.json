@@ -1,6 +1,6 @@
 {
   "template": "https://github.com/proofit404/python-library-template",
-  "commit": "0114b968a0c48aa31f98998dc3cdc7d13ad36212",
+  "commit": "fe409d3a9e42806c937113ec02d01255b825cf1c",
   "context": {
     "cookiecutter": {
       "project_name": "dependencies",

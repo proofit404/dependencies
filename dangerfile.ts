@@ -1,9 +1,4 @@
 export default async (): undefined => {
-  if (danger.github.pr.commits > 3) {
-    fail("PR has too much commits");
-    return;
-  }
-
   if (danger.github.pr.labels.length > 0) {
     fail("PR is not allowed to have labels");
     return;
@@ -38,11 +33,6 @@ export default async (): undefined => {
     .map((commit) => commit.message.match(/\sBREAKING CHANGE:\s/g))
     .some((match) => match);
 
-  if (commitTest.length !== commitTypes.size) {
-    fail("PR can not contain commits with the same type");
-    return;
-  }
-
   const commitFiles = danger.git.created_files
       .concat(danger.git.modified_files)
       .concat(danger.git.deleted_files),
@@ -76,112 +66,130 @@ export default async (): undefined => {
     return;
   }
 
-  const branchTest = danger.github.pr.head.ref.match(/^issue-(\d+)$/);
-
-  if (!branchTest) {
-    fail("Branch name should be 'issue-N' where N is the issue number");
-    return;
-  }
-
-  const issueNumber = branchTest[1];
-
-  for (const commit of danger.git.commits) {
-    if (!commit.message.split(/\r?\n/)[0].endsWith(` #${issueNumber}`)) {
-      fail("The first line of each commit should ends with the issue number");
-      return;
-    }
-  }
-
   if (danger.github.pr.body) {
     fail("PR body should be empty");
     return;
   }
 
-  const issueJSON = await danger.github.api.issues.get({
-    owner: danger.github.thisPR.owner,
-    repo: danger.github.thisPR.repo,
-    issue_number: parseInt(issueNumber),
-  });
+  const isSnapshotBranch = Boolean(
+    danger.github.pr.head.ref.match(/^snapshot$/)
+  );
 
-  if (issueJSON.status !== 200) {
-    fail(`Unable to check issue #${issueNumber}`);
-    return;
-  }
-
-  if (issueJSON.data.closed_at) {
-    fail("Closed issue can't be implemented");
-    return;
-  }
-
-  if (issueJSON.data.milestone) {
-    if (issueJSON.data.milestone.closed_at) {
-      fail("Issues of closed milestone can't be implemented");
+  if (!isSnapshotBranch) {
+    if (danger.github.pr.commits > 3) {
+      fail("PR has too much commits");
       return;
     }
-  }
 
-  if (issueJSON.data.assignee) {
-    fail("Issue can't have an assignee");
-    return;
-  }
-
-  const issueLabels = new Set(issueJSON.data.labels.map((label) => label.name)),
-    hasIncompatibleLabel = issueLabels.has("backward incompatible"),
-    hasFeatureLabel = issueLabels.has("feature"),
-    hasBugLabel = issueLabels.has("bug"),
-    hasDocumentationLabel = issueLabels.has("documentation"),
-    hasQuestionLabel = issueLabels.has("question"),
-    hasBlockedLabel = issueLabels.has("blocked");
-
-  if (hasFeatureLabel & hasBugLabel) {
-    fail("An issue can't be a bug and a feature simultaneously");
-    return;
-  }
-
-  if (hasIncompatibleLabel ^ hasBreakingCommit) {
-    fail(
-      "Only issue marked as backward incompatible is allowed to have breaking changes"
-    );
-    return;
-  }
-
-  if (hasFeatureLabel ^ hasFeatureCommit) {
-    fail("Only issue marked as feature is allowed to have feat commit");
-    return;
-  }
-
-  if (hasBugLabel ^ hasFixCommit) {
-    fail("Only issue marked as bug is allowed to have fix commit");
-    return;
-  }
-
-  if (hasDocumentationLabel & !hasDocsCommit) {
-    fail("Issue marked as documentation should have docs commit");
-    return;
-  }
-
-  if (hasFeatureLabel & !hasDocsCommit) {
-    fail("Issue marked as feature should have docs commit");
-    return;
-  }
-
-  if (hasQuestionLabel & !hasDocsCommit) {
-    fail("Issue marked as question should have docs commit");
-    return;
-  }
-
-  if (hasBlockedLabel) {
-    fail("Issues marked as blocked can not be implemented");
-    return;
-  }
-
-  const issueText = issueJSON.data.body,
-    issueLines = issueText.split(/\r?\n/).map((line) => line.trim());
-
-  for (const line of issueLines) {
-    if (line.match(/^[*+-] \[[xX]\] /)) {
-      fail("Create a milestone instead of the issue with the task list");
+    if (commitTest.length !== commitTypes.size) {
+      fail("PR can not contain commits with the same type");
       return;
+    }
+
+    const branchTest = danger.github.pr.head.ref.match(/^issue-(\d+)$/);
+
+    if (!branchTest) {
+      fail("Branch name should be 'issue-N' where N is the issue number");
+      return;
+    }
+
+    const issueNumber = branchTest[1];
+
+    for (const commit of danger.git.commits) {
+      if (!commit.message.split(/\r?\n/)[0].endsWith(` #${issueNumber}`)) {
+        fail("The first line of each commit should ends with the issue number");
+        return;
+      }
+    }
+
+    const issueJSON = await danger.github.api.issues.get({
+      owner: danger.github.thisPR.owner,
+      repo: danger.github.thisPR.repo,
+      issue_number: parseInt(issueNumber),
+    });
+
+    if (issueJSON.status !== 200) {
+      fail(`Unable to check issue #${issueNumber}`);
+      return;
+    }
+
+    if (issueJSON.data.closed_at) {
+      fail("Closed issue can't be implemented");
+      return;
+    }
+
+    if (issueJSON.data.milestone) {
+      if (issueJSON.data.milestone.closed_at) {
+        fail("Issues of closed milestone can't be implemented");
+        return;
+      }
+    }
+
+    if (issueJSON.data.assignee) {
+      fail("Issue can't have an assignee");
+      return;
+    }
+
+    const issueLabels = new Set(
+        issueJSON.data.labels.map((label) => label.name)
+      ),
+      hasIncompatibleLabel = issueLabels.has("backward incompatible"),
+      hasFeatureLabel = issueLabels.has("feature"),
+      hasBugLabel = issueLabels.has("bug"),
+      hasDocumentationLabel = issueLabels.has("documentation"),
+      hasQuestionLabel = issueLabels.has("question"),
+      hasBlockedLabel = issueLabels.has("blocked");
+
+    if (hasFeatureLabel & hasBugLabel) {
+      fail("An issue can't be a bug and a feature simultaneously");
+      return;
+    }
+
+    if (hasIncompatibleLabel ^ hasBreakingCommit) {
+      fail(
+        "Only issue marked as backward incompatible is allowed to have breaking changes"
+      );
+      return;
+    }
+
+    if (hasFeatureLabel ^ hasFeatureCommit) {
+      fail("Only issue marked as feature is allowed to have feat commit");
+      return;
+    }
+
+    if (hasBugLabel ^ hasFixCommit) {
+      fail("Only issue marked as bug is allowed to have fix commit");
+      return;
+    }
+
+    if (hasDocumentationLabel & !hasDocsCommit) {
+      fail("Issue marked as documentation should have docs commit");
+      return;
+    }
+
+    if (hasFeatureLabel & !hasDocsCommit) {
+      fail("Issue marked as feature should have docs commit");
+      return;
+    }
+
+    if (hasQuestionLabel & !hasDocsCommit) {
+      fail("Issue marked as question should have docs commit");
+      return;
+    }
+
+    if (hasBlockedLabel) {
+      fail("Issues marked as blocked can not be implemented");
+      return;
+    }
+
+    const issueText = issueJSON.data.body,
+      issueLines = issueText.split(/\r?\n/).map((line) => line.trim());
+
+    for (const line of issueLines) {
+      if (line.match(/^[*+-] \[[xX]\] /)) {
+        fail("Create a milestone instead of the issue with the task list");
+        return;
+      }
     }
   }
 
@@ -203,6 +211,7 @@ export default async (): undefined => {
     "feature",
     "question",
     "released",
+    "released on @develop",
   ]);
 
   for (const repoLabel of labelsJSON.data) {
