@@ -6,4 +6,4 @@ def _is_data(name, dependency):
 
 
 def _build_data_spec(name, dependency):
-    return _Spec(lambda: dependency, {}, set(), set())
+    return _Spec(lambda: dependency, {}, set(), set(), False)

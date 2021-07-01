@@ -2,12 +2,19 @@
 from dependencies import Injector
 
 
+class Foo:
+    """A useful class."""
+
+    def __repr__(self):
+        return "foo instance"
+
+
 class Container(Injector):
     """The code written in this docstring will be executed by pytest.
 
     >>> Container.foo
-    1
+    foo instance
 
     """
 
-    foo = 1
+    foo = Foo
