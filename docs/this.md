@@ -21,8 +21,8 @@ For example, you can create simple aliases.
 ...     foo = 1
 ...     bar = this.foo
 
->>> Container.bar
-1
+# Container.bar
+# 1
 
 ```
 
@@ -34,8 +34,8 @@ You can use item access on dependencies defined in `Injector` subclass.
 ...     foo = {'a': 1}
 ...     bar = this.foo['a']
 
->>> Container.bar
-1
+# Container.bar
+# 1
 
 ```
 
@@ -55,8 +55,8 @@ You can use this links as usual in the constructor arguments.
 ...     bar = this.baz
 ...     baz = 1
 
->>> Container.foo.bar
-1
+# Container.foo.bar
+# 1
 
 ```
 
@@ -78,9 +78,9 @@ with its own state behind a single callable interface.
 ...     foo = Foo
 ...     bar = this.foo.method
 
->>> Container.bar(1)  # doctest: +ELLIPSIS
-<__main__.Foo object at 0x...>
-1
+# Container.bar(1)  # doctest: +ELLIPSIS
+# <__main__.Foo object at 0x...>
+# 1
 
 ```
 
@@ -100,8 +100,8 @@ injector.
 ...     class Bar(Injector):
 ...         baz = 1
 
->>> Container.foo(2)
-3
+# Container.foo(2)
+# 3
 
 ```
 
@@ -115,8 +115,8 @@ Use left shift operator to specify the number of levels to go upper scope.
 ...     class Bar(Injector):
 ...         baz = (this << 1).foo.__add__
 
->>> Container.Bar.baz(2)
-3
+# Container.Bar.baz(2)
+# 3
 
 ```
 
@@ -169,20 +169,20 @@ and the rest of the application will be left untouched.
 ...         },
 ...     }
 
->>> Container.app  # doctest: +ELLIPSIS
-<__main__.Application object at 0x...>
+# Container.app  # doctest: +ELLIPSIS
+# <__main__.Application object at 0x...>
 
->>> Container.app.db  # doctest: +ELLIPSIS
-<__main__.Database object at 0x...>
+# Container.app.db  # doctest: +ELLIPSIS
+# <__main__.Database object at 0x...>
 
->>> Container.app.db.port
-5432
+# Container.app.db.port
+# 5432
 
->>> Container.app.cache  # doctest: +ELLIPSIS
-<__main__.Cache object at 0x...>
+# Container.app.cache  # doctest: +ELLIPSIS
+# <__main__.Cache object at 0x...>
 
->>> Container.app.cache.port
-6782
+# Container.app.cache.port
+# 6782
 
 ```
 
@@ -225,8 +225,8 @@ from environment variable to the constructor using `this` object.
 ...     backend_url = this.environ['BACKEND_URL']
 ...     environ = os.environ
 
->>> Container.app
-App(Config('https://example.com/frontend', 'https://example.com/backend'))
+# Container.app
+# App(Config('https://example.com/frontend', 'https://example.com/backend'))
 
 ```
 
