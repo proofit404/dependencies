@@ -43,6 +43,7 @@ nav:
       - This: this.md
       - Package: package.md
       - Value: value.md
+      - Scalar types: scalar.md
       - FAQ: faq.md
   - Guides:
       - Attrs: attrs.md
