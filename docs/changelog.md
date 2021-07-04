@@ -1,3 +1,18 @@
+# [7.0.0-rc.1](https://github.com/proofit404/dependencies/compare/6.0.1...7.0.0-rc.1) (2021-07-04)
+
+### Features
+
+- scalar dependencies can't be resolved directly
+  [#480](https://github.com/proofit404/dependencies/issues/480)
+  ([c82e8c5](https://github.com/proofit404/dependencies/commit/c82e8c5af0d4deafab723886d800b53c3aadd059))
+
+### BREAKING CHANGES
+
+- Scalar dependencies are basically data types. They are allowed to be used as
+  dependencies for other more complicated data types, like classes. If you need
+  to take scalar dependency from Injector subclass, use constant value instead.
+  You don't need Injector for this.
+
 ## [6.0.1](https://github.com/proofit404/dependencies/compare/6.0.0...6.0.1) (2021-02-20)
 
 ### Bug Fixes
