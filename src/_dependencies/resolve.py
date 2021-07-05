@@ -37,7 +37,7 @@ class _Resolver:
         self.state.store(factory(**self.state.kwargs(args)))
 
     def match(self, args):
-        for arg, default in args.items():  # pragma: no branch
-            if self.state.should(arg, default):
-                self.state.add(arg, default)
+        for arg, have_default in args.items():  # pragma: no branch
+            if self.state.should(arg, have_default):
+                self.state.add(arg, have_default)
                 break
