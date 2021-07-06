@@ -85,6 +85,8 @@ That's why descriptor found in the injection scope will be treated as an error.
 ...
 ...     wrong = Wrong
 ...     attribute = Descriptor()
+
+>>> Container.wrong
 Traceback (most recent call last):
   ...
 _dependencies.exceptions.DependencyError: Attribute 'attribute' contains descriptor.
@@ -100,6 +102,8 @@ Use @value decorator instead, if you really need inject descriptor instance some
 ...     @property
 ...     def attribute(self):
 ...         return 1
+
+>>> Container.wrong
 Traceback (most recent call last):
   ...
 _dependencies.exceptions.DependencyError: Attribute 'attribute' contains descriptor.

@@ -1,8 +1,6 @@
 from importlib import import_module
 
 from _dependencies.objects.attributes import _Attributes
-from _dependencies.replace import _Replace
-from _dependencies.spec import _Spec
 
 
 class Package:
@@ -31,25 +29,20 @@ def _is_package(name, dependency):
 
 
 def _build_package_spec(name, dependency):
-    return _Spec(_ImportFactory(dependency), {}, set(), set())
+    imported, attrs = _import_module(dependency.__name__, dependency.__attrs__)
+    imported_spec = yield _Attributes(imported, attrs)
+    return imported_spec
 
 
-class _ImportFactory:
-    def __init__(self, dependency):
-        self.__name__ = dependency.__name__
-        self.__attrs__ = dependency.__attrs__
-
-    def __call__(self):
-        module = self.__name__
-        result = import_module(module)
-        index = 0
-
-        for attr in self.__attrs__:
-            index += 1
-            try:
-                module += "." + attr
-                result = import_module(module)
-            except ImportError:
-                result = getattr(result, attr)
-                break
-        raise _Replace(_Attributes(result, self.__attrs__[index:]))
+def _import_module(module, attrs):
+    result = import_module(module)
+    index = 0
+    for attr in attrs:
+        index += 1
+        try:
+            module += "." + attr
+            result = import_module(module)
+        except ImportError:
+            result = getattr(result, attr)
+            break
+    return result, attrs[index:]

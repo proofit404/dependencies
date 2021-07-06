@@ -37,7 +37,7 @@ conditions = (
     (_is_nested_injector, _build_nested_injector_spec),
     (_is_class, _build_class_spec),
     (_is_this, _build_this_spec),
-    (_is_package, _build_package_spec),
+    (_is_package, _recursive(_build_package_spec)),
     (_is_value, _build_value_spec),
     (_is_data, _build_data_spec),
 )

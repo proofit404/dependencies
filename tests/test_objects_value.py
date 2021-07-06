@@ -61,22 +61,28 @@ deny_method = CodeCollector()
 def test_protect_against_self(code):
     """Deny to define a value with argument called `self`."""
 
+    class Foo:
+        pass
+
     @value
     def method(self, foo, bar):
         pass  # pragma: no cover
 
     with pytest.raises(DependencyError) as exc_info:
-        code(method)
+        code(Foo, method)
 
     assert str(exc_info.value) == "'value' decorator can not be used on methods"
 
 
 @deny_method
-def _sUIvAUUeQIde(arg):
+def _sUIvAUUeQIde(Foo, arg):
     class Container(Injector):
+        foo = Foo
         method = arg
+
+    Container.foo
 
 
 @deny_method
-def _nVlMKQghCDAQ(arg):
-    Injector(method=arg)
+def _nVlMKQghCDAQ(Foo, arg):
+    Injector(foo=Foo, method=arg).foo

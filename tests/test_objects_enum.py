@@ -29,11 +29,15 @@ def test_deny_enums(code):
     We should suggest to inject a specific enum member instead.
 
     """
+
+    class Foo:
+        pass
+
     with pytest.raises(DependencyError) as exc_info:
-        code()
+        code(Foo)
 
     expected = """
-Attribute 'foo' contains Enum.
+Attribute 'choices' contains Enum.
 
 Do not inject enumeration classes.
 
@@ -46,14 +50,17 @@ Inject its members instead.
 
 
 @deny_enums
-def _xO4I429TCjk6():
+def _xO4I429TCjk6(Foo):
     class Container(Injector):
-        foo = Choices
+        foo = Foo
+        choices = Choices
+
+    Container.foo
 
 
 @deny_enums
-def _bfShH49KZHzO():
-    Injector(foo=Choices)
+def _bfShH49KZHzO(Foo):
+    Injector(foo=Foo, choices=Choices).foo
 
 
 allow_enum_members = CodeCollector()
