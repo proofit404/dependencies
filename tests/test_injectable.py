@@ -15,8 +15,12 @@ varargs_defs = CodeCollector("foo")
 @varargs_defs.parametrize
 def test_deny_arbitrary_argument_list(code, foo):
     """Raise `DependencyError` if constructor have *args argument."""
+
+    class Baz:
+        pass
+
     with pytest.raises(DependencyError) as exc_info:
-        code(foo())
+        code(foo(), Baz)
 
     message = str(exc_info.value)
     assert message in {
@@ -26,15 +30,18 @@ def test_deny_arbitrary_argument_list(code, foo):
 
 
 @deny_varargs
-def _dfe1c22c641e(Foo):
+def _dfe1c22c641e(Foo, Baz):
     class Container(Injector):
         foo = Foo
         args = (1, 2, 3)
+        baz = Baz
+
+    Container.baz
 
 
 @deny_varargs
-def _f7ef2aa82c18(Foo):
-    Injector(foo=Foo, args=(1, 2, 3))
+def _f7ef2aa82c18(Foo, Baz):
+    Injector(foo=Foo, args=(1, 2, 3), baz=Baz).baz
 
 
 @varargs_defs
@@ -63,8 +70,12 @@ kwargs_defs = CodeCollector("foo")
 @kwargs_defs.parametrize
 def test_deny_arbitrary_keyword_arguments(code, foo):
     """Raise `DependencyError` if constructor have **kwargs argument."""
+
+    class Baz:
+        pass
+
     with pytest.raises(DependencyError) as exc_info:
-        code(foo())
+        code(foo(), Baz)
 
     message = str(exc_info.value)
     assert message in {
@@ -74,15 +85,18 @@ def test_deny_arbitrary_keyword_arguments(code, foo):
 
 
 @deny_kwargs
-def _e281099be65d(Foo):
+def _e281099be65d(Foo, Baz):
     class Container(Injector):
         foo = Foo
         kwargs = {"start": 5}
+        baz = Baz
+
+    Container.baz
 
 
 @deny_kwargs
-def _bcf7c5881b2c(Foo):
-    Injector(foo=Foo, kwargs={"start": 5})
+def _bcf7c5881b2c(Foo, Baz):
+    Injector(foo=Foo, kwargs={"start": 5}, baz=Baz).baz
 
 
 @kwargs_defs
@@ -119,8 +133,11 @@ def test_deny_classes_as_default_values(code, bar):
     class Foo:
         pass
 
+    class Baz:
+        pass
+
     with pytest.raises(DependencyError) as exc_info:
-        code(bar(Foo))
+        code(bar(Foo), Baz)
 
     message = str(exc_info.value)
 
@@ -142,14 +159,17 @@ or set the default value to an instance of that class.
 
 
 @cls_named_arguments
-def _dad79637580d(Bar):
+def _dad79637580d(Bar, Baz):
     class Container(Injector):
         bar = Bar
+        baz = Baz
+
+    Container.baz
 
 
 @cls_named_arguments
-def _bccb4f621e70(Bar):
-    Injector(bar=Bar)
+def _bccb4f621e70(Bar, Baz):
+    Injector(bar=Bar, baz=Baz).baz
 
 
 @arguments_defs
@@ -178,8 +198,12 @@ defaults_defs = CodeCollector("bar")
 @defaults_defs.parametrize
 def test_deny_non_classes_in_class_named_arguments(code, bar):
     """If argument name ends with `_class`, it must have a class as it default value."""
+
+    class Baz:
+        pass
+
     with pytest.raises(DependencyError) as exc_info:
-        code(bar())
+        code(bar(), Baz)
 
     message = str(exc_info.value)
 
@@ -187,14 +211,17 @@ def test_deny_non_classes_in_class_named_arguments(code, bar):
 
 
 @cls_named_defaults
-def _a8cd70341d3d(Bar):
+def _a8cd70341d3d(Bar, Baz):
     class Container(Injector):
         bar = Bar
+        baz = Baz
+
+    Container.baz
 
 
 @cls_named_defaults
-def _b859e98f2913(Bar):
-    Injector(bar=Bar)
+def _b859e98f2913(Bar, Baz):
+    Injector(bar=Bar, baz=Baz).baz
 
 
 @defaults_defs

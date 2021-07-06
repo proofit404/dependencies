@@ -45,6 +45,8 @@ attribute with enumeration class in it.
 >>> class Container(Injector):
 ...     order = Order
 ...     status = Status
+
+>>> Container.order
 Traceback (most recent call last):
   ...
 _dependencies.exceptions.DependencyError: Attribute 'status' contains Enum.
@@ -61,9 +63,19 @@ Using enumeration classes in class-named attributes are still allowed.
 
 ```pycon
 
+>>> class Price:
+...     def __init__(self, status_class):
+...         self.status_class = status_class
+...
+...     def __repr__(self):
+...         return f"Price({self.status_class!r})"
+
 >>> class Container(Injector):
-...     order = Order
+...     price = Price
 ...     status_class = Status
+
+>>> Container.price
+Price(<enum 'Status'>)
 
 ```
 
