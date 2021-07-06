@@ -1,3 +1,11 @@
+# [7.0.0-rc.2](https://github.com/proofit404/dependencies/compare/7.0.0-rc.1...7.0.0-rc.2) (2021-07-06)
+
+### Bug Fixes
+
+- initialize dependency graph lazily
+  [#241](https://github.com/proofit404/dependencies/issues/241)
+  ([4d0d3c9](https://github.com/proofit404/dependencies/commit/4d0d3c90f4c81de7db1e51f5451ec120e8209df9))
+
 # [7.0.0-rc.1](https://github.com/proofit404/dependencies/compare/6.0.1...7.0.0-rc.1) (2021-07-04)
 
 ### Features
