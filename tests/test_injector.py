@@ -887,25 +887,33 @@ deny_magic_methods = CodeCollector()
 @deny_magic_methods.parametrize
 def test_deny_magic_methods_injection(code):
     """`Injector` doesn't accept magic methods."""
+
+    class Foo:
+        pass
+
     with pytest.raises(DependencyError) as exc_info:
-        code()
+        code(Foo)
 
     assert str(exc_info.value) == "Magic methods are not allowed"
 
 
 @deny_magic_methods
-def _e78bf771747c():
-    class Bar(Injector):
+def _e78bf771747c(Foo):
+    class Container(Injector):
+        foo = Foo
+
         def __eq__(self, other):
             pass  # pragma: no cover
 
+    Container.foo
+
 
 @deny_magic_methods
-def _e34b88041f64():
+def _e34b88041f64(Foo):
     def eq(self, other):
         pass  # pragma: no cover
 
-    Injector(__eq__=eq)
+    Injector(foo=Foo, __eq__=eq).foo
 
 
 deny_empty_scope = CodeCollector()
