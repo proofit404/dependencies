@@ -1,5 +1,4 @@
 from _dependencies.exceptions import DependencyError
-from _dependencies.replace import _Replace
 
 
 class _Resolver:
@@ -39,20 +38,10 @@ class _Resolver:
         raise DependencyError(message)
 
     def create(self, factory, args):
-        try:
-            self.state.store(factory(**self.state.kwargs(args)))
-        except _Replace as replace:
-            self.replace(replace.dependency)
+        self.state.store(factory(**self.state.kwargs(args)))
 
     def match(self, args):
         for arg, default in args.items():  # pragma: no branch
             if self.state.should(arg, default):
                 self.state.add(arg, default)
-                break
-
-    def replace(self, dependency):
-        for injector in self.injector.__mro__:  # pragma: no branch
-            if injector.__dependencies__.has(self.state.current):
-                injector.__dependencies__.assign(self.state.current, dependency)
-            else:
                 break

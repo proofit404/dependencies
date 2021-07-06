@@ -319,30 +319,40 @@ direct = CodeCollector()
 @direct.parametrize
 def test_deny_this_without_attribute_access(code):
     """`this` object can't be used as a dependency directly."""
+
+    class Foo:
+        pass
+
     with pytest.raises(DependencyError) as exc_info:
-        code()
+        code(Foo)
 
     message = str(exc_info.value)
     assert message == "You can not use 'this' directly in the 'Injector'"
 
 
 @direct
-def _b648b6f6a712():
+def _b648b6f6a712(Foo):
     class Container(Injector):
-        foo = this
+        foo = Foo
+        bar = this
+
+    Container.foo
 
 
 @direct
-def _c147d398f4be():
+def _c147d398f4be(Foo):
     class Container(Injector):
-        foo = this << 1
+        foo = Foo
+        bar = this << 1
+
+    Container.foo
 
 
 @direct
-def _a37783b6d1ad():
-    Injector(foo=this)
+def _a37783b6d1ad(Foo):
+    Injector(foo=Foo, bar=this).foo
 
 
 @direct
-def _bd05271fb831():
-    Injector(foo=(this << 1))
+def _bd05271fb831(Foo):
+    Injector(foo=Foo, bar=(this << 1)).foo
