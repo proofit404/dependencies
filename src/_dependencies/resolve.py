@@ -16,8 +16,10 @@ class _Resolver:
                 self.create(spec.factory, spec.args)
             else:
                 self.match(spec.args)
-        if not self.graph.get(attrname).resolvable:
-            message = "Scalar dependencies could only be used to instantiate classes"
+        if not spec.resolvable:
+            message = (
+                f"{spec.kind} dependencies could only be used to instantiate classes"
+            )
             raise DependencyError(message)
         return self.state.cache[attrname]
 
