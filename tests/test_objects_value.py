@@ -10,8 +10,13 @@ from helpers import CodeCollector
 def test_define_value():
     """Evaluate @value decorated function during dependency injection process."""
 
+    class Get:
+        def __init__(self, result):
+            self.result = result
+
     class Container(Injector):
 
+        get = Get
         foo = 1
         bar = 2
         baz = 3
@@ -20,19 +25,24 @@ def test_define_value():
         def result(foo, bar, baz):
             return foo + bar + baz
 
-    assert Container.result == 6
+    assert Container.get.result == 6
 
 
 def test_keyword_arguments():
-    """
-    @value decorated function should support keyword arguments.
+    """@value decorated function should support keyword arguments.
 
     If keyword argument is missing in the Injector subclass the
     default value should be used.
+
     """
+
+    class Get:
+        def __init__(self, result):
+            self.result = result
 
     class Container(Injector):
 
+        get = Get
         foo = 1
         bar = 2
 
@@ -40,7 +50,7 @@ def test_keyword_arguments():
         def result(foo, bar, baz=3):
             return foo + bar + baz
 
-    assert Container.result == 6
+    assert Container.get.result == 6
 
 
 def test_protect_against_classes():
@@ -86,3 +96,38 @@ def _sUIvAUUeQIde(Foo, arg):
 @deny_method
 def _nVlMKQghCDAQ(Foo, arg):
     Injector(foo=Foo, method=arg).foo
+
+
+deny_direct_resolve = CodeCollector()
+
+
+@deny_direct_resolve.parametrize
+def test_direct_value_resolve(code):
+    """Attempt to resolve value directly should raise exception.
+
+    Values are allowed to be used as dependencies for classes.
+
+    """
+    with pytest.raises(DependencyError) as exc_info:
+        code()
+    expected = "'value' dependencies could only be used to instantiate classes"
+    assert str(exc_info.value) == expected
+
+
+@deny_direct_resolve
+def _n3XOmcCoWc0W():
+    class Container(Injector):
+        @value
+        def a():
+            return 1
+
+    Container.a
+
+
+@deny_direct_resolve
+def _pZKCM0OCHMML():
+    @value
+    def a():
+        return 1
+
+    Injector(a=a).a
