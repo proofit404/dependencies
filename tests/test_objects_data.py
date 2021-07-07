@@ -6,11 +6,11 @@ from dependencies.exceptions import DependencyError
 from helpers import CodeCollector
 
 
-deny_data = CodeCollector()
+deny_direct_resolve = CodeCollector()
 
 
-@deny_data.parametrize
-def test_data(code):
+@deny_direct_resolve.parametrize
+def test_direct_data_resolve(code):
     """Attempt to resolve scalar types directly should raise exception.
 
     Scalar types are allowed to be used as dependencies for classes.
@@ -22,7 +22,7 @@ def test_data(code):
     assert str(exc_info.value) == expected
 
 
-@deny_data
+@deny_direct_resolve
 def _jxu5tzdy99V7():
     class Container(Injector):
         a = 1
@@ -30,6 +30,6 @@ def _jxu5tzdy99V7():
     Container.a
 
 
-@deny_data
+@deny_direct_resolve
 def _z8iAExxZyJjd():
     Injector(a=1).a
