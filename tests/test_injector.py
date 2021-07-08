@@ -560,13 +560,15 @@ evaluate_once = CodeCollector()
 evaluate_once_a = CodeCollector("a")
 evaluate_once_b = CodeCollector("b")
 evaluate_once_c = CodeCollector("c")
+evaluate_once_d = CodeCollector("d")
 
 
 @evaluate_once.parametrize
 @evaluate_once_a.parametrize
 @evaluate_once_b.parametrize
 @evaluate_once_c.parametrize
-def test_evaluate_once_different_types(code, a, b, c):
+@evaluate_once_d.parametrize
+def test_evaluate_once_different_types(code, a, b, c, d):
     """Evaluate each node in the dependencies graph once.
 
     Arguments of dependencies of different types should be evaluated once. This rules
@@ -574,21 +576,22 @@ def test_evaluate_once_different_types(code, a, b, c):
     against all necessary inputs.
 
     """
+
+    class Root:
+        def __init__(self, a):
+            self.a = a
+
     times = []
-
-    class D:
-        def __init__(self):
-            times.append(1)
-
-    Container = code(a(), b(), c(), D)
+    Container = code(Root, a(), b(), c(), d(times))
     assert sum(times) == 0
-    Container.a
+    Container.root.a
     assert sum(times) == 1
 
 
 @evaluate_once
-def _rNYf35g94V1B(A, B, C, D):
+def _rNYf35g94V1B(Root, A, B, C, D):
     class Container(Injector):
+        root = Root
         a = A
         b = B
         c = C
@@ -598,8 +601,8 @@ def _rNYf35g94V1B(A, B, C, D):
 
 
 @evaluate_once
-def _uf0ibIiz0aIl(A, B, C, D):
-    return Injector(a=A, b=B, c=C, d=D)
+def _uf0ibIiz0aIl(Root, A, B, C, D):
+    return Injector(root=Root, a=A, b=B, c=C, d=D)
 
 
 @evaluate_once_a
@@ -654,6 +657,24 @@ def _z7bIvBpQsr4H():
         pass
 
     return c
+
+
+@evaluate_once_d
+def _wjwPzTamAceJ(times):
+    class D:
+        def __init__(self):
+            times.append(1)
+
+    return D
+
+
+@evaluate_once_d
+def _s7pP3oP4L3pZ(times):
+    @value
+    def d():
+        times.append(1)
+
+    return d
 
 
 multiple_inheritance = CodeCollector()
