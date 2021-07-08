@@ -1,3 +1,16 @@
+# [7.0.0-rc.3](https://github.com/proofit404/dependencies/compare/7.0.0-rc.2...7.0.0-rc.3) (2021-07-08)
+
+### Features
+
+- deny to resolve value object directly
+  [#473](https://github.com/proofit404/dependencies/issues/473)
+  ([b3746c3](https://github.com/proofit404/dependencies/commit/b3746c382c282b1a394b71c1067d090ac3364807))
+
+### BREAKING CHANGES
+
+- value objects could only be used to evaluate arguments of classes. Attribute
+  access of Injector subclass which result in value object would raise an error.
+
 # [7.0.0-rc.2](https://github.com/proofit404/dependencies/compare/7.0.0-rc.1...7.0.0-rc.2) (2021-07-06)
 
 ### Bug Fixes
