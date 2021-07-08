@@ -22,16 +22,21 @@ scope where value object was defined.
 
 >>> from dependencies import Injector, value
 
+>>> class Calc:
+...     def __init__(self, result):
+...         self.result = result
+
 >>> class Container(Injector):
+...     calc = Calc
 ...     foo = 1
 ...     bar = 2
 ...     baz = 3
 ...
 ...     @value
-...     def quiz(foo, bar, baz):
+...     def result(foo, bar, baz):
 ...         return foo + bar + baz
 
->>> Container.quiz
+>>> Container.calc.result
 6
 
 ```
@@ -41,6 +46,25 @@ injection scope. After that `quiz` function was called with resolved
 dependencies passed to its arguments. Result of the function was stored in the
 injection scope under the same `quiz` name. We received value from `quiz` name
 from the injection scope.
+
+## Restrictions
+
+You can't resolve value objects as main target of dependency injection. The main
+goal of `value` objects is to be evaluated dependencies for classes.
+
+```pycon
+
+>>> class Container(Injector):
+...     @value
+...     def foo():
+...         return 1
+
+>>> Container.foo
+Traceback (most recent call last):
+  ...
+_dependencies.exceptions.DependencyError: 'value' dependencies could only be used to instantiate classes
+
+```
 
 ## Depending on the value
 
