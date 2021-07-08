@@ -121,18 +121,16 @@ is most cases. You **don't** need a workaround until you're doing something
 really strange like defining classes during dependency injection process or
 accessing `Injector` attributes during class definition process.
 
-If you decided to bypass this restriction, you can use `@value` to hide the
-nature of an object.
+If you decided to bypass this restriction, you can use a nested class to hide
+the nature of an object.
 
 ```pycon
 
->>> from dependencies import value
-
 >>> class Container(Injector):
 ...
-...     @value
-...     def attribute():
-...         return Descriptor()
+...     class attribute:
+...         def __new__(cls):
+...             return Descriptor()
 
 >>> class Strange:
 ...
