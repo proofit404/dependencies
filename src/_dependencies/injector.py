@@ -2,8 +2,8 @@ from _dependencies.exceptions import DependencyError
 from _dependencies.graph import _Graph
 from _dependencies.lazy import _LazyGraph
 from _dependencies.objects.nested import _InjectorTypeType
+from _dependencies.pointer import _Pointer
 from _dependencies.resolve import _Resolver
-from _dependencies.state import _State
 
 
 class _InjectorType(_InjectorTypeType):
@@ -30,7 +30,13 @@ class _InjectorType(_InjectorTypeType):
         return type(cls.__name__, (cls, other), {})
 
     def __getattr__(cls, attrname):
-        return _Resolver(cls, _State(cls, attrname)).resolve(attrname)
+        pointer = _Pointer()
+        cache = {"__self__": pointer}
+        resolver = _Resolver(cls.__dependencies__, cache, attrname)
+        pointer.resolver = resolver
+        resolved = resolver.resolve()
+        cls.__dependencies__.get(attrname).resolved()
+        return resolved
 
     def __setattr__(cls, attrname, value):
         raise DependencyError("'Injector' modification is not allowed")

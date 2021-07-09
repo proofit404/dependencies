@@ -233,10 +233,7 @@ def test_no_reuse_default_value_between_dependencies():
     with pytest.raises(DependencyError) as exc_info:
         Container.foo
 
-    assert (
-        str(exc_info.value)
-        == "'Container' can not resolve attribute 'y' while building 'foo'"
-    )
+    assert str(exc_info.value) == "Can not resolve attribute 'y' while building 'foo'"
 
 
 def test_class_named_argument_default_value():
@@ -783,10 +780,7 @@ def test_attribute_error(code):
     with pytest.raises(DependencyError) as exc_info:
         code()
 
-    assert str(exc_info.value) in {
-        "'Foo' can not resolve attribute 'test'",
-        "'Injector' can not resolve attribute 'test'",
-    }
+    assert str(exc_info.value) == "Can not resolve attribute 'test'"
 
 
 @attribute_error
@@ -821,10 +815,9 @@ def test_incomplete_dependencies_error(code):
     with pytest.raises(DependencyError) as exc_info:
         code()
 
-    assert str(exc_info.value) in {
-        "'Foo' can not resolve attribute 'test' while building 'bar'",
-        "'Injector' can not resolve attribute 'test' while building 'bar'",
-    }
+    assert (
+        str(exc_info.value) == "Can not resolve attribute 'test' while building 'bar'"
+    )
 
 
 @incomplete_dependencies

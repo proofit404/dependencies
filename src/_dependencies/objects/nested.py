@@ -1,5 +1,7 @@
 from weakref import ref
 
+from _dependencies.pointer import _Pointer
+from _dependencies.resolve import _Resolver
 from _dependencies.spec import _Spec
 
 
@@ -23,11 +25,9 @@ class _NestedInjectorFactory:
 
     def __call__(self, __self__):
         parent = _Spec(ref(__self__), {}, set(), set())
-        subclass = type(self.injector.__name__, (self.injector,), _NonEmptyNamespace())
-        subclass.__dependencies__.specs["__parent__"] = parent
-        return subclass
-
-
-class _NonEmptyNamespace(dict):
-    def __bool__(self):
-        return True
+        graph = self.injector.__dependencies__
+        graph.specs["__parent__"] = parent
+        pointer = _Pointer()
+        cache = {"__self__": pointer}
+        pointer.resolver = _Resolver(graph, cache, None)
+        return pointer
