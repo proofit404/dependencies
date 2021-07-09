@@ -1,3 +1,17 @@
+# [7.0.0-rc.4](https://github.com/proofit404/dependencies/compare/7.0.0-rc.3...7.0.0-rc.4) (2021-07-09)
+
+### Features
+
+- deny resolve this objects directly
+  [#472](https://github.com/proofit404/dependencies/issues/472)
+  ([d368589](https://github.com/proofit404/dependencies/commit/d368589ed2d6d2f8800caab9d36cb83ef1ea8fba))
+
+### BREAKING CHANGES
+
+- The only allowed purpose of this objects is to specify dependencies of classes
+  and value objects as links to attributes with different names or stored in
+  nested Injector classes.
+
 # [7.0.0-rc.3](https://github.com/proofit404/dependencies/compare/7.0.0-rc.2...7.0.0-rc.3) (2021-07-08)
 
 ### Features
