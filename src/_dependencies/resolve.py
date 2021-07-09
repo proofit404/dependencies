@@ -1,14 +1,15 @@
 from _dependencies.exceptions import DependencyError
+from _dependencies.state import _State
 
 
 class _Resolver:
-    def __init__(self, injector, state):
-        self.injector = injector
-        self.graph = injector.__dependencies__
-        self.state = state
+    def __init__(self, graph, cache, attrname):
+        self.graph = graph
+        self.state = _State(cache, attrname)
+        self.attrname = attrname
 
-    def resolve(self, attrname):
-        while attrname not in self.state.cache:
+    def resolve(self):
+        while self.attrname not in self.state.cache:
             spec = self.graph.get(self.state.current)
             if self.is_optional(spec):
                 continue
@@ -16,12 +17,7 @@ class _Resolver:
                 self.create(spec.factory, spec.args)
             else:
                 self.match(spec.args)
-        if not spec.resolvable:
-            message = (
-                f"{spec.kind} dependencies could only be used to instantiate classes"
-            )
-            raise DependencyError(message)
-        return self.state.cache[attrname]
+        return self.state.cache[self.attrname]
 
     def is_optional(self, spec):
         if spec is not None:
@@ -30,13 +26,11 @@ class _Resolver:
             self.state.pop()
             return True
         if self.state.full():
-            message = "{!r} can not resolve attribute {!r} while building {!r}".format(
-                self.injector.__name__, self.state.current, self.state.stack.pop()[0]
+            message = "Can not resolve attribute {!r} while building {!r}".format(
+                self.state.current, self.state.stack.pop()[0]
             )
         else:
-            message = "{!r} can not resolve attribute {!r}".format(
-                self.injector.__name__, self.state.current
-            )
+            message = f"Can not resolve attribute {self.state.current!r}"
         raise DependencyError(message)
 
     def create(self, factory, args):
