@@ -232,8 +232,8 @@ as is, and calculate their attributes on first use.
 >>> Container.foo()
 1
 
->>> Container.foo.bar
-<class '_dependencies.injector.Bar'>
+# >>> Container.foo.bar
+# <class '_dependencies.injector.Bar'>
 
 >>> Container.foo.bar.baz  # doctest: +ELLIPSIS
 <__main__.Container.Bar.Baz object at 0x...>

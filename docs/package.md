@@ -98,22 +98,5 @@ is actually happen. You can inject bound methods with exactly one line.
 
 ```
 
-The injector definition above is equivalent to the longuer version:
-
-```pycon
-
->>> from dependencies import this
->>> from app.calc import Calc
-
->>> class Container(Injector):
-...     foo = this.tmp.do
-...     tmp = Calc
-...     a = 1
-...     b = 2
-
->>> assert Container.foo() == 3
-
-```
-
 <p align="center">&mdash; ⭐ &mdash;</p>
 <p align="center"><i>The <code>dependencies</code> library is part of the SOLID python family.</i></p>

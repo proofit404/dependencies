@@ -169,20 +169,20 @@ and the rest of the application will be left untouched.
 ...         },
 ...     }
 
-# Container.app  # doctest: +ELLIPSIS
-# <__main__.Application object at 0x...>
+Container.app  # doctest: +ELLIPSIS
+<__main__.Application object at 0x...>
 
-# Container.app.db  # doctest: +ELLIPSIS
-# <__main__.Database object at 0x...>
+Container.app.db  # doctest: +ELLIPSIS
+<__main__.Database object at 0x...>
 
-# Container.app.db.port
-# 5432
+Container.app.db.port
+5432
 
-# Container.app.cache  # doctest: +ELLIPSIS
-# <__main__.Cache object at 0x...>
+Container.app.cache  # doctest: +ELLIPSIS
+<__main__.Cache object at 0x...>
 
-# Container.app.cache.port
-# 6782
+Container.app.cache.port
+6782
 
 ```
 
@@ -227,6 +227,25 @@ from environment variable to the constructor using `this` object.
 
 # Container.app
 # App(Config('https://example.com/frontend', 'https://example.com/backend'))
+
+```
+
+## Restrictions
+
+You can't resolve this objects as main target of dependency injection. The main
+goal of `this` object is to point to real dependencies for classes. For example,
+if they are located in the attribute with a different name.
+
+```pycon
+
+>>> class Container(Injector):
+...     foo = this.bar
+...     bar = 1
+
+>>> Container.foo
+Traceback (most recent call last):
+  ...
+_dependencies.exceptions.DependencyError: 'this' dependencies could only be used to instantiate classes
 
 ```
 
