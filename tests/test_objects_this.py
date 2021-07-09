@@ -277,10 +277,8 @@ def test_attribute_error_on_parent_access(code):
         code()
 
     assert str(exc_info.value) in {
-        "'Container' can not resolve attribute 'bar'",
-        "'Injector' can not resolve attribute 'bar'",
-        "'Container' can not resolve attribute 'bar' while building 'foo'",
-        "'Injector' can not resolve attribute 'bar' while building 'foo'",
+        "Can not resolve attribute 'bar'",
+        "Can not resolve attribute 'bar' while building 'foo'",
     }
 
 
