@@ -19,12 +19,13 @@ def test_attribute_getter():
             return self.one + self.two
 
     class Container(Injector):
+        foo = Foo
+        one = this.SubContainer.one
+        two = this.SubContainer.two
+
         class SubContainer(Injector):
-            foo = Foo
             one = 1
             two = 2
-
-        foo = this.SubContainer.foo
 
     foo = Container.foo
     assert isinstance(foo, Foo)
@@ -34,120 +35,130 @@ def test_attribute_getter():
 def test_attribute_getter_few_attributes():
     """We resolve attribute access until we find all specified attributes."""
 
+    class Root:
+        def __init__(self, result):
+            self.result = result
+
     class Foo:
         def __init__(self, one):
             self.one = one
 
     class Container(Injector):
+        root = Root
+        result = this.SubContainer.foo.one
+
         class SubContainer(Injector):
             foo = Foo
             one = 1
 
-        foo = this.SubContainer.foo.one
-
-    assert Container.foo == 1
+    assert Container.root.result == 1
 
 
 item_access = CodeCollector()
 
 
 @item_access.parametrize
-@pytest.mark.xfail()
 def test_item_getter(code):
     """We can describe item access in the `Injector` in the declarative manner."""
-    result = code()
-    assert result == 1  # pragma: no cover
+
+    class Root:
+        def __init__(self, result):
+            self.result = result
+
+    result = code(Root)
+    assert result == 1
 
 
 @item_access
-def _ce642f492941():
+def _ce642f492941(Root):
     class Container(Injector):
+        root = Root
         foo = {"one": 1}
-        one = this.foo["one"]
+        result = this.foo["one"]
 
-    result = Container.one
-
-    return result  # pragma: no cover
+    return Container.root.result
 
 
 @item_access
-def _ffa208dc1130():
+def _ffa208dc1130(Root):
     class Container(Injector):
+        root = Root
         foo = {"one": {"two": 1}}
-        two = this.foo["one"]["two"]
+        result = this.foo["one"]["two"]
 
-    result = Container.two
-
-    return result  # pragma: no cover
+    return Container.root.result
 
 
 @item_access
-def _e5c358190fef():
+def _e5c358190fef(Root):
     class Container(Injector):
+        root = Root
+        result = this.SubContainer.spam
         foo = {"bar": {"baz": 1}}
 
         class SubContainer(Injector):
             spam = (this << 1).foo["bar"]["baz"]
 
-    result = Container.SubContainer.spam
-
-    return result  # pragma: no cover
+    return Container.root.result
 
 
 @item_access
-def _ab4cdbf60b2f():
+def _ab4cdbf60b2f(Root):
     class Container(Injector):
+        root = Root
+        result = this.SubContainer.SubSubContainer.spam
         foo = {"bar": {"baz": 1}}
 
         class SubContainer(Injector):
             class SubSubContainer(Injector):
                 spam = (this << 2).foo["bar"]["baz"]
 
-    result = Container.SubContainer.SubSubContainer.spam
-
-    return result  # pragma: no cover
+    return Container.root.result
 
 
 @item_access
-def _be332433b74d():
+def _be332433b74d(Root):
     class Container(Injector):
+        root = Root
+        result = this.bar
         foo = [1, 2, 3]
         bar = this.foo[0]
 
-    result = Container.bar
-
-    return result  # pragma: no cover
+    return Container.root.result
 
 
 @item_access
-def _fe150d5ebe93():
+def _fe150d5ebe93(Root):
     class Container(Injector):
+        root = Root
+        result = this.bar
         foo = {2: 1}
         bar = this.foo[2]
 
-    result = Container.bar
-
-    return result  # pragma: no cover
+    return Container.root.result
 
 
 @item_access
-def _dc4fedcd09d8():
+def _dc4fedcd09d8(Root):
     class Container(Injector):
+        root = Root
+        result = this.bar
         foo = {("x", 1): 1}
         bar = this.foo[("x", 1)]
 
-    result = Container.bar
-
-    return result  # pragma: no cover
+    return Container.root.result
 
 
-@pytest.mark.xfail()
 def test_item_getter_non_printable_key():
     """Don't use string representation as key hash function.
 
     We can describe item access for keys which can't be presented as normal strings.
 
     """
+
+    class Root:
+        def __init__(self, result):
+            self.result = result
 
     class Boom:
         def __init__(self, salt):
@@ -162,26 +173,32 @@ def test_item_getter_non_printable_key():
     boom = Boom("hello")
 
     class Container(Injector):
+        root = Root
         foo = {boom: 1}
-        bar = this.foo[boom]
+        result = this.foo[boom]
 
-    assert Container.bar == 1
+    assert Container.root.result == 1
 
 
 def test_attribute_access_after_item_getter():
     """Check we can use attribute access notation after item getter notation."""
 
-    class Foo:
-        x = 1
+    class Root:
+        def __init__(self, result):
+            self.result = result
 
-    class Bar:
-        y = {"foo": Foo}
+    class Baz:
+        quiz = 1
+
+    class Foo:
+        bar = {"baz": Baz}
 
     class Container(Injector):
-        bar = Bar
-        baz = this.bar.y["foo"].x
+        root = Root
+        result = this.foo.bar["baz"].quiz
+        foo = Foo
 
-    assert Container.baz == 1
+    assert Container.root.result == 1
 
 
 def test_this_deny_non_integers():
@@ -354,3 +371,33 @@ def _a37783b6d1ad(Foo):
 @direct
 def _bd05271fb831(Foo):
     Injector(foo=Foo, bar=(this << 1)).foo
+
+
+deny_direct_resolve = CodeCollector()
+
+
+@deny_direct_resolve.parametrize
+def test_direct_this_resolve(code):
+    """Attempt to resolve this directly should raise exception.
+
+    This objects are allowed to be used as dependencies for classes.
+
+    """
+    with pytest.raises(DependencyError) as exc_info:
+        code()
+    expected = "'this' dependencies could only be used to instantiate classes"
+    assert str(exc_info.value) == expected
+
+
+@deny_direct_resolve
+def _thSaFsw1po8I():
+    class Container(Injector):
+        a = this.b
+        b = 1
+
+    Container.a
+
+
+@deny_direct_resolve
+def _vIWzcvYG5qs5():
+    Injector(a=this.b, b=1).a

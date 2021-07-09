@@ -31,7 +31,14 @@ def _is_this(name, dependency):
 def _build_this_spec(name, dependency):
     expression = dependency.__expression__
     _check_expression(expression)
-    return _Spec(_ThisFactory(expression), {"__self__": False}, {"__self__"}, set())
+    return _Spec(
+        _ThisFactory(expression),
+        {"__self__": False},
+        {"__self__"},
+        set(),
+        "'this'",
+        False,
+    )
 
 
 class _ThisFactory:
