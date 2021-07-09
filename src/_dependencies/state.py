@@ -2,8 +2,8 @@ from collections import deque
 
 
 class _State:
-    def __init__(self, injector, attrname):
-        self.cache = {"__self__": injector}
+    def __init__(self, cache, attrname):
+        self.cache = cache
         self.tried = set()
         self.stack = deque()
         self.current = attrname
