@@ -400,6 +400,7 @@ def test_show_call_dependencies_with_dir():
     assert "x" in dir(Foo(x=1))
 
 
+@pytest.mark.xfail()
 def test_omit_parent_link_in_dir_listing():
     """Don't show `__parent__` link in the `dir` output.
 
