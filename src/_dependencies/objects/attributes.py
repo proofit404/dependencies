@@ -18,6 +18,8 @@ def _build_attributes_spec(name, dependency):
         origin_spec.args,
         origin_spec.required,
         origin_spec.optional,
+        origin_spec.kind,
+        origin_spec.resolvable,
     )
 
 

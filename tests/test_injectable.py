@@ -48,7 +48,7 @@ def _f7ef2aa82c18(Foo, Baz):
 def _xkebooxhls7f():
     class Foo:
         def __init__(self, *args):
-            pass  # pragma: no cover
+            raise RuntimeError
 
     return Foo
 
@@ -57,7 +57,7 @@ def _xkebooxhls7f():
 def _eapfhkr8z0mg():
     @value
     def func(*args):
-        pass  # pragma: no cover
+        raise RuntimeError
 
     return func
 
@@ -103,7 +103,7 @@ def _bcf7c5881b2c(Foo, Baz):
 def _gvhotc3zgfuq():
     class Foo:
         def __init__(self, **kwargs):
-            pass  # pragma: no cover
+            raise RuntimeError
 
     return Foo
 
@@ -112,7 +112,7 @@ def _gvhotc3zgfuq():
 def _hmshyccwnhsw():
     @value
     def func(**kwargs):
-        pass  # pragma: no cover
+        raise RuntimeError
 
     return func
 
@@ -176,7 +176,7 @@ def _bccb4f621e70(Bar, Baz):
 def _sxd25ppy5ypj(Foo):
     class Bar:
         def __init__(self, foo=Foo):
-            pass  # pragma: no cover
+            raise RuntimeError
 
     return Bar
 
@@ -185,7 +185,7 @@ def _sxd25ppy5ypj(Foo):
 def _oafemes7wcku(Foo):
     @value
     def func(foo=Foo):
-        pass  # pragma: no cover
+        raise RuntimeError
 
     return func
 
@@ -228,7 +228,7 @@ def _b859e98f2913(Bar, Baz):
 def _x53iiy9oyx4i():
     class Bar:
         def __init__(self, foo_class=1):
-            pass  # pragma: no cover
+            raise RuntimeError
 
     return Bar
 
@@ -237,6 +237,6 @@ def _x53iiy9oyx4i():
 def _zkh2hnjhe149():
     @value
     def func(foo_class=1):
-        pass  # pragma: no cover
+        raise RuntimeError
 
     return func

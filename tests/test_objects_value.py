@@ -59,7 +59,7 @@ def test_protect_against_classes():
 
         @value
         class Foo:
-            pass  # pragma: no cover
+            pass
 
     assert str(exc_info.value) == "'value' decorator can not be used on classes"
 
@@ -76,7 +76,7 @@ def test_protect_against_self(code):
 
     @value
     def method(self, foo, bar):
-        pass  # pragma: no cover
+        raise RuntimeError
 
     with pytest.raises(DependencyError) as exc_info:
         code(Foo, method)

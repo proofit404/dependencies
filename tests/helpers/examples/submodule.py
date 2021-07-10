@@ -1,3 +1,11 @@
+variable = 1
+
+
+def function():
+    """Return dummy data."""
+    return 1
+
+
 class Foo:
     """A dummy class for tests."""
 
@@ -16,11 +24,3 @@ class Bar:
     def do(self):
         """Return dummy data."""
         return self.a + self.b
-
-
-def function():
-    """Return dummy data."""
-    return 1
-
-
-variable = 1
