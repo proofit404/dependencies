@@ -219,7 +219,7 @@ def test_no_reuse_default_value_between_dependencies():
 
     class Foo:
         def __init__(self, bar, x, y):
-            pass  # pragma: no cover
+            raise RuntimeError
 
     class Bar:
         def __init__(self, x, y=1):
@@ -400,7 +400,6 @@ def test_show_call_dependencies_with_dir():
     assert "x" in dir(Foo(x=1))
 
 
-@pytest.mark.xfail()
 def test_omit_parent_link_in_dir_listing():
     """Don't show `__parent__` link in the `dir` output.
 
@@ -465,15 +464,14 @@ def _tQeRzD5ZsyTm():
     del Injector.foo
 
 
-@pytest.mark.xfail()
 def test_nested_injectors():
     """`Injector` subclass could be used as attribute of another `Injector` subclass."""
 
     def do_x(a, b):
-        return a + b  # pragma: no cover
+        return a + b
 
     def do_y(c, d):
-        return c * d  # pragma: no cover
+        return c * d
 
     class Call:
         def __init__(self, foo, bar):
@@ -825,7 +823,7 @@ def test_incomplete_dependencies_error(code):
 def _c4e7ecf75167():
     class Bar:
         def __init__(self, test, two=2):
-            pass  # pragma: no cover
+            raise RuntimeError
 
     class Foo(Injector):
         bar = Bar
@@ -837,7 +835,7 @@ def _c4e7ecf75167():
 def _dmsMgYqbsHgB():
     class Bar:
         def __init__(self, test):
-            pass  # pragma: no cover
+            raise RuntimeError
 
     Foo = Injector(bar=Bar)
 
@@ -918,7 +916,7 @@ def _e78bf771747c(Foo):
         foo = Foo
 
         def __eq__(self, other):
-            pass  # pragma: no cover
+            raise RuntimeError
 
     Container.foo
 
@@ -926,7 +924,7 @@ def _e78bf771747c(Foo):
 @deny_magic_methods
 def _e34b88041f64(Foo):
     def eq(self, other):
-        pass  # pragma: no cover
+        raise RuntimeError
 
     Injector(foo=Foo, __eq__=eq).foo
 
