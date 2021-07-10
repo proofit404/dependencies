@@ -140,35 +140,35 @@ Only one function was collected as test parameter.
 
 Collect more functions or inline parameter inside test.
 
-Inspect {test_func!r} definition.
+Inspect {test_func} definition.
 """.strip()
 
 
 repeated_template = """
 {function_name} was already collected.
 
-How about {suggested!r}
+How about {suggested}
 """.strip()
 
 
 wrong_length_template = """
 {function_name} should be 13 characters long.
 
-How about {suggested!r}
+How about {suggested}
 """.strip()
 
 
 wrong_prefix_template = """
 {function_name} should be a private function.
 
-How about {suggested!r}
+How about {suggested}
 """.strip()
 
 
 wrong_name_template = """
 {function_name} should a have random name.
 
-How about {suggested!r}
+How about {suggested}
 """.strip()
 
 

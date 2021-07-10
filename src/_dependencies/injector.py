@@ -2,8 +2,7 @@ from _dependencies.exceptions import DependencyError
 from _dependencies.graph import _Graph
 from _dependencies.lazy import _LazyGraph
 from _dependencies.objects.nested import _InjectorTypeType
-from _dependencies.pointer import _Pointer
-from _dependencies.resolve import _Resolver
+from _dependencies.scope import _Scope
 
 
 class _InjectorType(_InjectorTypeType):
@@ -30,11 +29,7 @@ class _InjectorType(_InjectorTypeType):
         return type(cls.__name__, (cls, other), {})
 
     def __getattr__(cls, attrname):
-        pointer = _Pointer()
-        cache = {"__self__": pointer}
-        resolver = _Resolver(cls.__dependencies__, cache, attrname)
-        pointer.resolver = resolver
-        resolved = resolver.resolve()
+        resolved = getattr(_Scope(cls.__dependencies__), attrname)
         cls.__dependencies__.get(attrname).resolved()
         return resolved
 

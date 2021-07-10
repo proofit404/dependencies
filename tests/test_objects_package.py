@@ -1,119 +1,322 @@
 """Tests related to the Package object."""
 import inspect
 
-import pytest
-
 from dependencies import Injector
 from dependencies import Package
 from helpers import CodeCollector
 
 
-package_definitions = CodeCollector()
+provide_module = CodeCollector()
 
 
-@package_definitions.parametrize
+@provide_module.parametrize
 def test_provide_module(code):
     """Package instance itself should refer to the module."""
-    Container = code()
+    import examples
 
-    assert inspect.ismodule(Container.itself)
-    assert inspect.ismodule(Container.submodule)
+    class Root:
+        def __init__(self, result):
+            self.result = result
 
-
-@package_definitions.parametrize
-def test_provide_an_instance(code):
-    """Package attribute access should provide an instance when refer to a class."""
-    Container = code()
-
-    from examples.submodule import Foo, Bar
-
-    assert isinstance(Container.instance, Foo) or isinstance(Container.instance, Bar)
-    assert hasattr(Container.instance, "do")
+    Container = code(Root)
+    assert inspect.ismodule(Container.root.result)
+    assert examples is Container.root.result
 
 
-@package_definitions.parametrize
-def test_provide_instance_method(code):
-    """Package instance attribute access should provide instance method."""
-    Container = code()
+@provide_module
+def _vlg36qA6yZyS(Root):
+    examples = Package("examples")
 
-    assert inspect.ismethod(Container.instance_method)
-    assert Container.instance_method() == 1
+    class Container(Injector):
+        root = Root
+        result = examples
 
-
-@package_definitions.parametrize
-def test_provide_a_function(code):
-    """Package instance attribute access should provide regular function."""
-    Container = code()
-
-    assert inspect.isfunction(Container.function)
-    assert Container.function() == 1
+    return Container
 
 
-@package_definitions.parametrize
-def test_provide_a_variable(code):
+@provide_module
+def _vNORYQu36ygs(Root):
+    examples = Package("examples")
+    return Injector(root=Root, result=examples)
+
+
+provide_submodule = CodeCollector()
+submodule_variant = CodeCollector("sub")
+
+
+@provide_submodule.parametrize
+@submodule_variant.parametrize
+def test_provide_submodule(code, sub):
+    """Package instance itself should refer to the module."""
+    import examples.submodule
+
+    class Root:
+        def __init__(self, result):
+            self.result = result
+
+    Container = code(Root, sub())
+    assert inspect.ismodule(Container.root.result)
+    assert examples.submodule is Container.root.result
+
+
+@provide_submodule
+def _maXQQRr7Q7HH(Root, sub):
+    class Container(Injector):
+        root = Root
+        result = sub
+
+    return Container
+
+
+@provide_submodule
+def _cjMUDUzwLP6j(Root, sub):
+    return Injector(root=Root, result=sub)
+
+
+@submodule_variant
+def _kFnqTphEQoHc():
+    return Package("examples.submodule")
+
+
+@submodule_variant
+def _c50eltRQOS2a():
+    examples = Package("examples")
+    return examples.submodule
+
+
+provide_variable = CodeCollector()
+variable_variant = CodeCollector("variable")
+
+
+@provide_variable.parametrize
+@variable_variant.parametrize
+def test_provide_a_variable(code, variable):
     """Package instance attribute access should provide regular variable."""
-    Container = code()
 
-    assert Container.variable == 1
+    class Root:
+        def __init__(self, result):
+            self.result = result
+
+    Container = code(Root, variable())
+    assert Container.root.result == 1
 
 
-@pytest.mark.xfail()
-@package_definitions.parametrize
-def test_provide_a_class(code):
+@provide_variable
+def _fpOfsFByaQOc(Root, variable):
+    class Container(Injector):
+        root = Root
+        result = variable
+
+    return Container
+
+
+@provide_variable
+def _qICvFa5gphmY(Root, variable):
+    return Injector(root=Root, result=variable)
+
+
+@variable_variant
+def _xqImNk0p0kun():
+    examples = Package("examples")
+    return examples.submodule.variable
+
+
+@variable_variant
+def _d1H5hbDhnoVL():
+    submodule = Package("examples.submodule")
+    return submodule.variable
+
+
+provide_function = CodeCollector()
+function_variant = CodeCollector("function")
+
+
+@provide_function.parametrize
+@function_variant.parametrize
+def test_provide_a_function(code, function):
+    """Package instance attribute access should provide regular function."""
+
+    class Root:
+        def __init__(self, result):
+            self.result = result
+
+    Container = code(Root, function())
+    assert inspect.isfunction(Container.root.result)
+    assert Container.root.result() == 1
+
+
+@provide_function
+def _qy2e8eIhQ7k4(Root, function):
+    class Container(Injector):
+        root = Root
+        result = function
+
+    return Container
+
+
+@provide_function
+def _lCNl7nzCX0KO(Root, function):
+    return Injector(root=Root, result=function)
+
+
+@function_variant
+def _xIMIuAFAZ5iR():
+    examples = Package("examples")
+    return examples.submodule.function
+
+
+@function_variant
+def _l3PIIW8qeapm():
+    submodule = Package("examples.submodule")
+    return submodule.function
+
+
+provide_instance = CodeCollector()
+instance_variant = CodeCollector("instance")
+
+
+@provide_instance.parametrize
+@instance_variant.parametrize
+def test_provide_an_instance(code, instance):
+    """Package attribute access should provide an instance when refer to a class."""
+    from examples.submodule import Foo
+
+    class Root:
+        def __init__(self, result):
+            self.result = result
+
+    Container = code(Root, instance())
+    assert isinstance(Container.root.result, Foo)
+    assert Container.root.result.do() == 1
+
+
+@provide_instance
+def _s9nywIe9xRPm(Root, instance):
+    class Container(Injector):
+        root = Root
+        result = instance
+
+    return Container
+
+
+@provide_instance
+def _qviB3dir35aM(Root, instance):
+    return Injector(root=Root, result=instance)
+
+
+@instance_variant
+def _t6nazic2SZeH():
+    examples = Package("examples")
+    return examples.submodule.Foo
+
+
+@instance_variant
+def _j9swuGAFg3Ss():
+    submodule = Package("examples.submodule")
+    return submodule.Foo
+
+
+provide_instance_method = CodeCollector()
+instance_method_variant = CodeCollector("method")
+
+
+@provide_instance_method.parametrize
+@instance_method_variant.parametrize
+def test_provide_instance_method(code, method):
+    """Package instance attribute access should provide instance method."""
+    from examples.submodule import Bar
+
+    class Root:
+        def __init__(self, result):
+            self.result = result
+
+    Container = code(Root, method())
+    assert inspect.ismethod(Container.root.result)
+    assert isinstance(Container.root.result.__self__, Bar)
+    assert Container.root.result() == 12
+
+
+@provide_instance_method
+def _s6NFdEBsCnNy(Root, method):
+    class Container(Injector):
+        root = Root
+        result = method
+        a = 7
+        b = 5
+
+    return Container
+
+
+@provide_instance_method
+def _o2BJhyCPZKft(Root, method):
+    return Injector(root=Root, result=method, a=7, b=5)
+
+
+@instance_method_variant
+def _nsYIrniBcXRO():
+    examples = Package("examples")
+    return examples.submodule.Bar.do
+
+
+@instance_method_variant
+def _jz76zoiIhe0f():
+    submodule = Package("examples.submodule")
+    return submodule.Bar.do
+
+
+provide_class = CodeCollector()
+class_variant = CodeCollector("klass")
+
+
+@provide_class.parametrize
+@class_variant.parametrize
+def test_provide_a_class(code, klass):
     """Package class-named attributes should provide classes.
 
     Package attribute should provide a class when it stored in the attribute with
     `_class` in its name.
 
     """
-    Container = code()
-
     from examples.submodule import Foo
 
-    assert inspect.isclass(Container.keep_class)
-    assert Container.keep_class is Foo
+    class Root:
+        def __init__(self, result_class):
+            self.result_class = result_class
+
+    Container = code(Root, klass())
+    assert inspect.isclass(Container.root.result_class)
+    assert Container.root.result_class is Foo
 
 
-@package_definitions
-def _rQlPiacYOKsN():
-    examples = Package("examples")
-
+@provide_class
+def _rpx7XSPKVFaV(Root, klass):
     class Container(Injector):
-        itself = examples
-        submodule = examples.submodule
-        instance = examples.submodule.Foo
-        instance_method = examples.submodule.Foo.do
-        function = examples.submodule.function
-        variable = examples.submodule.variable
-        keep_class = examples.submodule.Foo
+        root = Root
+        result_class = klass
 
     return Container
 
 
-@package_definitions
-def _uHSfYcZjGSJQ():
+@provide_class
+def _aTLBa5GAkLkV(Root, klass):
+    return Injector(root=Root, result_class=klass)
+
+
+@class_variant
+def _qtSV6ssFFmT0():
     examples = Package("examples")
-    sub = Package("examples.submodule")
+    return examples.submodule.Foo
 
-    class Container(Injector):
-        itself = examples
-        submodule = sub
-        instance = sub.Bar
-        instance_method = sub.Bar.do
-        function = sub.function
-        variable = sub.variable
-        keep_class = sub.Bar
 
-        a = -1
-        b = 2
-
-    return Container
+@class_variant
+def _fmreItIa9y2J():
+    submodule = Package("examples.submodule")
+    return submodule.Foo
 
 
 injector_pointer = CodeCollector()
 
 
-@pytest.mark.xfail()
 @injector_pointer.parametrize
 def test_point_to_injector(code):
     """Package attribute access should provide Injector classes as is.
@@ -125,7 +328,7 @@ def test_point_to_injector(code):
     Container = code()
 
     assert Container.foo == 1
-    assert Container.bar == 2  # pragma: no cover
+    assert Container.bar == 2
 
 
 @injector_pointer
@@ -158,7 +361,6 @@ self_pointer = CodeCollector()
 
 
 @self_pointer.parametrize
-@pytest.mark.xfail()
 def test_package_provides_lazy_loading(code):
     """We can point `Package` to the same module.
 
