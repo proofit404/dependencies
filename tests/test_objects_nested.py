@@ -1,13 +1,9 @@
 """Tests related to Injector classes written inside other Injector classes."""
-import pytest
-
 from dependencies import Injector
 from dependencies import Package
 from dependencies import this
 from helpers import CodeCollector
 
-
-pytestmark = pytest.mark.xfail
 
 parent_attr = CodeCollector()
 subcontainer = CodeCollector("sub")
@@ -135,4 +131,4 @@ def test_one_subcontainer_multiple_parents():
         sub = SubContainer
 
     assert Container1.sub.bar == 1
-    assert Container2.sub.bar == 2  # pragma: no cover
+    assert Container2.sub.bar == 2

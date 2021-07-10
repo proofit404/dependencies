@@ -2,7 +2,7 @@ from _dependencies.exceptions import DependencyError
 
 
 class _Spec:
-    def __init__(self, factory, args, required, optional, kind=None, resolvable=True):
+    def __init__(self, factory, args, required, optional, kind, resolvable):
         self.factory = factory
         self.args = args
         self.required = required

@@ -51,7 +51,7 @@ def _ebVCjYc6QfKm(Foo):
 def _r9dddJV0mf2S():
     class Foo:
         def __get__(self, instance, owner=None):
-            pass  # pragma: no cover
+            raise RuntimeError
 
     return Foo()
 
@@ -60,7 +60,7 @@ def _r9dddJV0mf2S():
 def _rKUlUpA2fLI9():
     @property
     def foo(self):
-        pass  # pragma: no cover
+        raise RuntimeError
 
     return foo
 

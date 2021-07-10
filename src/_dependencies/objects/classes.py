@@ -10,12 +10,12 @@ def _is_class(name, dependency):
 
 def _build_class_spec(name, dependency):
     if _using_object_init(dependency):
-        return _Spec(dependency, {}, set(), set())
+        return _Spec(dependency, {}, set(), set(), None, True)
     else:
         name = dependency.__name__ + "." + "__init__"
         owner = f"{dependency.__name__!r} class"
         args, required, optional = _method_args(dependency.__init__, name, owner)
-        return _Spec(dependency, args, required, optional)
+        return _Spec(dependency, args, required, optional, None, True)
 
 
 def _using_object_init(cls):
