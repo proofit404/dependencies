@@ -1,8 +1,11 @@
 """Tests related to the Package object."""
 import inspect
 
+import pytest
+
 from dependencies import Injector
 from dependencies import Package
+from dependencies.exceptions import DependencyError
 from helpers import CodeCollector
 
 
@@ -178,30 +181,31 @@ instance_variant = CodeCollector("instance")
 @provide_instance.parametrize
 @instance_variant.parametrize
 def test_provide_an_instance(code, instance):
-    """Package attribute access should provide an instance when refer to a class."""
+    """Package attribute access should provide an instance when refer to a class.
+
+    We explicitly does not create an intermediate Root class to have access to the
+    package declaration. Package could provide access to the class defined in another
+    module.
+
+    """
     from examples.submodule import Foo
 
-    class Root:
-        def __init__(self, result):
-            self.result = result
-
-    Container = code(Root, instance())
-    assert isinstance(Container.root.result, Foo)
-    assert Container.root.result.do() == 1
+    Container = code(instance())
+    assert isinstance(Container.result, Foo)
+    assert Container.result.do() == 1
 
 
 @provide_instance
-def _s9nywIe9xRPm(Root, instance):
+def _s9nywIe9xRPm(instance):
     class Container(Injector):
-        root = Root
         result = instance
 
     return Container
 
 
 @provide_instance
-def _qviB3dir35aM(Root, instance):
-    return Injector(root=Root, result=instance)
+def _qviB3dir35aM(instance):
+    return Injector(result=instance)
 
 
 @instance_variant
@@ -223,7 +227,12 @@ instance_method_variant = CodeCollector("method")
 @provide_instance_method.parametrize
 @instance_method_variant.parametrize
 def test_provide_instance_method(code, method):
-    """Package instance attribute access should provide instance method."""
+    """Package instance attribute access should provide instance method.
+
+    Access bound method should not be allowed to be resolved directly. That's why we
+    need an intermediate Root class.
+
+    """
     from examples.submodule import Bar
 
     class Root:
@@ -312,6 +321,34 @@ def _qtSV6ssFFmT0():
 def _fmreItIa9y2J():
     submodule = Package("examples.submodule")
     return submodule.Foo
+
+
+deny_direct_resolve = CodeCollector()
+
+
+@deny_direct_resolve.parametrize
+def test_direct_data_resolve(code):
+    """Attempt to resolve scalar types directly should raise exception."""
+    with pytest.raises(DependencyError) as exc_info:
+        code()
+    expected = "Scalar dependencies could only be used to instantiate classes"
+    assert str(exc_info.value) == expected
+
+
+@deny_direct_resolve
+def _so9SmIf2QZ5l():
+    examples = Package("examples")
+
+    class Container(Injector):
+        a = examples.submodule.variable
+
+    Container.a
+
+
+@deny_direct_resolve
+def _gMiVaHHt4rJG():
+    examples = Package("examples")
+    Injector(a=examples.submodule.variable).a
 
 
 injector_pointer = CodeCollector()
