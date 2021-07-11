@@ -1,3 +1,24 @@
+# [7.0.0-rc.5](https://github.com/proofit404/dependencies/compare/7.0.0-rc.4...7.0.0-rc.5) (2021-07-11)
+
+### Bug Fixes
+
+- store nested injector spec as scalar data type
+  [#510](https://github.com/proofit404/dependencies/issues/510)
+  ([ac89edb](https://github.com/proofit404/dependencies/commit/ac89edbf9a0d759ffaac34f2fcaf30e1ebbecf2e))
+
+### Features
+
+- respect resolution ruses in package objects
+  [#471](https://github.com/proofit404/dependencies/issues/471)
+  ([ac27877](https://github.com/proofit404/dependencies/commit/ac278772c364db32dd3550074bf6b15f903a017e))
+
+### BREAKING CHANGES
+
+- Package objects will conform its resolution rules with imported objects. If
+  package dependency points to the class, it's allowed to resolve such
+  dependency directly. If package object points to the scalar type for example,
+  it'll raise exception if you tries to resolve such dependency directly.
+
 # [7.0.0-rc.4](https://github.com/proofit404/dependencies/compare/7.0.0-rc.3...7.0.0-rc.4) (2021-07-09)
 
 ### Features
