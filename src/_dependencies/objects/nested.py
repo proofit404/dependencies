@@ -1,5 +1,3 @@
-from weakref import ref
-
 from _dependencies.scope import _Scope
 from _dependencies.spec import _Spec
 
@@ -28,7 +26,7 @@ class _NestedInjectorFactory:
         self.injector = injector
 
     def __call__(self, __self__):
-        parent = _Spec(ref(__self__), {}, set(), set(), None, True)
+        parent = _Spec(lambda: __self__, {}, set(), set(), None, True)
         graph = self.injector.__dependencies__
         graph.specs["__parent__"] = parent
         return _Scope(graph)
