@@ -43,11 +43,7 @@ class _InjectorType(_InjectorTypeType):
         return cls.__dependencies__.has(attrname)
 
     def __dir__(cls):
-        parent = set(dir(cls.__base__))
-        current = set(cls.__dict__) - {"__dependencies__", "__wrapped__", "_subs_tree"}
-        dependencies = set(cls.__dependencies__.specs) - {"__parent__"}
-        attributes = sorted(parent | current | dependencies)
-        return attributes
+        return sorted(cls.__dependencies__.specs)
 
 
 def _transfer(from_namespace, to_namespace):
