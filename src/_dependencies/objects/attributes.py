@@ -18,8 +18,7 @@ def _build_attributes_spec(name, dependency):
         origin_spec.args,
         origin_spec.required,
         origin_spec.optional,
-        origin_spec.kind,
-        origin_spec.resolvable,
+        _AttributesResolve(origin_spec.factory, dependency.attrs, origin_spec.resolve),
     )
 
 
@@ -33,3 +32,17 @@ class _AttributesFactory:
         for attr in self.attrs:
             result = getattr(result, attr)
         return result
+
+
+class _AttributesResolve:
+    def __init__(self, factory, attrs, resolve):
+        self.factory = factory
+        self.attrs = attrs
+        self.resolve = resolve
+
+    def __call__(self):
+        resolved = self.resolve()
+        is_nested = resolved == "'Injector'"
+        if is_nested and self.attrs:
+            return self.factory.injector.__dependencies__.get(self.attrs[0]).resolve()
+        return resolved
