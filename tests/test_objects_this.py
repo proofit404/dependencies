@@ -242,8 +242,13 @@ def test_require_more_parents_that_injector_actually_has(code):
     message to user.
 
     """
+
+    class Root:
+        def __init__(self, foo):
+            raise RuntimeError
+
     with pytest.raises(DependencyError) as exc_info:
-        code()
+        code(Root)
 
     assert str(exc_info.value) == (
         "You tried to shift this more times than Injector has levels"
@@ -251,32 +256,34 @@ def test_require_more_parents_that_injector_actually_has(code):
 
 
 @too_many
-def _s6lduD7BJpxW():
+def _s6lduD7BJpxW(Root):
     class Container(Injector):
-
+        root = Root
         foo = (this << 1).bar
 
-    Container.foo
+    Container.root
 
 
 @too_many
-def _bUICVObtDZ4I():
-    class Container(Injector):
-        class SubContainer(Injector):
+def _ww6xNI4YrNr6(Root):
+    Injector(root=Root, foo=(this << 1).bar).root
 
+
+@too_many
+def _bUICVObtDZ4I(Root):
+    class Container(Injector):
+        root = Root
+        foo = this.Nested.foo
+
+        class Nested(Injector):
             foo = (this << 2).bar
 
-    Container.SubContainer.foo
+    Container.root
 
 
 @too_many
-def _ww6xNI4YrNr6():
-    Injector(foo=(this << 1).bar).foo
-
-
-@too_many
-def _rN3suiVzhqMM():
-    Injector(SubContainer=Injector(foo=(this << 2).bar)).SubContainer.foo
+def _rN3suiVzhqMM(Root):
+    Injector(root=Root, foo=this.Nested.foo, Nested=Injector(foo=(this << 2).bar)).root
 
 
 attribute_error = CodeCollector()
@@ -290,42 +297,46 @@ def test_attribute_error_on_parent_access(code):
     wrong attribute name.
 
     """
-    with pytest.raises(DependencyError) as exc_info:
-        code()
 
-    assert str(exc_info.value) in {
-        "Can not resolve attribute 'bar'",
-        "Can not resolve attribute 'bar' while building 'foo'",
-    }
+    class Root:
+        def __init__(self, foo):
+            raise RuntimeError
+
+    with pytest.raises(DependencyError) as exc_info:
+        code(Root)
+
+    assert str(exc_info.value) == "Can not resolve attribute 'bar'"
 
 
 @attribute_error
-def _t1jn9RI9v42t():
+def _t1jn9RI9v42t(Root):
     class Container(Injector):
-
+        root = Root
         foo = this.bar
 
-    Container.foo
+    Container.root
 
 
 @attribute_error
-def _yOEj1qQfsXHy():
-    class Container(Injector):
-        class SubContainer(Injector):
+def _vnmkIELBH3MN(Root):
+    Injector(root=Root, foo=this.bar).root
 
+
+@attribute_error
+def _yOEj1qQfsXHy(Root):
+    class Container(Injector):
+        root = Root
+        foo = this.Nested.foo
+
+        class Nested(Injector):
             foo = (this << 1).bar
 
-    Container.SubContainer.foo
+    Container.root
 
 
 @attribute_error
-def _vnmkIELBH3MN():
-    Injector(foo=this.bar).foo
-
-
-@attribute_error
-def _pG9M52ZRQr2S():
-    Injector(SubContainer=Injector(foo=(this << 1).bar)).SubContainer.foo
+def _pG9M52ZRQr2S(Root):
+    Injector(root=Root, foo=this.Nested.foo, Nested=Injector(foo=(this << 1).bar)).root
 
 
 direct = CodeCollector()

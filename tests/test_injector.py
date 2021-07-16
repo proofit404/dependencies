@@ -359,13 +359,12 @@ def test_call_on_injector_directly():
 def test_show_common_class_attributes_with_dir():
     """`dir` show common class attributes."""
 
-    class Common:
-        x = 1
-
     class Foo(Injector):
         x = 1
+        y = 2
+        z = 3
 
-    assert dir(Common) == dir(Foo)
+    assert dir(Foo) == ["x", "y", "z"]
 
 
 def test_show_injected_dependencies_with_dir():
@@ -398,20 +397,6 @@ def test_show_call_dependencies_with_dir():
         y = 2
 
     assert "x" in dir(Foo(x=1))
-
-
-def test_omit_parent_link_in_dir_listing():
-    """Don't show `__parent__` link in the `dir` output.
-
-    It is an implementation detail.
-
-    """
-
-    class Foo(Injector):
-        class Bar(Injector):
-            x = 1
-
-    assert "__parent__" not in dir(Foo.Bar)
 
 
 attribute_assignment = CodeCollector()
