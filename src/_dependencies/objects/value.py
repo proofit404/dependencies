@@ -32,7 +32,7 @@ def _build_value_spec(name, dependency):
     owner = f"{name!r} value"
     args, required, optional = _function_args(function, name, owner)
     _check_method(args)
-    return _Spec(function, args, required, optional, "'value'", False)
+    return _Spec(function, args, required, optional, lambda: "'value'")
 
 
 def _check_class(function):
