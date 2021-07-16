@@ -16,8 +16,8 @@ def _build_nested_injector_spec(name, dependency):
         {"__self__": False},
         {"__self__"},
         set(),
-        None,
-        True,
+        "'Injector'",
+        False,
     )
 
 
@@ -26,7 +26,7 @@ class _NestedInjectorFactory:
         self.injector = injector
 
     def __call__(self, __self__):
-        parent = _Spec(lambda: __self__, {}, set(), set(), None, True)
+        parent = _Spec(lambda: __self__, {}, set(), set(), "'Injector'", False)
         graph = self.injector.__dependencies__
         graph.specs["__parent__"] = parent
         return _Scope(graph)
