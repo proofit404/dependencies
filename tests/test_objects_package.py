@@ -362,18 +362,23 @@ def test_point_to_injector(code):
     another module.
 
     """
-    Container = code()
 
-    assert Container.foo == 1
-    assert Container.bar == 2
+    class Root:
+        def __init__(self, foo, bar):
+            self.foo = foo
+            self.bar = bar
+
+    Container = code(Root)
+    assert Container.root.foo == 1
+    assert Container.root.bar == 2
 
 
 @injector_pointer
-def _zprTYSyMkLEC():
+def _zprTYSyMkLEC(Root):
     examples = Package("examples")
 
     class Container(Injector):
-
+        root = Root
         foo = examples.injected.Container.foo
         bar = examples.injected.Container.bar
         baz = 2
@@ -382,11 +387,11 @@ def _zprTYSyMkLEC():
 
 
 @injector_pointer
-def _dqXJgFoftQja():
+def _dqXJgFoftQja(Root):
     injected = Package("examples.injected")
 
     class Container(Injector):
-
+        root = Root
         foo = injected.Container.foo
         bar = injected.Container.bar
         baz = 2
@@ -406,8 +411,7 @@ def test_package_provides_lazy_loading(code):
 
     """
     Container = code()
-
-    assert Container.foo == 1
+    assert Container.foo.bar == "baz"
 
 
 @self_pointer
@@ -415,7 +419,6 @@ def _dmldmoXCFIBG():
     self_pointer = Package("examples.self_pointer")
 
     class Container(Injector):
-
         foo = self_pointer.Container.foo
 
     return Container

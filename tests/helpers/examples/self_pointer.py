@@ -5,13 +5,19 @@ from dependencies import Package
 current = Package("examples.self_pointer")
 
 
+class Foo:
+    """A dummy class."""
+
+    bar = "baz"
+
+
 class Container(Injector):
-    """A dummy class for tests."""
+    """A dummy container."""
 
     foo = current.Box.foo
 
 
 class Box(Injector):
-    """A dummy class for tests."""
+    """A dummy nested container."""
 
-    foo = 1
+    foo = Foo

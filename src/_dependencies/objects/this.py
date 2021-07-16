@@ -36,8 +36,7 @@ def _build_this_spec(name, dependency):
         {"__self__": False},
         {"__self__"},
         set(),
-        "'this'",
-        False,
+        lambda: "'this'",
     )
 
 
