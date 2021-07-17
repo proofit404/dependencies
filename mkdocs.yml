@@ -44,6 +44,7 @@ nav:
       - Package: package.md
       - Value: value.md
       - Scalar types: scalar.md
+      - Nested injectors: nested.md
       - FAQ: faq.md
   - Guides:
       - Attrs: attrs.md
