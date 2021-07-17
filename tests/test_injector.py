@@ -450,37 +450,6 @@ def _tQeRzD5ZsyTm():
     del Injector.foo
 
 
-def test_nested_injectors():
-    """`Injector` subclass could be used as attribute of another `Injector` subclass."""
-
-    def do_x(a, b):
-        return a + b
-
-    def do_y(c, d):
-        return c * d
-
-    class Call:
-        def __init__(self, foo, bar):
-            self.foo = foo
-            self.bar = bar
-
-        def __call__(self, one, two, three):
-            return self.bar.y(self.foo.x(one, two), three)
-
-    class Foo(Injector):
-        x = do_x
-
-    class Bar(Injector):
-        y = do_y
-
-    class Baz(Injector):
-        foo = Foo
-        bar = Bar
-        do = Call
-
-    assert Baz.do(1, 2, 3) == 9
-
-
 def test_docstrings():
     """Check we can access Injector docstring.
 
