@@ -1,6 +1,8 @@
 from inspect import isclass
 
+from _dependencies.exceptions import DependencyError
 from _dependencies.injectable import _method_args
+from _dependencies.scope import _IsScope
 from _dependencies.spec import _Spec
 
 
@@ -10,12 +12,12 @@ def _is_class(name, dependency):
 
 def _build_class_spec(name, dependency):
     if _using_object_init(dependency):
-        return _Spec(dependency, {}, set(), set(), lambda: None)
+        return _Spec(_ClassFactory(dependency), {}, set(), set(), lambda: None)
     else:
         name = dependency.__name__ + "." + "__init__"
         owner = f"{dependency.__name__!r} class"
         args, required, optional = _method_args(dependency.__init__, name, owner)
-        return _Spec(dependency, args, required, optional, lambda: None)
+        return _Spec(_ClassFactory(dependency), args, required, optional, lambda: None)
 
 
 def _using_object_init(cls):
@@ -24,3 +26,24 @@ def _using_object_init(cls):
             return True
         elif "__init__" in base.__dict__:
             return False
+
+
+class _ClassFactory:
+    def __init__(self, cls):
+        self.cls = cls
+
+    def __call__(self, **kwargs):
+        for argument in kwargs.values():
+            if isinstance(argument, _IsScope):
+                raise DependencyError(no_depend_nested_injector_template)
+        return self.cls(**kwargs)
+
+
+# Messages.
+
+
+no_depend_nested_injector_template = """
+Do not depend on nested injectors directly.
+
+Use this object to access inner attributes of nested injector.
+""".strip()

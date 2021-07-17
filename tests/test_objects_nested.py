@@ -89,3 +89,42 @@ def _wlimEBYr7skq():
 @deny_direct_resolve
 def _bA1A3d0zf1hZ():
     Injector(Nested=Injector(foo=1)).Nested
+
+
+deny_depends_on = CodeCollector()
+
+
+@deny_depends_on.parametrize
+def test_deny_classes_depend_on_nested_injectors(code):
+    """Classes should not receive nested injectors as arguments of constructors."""
+
+    class Foo:
+        def __init__(self, bar):
+            raise RuntimeError
+
+    class Bar(Injector):
+        baz = None
+
+    with pytest.raises(DependencyError) as exc_info:
+        code(Foo, Bar)
+
+    expected = """
+Do not depend on nested injectors directly.
+
+Use this object to access inner attributes of nested injector.
+""".strip()
+    assert expected == str(exc_info.value)
+
+
+@deny_depends_on
+def _xLzoX5QDFuuw(Foo, Bar):
+    class Container(Injector):
+        foo = Foo
+        bar = Bar
+
+    Container.foo
+
+
+@deny_depends_on
+def _jrp5adysQeRH(Foo, Bar):
+    Injector(foo=Foo, bar=Bar).foo
