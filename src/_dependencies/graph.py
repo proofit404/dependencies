@@ -29,5 +29,5 @@ class _Graph:
 
 
 def _check_dunder_name(name):
-    if name.startswith("__") and name.endswith("__"):
+    if name.startswith("__") and name.endswith("__"):  # pragma: no mutate
         raise DependencyError("Magic methods are not allowed")

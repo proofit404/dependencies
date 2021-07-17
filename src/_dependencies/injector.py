@@ -57,7 +57,7 @@ class _InjectorType(_InjectorTypeType):
 
 
 def _transfer(source, destination):
-    for attr in ("__module__", "__doc__", "__weakref__", "__qualname__"):
+    for attr in ("__module__", "__doc__", "__qualname__"):
         if attr in source:
             destination[attr] = source.pop(attr)
 
