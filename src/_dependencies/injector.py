@@ -47,7 +47,7 @@ class _InjectorType(_InjectorTypeType):
 
 
 def _transfer(from_namespace, to_namespace):
-    for attr in ("__module__", "__doc__", "__weakref__", "__qualname__"):
+    for attr in ("__module__", "__doc__", "__qualname__"):
         try:
             to_namespace[attr] = from_namespace.pop(attr)
         except KeyError:
