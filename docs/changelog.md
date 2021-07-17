@@ -1,3 +1,16 @@
+# [7.0.0-rc.6](https://github.com/proofit404/dependencies/compare/7.0.0-rc.5...7.0.0-rc.6) (2021-07-17)
+
+### Features
+
+- deny resolve nested injector directly
+  [#474](https://github.com/proofit404/dependencies/issues/474)
+  ([779d3ac](https://github.com/proofit404/dependencies/commit/779d3ac95ea9838a5f624c529dd830923b2d71bf))
+
+### BREAKING CHANGES
+
+- The only allowed purpose of nested injectors is to be targets for this
+  objects.
+
 # [7.0.0-rc.5](https://github.com/proofit404/dependencies/compare/7.0.0-rc.4...7.0.0-rc.5) (2021-07-11)
 
 ### Bug Fixes
