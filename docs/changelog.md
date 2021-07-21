@@ -1,3 +1,17 @@
+# [7.0.0-rc.8](https://github.com/proofit404/dependencies/compare/7.0.0-rc.7...7.0.0-rc.8) (2021-07-21)
+
+### Features
+
+- deny classes to depend on nested injectors
+  [#479](https://github.com/proofit404/dependencies/issues/479)
+  ([3406946](https://github.com/proofit404/dependencies/commit/340694669c0abff951a1e5c197ea0b10657299ce))
+
+### BREAKING CHANGES
+
+- Injector won't pass nested injectors to the constructor of the class. Use
+  `this` objects to access inner attributes of nested injector and pass them to
+  the constructor arguments.
+
 # [7.0.0-rc.7](https://github.com/proofit404/dependencies/compare/7.0.0-rc.6...7.0.0-rc.7) (2021-07-21)
 
 ### Bug Fixes
