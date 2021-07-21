@@ -191,61 +191,6 @@ False
 
 ```
 
-### Nested `Injectors`
-
-It is possible to inject `Injector` itself. `Injector` subclasses are provided
-as is, and calculate their attributes on first use.
-
-```pycon
-
->>> from dependencies import Injector
-
->>> class Container(Injector):
-...
-...     class Foo:
-...
-...         def __init__(self, bar):
-...             self.bar = bar
-...
-...         def __call__(self):
-...             return self.bar.baz()
-...
-...     class Bar(Injector):
-...
-...         class Baz:
-...
-...             def __init__(self, func):
-...                 self.func = func
-...
-...             def __call__(self):
-...                 return self.func()
-...
-...         def func():
-...             return 1
-...
-...         # Names.
-...         baz = Baz
-...
-...     # Names.
-...     foo, bar = Foo, Bar
-
->>> Container.foo()
-1
-
-# >>> Container.foo.bar
-# <class '_dependencies.injector.Bar'>
-
->>> Container.foo.bar.baz  # doctest: +ELLIPSIS
-<__main__.Container.Bar.Baz object at 0x...>
-
->>> Container.foo.bar.baz.func  # doctest: +ELLIPSIS
-<function Container.Bar.func at 0x...>
-
->>> Container.foo.bar.baz.func()
-1
-
-```
-
 ## Scope extension
 
 You can define a dependency scope partially and then extend it; only in
