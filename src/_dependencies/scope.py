@@ -2,9 +2,10 @@ from _dependencies.resolve import _Resolver
 
 
 class _Scope:
-    def __init__(self, graph):
-        self.graph = graph
-        self.cache = {"__self__": self}
+    def __new__(cls, graph):
+        def getattr_method(self, attrname):
+            return _Resolver(graph, cache, attrname).resolve()
 
-    def __getattr__(self, attrname):
-        return _Resolver(self.graph, self.cache, attrname).resolve()
+        instance = type(cls.__name__, (), {"__getattr__": getattr_method})()
+        cache = {"__self__": instance}
+        return instance
