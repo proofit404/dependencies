@@ -1,3 +1,11 @@
+# [7.0.0-rc.7](https://github.com/proofit404/dependencies/compare/7.0.0-rc.6...7.0.0-rc.7) (2021-07-21)
+
+### Bug Fixes
+
+- hide scope objects own attributes
+  [#514](https://github.com/proofit404/dependencies/issues/514)
+  ([6440c97](https://github.com/proofit404/dependencies/commit/6440c9765cdc75a305e5cd7bad9ea8641c5799b3))
+
 # [7.0.0-rc.6](https://github.com/proofit404/dependencies/compare/7.0.0-rc.5...7.0.0-rc.6) (2021-07-17)
 
 ### Features
