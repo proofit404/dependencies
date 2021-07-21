@@ -1,3 +1,59 @@
+# [7.0.0](https://github.com/proofit404/dependencies/compare/6.0.1...7.0.0) (2021-07-21)
+
+### Bug Fixes
+
+- hide scope objects own attributes
+  [#514](https://github.com/proofit404/dependencies/issues/514)
+  ([1af2173](https://github.com/proofit404/dependencies/commit/1af217338005d5c49b6d3d26797e14ac395e4382))
+- initialize dependency graph lazily
+  [#241](https://github.com/proofit404/dependencies/issues/241)
+  ([1e18e74](https://github.com/proofit404/dependencies/commit/1e18e74fb8537eb9fec94cf3a3887d70de1efe31))
+- store nested injector spec as scalar data type
+  [#510](https://github.com/proofit404/dependencies/issues/510)
+  ([2344892](https://github.com/proofit404/dependencies/commit/234489256b261ae722e00fd1b9232c24c7ef5a93))
+
+### Features
+
+- deny classes to depend on nested injectors
+  [#479](https://github.com/proofit404/dependencies/issues/479)
+  ([dafdf85](https://github.com/proofit404/dependencies/commit/dafdf85b071e8e99dcfa14e45eb7b102975b516d))
+- deny resolve nested injector directly
+  [#474](https://github.com/proofit404/dependencies/issues/474)
+  ([6a4d86d](https://github.com/proofit404/dependencies/commit/6a4d86d81aba48144ec46162a766d9cb7b73097a))
+- deny resolve this objects directly
+  [#472](https://github.com/proofit404/dependencies/issues/472)
+  ([9786dbd](https://github.com/proofit404/dependencies/commit/9786dbdc93f72657e2df7c50bb9695ca7d75813c))
+- deny to resolve value object directly
+  [#473](https://github.com/proofit404/dependencies/issues/473)
+  ([bece3d1](https://github.com/proofit404/dependencies/commit/bece3d1837a54da27cdaedbf2cbe197e1d196dfe))
+- respect resolution ruses in package objects
+  [#471](https://github.com/proofit404/dependencies/issues/471)
+  ([db9b790](https://github.com/proofit404/dependencies/commit/db9b790d7a1fd77f27500facf8d6879a7ec22274))
+- scalar dependencies can't be resolved directly
+  [#480](https://github.com/proofit404/dependencies/issues/480)
+  ([591c605](https://github.com/proofit404/dependencies/commit/591c60501c650adfbfbf436f600c506b71c156e9))
+
+### BREAKING CHANGES
+
+- Injector won't pass nested injectors to the constructor of the class. Use
+  `this` objects to access inner attributes of nested injector and pass them to
+  the constructor arguments.
+- The only allowed purpose of nested injectors is to be targets for this
+  objects.
+- Package objects will conform its resolution rules with imported objects. If
+  package dependency points to the class, it's allowed to resolve such
+  dependency directly. If package object points to the scalar type for example,
+  it'll raise exception if you tries to resolve such dependency directly.
+- The only allowed purpose of this objects is to specify dependencies of classes
+  and value objects as links to attributes with different names or stored in
+  nested Injector classes.
+- value objects could only be used to evaluate arguments of classes. Attribute
+  access of Injector subclass which result in value object would raise an error.
+- Scalar dependencies are basically data types. They are allowed to be used as
+  dependencies for other more complicated data types, like classes. If you need
+  to take scalar dependency from Injector subclass, use constant value instead.
+  You don't need Injector for this.
+
 ## [6.0.1](https://github.com/proofit404/dependencies/compare/6.0.0...6.0.1) (2021-02-20)
 
 ### Bug Fixes
