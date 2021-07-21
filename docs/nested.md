@@ -21,5 +21,29 @@ _dependencies.exceptions.DependencyError: 'Injector' dependencies could only be 
 
 ```
 
+Your classes can't depend on nested `Injector` as it's arguments. Nested
+injectors are supposed to be accessed only by `this` objects.
+
+```pycon
+
+>>> class Foo:
+...     def __init__(self, Bar):
+...         self.baz = Bar.baz
+
+>>> class Container(Injector):
+...     foo = Foo
+...
+...     class Bar(Injector):
+...         baz = 1
+
+>>> Container.foo
+Traceback (most recent call last):
+  ...
+_dependencies.exceptions.DependencyError: Do not depend on nested injectors directly.
+<BLANKLINE>
+Use this object to access inner attributes of nested injector.
+
+```
+
 <p align="center">&mdash; ⭐ &mdash;</p>
 <p align="center"><i>The <code>dependencies</code> library is part of the SOLID python family.</i></p>

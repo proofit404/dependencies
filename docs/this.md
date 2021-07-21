@@ -9,6 +9,10 @@ parent `Injector`.
 
 >>> from dependencies import Injector, this
 
+>>> class Main:
+...     def __init__(self, result):
+...         self.result = result
+
 ```
 
 ## Simple links
@@ -18,11 +22,12 @@ For example, you can create simple aliases.
 ```pycon
 
 >>> class Container(Injector):
+...     main = Main
+...     result = this.foo
 ...     foo = 1
-...     bar = this.foo
 
-# Container.bar
-# 1
+>>> Container.main.result
+1
 
 ```
 
@@ -31,11 +36,12 @@ You can use item access on dependencies defined in `Injector` subclass.
 ```pycon
 
 >>> class Container(Injector):
+...     main = Main
+...     result = this.foo['a']
 ...     foo = {'a': 1}
-...     bar = this.foo['a']
 
-# Container.bar
-# 1
+>>> Container.main.result
+1
 
 ```
 
@@ -55,8 +61,8 @@ You can use this links as usual in the constructor arguments.
 ...     bar = this.baz
 ...     baz = 1
 
-# Container.foo.bar
-# 1
+>>> Container.foo.bar
+1
 
 ```
 
@@ -75,12 +81,13 @@ with its own state behind a single callable interface.
 ...         print(arg)
 
 >>> class Container(Injector):
+...     main = Main
+...     result = this.foo.method
 ...     foo = Foo
-...     bar = this.foo.method
 
-# Container.bar(1)  # doctest: +ELLIPSIS
-# <__main__.Foo object at 0x...>
-# 1
+>>> Container.main.result(1)  # doctest: +ELLIPSIS
+<__main__.Foo object at 0x...>
+1
 
 ```
 
@@ -88,7 +95,10 @@ You can see that `method` has access to the `Foo` instance. It can call other
 methods of `Foo`. You can define dependencies of the `Foo` class in it
 constructor as usual.
 
-## Nested and parent injector access
+## Nested `Injector` access
+
+It is possible to inject `Injector` itself. `Injector` subclasses are provided
+as is, and calculate their attributes on first use.
 
 Links created with `this` objects can access attributes defined in the nested
 injector.
@@ -96,12 +106,14 @@ injector.
 ```pycon
 
 >>> class Container(Injector):
-...     foo = this.Bar.baz.__add__
+...     main = Main
+...     result = this.Bar.baz.__add__
+...
 ...     class Bar(Injector):
 ...         baz = 1
 
-# Container.foo(2)
-# 3
+>>> Container.main.result(2)
+3
 
 ```
 
@@ -111,12 +123,15 @@ Use left shift operator to specify the number of levels to go upper scope.
 ```pycon
 
 >>> class Container(Injector):
+...     main = Main
+...     result = this.Bar.baz
 ...     foo = 1
+...
 ...     class Bar(Injector):
 ...         baz = (this << 1).foo.__add__
 
-# Container.Bar.baz(2)
-# 3
+>>> Container.main.result(2)
+3
 
 ```
 
@@ -169,19 +184,19 @@ and the rest of the application will be left untouched.
 ...         },
 ...     }
 
-Container.app  # doctest: +ELLIPSIS
-<__main__.Application object at 0x...>
+>>> isinstance(Container.app, Application)
+True
 
-Container.app.db  # doctest: +ELLIPSIS
-<__main__.Database object at 0x...>
+>>> isinstance(Container.app.db, Database)
+True
 
-Container.app.db.port
+>>> Container.app.db.port
 5432
 
-Container.app.cache  # doctest: +ELLIPSIS
-<__main__.Cache object at 0x...>
+>>> isinstance(Container.app.cache, Cache)
+True
 
-Container.app.cache.port
+>>> Container.app.cache.port
 6782
 
 ```
@@ -225,8 +240,8 @@ from environment variable to the constructor using `this` object.
 ...     backend_url = this.environ['BACKEND_URL']
 ...     environ = os.environ
 
-# Container.app
-# App(Config('https://example.com/frontend', 'https://example.com/backend'))
+>>> Container.app
+App(Config('https://example.com/frontend', 'https://example.com/backend'))
 
 ```
 
