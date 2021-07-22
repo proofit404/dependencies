@@ -28,6 +28,12 @@ class _InjectorType(_InjectorTypeType):
     def __and__(cls, other):
         return type(cls.__name__, (cls, other), {})
 
+    def __enter__(cls):
+        return _Scope(cls.__dependencies__)
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        pass
+
     def __getattr__(cls, attrname):
         resolved = getattr(_Scope(cls.__dependencies__), attrname)
         cls.__dependencies__.get(attrname).resolved()
