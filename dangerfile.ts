@@ -66,11 +66,6 @@ export default async (): undefined => {
     return;
   }
 
-  if (danger.github.pr.body) {
-    fail("PR body should be empty");
-    return;
-  }
-
   const isSnapshotBranch = Boolean(
     danger.github.pr.head.ref.match(/^snapshot$/)
   );
@@ -94,6 +89,11 @@ export default async (): undefined => {
     }
 
     const issueNumber = branchTest[1];
+
+    if (danger.github.pr.body !== `Resolves #${issueNumber}`) {
+      fail("PR should resolve related issue");
+      return;
+    }
 
     for (const commit of danger.git.commits) {
       if (!commit.message.split(/\r?\n/)[0].endsWith(` #${issueNumber}`)) {
