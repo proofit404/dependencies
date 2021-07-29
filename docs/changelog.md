@@ -1,3 +1,11 @@
+# [7.1.0](https://github.com/proofit404/dependencies/compare/7.0.0...7.1.0) (2021-07-29)
+
+### Features
+
+- implement sticky scopes
+  [#311](https://github.com/proofit404/dependencies/issues/311)
+  ([612b522](https://github.com/proofit404/dependencies/commit/612b522e48e36a4278cea7dd5a9289d66e70a217))
+
 # [7.0.0](https://github.com/proofit404/dependencies/compare/6.0.1...7.0.0) (2021-07-21)
 
 ### Bug Fixes
