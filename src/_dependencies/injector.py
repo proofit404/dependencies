@@ -17,7 +17,7 @@ class _InjectorType(_InjectorTypeType):
         else:
             ns = {}
             _transfer(namespace, ns)
-            _check_inheritance(bases, Injector)
+            _check_inheritance(bases)
             _check_extension_scope(bases, namespace)
             ns["__dependencies__"] = _LazyGraph("__dependencies__", namespace)
             return type.__new__(cls, class_name, bases, ns)
@@ -60,9 +60,9 @@ def _transfer(from_namespace, to_namespace):
             pass
 
 
-def _check_inheritance(bases, injector):
+def _check_inheritance(bases):
     for base in bases:
-        if not issubclass(base, injector):
+        if not issubclass(base, Injector):
             message = "Multiple inheritance is allowed for Injector subclasses only"
             raise DependencyError(message)
 

@@ -40,6 +40,7 @@ nav:
   - Usage:
       - Why: why.md
       - Usage: usage.md
+      - Sticky scopes: sticky.md
       - This: this.md
       - Package: package.md
       - Value: value.md
