@@ -34,7 +34,7 @@ jobs:
         displayName: Install PyPy.
       - task: NodeTool@0
         inputs:
-          versionSpec: "12.x"
+          versionSpec: "16.6.2"
         displayName: Install NodeJS.
       - script: |
           git checkout release
@@ -43,12 +43,11 @@ jobs:
         displayName: Unshallow commit log.
       - script: pip install --upgrade tox
         displayName: Install Tox.
-      - script: tox -p auto
+      - script: tox
         env:
           CI_PYTEST_FLAGS: >-
             --junitxml=junit-{envname}.xml -o junit_suite_name={envname} -o
             junit_family=xunit2 -o junit_log_passing_tests=true
-          TOX_PARALLEL_NO_SPINNER: 1
           TOX_SKIP_ENV: mutmut
         displayName: Run Tox.
       # - script: .tox/mutmut/bin/mutmut junitxml > junit-mutmut.xml
@@ -70,7 +69,7 @@ jobs:
           summaryFileLocation: coverage.xml
         displayName: Publish coverage report.
       - script: |
-          npm install --no-save --no-package-lock danger typescript
+          npm install --save-dev danger typescript
         condition: eq(variables['should_review'], 'true')
         displayName: Install Danger.
       - script: npx danger ci
@@ -92,7 +91,7 @@ jobs:
         displayName: Install Python.
       - task: NodeTool@0
         inputs:
-          versionSpec: "12.x"
+          versionSpec: "16.6.2"
         displayName: Install NodeJS.
       - script: |
           git config --local user.name "Artem Malyshev"
@@ -109,9 +108,8 @@ jobs:
           echo '##vso[task.prependpath]$(HOME)/.poetry/bin'
         displayName: Install Poetry.
       - script: >-
-          npm install --no-save --no-package-lock semantic-release
-          @semantic-release/changelog @semantic-release/exec
-          @semantic-release/git
+          npm install --save-dev semantic-release @semantic-release/changelog
+          @semantic-release/exec @semantic-release/git
         displayName: Install Semantic Release.
       - script: |
           npx semantic-release

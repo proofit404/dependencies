@@ -1,45 +1,35 @@
-# [7.1.0](https://github.com/proofit404/dependencies/compare/7.0.0...7.1.0) (2021-07-29)
+# 7.1.0 (2021-07-29)
 
 ### Features
 
 - implement sticky scopes
   [#311](https://github.com/proofit404/dependencies/issues/311)
-  ([612b522](https://github.com/proofit404/dependencies/commit/612b522e48e36a4278cea7dd5a9289d66e70a217))
 
-# [7.0.0](https://github.com/proofit404/dependencies/compare/6.0.1...7.0.0) (2021-07-21)
+# 7.0.0 (2021-07-21)
 
 ### Bug Fixes
 
 - hide scope objects own attributes
   [#514](https://github.com/proofit404/dependencies/issues/514)
-  ([1af2173](https://github.com/proofit404/dependencies/commit/1af217338005d5c49b6d3d26797e14ac395e4382))
 - initialize dependency graph lazily
   [#241](https://github.com/proofit404/dependencies/issues/241)
-  ([1e18e74](https://github.com/proofit404/dependencies/commit/1e18e74fb8537eb9fec94cf3a3887d70de1efe31))
 - store nested injector spec as scalar data type
   [#510](https://github.com/proofit404/dependencies/issues/510)
-  ([2344892](https://github.com/proofit404/dependencies/commit/234489256b261ae722e00fd1b9232c24c7ef5a93))
 
 ### Features
 
 - deny classes to depend on nested injectors
   [#479](https://github.com/proofit404/dependencies/issues/479)
-  ([dafdf85](https://github.com/proofit404/dependencies/commit/dafdf85b071e8e99dcfa14e45eb7b102975b516d))
 - deny resolve nested injector directly
   [#474](https://github.com/proofit404/dependencies/issues/474)
-  ([6a4d86d](https://github.com/proofit404/dependencies/commit/6a4d86d81aba48144ec46162a766d9cb7b73097a))
 - deny resolve this objects directly
   [#472](https://github.com/proofit404/dependencies/issues/472)
-  ([9786dbd](https://github.com/proofit404/dependencies/commit/9786dbdc93f72657e2df7c50bb9695ca7d75813c))
 - deny to resolve value object directly
   [#473](https://github.com/proofit404/dependencies/issues/473)
-  ([bece3d1](https://github.com/proofit404/dependencies/commit/bece3d1837a54da27cdaedbf2cbe197e1d196dfe))
 - respect resolution ruses in package objects
   [#471](https://github.com/proofit404/dependencies/issues/471)
-  ([db9b790](https://github.com/proofit404/dependencies/commit/db9b790d7a1fd77f27500facf8d6879a7ec22274))
 - scalar dependencies can't be resolved directly
   [#480](https://github.com/proofit404/dependencies/issues/480)
-  ([591c605](https://github.com/proofit404/dependencies/commit/591c60501c650adfbfbf436f600c506b71c156e9))
 
 ### BREAKING CHANGES
 
@@ -62,21 +52,19 @@
   to take scalar dependency from Injector subclass, use constant value instead.
   You don't need Injector for this.
 
-## [6.0.1](https://github.com/proofit404/dependencies/compare/6.0.0...6.0.1) (2021-02-20)
+## 6.0.1 (2021-02-20)
 
 ### Bug Fixes
 
 - custom error message for enumerations
   [#121](https://github.com/proofit404/dependencies/issues/121)
-  ([30cf46e](https://github.com/proofit404/dependencies/commit/30cf46e7b2a6724c17ae928d24641c1490e363b0))
 
-# [6.0.0](https://github.com/proofit404/dependencies/compare/5.2.0...6.0.0) (2021-02-12)
+# 6.0.0 (2021-02-12)
 
 ### Features
 
 - deprecate [@operation](https://github.com/operation) object
   [#457](https://github.com/proofit404/dependencies/issues/457)
-  ([917b62f](https://github.com/proofit404/dependencies/commit/917b62fae0e76aec2ca1fe7f6178d484820cce97))
 
 ### BREAKING CHANGES
 
@@ -84,76 +72,68 @@
   returning inner function. This inner function would use it's closure to
   resolve injected dependencies.
 
-# [5.2.0](https://github.com/proofit404/dependencies/compare/5.1.0...5.2.0) (2020-11-21)
+# 5.2.0 (2020-11-21)
 
 ### Features
 
 - support descriptor protocol
   [#25](https://github.com/proofit404/dependencies/issues/25)
-  ([66111b5](https://github.com/proofit404/dependencies/commit/66111b5c4ef257c114c39984585239277fe067ca))
 
-# [5.1.0](https://github.com/proofit404/dependencies/compare/5.0.0...5.1.0) (2020-11-20)
+# 5.1.0 (2020-11-20)
 
 ### Features
 
 - support pypy interpreter
   [#42](https://github.com/proofit404/dependencies/issues/42)
-  ([bb454e7](https://github.com/proofit404/dependencies/commit/bb454e7038f9d180342bd6e4ccfb43ce33b6452a))
 
-# [5.0.0](https://github.com/proofit404/dependencies/compare/4.1.0...5.0.0) (2020-11-12)
+# 5.0.0 (2020-11-12)
 
 ### Build System
 
 - add python 3.9 support
   [#410](https://github.com/proofit404/dependencies/issues/410)
-  ([a9526bb](https://github.com/proofit404/dependencies/commit/a9526bbb237a6a143a18e47ed4dc27e08fa7b049))
 
 ### BREAKING CHANGES
 
 - drop python 3.6 support.
 
-# [4.1.0](https://github.com/proofit404/dependencies/compare/4.0.1...4.1.0) (2020-10-23)
+# 4.1.0 (2020-10-23)
 
 ### Features
 
 - deny to use empty extension scope
   [#398](https://github.com/proofit404/dependencies/issues/398)
-  ([18fb528](https://github.com/proofit404/dependencies/commit/18fb5286f6ba6343592461629257ed628713c113))
 
-## [4.0.1](https://github.com/proofit404/dependencies/compare/4.0.0...4.0.1) (2020-10-02)
+## 4.0.1 (2020-10-02)
 
 ### Bug Fixes
 
 - handle shadowed default arguments
   [#240](https://github.com/proofit404/dependencies/issues/240)
-  ([04f795f](https://github.com/proofit404/dependencies/commit/04f795f1cbb3d4820d2ce0ea58f2aed93610e0e3))
 
-# [4.0.0](https://github.com/proofit404/dependencies/compare/3.0.0...4.0.0) (2020-10-01)
+# 4.0.0 (2020-10-01)
 
 ### Bug Fixes
 
 - correct default argument error message
   [#239](https://github.com/proofit404/dependencies/issues/239)
-  ([1d7c436](https://github.com/proofit404/dependencies/commit/1d7c4364749609fb87399f6e5ddee099e8885824))
 
 ### Features
 
 - replace let attribute with call
   [#315](https://github.com/proofit404/dependencies/issues/315)
-  ([1c84ea9](https://github.com/proofit404/dependencies/commit/1c84ea96ed3bef1b7f57b219a743b98a3837e9ca))
 
 ### BREAKING CHANGES
 
 - `let` attribute was removed. Use `Injector()` instead of obsolete
   `Injector.let()`.
 
-# [3.0.0](https://github.com/proofit404/dependencies/compare/2.0.1...3.0.0) (2020-08-30)
+# 3.0.0 (2020-08-30)
 
 ### Code Refactoring
 
 - drop Python 2.7 and 3.4 support
   [#348](https://github.com/proofit404/dependencies/issues/348)
-  ([360ad90](https://github.com/proofit404/dependencies/commit/360ad90b51063e5c14b4df9b643caee25aba4848))
 
 ### BREAKING CHANGES
 
@@ -161,20 +141,18 @@
   version of python and libraries we are integrated with as soon as they reach
   official end of life.
 
-## [2.0.1](https://github.com/proofit404/dependencies/compare/2.0.0...2.0.1) (2020-07-16)
+## 2.0.1 (2020-07-16)
 
 ### Bug Fixes
 
 - compatibility with typing module on Python 3.6
-  ([137741f](https://github.com/proofit404/dependencies/commit/137741fb29d69f6ffe22d949e05f9db06c706a38))
 
 # [2.0.0](https://github.com/proofit404/dependencies/compare/1.0.1...2.0.0) (2020-05-17)
 
 ### Features
 
-- remove contrib package
-  ([5bfe041](https://github.com/proofit404/dependencies/commit/5bfe041f72bc82a4a24ea47599cf2bfbb8d13900)),
-  closes [#192](https://github.com/proofit404/dependencies/issues/192)
+- remove contrib package closes
+  [#192](https://github.com/proofit404/dependencies/issues/192)
 
 ### BREAKING CHANGES
 
@@ -182,19 +160,17 @@
   with stories and dependencies I understand that there is a missing module in
   the contrib package.
 
-## [1.0.1](https://github.com/proofit404/dependencies/compare/1.0.0...1.0.1) (2020-03-31)
+## 1.0.1 (2020-03-31)
 
 ### Bug Fixes
 
 - add **wrapped** attribute
-  ([e3c7aa9](https://github.com/proofit404/dependencies/commit/e3c7aa98cec4b33146c98855ae851fa57c990367))
 
 # 1.0.0 (2020-02-11)
 
 ### Bug Fixes
 
 - prevent generated changelog from style guide violation
-  ([d3a472f](https://github.com/proofit404/dependencies/commit/d3a472f1779f443be0d9f3321c8451241ee723ff))
 
 ## 0.15 (2018-07-21)
 

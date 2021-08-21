@@ -7,4 +7,7 @@ __pycache__/
 coverage.xml
 dist/
 htmlcov/
+node_modules/
+package-lock.json
+package.json
 site/

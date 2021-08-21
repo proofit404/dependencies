@@ -188,7 +188,7 @@ def _lock_files_not_committed():
 
 
 def _symbolic_links():
-    for filename in ["README.md", ".prettierignore"]:
+    for filename in ["README.md"]:
         assert os.path.islink(filename)
 
 
