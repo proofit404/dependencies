@@ -45,5 +45,5 @@ class _ClassFactory:
 no_depend_nested_injector_template = """
 Do not depend on nested injectors directly.
 
-Use this object to access inner attributes of nested injector.
+Use this object to access inner attributes of nested injector
 """.strip()
