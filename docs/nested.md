@@ -41,7 +41,9 @@ Traceback (most recent call last):
   ...
 _dependencies.exceptions.DependencyError: Do not depend on nested injectors directly.
 <BLANKLINE>
-Use this object to access inner attributes of nested injector.
+Use this object to access inner attributes of nested injector:
+<BLANKLINE>
+Container.foo
 
 ```
 

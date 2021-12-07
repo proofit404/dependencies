@@ -91,11 +91,11 @@ def _bA1A3d0zf1hZ():
     Injector(Nested=Injector(foo=1)).Nested
 
 
-deny_depends_on = CodeCollector()
+deny_depends_on = CodeCollector("stack_representation", "code")
 
 
 @deny_depends_on.parametrize
-def test_deny_classes_depend_on_nested_injectors(code):
+def test_deny_classes_depend_on_nested_injectors(stack_representation, code):
     """Classes should not receive nested injectors as arguments of constructors."""
 
     class Foo:
@@ -108,15 +108,17 @@ def test_deny_classes_depend_on_nested_injectors(code):
     with pytest.raises(DependencyError) as exc_info:
         code(Foo, Bar)
 
-    expected = """
+    expected = f"""
 Do not depend on nested injectors directly.
 
-Use this object to access inner attributes of nested injector.
-""".strip()
+Use this object to access inner attributes of nested injector:
+
+{stack_representation}
+    """.strip()
     assert expected == str(exc_info.value)
 
 
-@deny_depends_on
+@deny_depends_on("Container.foo")
 def _xLzoX5QDFuuw(Foo, Bar):
     class Container(Injector):
         foo = Foo
@@ -125,6 +127,6 @@ def _xLzoX5QDFuuw(Foo, Bar):
     Container.foo
 
 
-@deny_depends_on
+@deny_depends_on("Injector.foo")
 def _jrp5adysQeRH(Foo, Bar):
     Injector(foo=Foo, bar=Bar).foo

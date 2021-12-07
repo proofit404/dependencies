@@ -231,11 +231,11 @@ def _nvm3ybp98vGm():
     this << 0
 
 
-too_many = CodeCollector()
+too_many = CodeCollector("stack_representation", "code")
 
 
 @too_many.parametrize
-def test_require_more_parents_that_injector_actually_has(code):
+def test_require_more_parents_that_injector_actually_has(stack_representation, code):
     """Verify `this` expression against depth of nesting.
 
     If we shift more that container levels available, we should provide meaningful
@@ -250,12 +250,21 @@ def test_require_more_parents_that_injector_actually_has(code):
     with pytest.raises(DependencyError) as exc_info:
         code(Root)
 
-    assert str(exc_info.value) == (
-        "You tried to shift this more times than Injector has levels"
-    )
+    expected = f"""
+You tried to shift this more times than Injector has levels:
+
+{stack_representation}
+    """.strip()
+
+    assert str(exc_info.value) == expected
 
 
-@too_many
+@too_many(
+    """
+Container.root
+  Container.foo
+    """.strip()
+)
 def _s6lduD7BJpxW(Root):
     class Container(Injector):
         root = Root
@@ -264,12 +273,23 @@ def _s6lduD7BJpxW(Root):
     Container.root
 
 
-@too_many
+@too_many(
+    """
+Injector.root
+  Injector.foo
+    """.strip()
+)
 def _ww6xNI4YrNr6(Root):
     Injector(root=Root, foo=(this << 1).bar).root
 
 
-@too_many
+@too_many(
+    """
+Container.root
+  Container.foo
+    Nested.foo
+    """.strip()
+)
 def _bUICVObtDZ4I(Root):
     class Container(Injector):
         root = Root
@@ -281,16 +301,22 @@ def _bUICVObtDZ4I(Root):
     Container.root
 
 
-@too_many
+@too_many(
+    """
+Injector.root
+  Injector.foo
+    Injector.foo
+    """.strip()
+)
 def _rN3suiVzhqMM(Root):
     Injector(root=Root, foo=this.Nested.foo, Nested=Injector(foo=(this << 2).bar)).root
 
 
-attribute_error = CodeCollector("container_name", "code")
+attribute_error = CodeCollector("stack_representation", "code")
 
 
 @attribute_error.parametrize
-def test_attribute_error_on_parent_access(container_name, code):
+def test_attribute_error_on_parent_access(stack_representation, code):
     """Verify `this` object expression against existed dependencies.
 
     We should raise `AttributeError` if we have correct number of parents but specify
@@ -308,13 +334,19 @@ def test_attribute_error_on_parent_access(container_name, code):
     expected = f"""
 Can not resolve attribute 'bar':
 
-{container_name}.bar
+{stack_representation}
     """.strip()
 
     assert str(exc_info.value) == expected
 
 
-@attribute_error("Container")
+@attribute_error(
+    """
+Container.root
+  Container.foo
+    Container.bar
+    """.strip()
+)
 def _t1jn9RI9v42t(Root):
     class Container(Injector):
         root = Root
@@ -323,12 +355,25 @@ def _t1jn9RI9v42t(Root):
     Container.root
 
 
-@attribute_error("Injector")
+@attribute_error(
+    """
+Injector.root
+  Injector.foo
+    Injector.bar
+    """.strip()
+)
 def _vnmkIELBH3MN(Root):
     Injector(root=Root, foo=this.bar).root
 
 
-@attribute_error("Container")
+@attribute_error(
+    """
+Container.root
+  Container.foo
+    Nested.foo
+      Container.bar
+    """.strip()
+)
 def _yOEj1qQfsXHy(Root):
     class Container(Injector):
         root = Root
@@ -340,7 +385,14 @@ def _yOEj1qQfsXHy(Root):
     Container.root
 
 
-@attribute_error("Injector")
+@attribute_error(
+    """
+Injector.root
+  Injector.foo
+    Injector.foo
+      Injector.bar
+    """.strip()
+)
 def _pG9M52ZRQr2S(Root):
     Injector(root=Root, foo=this.Nested.foo, Nested=Injector(foo=(this << 1).bar)).root
 
