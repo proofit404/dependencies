@@ -25,12 +25,7 @@ class _Resolver:
         if self.state.have_default:
             self.state.pop()
             return True
-        if self.state.full():
-            message = "Can not resolve attribute {!r} while building {!r}".format(
-                self.state.current, self.state.stack.pop()[0]
-            )
-        else:
-            message = f"Can not resolve attribute {self.state.current!r}"
+        message = f"Can not resolve attribute {self.state.current!r}:\n\n{self.state!r}"
         raise DependencyError(message)
 
     def create(self, factory, args):
