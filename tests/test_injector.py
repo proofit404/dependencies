@@ -234,7 +234,14 @@ def test_no_reuse_default_value_between_dependencies():
     with pytest.raises(DependencyError) as exc_info:
         Container.foo
 
-    assert str(exc_info.value) == "Can not resolve attribute 'y' while building 'foo'"
+    expected = """
+Can not resolve attribute 'y':
+
+Container.foo
+  Container.y
+    """.strip()
+
+    assert str(exc_info.value) == expected
 
 
 def test_class_named_argument_default_value():
@@ -366,16 +373,6 @@ def test_show_common_class_attributes_with_dir():
         z = 3
 
     assert dir(Foo) == ["x", "y", "z"]
-
-
-def test_show_injected_dependencies_with_dir():
-    """`dir` should show injected dependencies and hide `__dependencies__` container."""
-
-    class Foo(Injector):
-        x = 1
-
-    assert "x" in dir(Foo)
-    assert "__dependencies__" not in dir(Foo)
 
 
 def test_show_injected_dependencies_with_dir_once():
@@ -901,19 +898,25 @@ def _d851e0414bdf(Container1, Container2, Container3):
     return (Container1 & Container2 & Container3).foo.x
 
 
-attribute_error = CodeCollector()
+attribute_error = CodeCollector("container_name", "code")
 
 
 @attribute_error.parametrize
-def test_attribute_error(code):
+def test_attribute_error(container_name, code):
     """Raise `DependencyError` if we can't find dependency."""
     with pytest.raises(DependencyError) as exc_info:
         code()
 
-    assert str(exc_info.value) == "Can not resolve attribute 'test'"
+    expected = f"""
+Can not resolve attribute 'test':
+
+{container_name}.test
+    """.strip()
+
+    assert str(exc_info.value) == expected
 
 
-@attribute_error
+@attribute_error("Foo")
 def _c58b054bfcd0():
     class Foo(Injector):
         x = 1
@@ -921,14 +924,14 @@ def _c58b054bfcd0():
     Foo.test
 
 
-@attribute_error
+@attribute_error("Injector")
 def _f9c50c81e8c9():
     Foo = Injector(x=1)
 
     Foo.test
 
 
-@attribute_error
+@attribute_error("Foo")
 def _e2f16596a652():
     class Foo(Injector):
         x = 1
@@ -936,21 +939,26 @@ def _e2f16596a652():
     Foo(y=2).test
 
 
-incomplete_dependencies = CodeCollector()
+incomplete_dependencies = CodeCollector("container_name", "code")
 
 
 @incomplete_dependencies.parametrize
-def test_incomplete_dependencies_error(code):
+def test_incomplete_dependencies_error(container_name, code):
     """Raise `DependencyError` if we can't find dependency."""
     with pytest.raises(DependencyError) as exc_info:
         code()
 
-    assert (
-        str(exc_info.value) == "Can not resolve attribute 'test' while building 'bar'"
-    )
+    expected = f"""
+Can not resolve attribute 'test':
+
+{container_name}.bar
+  {container_name}.test
+    """.strip()
+
+    assert str(exc_info.value) == expected
 
 
-@incomplete_dependencies
+@incomplete_dependencies("Foo")
 def _c4e7ecf75167():
     class Bar:
         def __init__(self, test, two=2):
@@ -962,7 +970,7 @@ def _c4e7ecf75167():
     Foo.bar
 
 
-@incomplete_dependencies
+@incomplete_dependencies("Injector")
 def _dmsMgYqbsHgB():
     class Bar:
         def __init__(self, test):

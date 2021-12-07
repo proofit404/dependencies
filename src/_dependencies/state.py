@@ -36,5 +36,19 @@ class _State:
     def should(self, arg, have_default):
         return arg not in self.tried or (arg not in self.cache and not have_default)
 
-    def full(self):
-        return len(self.stack) > 0
+    def __repr__(self):
+        indentation = _Indentation()
+        name = self.cache["__self__"].__class__.__name__
+        attributes = [attrname for attrname, have_default in self.stack]
+        attributes.append(self.current)
+        return "\n".join(f"{indentation()}{name}.{attrname}" for attrname in attributes)
+
+
+class _Indentation:
+    def __init__(self):
+        self.index = 0
+
+    def __call__(self):
+        result = "  " * self.index
+        self.index += 1
+        return result

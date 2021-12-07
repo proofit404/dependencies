@@ -286,11 +286,11 @@ def _rN3suiVzhqMM(Root):
     Injector(root=Root, foo=this.Nested.foo, Nested=Injector(foo=(this << 2).bar)).root
 
 
-attribute_error = CodeCollector()
+attribute_error = CodeCollector("container_name", "code")
 
 
 @attribute_error.parametrize
-def test_attribute_error_on_parent_access(code):
+def test_attribute_error_on_parent_access(container_name, code):
     """Verify `this` object expression against existed dependencies.
 
     We should raise `AttributeError` if we have correct number of parents but specify
@@ -305,10 +305,16 @@ def test_attribute_error_on_parent_access(code):
     with pytest.raises(DependencyError) as exc_info:
         code(Root)
 
-    assert str(exc_info.value) == "Can not resolve attribute 'bar'"
+    expected = f"""
+Can not resolve attribute 'bar':
+
+{container_name}.bar
+    """.strip()
+
+    assert str(exc_info.value) == expected
 
 
-@attribute_error
+@attribute_error("Container")
 def _t1jn9RI9v42t(Root):
     class Container(Injector):
         root = Root
@@ -317,12 +323,12 @@ def _t1jn9RI9v42t(Root):
     Container.root
 
 
-@attribute_error
+@attribute_error("Injector")
 def _vnmkIELBH3MN(Root):
     Injector(root=Root, foo=this.bar).root
 
 
-@attribute_error
+@attribute_error("Container")
 def _yOEj1qQfsXHy(Root):
     class Container(Injector):
         root = Root
@@ -334,7 +340,7 @@ def _yOEj1qQfsXHy(Root):
     Container.root
 
 
-@attribute_error
+@attribute_error("Injector")
 def _pG9M52ZRQr2S(Root):
     Injector(root=Root, foo=this.Nested.foo, Nested=Injector(foo=(this << 1).bar)).root
 
