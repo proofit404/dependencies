@@ -19,7 +19,7 @@ packages = [
 ]
 readme = "docs/index.md"
 repository = "https://github.com/proofit404/dependencies"
-version = "7.1.0"
+version = "7.1.1"
 
 [tool.poetry.dependencies]
 python = "~3.6 || ~3.7 || ~3.8 || ~3.9"

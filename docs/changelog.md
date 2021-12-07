@@ -1,3 +1,10 @@
+## 7.1.1 (2021-12-07)
+
+### Bug Fixes
+
+- show resolver stack in missing dependency hint
+  [#32](https://github.com/proofit404/dependencies/issues/32) edf4436
+
 # 7.1.0 (2021-07-29)
 
 ### Features
