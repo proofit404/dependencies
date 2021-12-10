@@ -1,3 +1,10 @@
+## 7.1.2 (2021-12-10)
+
+### Bug Fixes
+
+- show proper hint on nested injector missed dependency
+  [#522](https://github.com/proofit404/dependencies/issues/522) 865877d
+
 ## 7.1.1 (2021-12-07)
 
 ### Bug Fixes
