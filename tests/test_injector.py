@@ -981,6 +981,83 @@ def _dmsMgYqbsHgB():
     Foo.bar
 
 
+circle_dependencies = CodeCollector("stack_representation", "code")
+
+
+@circle_dependencies.parametrize
+def test_circle_dependency_error(stack_representation, code):
+    """Handle circle definitions in dependency graph.
+
+    Attempt to resolve such definition would end up with recursion error. We should
+    provide readable error message from what users would be able to understand what
+    exactly they defined wrong.
+
+    """
+    with pytest.raises(DependencyError) as exc_info:
+        code()
+
+    expected = f"""
+Circle error found in definition of the dependency graph:
+
+{stack_representation}
+    """.strip()
+
+    assert str(exc_info.value) == expected
+
+
+@circle_dependencies(
+    """
+Container.foo
+  Container.bar
+    SubContainer.bar
+      SubSubContainer.baz
+        Container.foo
+    """.strip()
+)
+def _dhQgq7aBGY7j():
+    class Foo:
+        def __init__(self, bar):
+            raise RuntimeError
+
+    class Container(Injector):
+        foo = Foo
+        bar = this.SubContainer.bar
+
+        class SubContainer(Injector):
+            bar = this.SubSubContainer.baz
+
+            class SubSubContainer(Injector):
+                baz = (this << 2).foo
+
+    Container.foo
+
+
+@circle_dependencies(
+    """
+Injector.foo
+  Injector.bar
+    Injector.bar
+      Injector.baz
+        Injector.foo
+    """.strip()
+)
+def _nHW3zQ0Kv3se():
+    class Foo:
+        def __init__(self, bar):
+            raise RuntimeError
+
+    Injector(
+        foo=Foo,
+        bar=this.SubContainer.bar,
+        SubContainer=Injector(
+            bar=this.SubSubContainer.baz,
+            SubSubContainer=Injector(
+                baz=(this << 2).foo,
+            ),
+        ),
+    ).foo
+
+
 has_attribute = CodeCollector()
 
 
