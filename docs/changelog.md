@@ -1,3 +1,10 @@
+## 7.1.3 (2021-12-10)
+
+### Bug Fixes
+
+- show correct error message for circle error
+  [#470](https://github.com/proofit404/dependencies/issues/470) e547c54
+
 ## 7.1.2 (2021-12-10)
 
 ### Bug Fixes
