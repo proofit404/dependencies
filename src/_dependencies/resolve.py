@@ -1,5 +1,6 @@
 from _dependencies.exceptions import DependencyError
 from _dependencies.state import _State
+from _dependencies.trace import _Trace
 
 
 class _Resolver:
@@ -9,6 +10,14 @@ class _Resolver:
         self.attrname = attrname
 
     def resolve(self):
+        try:
+            return self.find()
+        except RecursionError:
+            message = _Trace(self.state)
+            message.add("Circle error found in definition of the dependency graph")
+            raise DependencyError(message)
+
+    def find(self):
         while self.attrname not in self.state.cache:
             spec = self.graph.get(self.state.current)
             if self.is_optional(spec):
@@ -42,37 +51,3 @@ class _Resolver:
             if self.state.should(arg, have_default):
                 self.state.add(arg, have_default)
                 break
-
-
-class _Trace:
-    def __init__(self, state):
-        name = state.cache["__self__"].__class__.__name__
-        self.attributes = [
-            f"{name}.{attrname}" for attrname, have_default in state.stack
-        ]
-        self.attributes.append(f"{name}.{state.current}")
-
-    def __str__(self):
-        indentation = _Indentation()
-        return self.error + ":\n\n" + "\n".join(map(indentation, self.attributes))
-
-    def add(self, error):
-        if isinstance(error, DependencyError):
-            message = error.args[0]
-            if isinstance(message, _Trace):
-                self.error = message.error
-                self.attributes.extend(message.attributes)
-            else:
-                self.error = message
-        else:
-            self.error = error
-
-
-class _Indentation:
-    def __init__(self):
-        self.index = 0
-
-    def __call__(self, arg):
-        result = "  " * self.index + arg
-        self.index += 1
-        return result
