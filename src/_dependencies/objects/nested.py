@@ -26,7 +26,6 @@ class _NestedInjectorFactory:
 
     def __call__(self, __self__):
         parent = _Spec(lambda: __self__, {}, set(), set(), lambda: "'Injector'")
-        name = self.injector.__name__
-        graph = self.injector.__dependencies__
-        graph.specs["__parent__"] = parent  # FIXME: If lazy graph was already replaced by normal graph, wouldn't it modify specs of the normal graph?
-        return _Scope(name, graph)
+        graph = self.injector.__dependencies__.copy()
+        graph.specs["__parent__"] = parent
+        return _Scope(self.injector.__name__, graph)
