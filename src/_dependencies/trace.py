@@ -26,17 +26,12 @@ class _Trace:
         for state in self.states:
             scope = state.cache["__self__"]
             name = scope.__class__.__name__
-            if scope in seen:
-                attributes.append(
-                    f"{name}.{state.stack[0][0] if state.stack else state.current}"
-                )
-                break
-            else:
-                attributes.extend(
-                    f"{name}.{attrname}" for attrname, have_default in state.stack
-                )
-                attributes.append(f"{name}.{state.current}")
-                seen.add(scope)
+            for attribute in [*[s[0] for s in state.stack], state.current]:
+                attributes.append(f"{name}.{attribute}")
+                if (scope, attribute) in seen:
+                    return attributes
+                else:
+                    seen.add((scope, attribute))
         return attributes
 
 

@@ -1011,7 +1011,10 @@ Container.foo
   Container.bar
     SubContainer.bar
       SubSubContainer.baz
-        Container.foo
+        Container.quiz
+          SubContainer.ham
+            SubSubContainer.egg
+              Container.foo
     """.strip()
 )
 def _dhQgq7aBGY7j():
@@ -1022,12 +1025,15 @@ def _dhQgq7aBGY7j():
     class Container(Injector):
         foo = Foo
         bar = this.SubContainer.bar
+        quiz = this.SubContainer.ham
 
         class SubContainer(Injector):
             bar = this.SubSubContainer.baz
+            ham = this.SubSubContainer.egg
 
             class SubSubContainer(Injector):
-                baz = (this << 2).foo
+                baz = (this << 2).quiz
+                egg = (this << 2).foo
 
     Container.foo
 
@@ -1038,7 +1044,10 @@ Injector.foo
   Injector.bar
     Injector.bar
       Injector.baz
-        Injector.foo
+        Injector.quiz
+          Injector.ham
+            Injector.egg
+              Injector.foo
     """.strip()
 )
 def _nHW3zQ0Kv3se():
@@ -1049,10 +1058,13 @@ def _nHW3zQ0Kv3se():
     Injector(
         foo=Foo,
         bar=this.SubContainer.bar,
+        quiz=this.SubContainer.ham,
         SubContainer=Injector(
             bar=this.SubSubContainer.baz,
+            ham=this.SubSubContainer.egg,
             SubSubContainer=Injector(
-                baz=(this << 2).foo,
+                baz=(this << 2).quiz,
+                egg=(this << 2).foo,
             ),
         ),
     ).foo
