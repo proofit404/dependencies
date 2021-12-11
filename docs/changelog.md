@@ -1,3 +1,10 @@
+## 7.1.4 (2021-12-11)
+
+### Bug Fixes
+
+- correct stack representation in circle error message
+  [#525](https://github.com/proofit404/dependencies/issues/525) 8776947
+
 ## 7.1.3 (2021-12-10)
 
 ### Bug Fixes
