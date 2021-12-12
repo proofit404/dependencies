@@ -5,6 +5,7 @@ import pytest
 
 from dependencies import Injector
 from dependencies import Package
+from dependencies import this
 from dependencies.exceptions import DependencyError
 from helpers import CodeCollector
 
@@ -128,6 +129,12 @@ def _xqImNk0p0kun():
 def _d1H5hbDhnoVL():
     submodule = Package("examples.submodule")
     return submodule.variable
+
+
+@variable_variant
+def _ocFk5G1OWGty():
+    examples = Package("examples")
+    return examples.init_variable
 
 
 provide_function = CodeCollector()
@@ -428,3 +435,71 @@ def _dmldmoXCFIBG():
 def _pRX4SSAbG8iO():
     examples = Package("examples")
     return Injector(foo=examples.self_pointer.Container.foo)
+
+
+import_error = CodeCollector()
+nested_variant = CodeCollector("nested")
+error_variant = CodeCollector("error")
+
+
+@import_error.parametrize
+@nested_variant.parametrize
+@error_variant.parametrize
+def test_handle_import_error(code, nested, error):
+    """Import time errors should be propagated.
+
+    Import error raised by poorly written project module should not be hidden by Package
+    implementation.
+
+    """
+
+    class Root:
+        def __init__(self, result):
+            raise RuntimeError
+
+    Container = code(Root, nested(error()))
+
+    with pytest.raises(ModuleNotFoundError) as exc_info:
+        Container.root
+
+    assert str(exc_info.value) == "No module named 'astral'"
+
+
+@import_error
+def _yjihTbbUJ3rS(Root, Nested):
+    class Container(Injector):
+        root = Root
+        result = this.nested.foo
+        nested = Nested
+
+    return Container
+
+
+@import_error
+def _xtLbizL0vuJr(Root, Nested):
+    return Injector(root=Root, result=this.nested.foo, nested=Nested)
+
+
+@nested_variant
+def _cdYU3Mxu5W0R(error):
+    class Nested(Injector):
+        foo = error
+
+    return Nested
+
+
+@nested_variant
+def _q8vFClchGiWW(error):
+    return Injector(foo=error)
+
+
+@error_variant
+def _cXjECOua1K75():
+    examples = Package("examples")
+    return examples.import_error.Vision
+
+
+@error_variant
+def _jNELGA2KFLA7():
+    submodule = Package("examples.import_error")
+    return submodule.Vision
