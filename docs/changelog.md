@@ -1,3 +1,10 @@
+## 7.1.5 (2021-12-12)
+
+### Bug Fixes
+
+- correct possible recursion error caused by package import
+  [#87](https://github.com/proofit404/dependencies/issues/87) 2304537
+
 ## 7.1.4 (2021-12-11)
 
 ### Bug Fixes
