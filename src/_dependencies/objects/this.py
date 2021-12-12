@@ -56,9 +56,8 @@ def _get_attribute(instance, name):
         return getattr(instance, name)
     except DependencyError:
         if name == "__parent__":
-            raise DependencyError(
-                "You tried to shift this more times than Injector has levels"
-            )
+            message = "You tried to shift this more times than Injector has levels"
+            raise DependencyError(message) from None
         else:
             raise
 

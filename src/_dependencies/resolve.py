@@ -15,7 +15,7 @@ class _Resolver:
         except RecursionError:
             message = _Trace(self.state)
             message.add("Circle error found in definition of the dependency graph")
-            raise DependencyError(message)
+            raise DependencyError(message) from None
 
     def find(self):
         while self.attrname not in self.state.cache:
@@ -44,7 +44,7 @@ class _Resolver:
         except DependencyError as error:
             message = _Trace(self.state)
             message.add(error)
-            raise DependencyError(message)
+            raise DependencyError(message) from None
 
     def match(self, args):
         for arg, have_default in args.items():  # pragma: no branch

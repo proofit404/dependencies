@@ -1,4 +1,5 @@
 from importlib import import_module
+from inspect import ismodule
 
 from _dependencies.objects.attributes import _Attributes
 
@@ -39,10 +40,11 @@ def _import_module(module, attrs):
     index = 0
     for attr in attrs:
         index += 1
-        try:
-            module += "." + attr
-            result = import_module(module)
-        except ImportError:
-            result = getattr(result, attr)
-            break
+        if hasattr(result, attr):
+            attribute = getattr(result, attr)
+            if not ismodule(attribute):
+                result = attribute
+                break
+        module += "." + attr
+        result = import_module(module)
     return result, attrs[index:]
