@@ -330,6 +330,49 @@ def _fmreItIa9y2J():
     return submodule.Foo
 
 
+provide_item_access = CodeCollector()
+item_variant = CodeCollector("item")
+
+
+@provide_item_access.parametrize
+@item_variant.parametrize
+def test_provide_item_access(code, item):
+    """Package declarative items should provide access to inner structures."""
+
+    class Root:
+        def __init__(self, result):
+            self.result = result
+
+    Container = code(Root, item())
+    assert Container.root.result == 12
+
+
+@provide_item_access
+def _fnivFTniPD5B(Root, item):
+    class Container(Injector):
+        root = Root
+        result = item
+
+    return Container
+
+
+@provide_item_access
+def _vVyoSLm9MoBk(Root, item):
+    return Injector(root=Root, result=item)
+
+
+@item_variant
+def _kYOwTnKBIKQr():
+    examples = Package("examples")
+    return examples.submodule.dict_variable["foo"]
+
+
+@item_variant
+def _qNbGkpQUugDP():
+    submodule = Package("examples.submodule")
+    return submodule.dict_variable["foo"]
+
+
 injector_pointer = CodeCollector()
 
 

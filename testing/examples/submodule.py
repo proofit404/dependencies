@@ -1,6 +1,9 @@
 variable = 1
 
 
+dict_variable = {"foo": 12}
+
+
 def function():
     """Return dummy data."""
     return 1
