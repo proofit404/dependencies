@@ -503,3 +503,14 @@ def _cXjECOua1K75():
 def _jNELGA2KFLA7():
     submodule = Package("examples.import_error")
     return submodule.Vision
+
+
+@pytest.mark.parametrize("relative", [".", "..", ".example", "..example"])
+def test_protect_against_relative_import(relative):
+    """Deny to use relative import path in Package declaration."""
+    with pytest.raises(DependencyError) as exc_info:
+        Package(relative)
+
+    expected = "Do not use relative import path in Package declaration"
+
+    assert str(exc_info.value) == expected

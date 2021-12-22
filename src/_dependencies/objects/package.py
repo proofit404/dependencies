@@ -1,6 +1,7 @@
 from importlib import import_module
 from inspect import ismodule
 
+from _dependencies.exceptions import DependencyError
 from _dependencies.objects.attributes import _Attributes
 
 
@@ -16,6 +17,7 @@ class Package:
     """
 
     def __init__(self, name):
+        _check_relative(name)
         self.__name__ = name
         self.__attrs__ = ()
 
@@ -48,3 +50,8 @@ def _import_module(module, attrs):
         module += "." + attr
         result = import_module(module)
     return result, attrs[index:]
+
+
+def _check_relative(name):
+    if name.startswith("."):
+        raise DependencyError("Do not use relative import path in Package declaration")
