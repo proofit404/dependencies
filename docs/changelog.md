@@ -1,3 +1,10 @@
+## 7.1.6 (2021-12-22)
+
+### Bug Fixes
+
+- deny relative imports in Package declaration
+  [#71](https://github.com/proofit404/dependencies/issues/71) 9636e32
+
 ## 7.1.5 (2021-12-12)
 
 ### Bug Fixes
