@@ -9,6 +9,8 @@ class This:
         self.__expression__ = expression
 
     def __getattr__(self, attrname):
+        if attrname == "__wrapped__":
+            raise AttributeError
         return This(self.__expression__ + ((".", attrname),))
 
     def __getitem__(self, item):
