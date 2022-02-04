@@ -221,7 +221,7 @@ def _docs_footer():
 def _tox_environments_are_ordered():
     tox_ini = open("tox.ini").read()
     offsets = [
-        (re.search(fr"[testenv:(\w*,)?{e}(\w*,)?]", tox_ini).start(), e)
+        (re.search(rf"[testenv:(\w*,)?{e}(\w*,)?]", tox_ini).start(), e)
         for e in _tox_envlist()
     ]
     assert offsets == sorted(offsets, key=lambda key: key[0])

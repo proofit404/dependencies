@@ -1,4 +1,6 @@
 """Tests related to the `this` object."""
+from inspect import unwrap
+
 import pytest
 
 from dependencies import Injector
@@ -470,3 +472,8 @@ def _thSaFsw1po8I():
 @deny_direct_resolve
 def _vIWzcvYG5qs5():
     Injector(a=this.b, b=1).a
+
+
+def test_this_inspect():
+    """This should not trigger inspect unwrap infinite loop."""
+    assert isinstance(unwrap(this), this.__class__)
