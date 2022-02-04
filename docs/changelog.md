@@ -1,3 +1,10 @@
+## 7.1.7 (2022-02-04)
+
+### Bug Fixes
+
+- this should not trigger error
+  [#531](https://github.com/proofit404/dependencies/issues/531) 99cc55d
+
 ## 7.1.6 (2021-12-22)
 
 ### Bug Fixes
