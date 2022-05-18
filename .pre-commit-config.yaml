@@ -1,7 +1,7 @@
 ---
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: master
+    rev: main
     hooks:
       - id: forbid-new-submodules
       - id: check-added-large-files
@@ -14,7 +14,7 @@ repos:
       - id: trailing-whitespace
         exclude: blacken-docs.patch
       - id: file-contents-sorter
-        files: ^(.gitignore|.python-version)$
+        files: ^(.gitignore|.python-version|requirements.txt)$
       - id: debug-statements
       - id: check-builtin-literals
         args:
@@ -23,7 +23,7 @@ repos:
       - id: check-toml
       - id: check-yaml
   - repo: https://github.com/pre-commit/pygrep-hooks
-    rev: master
+    rev: main
     hooks:
       - id: python-check-blanket-noqa
       - id: python-check-mock-methods

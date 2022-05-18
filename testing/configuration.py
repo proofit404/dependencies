@@ -3,21 +3,28 @@ import configparser
 import datetime
 import itertools
 import os.path
+import platform
 import re
 import subprocess
 import textwrap
 
+import better_exceptions
 import tomlkit
 import yaml
 
 
+better_exceptions.MAX_LENGTH = None
+
+better_exceptions.hook()
+
+
 def _main():
+    _virtual_environment_use_max_python()
     _azure_install_python_interpreters()
     _azure_release_job_use_max_base_python()
     _tox_environments_use_all_pyenv_versions()
     _tox_environments_use_max_base_python()
     _tox_envlist_contains_all_tox_environments()
-    _tox_no_default_environment()
     _tox_no_factor_environments()
     _tox_no_factor_deps()
     _tox_single_line_settings_are_written_same_line()
@@ -25,34 +32,40 @@ def _main():
     _tox_no_unknown_settings()
     _coverage_include_all_packages()
     _coverage_environment_runs_at_the_end()
-    _poetry_python_version_use_all_pyenv_versions()
     _ini_files_indentation()
     _ini_files_boolean_case()
     _lock_files_not_committed()
     _symbolic_links()
+    _flake8_exclude_matches_gitignore()
+    _yamllint_ignore_matches_gitignore()
     _license_year()
     _docs_footer()
     _tox_environments_are_ordered()
     _tox_settings_are_ordered()
     _tox_deps_are_ordered()
-    _tox_whitelist_externals_are_ordered()
     _tox_setenv_are_ordered()
     _packages_are_ordered()
     _build_requires_are_ordered()
     _flake8_per_file_ignores_are_ordered()
     _flake8_ignored_errors_are_ordered()
-    _yamllint_ignored_patterns_are_ordered()
     _poetry_avoid_additional_dependencies()
     _pre_commit_hooks_avoid_additional_dependencies()
     _tox_deps_not_pinned()
+    _python_version_not_pinned()
     _build_requires_not_pinned()
     _pre_commit_hooks_not_pinned()
+
+
+def _virtual_environment_use_max_python():
+    current = tuple(map(int, platform.python_version().split(".")[0:2]))
+    version = max(_pyenv_versions())
+    assert current == version
 
 
 def _azure_install_python_interpreters():
     versions = [
         f"{major}.{minor}" if interpreter == "cpython" else f"{interpreter}{major}"
-        for interpreter, (major, minor) in _pyenv_interpreters()
+        for interpreter, (major, minor) in sorted(_pyenv_interpreters())
     ]
     installed = [
         s["inputs"]["versionSpec"]
@@ -63,7 +76,7 @@ def _azure_install_python_interpreters():
 
 
 def _azure_release_job_use_max_base_python():
-    version = max(f"{major}.{minor}" for major, minor in _pyenv_versions())
+    version = ".".join(map(str, max(_pyenv_versions())))
     installed = _azure_pipelines("jobs", 1, "steps", 0, "inputs", "versionSpec")
     assert version == installed
 
@@ -73,22 +86,22 @@ def _tox_environments_use_all_pyenv_versions():
         f"py{major}{minor}" if interpreter == "cpython" else f"{interpreter}{major}"
         for interpreter, (major, minor) in _pyenv_interpreters()
     ]
-    for version in versions:
-        assert version in _tox_envlist()
+    envlist = _tox_envlist()
+    assert set(envlist).issuperset(set(versions))
 
 
 def _tox_environments_use_max_base_python():
-    version = max(f"python{major}.{minor}" for major, minor in _pyenv_versions())
+    version = "python" + ".".join(map(str, max(_pyenv_versions())))
     for basepython in _tox_config_values("basepython"):
         assert basepython.value == version
 
 
 def _tox_envlist_contains_all_tox_environments():
-    assert _tox_envlist() == _tox_config_environments()
-
-
-def _tox_no_default_environment():
-    assert "testenv" not in _tox_ini()
+    envlist = ["testenv"] + [
+        e for e in _tox_envlist() if not re.match(r"py(py)?\d+", e)
+    ]
+    config_environments = _tox_config_environments()
+    assert envlist == config_environments
 
 
 def _tox_no_factor_environments():
@@ -127,23 +140,24 @@ def _coverage_include_all_packages():
     coverage_sources = _coveragerc()["run"]["source"].strip().splitlines()
 
     packages = set()
-    helpers = set()
+    testing = set()
 
     for f in _git_files():
         parts = [re.sub(r"\.py$", "", p) for p in f.split("/")]
         if len(parts) > 1 and parts[0] == "src":
             packages.add(parts[1])
-        if len(parts) > 2 and parts[0] == "tests" and parts[1] == "helpers":
-            helpers.add(parts[2])
+        if len(parts) > 1 and parts[0] == "testing":
+            testing.add(parts[1])
 
-    assert coverage_sources == sorted(packages) + sorted(helpers) + ["tests"]
+    assert coverage_sources == sorted(packages) + sorted(testing) + ["tests"]
 
 
 def _coverage_environment_runs_at_the_end():
-    coverage_depends = [
+    coverage_depends = ["testenv"] + [
         e
         for p in _tox_split_envlist(_tox_ini()["testenv:coverage"]["depends"])
         for e in _tox_expand_names(p)
+        if not re.match(r"py(py)?\d+", e)
     ]
     runs_coverage = [
         env
@@ -151,14 +165,6 @@ def _coverage_environment_runs_at_the_end():
         if "coverage run" in commands
     ]
     assert coverage_depends == runs_coverage
-
-
-def _poetry_python_version_use_all_pyenv_versions():
-    pyenv_version = " || ".join(
-        f"~{major}.{minor}" for major, minor in _pyenv_versions()
-    )
-    poetry_version = _pyproject_toml()["tool"]["poetry"]["dependencies"]["python"]
-    assert pyenv_version == poetry_version
 
 
 def _ini_files_indentation():
@@ -170,8 +176,9 @@ def _ini_files_indentation():
         "tox.ini",
     ]:
         ini_text = open(ini_file).read()
-        assert not re.search(r"^ \S", ini_text, re.MULTILINE)
-        assert not re.search(r"^ {3}", ini_text, re.MULTILINE)
+        assert re.search(r"^\S", ini_text, re.MULTILINE) or re.search(
+            r"^ {4}", ini_text, re.MULTILINE
+        )
 
 
 def _ini_files_boolean_case():
@@ -188,8 +195,20 @@ def _lock_files_not_committed():
 
 
 def _symbolic_links():
-    for filename in ["README.md"]:
+    for filename in ["README.md", ".prettierignore", ".remarkignore", ".eslintignore"]:
         assert os.path.islink(filename)
+
+
+def _flake8_exclude_matches_gitignore():
+    flake8_exclude = _lines(_flake8()["flake8"]["exclude"])
+    git_ignore = _lines(_gitignore())
+    assert flake8_exclude == git_ignore
+
+
+def _yamllint_ignore_matches_gitignore():
+    yamllint_ignore = _lines(_yamllint()["ignore"])
+    git_ignore = _lines(_gitignore())
+    assert yamllint_ignore == git_ignore
 
 
 def _license_year():
@@ -208,10 +227,7 @@ def _license_year():
 
 
 def _docs_footer():
-    footer = """
-<p align="center">&mdash; ⭐ &mdash;</p>
-<p align="center"><i>The <code>dependencies</code> library is part of the SOLID python family.</i></p>
-""".lstrip()  # noqa: E501
+    footer = '<p align="center">&mdash; ⭐ &mdash;</p>\n'
     documents = _values(_mkdocs_yml()["nav"])
     for document in documents:
         content = open(os.path.join("docs", document)).read()
@@ -248,12 +264,6 @@ def _tox_deps_are_ordered():
         assert deps == ordered
 
 
-def _tox_whitelist_externals_are_ordered():
-    for externals in _tox_config_values("whitelist_externals"):
-        externals = _lines(externals.value)
-        assert externals == sorted(externals)
-
-
 def _tox_setenv_are_ordered():
     for setenv in _tox_config_values("setenv"):
         setenv = _lines(setenv.value)
@@ -284,11 +294,6 @@ def _flake8_ignored_errors_are_ordered():
     assert ignore == sorted(ignore)
 
 
-def _yamllint_ignored_patterns_are_ordered():
-    ignore = _lines(_yamllint()["ignore"])
-    assert ignore == sorted(ignore)
-
-
 def _poetry_avoid_additional_dependencies():
     deps = list(_pyproject_toml()["tool"]["poetry"]["dependencies"])
     assert deps == ["python"]
@@ -304,13 +309,18 @@ def _tox_deps_not_pinned():
         assert "=" not in deps.value
 
 
+def _python_version_not_pinned():
+    poetry_version = _pyproject_toml()["tool"]["poetry"]["dependencies"]["python"]
+    assert poetry_version == "*"
+
+
 def _build_requires_not_pinned():
     requires = _pyproject_toml()["build-system"]["requires"]
     assert not any("=" in r for r in requires)
 
 
 def _pre_commit_hooks_not_pinned():
-    assert all(repo["rev"] == "master" for repo in _pre_commit_yaml()["repos"])
+    assert all(repo["rev"] == "main" for repo in _pre_commit_yaml()["repos"])
 
 
 class _Settings:
@@ -326,16 +336,16 @@ class _Settings:
     keys = [
         ("envlist", _Text),
         ("isolated_build", _Boolean),
-        ("basepython", _String),
-        ("skip_install", _Boolean),
-        ("ignore_outcome", _Boolean),
-        ("install_command", _String),
         ("setenv", _Text),
         ("passenv", _Text),
+        ("basepython", _String),
+        ("skip_install", _Boolean),
+        ("install_command", _String),
         ("deps", _Text),
         ("commands", _Text),
+        ("commands_post", _Text),
+        ("commands_pre", _Text),
         ("depends", _Text),
-        ("whitelist_externals", _Text),
     ]
 
     def _known(self):
@@ -368,26 +378,29 @@ def _tox_envlist():
 def _tox_split_envlist(string):
     # => _tox_split_envlist('py{36,37},doctest,flake8')
     # -> ['py{36,37}', 'doctest', 'flake8']
-    escaped = string
+    escaped = string.strip()
     while re.search(r"({[^,}]*),", escaped):
         escaped = re.subn(r"({[^,}]*),", r"\1:", escaped)[0]
-    parts = escaped.split(",")
+    parts = escaped.split("\n")
     return [re.subn(r":", ",", p)[0].strip() for p in parts]
 
 
 def _tox_expand_names(string):
+    # => _tox_expand_names('py{37,38},doctest')
+    # -> ['py37', 'py38', 'doctest']
     # => _tox_expand_names('py{37,38}')
     # -> ['py37', 'py38']
     # => _tox_expand_names('doctest')
     # -> ['doctest']
-    if "{" not in string:
-        yield string
-    else:
-        parts = re.split(r"{|}", string)
-        index = [i for i, p in enumerate(parts) if "," in p][0]
-        subs = parts[index].split(",")
-        for s in subs:
-            yield "".join(parts[:index] + [s])
+    for part in _tox_split_envlist(string):
+        if "{" not in part:
+            yield part
+        else:
+            pieces = re.split(r"{|}", part)
+            index = [i for i, p in enumerate(pieces) if "," in p][0]
+            subs = pieces[index].split(",")
+            for s in subs:
+                yield "".join(pieces[:index] + [s])
 
 
 def _tox_config_environments():
@@ -489,7 +502,7 @@ def _pyenv_interpreters():
     for v in open(".python-version").read().splitlines():
         m = re.match(r"^([a-z]+)?([0-9.]+)", v)
         interpreter = m.group(1) or "cpython"
-        version = m.group(2).split(".")[0:2]
+        version = tuple(map(int, m.group(2).split(".")[0:2]))
         yield interpreter, version
 
 
@@ -499,6 +512,10 @@ def _pyproject_toml():
 
 def _mkdocs_yml():
     return yaml.safe_load(open("mkdocs.yml").read())
+
+
+def _gitignore():
+    return open(".gitignore").read()
 
 
 if __name__ == "__main__":  # pragma: no branch

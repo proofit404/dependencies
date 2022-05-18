@@ -1,3 +1,15 @@
 ---
 extends: default
-ignore: .tox
+ignore: |
+  .coverage
+  .coverage.*
+  .mutmut-cache
+  .pytest_cache/
+  .tox/
+  __pycache__/
+  dist/
+  htmlcov/
+  node_modules/
+  package-lock.json
+  site/
+  venv/

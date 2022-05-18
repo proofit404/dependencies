@@ -1,0 +1,24 @@
+{
+  "name": "dependencies",
+  "version": "7.1.7",
+  "private": true,
+  "devDependencies": {
+    "@commitlint/cli": "*",
+    "@commitlint/config-conventional": "*",
+    "@semantic-release/changelog": "*",
+    "@semantic-release/exec": "*",
+    "@semantic-release/git": "*",
+    "@typescript-eslint/eslint-plugin": "*",
+    "@typescript-eslint/parser": "*",
+    "danger": "*",
+    "eslint": "*",
+    "eslint-plugin-json": "*",
+    "jscpd": "*",
+    "prettier": "*",
+    "remark-cli": "*",
+    "remark-lint": "*",
+    "remark-preset-lint-recommended": "*",
+    "semantic-release": "*",
+    "typescript": "*"
+  }
+}

@@ -1,0 +1,76 @@
+#!/bin/bash
+
+set -o errexit
+set -o nounset
+set -o pipefail
+
+. venv/bin/activate
+
+echo "==> Checking configuration…"
+PYTHONPATH=$PWD/testing coverage run -m configuration
+
+echo "==> Running pre-commit…"
+pre-commit run --all-files --show-diff-on-failure
+
+echo "==> Running pyupgrade…"
+git ls-files '*.py' | xargs pyupgrade --py37-plus
+
+echo "==> Running reorder-python-imports…"
+git ls-files '*.py' | xargs reorder-python-imports --application-directories=.:src:testing
+
+echo "==> Running docformatter…"
+git ls-files '*.py' | xargs docformatter --wrap-summaries 88 --wrap-descriptions 88 --blank --check
+
+echo "==> Running black…"
+black --check --diff .
+
+echo "==> Running blacken-docs…"
+git ls-files '*.md' | xargs blacken-docs
+
+echo "==> Running prettier…"
+npx prettier --prose-wrap=always --check .
+
+echo "==> Running misspell fixer…"
+git ls-files | xargs misspell-fixer -rsn
+
+echo "==> Running flake8…"
+flake8 .
+
+echo "==> Running yesqa…"
+git ls-files '*.py' | xargs yesqa
+
+echo "==> Running bandit…"
+bandit -r src/
+
+echo "==> Running xenon…"
+xenon --max-absolute A --max-modules A --max-average A src/
+
+echo "==> Running lint-imports…"
+PYTHONPATH=$PWD/src lint-imports
+
+echo "==> Running mkdocs…"
+mkdocs build
+
+echo "==> Running vale…"
+git ls-files '*.md' | xargs vale
+
+echo "==> Running remark…"
+npx remark --frail .
+
+echo "==> Running eslint…"
+npx eslint .
+
+echo "==> Running yamllint…"
+yamllint --strict .
+
+echo "==> Running toml-sort…"
+git ls-files '*.toml' | xargs toml-sort --all --no-header --check
+
+echo "==> Running tox-ini-fmt…"
+tox-ini-fmt tox.ini
+
+echo "==> Running jscpd…"
+npx jscpd src/
+
+echo "==> Running commitlint…"
+npx commitlint --from $(( git branch --show-current | grep -q develop || git branch --show-current | grep -q issue && git branch --list develop | grep -q develop ) && echo develop || echo release)

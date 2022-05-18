@@ -227,7 +227,7 @@ export default async (): undefined => {
     }
   }
 
-  const milestonesJSON = await danger.github.api.issues.listMilestonesForRepo({
+  const milestonesJSON = await danger.github.api.issues.listMilestones({
     owner: danger.github.thisPR.owner,
     repo: danger.github.thisPR.repo,
   });

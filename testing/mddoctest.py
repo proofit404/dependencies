@@ -1,12 +1,12 @@
 from doctest import testfile
-from os import environ
-from sys import argv
+from glob import glob
 from sys import exit
-
-import responses
 
 
 def _setup():
+    from os import environ
+    import responses
+
     environ["FRONTEND_URL"] = "https://example.com/frontend"
     environ["BACKEND_URL"] = "https://example.com/backend"
     responses.add(
@@ -18,9 +18,8 @@ def _setup():
 
 
 def _main():
-    markdown_files = argv[1:]
     exit_code = 0
-    for markdown_file in markdown_files:
+    for markdown_file in glob("docs/**/*.md", recursive=True):
         failed, attempted = testfile(markdown_file, module_relative=False)
         exit_code += failed
     exit(exit_code)

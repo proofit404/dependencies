@@ -21,7 +21,7 @@ module.exports = {
       "@semantic-release/exec",
       {
         prepareCmd:
-          "tox -e prettier -- --write && poetry version ${nextRelease.version} && poetry build",
+          "./scripts/lint && poetry version ${nextRelease.version} && npm version ${nextRelease.version} && poetry build",
         publishCmd: "poetry publish",
       },
     ],
