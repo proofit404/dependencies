@@ -1,0 +1,36 @@
+#!/bin/bash
+
+set -o nounset
+set -o pipefail
+
+. venv/bin/activate
+
+echo "==> Running pre-commit…"
+pre-commit run --all-files
+
+echo "==> Running pyupgrade…"
+git ls-files '*.py' | xargs pyupgrade --py37-plus
+
+echo "==> Running reorder-python-imports…"
+git ls-files '*.py' | xargs reorder-python-imports --application-directories=.:src:testing
+
+echo "==> Running docformatter…"
+git ls-files '*.py' | xargs docformatter --wrap-summaries 88 --wrap-descriptions 88 --blank --in-place
+
+echo "==> Running black…"
+black .
+
+echo "==> Running blacken-docs…"
+git ls-files '*.md' | xargs blacken-docs
+
+echo "==> Running prettier…"
+npx prettier --prose-wrap=always --write .
+
+echo "==> Running misspell fixer…"
+git ls-files | xargs misspell-fixer -rsn
+
+echo "==> Running toml-sort…"
+git ls-files '*.toml' | xargs toml-sort --all --no-header --in-place
+
+echo "==> Running tox-ini-fmt…"
+tox-ini-fmt tox.ini

@@ -1,0 +1,13 @@
+#!/bin/bash
+
+set -o errexit
+set -o nounset
+set -o pipefail
+
+. venv/bin/activate
+
+echo "==> Running danger…"
+npx danger ci
+
+echo "==> Running cruft…"
+cruft check

@@ -18,10 +18,6 @@ jobs:
     steps:
       - task: UsePythonVersion@0
         inputs:
-          versionSpec: "3.7"
-        displayName: Install Python 3.7.
-      - task: UsePythonVersion@0
-        inputs:
           versionSpec: "3.8"
         displayName: Install Python 3.8.
       - task: UsePythonVersion@0
@@ -30,49 +26,30 @@ jobs:
         displayName: Install Python 3.9.
       - task: UsePythonVersion@0
         inputs:
+          versionSpec: "3.10"
+        displayName: Install Python 3.10.
+      - task: UsePythonVersion@0
+        inputs:
           versionSpec: pypy3
         displayName: Install PyPy.
       - task: NodeTool@0
         inputs:
-          versionSpec: "16.6.2"
+          versionSpec: "16.14.2"
         displayName: Install NodeJS.
       - script: |
           git checkout release
           git checkout develop
           git checkout $(source_branch_name)
         displayName: Unshallow commit log.
-      - script: pip install --upgrade tox
-        displayName: Install Tox.
-      - script: tox
+      - script: ./scripts/install
+        displayName: Install dependencies.
+      - script: ./scripts/check
+        displayName: Run checks.
+      - script: ./scripts/test
         env:
-          CI_PYTEST_FLAGS: >-
-            --junitxml=junit-{envname}.xml -o junit_suite_name={envname} -o
-            junit_family=xunit2 -o junit_log_passing_tests=true
           TOX_SKIP_ENV: mutmut
-        displayName: Run Tox.
-      # - script: .tox/mutmut/bin/mutmut junitxml > junit-mutmut.xml
-      #   condition: always()
-      #   displayName: Generate mutmut report.
-      - task: PublishTestResults@2
-        condition: always()
-        inputs:
-          testResultsFormat: JUnit
-          testResultsFiles: junit-*.xml
-        displayName: Publish test results.
-      - script: .tox/coverage/bin/coverage xml
-        condition: always()
-        displayName: Generate coverage report.
-      - task: PublishCodeCoverageResults@1
-        condition: always()
-        inputs:
-          codeCoverageTool: cobertura
-          summaryFileLocation: coverage.xml
-        displayName: Publish coverage report.
-      - script: |
-          npm install --save-dev danger typescript
-        condition: eq(variables['should_review'], 'true')
-        displayName: Install Danger.
-      - script: npx danger ci
+        displayName: Run tests.
+      - script: ./scripts/review
         condition: eq(variables['should_review'], 'true')
         env:
           DANGER_FAKE_CI: YEP
@@ -89,11 +66,11 @@ jobs:
     steps:
       - task: UsePythonVersion@0
         inputs:
-          versionSpec: "3.9"
-        displayName: Install Python.
+          versionSpec: "3.10"
+        displayName: Install Python 3.10.
       - task: NodeTool@0
         inputs:
-          versionSpec: "16.6.2"
+          versionSpec: "16.14.2"
         displayName: Install NodeJS.
       - script: |
           git config --local user.name "Artem Malyshev"
@@ -102,29 +79,11 @@ jobs:
           git checkout develop
           git checkout $(source_branch_name)
         displayName: Unshallow commit log.
-      - script: pip install --upgrade tox
-        displayName: Install Tox.
-      - script: |
-          curl -sSL "https://raw.githubusercontent.com\
-          /python-poetry/poetry/master/get-poetry.py" | python
-          echo '##vso[task.prependpath]$(HOME)/.poetry/bin'
-        displayName: Install Poetry.
-      - script: >-
-          npm install --save-dev semantic-release @semantic-release/changelog
-          @semantic-release/exec @semantic-release/git
-        displayName: Install Semantic Release.
-      - script: |
-          npx semantic-release
+      - script: ./scripts/install
+        displayName: Install dependencies.
+      - script: ./scripts/release
         env:
           POETRY_PYPI_TOKEN_PYPI: $(SEMANTIC_RELEASE_PYPI_TOKEN)
           GITHUB_TOKEN: $(SEMANTIC_RELEASE_GITHUB_TOKEN)
-        displayName: Release package.
-      - script: |
-          REMOTE="https://${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}"
-          git remote set-url origin $REMOTE
-          tox -e mkdocs -- gh-deploy --force
-        env:
-          GITHUB_TOKEN: $(SEMANTIC_RELEASE_GITHUB_TOKEN)
           GITHUB_REPOSITORY: $(Build.Repository.Name)
-        condition: eq(variables['source_branch_name'], 'release')
-        displayName: Deploy documentation.
+        displayName: Release package.

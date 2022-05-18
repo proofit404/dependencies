@@ -1,0 +1,14 @@
+#!/bin/bash
+
+set -o errexit
+set -o nounset
+set -o pipefail
+
+. venv/bin/activate
+
+echo "==> Running semantic release…"
+npx semantic-release
+
+echo "==> Running mkdocs deploy…"
+git remote set-url origin "https://${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}"
+mkdocs gh-deploy --force

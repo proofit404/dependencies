@@ -36,4 +36,3 @@ the same way we build handwritten classes. But there is no need to write all
 this boilerplate by hand.
 
 <p align="center">&mdash; ⭐ &mdash;</p>
-<p align="center"><i>The <code>dependencies</code> library is part of the SOLID python family.</i></p>
