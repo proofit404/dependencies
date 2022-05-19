@@ -10,14 +10,14 @@ deny_direct_resolve = CodeCollector()
 
 
 @deny_direct_resolve.parametrize
-def test_direct_data_resolve(code):
+def test_direct_data_resolve(touch, code):
     """Attempt to resolve scalar types directly should raise exception.
 
     Scalar types are allowed to be used as dependencies for classes.
 
     """
     with pytest.raises(DependencyError) as exc_info:
-        code()
+        touch(code(), "a")
     expected = "Scalar dependencies could only be used to instantiate classes"
     assert str(exc_info.value) == expected
 
@@ -27,9 +27,9 @@ def _jxu5tzdy99V7():
     class Container(Injector):
         a = 1
 
-    Container.a
+    return Container
 
 
 @deny_direct_resolve
 def _z8iAExxZyJjd():
-    Injector(a=1).a
+    return Injector(a=1)
