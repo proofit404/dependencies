@@ -401,10 +401,19 @@ attribute_assignment = CodeCollector()
 
 
 @attribute_assignment.parametrize
-def test_deny_injector_changes(code):
-    """Explicitly deny change of any kind on `Injector` and its subclasses."""
+def test_deny_injector_attribute_assignment(touch, code):
+    """Deny attribute assignment on `Injector` and its subclasses."""
     with pytest.raises(DependencyError) as exc_info:
-        code()
+        touch.assign(code(), "foo", 1)
+
+    assert str(exc_info.value) == "'Injector' modification is not allowed"
+
+
+@attribute_assignment.parametrize
+def test_deny_injector_attribute_deletion(touch, code):
+    """Deny attribute deletion on `Injector` and its subclasses."""
+    with pytest.raises(DependencyError) as exc_info:
+        touch.delete(code(), "foo")
 
     assert str(exc_info.value) == "'Injector' modification is not allowed"
 
@@ -414,18 +423,7 @@ def _mvT9oyJdXhzh():
     class Container(Injector):
         x = 1
 
-    Container.foo = 1
-
-
-@attribute_assignment
-def _fXxRX4KFUc8q():
-    Injector.foo = 1
-
-
-@attribute_assignment
-def _pHfF0rbEjCsV():
-    Container = Injector(x=1)
-    Container.foo = 1
+    return Container
 
 
 @attribute_assignment
@@ -433,18 +431,17 @@ def _xhZaIhujf34t():
     class Container(Injector):
         foo = 1
 
-    del Container.foo
+    return Container
 
 
 @attribute_assignment
-def _jShuBfttg97c():
-    Container = Injector(foo=1)
-    del Container.foo
+def _fXxRX4KFUc8q():
+    return Injector
 
 
 @attribute_assignment
-def _tQeRzD5ZsyTm():
-    del Injector.foo
+def _pHfF0rbEjCsV():
+    return Injector(x=1)
 
 
 def test_docstrings():

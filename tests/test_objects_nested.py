@@ -92,14 +92,14 @@ deny_direct_resolve = CodeCollector()
 
 
 @deny_direct_resolve.parametrize
-def test_direct_nested_injector_resolve(code):
+def test_direct_nested_injector_resolve(touch, code):
     """Attempt to resolve nested injector directly should raise exception.
 
     Nested injectors are allowed to be used as this object targets.
 
     """
     with pytest.raises(DependencyError) as exc_info:
-        code()
+        touch(code(), "Nested")
     expected = "'Injector' dependencies could only be used to instantiate classes"
     assert str(exc_info.value) == expected
 
@@ -110,12 +110,12 @@ def _wlimEBYr7skq():
         class Nested(Injector):
             foo = 1
 
-    Container.Nested
+    return Container
 
 
 @deny_direct_resolve
 def _bA1A3d0zf1hZ():
-    Injector(Nested=Injector(foo=1)).Nested
+    return Injector(Nested=Injector(foo=1))
 
 
 deny_depends_on = CodeCollector("stack_representation", "code")

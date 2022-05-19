@@ -1,3 +1,4 @@
+from _dependencies.delegate import _Delegate
 from _dependencies.exceptions import DependencyError
 from _dependencies.graph import _Graph
 from _dependencies.lazy import _LazyGraph
@@ -29,16 +30,16 @@ class _InjectorType(_InjectorTypeType):
         return type(cls.__name__, (cls, other), {})
 
     def __enter__(cls):
-        return _Scope(cls.__name__, cls.__dependencies__)
+        scope = _Scope(cls.__name__, cls.__dependencies__)
+        return _Delegate(cls.__name__, cls.__dependencies__, scope)
 
     def __exit__(self, exc_type, exc_value, traceback):
         pass
 
     def __getattr__(cls, attrname):
         scope = _Scope(cls.__name__, cls.__dependencies__)
-        resolved = getattr(scope, attrname)
-        cls.__dependencies__.get(attrname).resolved()
-        return resolved
+        delegate = _Delegate(cls.__name__, cls.__dependencies__, scope)
+        return getattr(delegate, attrname)
 
     def __setattr__(cls, attrname, value):
         raise DependencyError("'Injector' modification is not allowed")

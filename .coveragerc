@@ -5,6 +5,7 @@ source =
   _dependencies
   dependencies
   app
+  attributes
   configuration
   examples
   helpers

@@ -448,14 +448,14 @@ deny_direct_resolve = CodeCollector()
 
 
 @deny_direct_resolve.parametrize
-def test_direct_this_resolve(code):
+def test_direct_this_resolve(touch, code):
     """Attempt to resolve this directly should raise exception.
 
     This objects are allowed to be used as dependencies for classes.
 
     """
     with pytest.raises(DependencyError) as exc_info:
-        code()
+        touch(code(), "a")
     expected = "'this' dependencies could only be used to instantiate classes"
     assert str(exc_info.value) == expected
 
@@ -466,12 +466,12 @@ def _thSaFsw1po8I():
         a = this.b
         b = 1
 
-    Container.a
+    return Container
 
 
 @deny_direct_resolve
 def _vIWzcvYG5qs5():
-    Injector(a=this.b, b=1).a
+    return Injector(a=this.b, b=1)
 
 
 def test_this_inspect():
