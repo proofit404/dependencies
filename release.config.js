@@ -21,7 +21,10 @@ module.exports = {
       "@semantic-release/exec",
       {
         prepareCmd:
-          "./scripts/lint && poetry version ${nextRelease.version} && npm version ${nextRelease.version} && poetry build",
+          "./scripts/lint && " +
+          "poetry version ${nextRelease.version} && " +
+          "npm version --no-git-tag-version ${nextRelease.version} && " +
+          "poetry build",
         publishCmd: "poetry publish",
       },
     ],
