@@ -85,6 +85,7 @@ properly. But code above has a lot of design problems:
 ## Principles
 
 - [Sticky scopes remember instances](#sticky-scopes-remember-instances)
+- [Sticky scopes restrict dependencies](#sticky-scopes-restrict-dependencies)
 
 ### Sticky scopes remember instances
 
@@ -108,6 +109,30 @@ As you may notice objects stays the same:
 >>> with Container as scope:
 ...     scope.root is scope.root
 True
+
+```
+
+### Sticky scopes restrict dependencies
+
+Sticky scopes restrict dependencies access in exactly same way as regular
+`Injector` subclass do. Only classes could be instantiated and returned during
+attribute access of the sticky scope object. If indirect or evaluated dependency
+would be accessed during attribute access, an error would be raised.
+
+```pycon
+
+>>> from dependencies import value
+
+>>> class Container(Injector):
+...     @value
+...     def foo():
+...         return 1
+
+>>> with Container as scope:
+...     scope.foo
+Traceback (most recent call last):
+  ...
+_dependencies.exceptions.DependencyError: 'value' dependencies could only be used to instantiate classes
 
 ```
 
