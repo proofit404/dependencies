@@ -114,4 +114,61 @@ be injected in corresponding argument of `Foo` and `Bar` constructors.
 As you can see `@value` decorated function was called only once even two objects
 depends on it.
 
+## Singletons
+
+The singleton pattern is considered a bad practice in general. But in some cases
+you would actually need to use them. For example, if you instantiate connection
+pool for you database, message queue, or cache.
+
+In that case you could use `functools.lru_cache` together with `@value`
+decorator.
+
+Let assume you would like to instantiate your view class each time you need to
+handle a separate HTTP request. If your view class would depend on connection
+pool, it would not be recreated each time you want to process the request.
+
+Nice thing about this approach - you don't need to make connection pool a
+singleton itself. This logic would kept inside `Injector` subclass, which would
+make pool class a little bit more testable.
+
+```pycon
+
+>>> from functools import lru_cache
+
+>>> class Connections:
+...     """Connection pool."""
+...     def __init__(self, host, port):
+...         ...
+...
+...     def connect(self):
+...         ...
+
+>>> class Request:
+...     def __init__(self, connections):
+...         self.connections = connections
+
+>>> class Container(Injector):
+...     request = Request
+...     host = "localhost"
+...     port = 1234
+...
+...     @value
+...     @lru_cache
+...     def connections(host, port):
+...         pool = Connections(host, port)
+...         pool.connect()
+...         return port
+
+>>> request1 = Container.request
+
+>>> request2 = Container.request
+
+>>> request1 is request2
+False
+
+>>> request1.connections is request2.connections
+True
+
+```
+
 <p align="center">&mdash; ⭐ &mdash;</p>

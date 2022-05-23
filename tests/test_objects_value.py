@@ -157,7 +157,7 @@ def _z4nIvE3QRpik(Foo):
         foo = Foo
 
         @value
-        @lru_cache()
+        @lru_cache()  # noqa: B019
         def bar():
             return randint(0, 1000)
 
