@@ -1,4 +1,7 @@
 """Tests related to the @value object."""
+from functools import lru_cache
+from random import randint
+
 import pytest
 
 from dependencies import Injector
@@ -131,3 +134,41 @@ def _pZKCM0OCHMML():
         return 1
 
     return Injector(a=a)
+
+
+decorated_functions = CodeCollector()
+
+
+@decorated_functions.parametrize
+def test_allow_decorated_functions(touch, code):
+    """Decorators applied to functions should keep working."""
+
+    class Foo:
+        def __init__(self, bar):
+            self.bar = bar
+
+    Container = code(Foo)
+    assert touch(Container, "foo").bar == touch(Container, "foo").bar
+
+
+@decorated_functions
+def _z4nIvE3QRpik(Foo):
+    class Container(Injector):
+        foo = Foo
+
+        @value
+        @lru_cache()
+        def bar():
+            return randint(0, 1000)
+
+    return Container
+
+
+@decorated_functions
+def _q6PYNbsibDGG(Foo):
+    @value
+    @lru_cache()
+    def bar():
+        return randint(0, 1000)
+
+    return Injector(foo=Foo, bar=bar)
