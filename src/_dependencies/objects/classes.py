@@ -12,12 +12,14 @@ def _is_class(name, dependency):
 
 def _build_class_spec(name, dependency):
     if _using_object_init(dependency):
-        return _Spec(_ClassFactory(dependency), {}, set(), set(), lambda: None)
+        return _Spec(_ClassFactory(dependency), {}, set(), set(), lambda: None, False)
     else:
         name = dependency.__name__ + "." + "__init__"
         owner = f"{dependency.__name__!r} class"
         args, required, optional = _method_args(dependency.__init__, name, owner)
-        return _Spec(_ClassFactory(dependency), args, required, optional, lambda: None)
+        return _Spec(
+            _ClassFactory(dependency), args, required, optional, lambda: None, False
+        )
 
 
 def _using_object_init(cls):
@@ -36,7 +38,7 @@ class _ClassFactory:
         for argument in kwargs.values():
             if isinstance(argument, _IsScope):
                 raise DependencyError(no_depend_nested_injector_template)
-        return self.cls(**kwargs)
+        return self.cls(**kwargs), None
 
 
 # Messages.

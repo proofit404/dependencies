@@ -4,16 +4,16 @@ from _dependencies.graph import _Graph
 from _dependencies.lazy import _LazyGraph
 from _dependencies.objects.nested import _InjectorTypeType
 from _dependencies.scope import _Scope
+from _dependencies.stack import _Stack
 
 
 class _InjectorType(_InjectorTypeType):
     def __new__(cls, class_name, bases, namespace):
         if not bases:
             namespace["__dependencies__"] = _Graph()
+            namespace["__context_stack__"] = _Stack()
             # Doctest module compatibility.
             namespace["__wrapped__"] = None  # pragma: no mutate
-            # Typing module compatibility.
-            namespace["_subs_tree"] = None  # pragma: no mutate
             return type.__new__(cls, class_name, bases, namespace)
         else:
             ns = {}
@@ -21,6 +21,7 @@ class _InjectorType(_InjectorTypeType):
             _check_inheritance(bases)
             _check_extension_scope(bases, namespace)
             ns["__dependencies__"] = _LazyGraph("__dependencies__", namespace)
+            ns["__context_stack__"] = _Stack()
             return type.__new__(cls, class_name, bases, ns)
 
     def __call__(cls, **kwargs):
@@ -30,14 +31,15 @@ class _InjectorType(_InjectorTypeType):
         return type(cls.__name__, (cls, other), {})
 
     def __enter__(cls):
-        scope = _Scope(cls.__name__, cls.__dependencies__)
+        enclose = cls.__context_stack__.add()
+        scope = _Scope(cls.__name__, cls.__dependencies__, enclose.before)
         return _Delegate(cls.__name__, cls.__dependencies__, scope)
 
-    def __exit__(self, exc_type, exc_value, traceback):
-        pass
+    def __exit__(cls, exc_type, exc_value, traceback):
+        cls.__context_stack__.remove()
 
     def __getattr__(cls, attrname):
-        scope = _Scope(cls.__name__, cls.__dependencies__)
+        scope = _Scope(cls.__name__, cls.__dependencies__, lambda graph, cache: None)
         delegate = _Delegate(cls.__name__, cls.__dependencies__, scope)
         return getattr(delegate, attrname)
 
