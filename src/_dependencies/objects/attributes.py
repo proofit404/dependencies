@@ -19,6 +19,7 @@ def _build_attributes_spec(name, dependency):
         origin_spec.required,
         origin_spec.optional,
         _AttributesResolve(origin_spec.factory, dependency.attrs, origin_spec.resolve),
+        False,
     )
 
 
@@ -28,10 +29,10 @@ class _AttributesFactory:
         self.attrs = attrs
 
     def __call__(self, **kwargs):
-        result = self.factory(**kwargs)
+        result, destructor = self.factory(**kwargs)
         for attr in self.attrs:
             result = getattr(result, attr)
-        return result
+        return result, destructor
 
 
 class _AttributesResolve:

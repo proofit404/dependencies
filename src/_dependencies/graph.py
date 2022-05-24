@@ -5,6 +5,7 @@ from _dependencies.exceptions import DependencyError
 class _Graph:
     def __init__(self):
         self.specs = {}
+        self.contexts = []
 
     def get(self, name):
         return self.specs.get(name)
@@ -12,6 +13,8 @@ class _Graph:
     def assign(self, name, dependency):
         _check_dunder_name(name)
         self.specs[name] = _make_dependency_spec(name, dependency)
+        if self.specs[name].is_context:
+            self.contexts.append(name)
 
     def has(self, name):
         return name in self.specs

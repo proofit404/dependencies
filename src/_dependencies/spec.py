@@ -2,7 +2,7 @@ from _dependencies.exceptions import DependencyError
 
 
 class _Spec:
-    def __init__(self, factory, args, required, optional, resolve):
+    def __init__(self, factory, args, required, optional, resolve, is_context):
         _validate_factory(factory)
         _validate_args(args, required, optional)
         _validate_resolve(resolve)
@@ -11,6 +11,7 @@ class _Spec:
         self.required = required
         self.optional = optional
         self.resolve = resolve
+        self.is_context = is_context
 
     def resolved(self):
         kind = self.resolve()

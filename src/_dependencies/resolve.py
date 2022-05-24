@@ -4,10 +4,11 @@ from _dependencies.trace import _Trace
 
 
 class _Resolver:
-    def __init__(self, graph, cache, attrname):
+    def __init__(self, graph, cache, attrname, remember):
         self.graph = graph
         self.state = _State(cache, attrname)
         self.attrname = attrname
+        self.remember = remember
 
     def resolve(self):
         try:
@@ -40,7 +41,9 @@ class _Resolver:
 
     def create(self, factory, args):
         try:
-            self.state.store(factory(**self.state.kwargs(args)))
+            result, destructor = factory(**self.state.kwargs(args))
+            self.state.store(result)
+            self.remember(destructor)
         except DependencyError as error:
             message = _Trace(self.state)
             message.add(error)

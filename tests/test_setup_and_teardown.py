@@ -1,7 +1,7 @@
 """Tests related to setup and teardown of @value decorator."""
+from collector import CodeCollector
 from dependencies import Injector
 from dependencies import value
-from helpers import CodeCollector
 
 
 setup_and_teardown = CodeCollector()

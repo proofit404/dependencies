@@ -39,6 +39,7 @@ def _build_this_spec(name, dependency):
         {"__self__"},
         set(),
         lambda: "'this'",
+        False,
     )
 
 
@@ -50,7 +51,7 @@ class _ThisFactory:
         result = __self__
         for operator, symbol in self.expression:
             result = operators[operator](result, symbol)
-        return result
+        return result, None
 
 
 def _get_attribute(instance, name):
