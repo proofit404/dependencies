@@ -1,3 +1,10 @@
+# 7.2.0 (2022-05-29)
+
+### Features
+
+- restrict sticky scopes
+  [#447](https://github.com/proofit404/dependencies/issues/447) 67fbae3
+
 ## 7.1.7 (2022-02-04)
 
 ### Bug Fixes
