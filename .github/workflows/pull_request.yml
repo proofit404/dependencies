@@ -32,6 +32,8 @@ jobs:
       - run: ./scripts/install
       - run: ./scripts/check
       - run: ./scripts/test
+        env:
+          TOX_SKIP_ENV: mutmut
       - run: ./scripts/review
         env:
           DANGER_GITHUB_API_TOKEN: Z2hwX3BZbXFOQWJXMkNkT0NwejNGS1BWZjBWZ3hTS01uSjJRSmVQbAo=
