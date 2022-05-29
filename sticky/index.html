@@ -13,7 +13,7 @@
         <link rel="canonical" href="https://proofit404.github.io/dependencies/sticky/">
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.2.15">
+      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.2.16">
     
     
       
@@ -21,7 +21,7 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.c382b1dc.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.1c3799f8.min.css">
       
         
         <link rel="stylesheet" href="../assets/stylesheets/palette.cc9b2e1e.min.css">
@@ -478,6 +478,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#sticky-scopes-restrict-dependencies" class="md-nav__link">
+    Sticky scopes restrict dependencies
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -726,6 +733,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#sticky-scopes-restrict-dependencies" class="md-nav__link">
+    Sticky scopes restrict dependencies
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -809,6 +823,7 @@ properly. But code above has a lot of design problems:</p>
 <h2 id="principles">Principles<a class="headerlink" href="#principles" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="#sticky-scopes-remember-instances">Sticky scopes remember instances</a></li>
+<li><a href="#sticky-scopes-restrict-dependencies">Sticky scopes restrict dependencies</a></li>
 </ul>
 <h3 id="sticky-scopes-remember-instances">Sticky scopes remember instances<a class="headerlink" href="#sticky-scopes-remember-instances" title="Permanent link">&para;</a></h3>
 <p><code>Injector</code> subclasses could be used as context managers to create sticky scopes.
@@ -823,6 +838,24 @@ objects from the same composition.</p>
 <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">Container</span> <span class="k">as</span> <span class="n">scope</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="n">scope</span><span class="o">.</span><span class="n">root</span> <span class="ow">is</span> <span class="n">scope</span><span class="o">.</span><span class="n">root</span>
 <span class="go">True</span>
+</code></pre></div>
+<h3 id="sticky-scopes-restrict-dependencies">Sticky scopes restrict dependencies<a class="headerlink" href="#sticky-scopes-restrict-dependencies" title="Permanent link">&para;</a></h3>
+<p>Sticky scopes restrict dependencies access in exactly same way as regular
+<code>Injector</code> subclass do. Only classes could be instantiated and returned during
+attribute access of the sticky scope object. If indirect or evaluated dependency
+would be accessed during attribute access, an error would be raised.</p>
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dependencies</span> <span class="kn">import</span> <span class="n">value</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Container</span><span class="p">(</span><span class="n">Injector</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="nd">@value</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">foo</span><span class="p">():</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="mi">1</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">Container</span> <span class="k">as</span> <span class="n">scope</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">scope</span><span class="o">.</span><span class="n">foo</span>
+<span class="gt">Traceback (most recent call last):</span>
+  <span class="c">...</span>
+<span class="gr">_dependencies.exceptions.DependencyError</span>: <span class="n">&#39;value&#39; dependencies could only be used to instantiate classes</span>
 </code></pre></div>
 <p align="center">&mdash; ⭐ &mdash;</p>
 
@@ -893,7 +926,7 @@ objects from the same composition.</p>
     <script id="__config" type="application/json">{"base": "..", "features": ["navigation.tabs"], "search": "../assets/javascripts/workers/search.2a1c317c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
     
     
-      <script src="../assets/javascripts/bundle.a6c66575.min.js"></script>
+      <script src="../assets/javascripts/bundle.3a4b43e5.min.js"></script>
       
         <script src="../javascripts/extra.js"></script>
       
