@@ -1,0 +1,41 @@
+---
+name: release
+"on":
+  push:
+    branches:
+      - release
+      - develop
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: release
+          fetch-depth: 0
+      - run: |
+          git checkout develop || true
+          git checkout $GITHUB_HEAD_REF
+      - uses: actions/setup-python@v3
+        with:
+          python-version: 3.8.12
+      - uses: actions/setup-python@v3
+        with:
+          python-version: 3.9.13
+      - uses: actions/setup-python@v3
+        with:
+          python-version: 3.10.4
+      - uses: actions/setup-python@v3
+        with:
+          python-version: pypy-3.9
+      - run: rm /opt/hostedtoolcache/PyPy/3.9.12/x64/bin/python3.9
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16.14.2
+      - run: ./scripts/install
+      - run: ./scripts/check
+      - run: ./scripts/test
+      - run: ./scripts/release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYPI_TOKEN }}

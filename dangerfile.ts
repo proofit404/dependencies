@@ -182,7 +182,7 @@ export default async (): undefined => {
       return;
     }
 
-    const issueText = issueJSON.data.body,
+    const issueText = issueJSON.data.body || "",
       issueLines = issueText.split(/\r?\n/).map((line) => line.trim());
 
     for (const line of issueLines) {

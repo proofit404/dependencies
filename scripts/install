@@ -26,9 +26,9 @@ sed -i "s/^\\(export rules_directory=\\)/export source_directory=$(echo $PWD | s
 ln -s $PWD/venv/misspell-fixer/misspell-fixer $PWD/venv/bin/misspell-fixer
 
 echo "==> Installing vale…"
-curl https://install.goreleaser.com/github.com/ValeLint/vale.sh | bash
-mv bin/vale venv/bin/
-rmdir bin
+curl -L -O https://github.com/errata-ai/vale/releases/latest/download/vale_2.17.0_Linux_64-bit.tar.gz
+tar -xvzf vale_2.17.0_Linux_64-bit.tar.gz -C venv/bin/
+rm vale_2.17.0_Linux_64-bit.tar.gz
 
 curl -L -O https://github.com/errata-ai/proselint/releases/latest/download/proselint.zip
 unzip -d venv/styles proselint.zip

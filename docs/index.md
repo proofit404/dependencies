@@ -1,10 +1,4 @@
-# Dependencies
-
-[![azure-devops-builds](https://img.shields.io/azure-devops/build/proofit404/dependencies/15?style=flat-square)](https://dev.azure.com/proofit404/dependencies/_build/latest?definitionId=15&branchName=release)
-[![azure-devops-coverage](https://img.shields.io/azure-devops/coverage/proofit404/dependencies/15?style=flat-square)](https://dev.azure.com/proofit404/dependencies/_build/latest?definitionId=15&branchName=release)
-[![pypi](https://img.shields.io/pypi/v/dependencies?style=flat-square)](https://pypi.org/project/dependencies)
-[![conda](https://img.shields.io/conda/vn/conda-forge/dependencies?style=flat-square)](https://anaconda.org/conda-forge/dependencies)
-[![python](https://img.shields.io/pypi/pyversions/dependencies?style=flat-square)](https://pypi.org/project/dependencies)
+# Dependencies [![build](https://img.shields.io/github/workflow/status/proofit404/dependencies/release?style=flat-square)](https://github.com/proofit404/dependencies/actions/workflows/release.yml?query=branch%3Arelease) [![pypi](https://img.shields.io/pypi/v/dependencies?style=flat-square)](https://pypi.org/project/dependencies)
 
 Constructor injection designed with OOP in mind.
 

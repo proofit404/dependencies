@@ -1,6 +1,6 @@
 {
   "template": "https://github.com/proofit404/python-library-template",
-  "commit": "2dd8f797481bb9f00a333f4931d1958130ae028d",
+  "commit": "805d005efe453acde4b46d88e8296f09dddfcd68",
   "checkout": null,
   "context": {
     "cookiecutter": {
@@ -18,13 +18,11 @@
       "changelog_url": "https://proofit404.github.io/dependencies/changelog",
       "twitter_url": "https://twitter.com/proofit404",
       "pypi_project": "https://pypi.org/project/dependencies",
-      "azure_definition_id": "15",
-      "azure_build_url": "https://dev.azure.com/proofit404/dependencies/_build/latest?definitionId=15&branchName=release",
-      "azure_build_badge_url": "https://img.shields.io/azure-devops/build/proofit404/dependencies/15?style=flat-square",
-      "azure_coverage_url": "https://dev.azure.com/proofit404/dependencies/_build/latest?definitionId=15&branchName=release",
-      "azure_coverage_badge_url": "https://img.shields.io/azure-devops/coverage/proofit404/dependencies/15?style=flat-square",
+      "github_workflow": "release",
+      "github_workflow_url": "https://github.com/proofit404/dependencies/actions/workflows/release.yml?query=branch%3Arelease",
+      "github_workflow_badge_url": "https://img.shields.io/github/workflow/status/proofit404/dependencies/release?style=flat-square",
       "pypi_badge_url": "https://img.shields.io/pypi/v/dependencies?style=flat-square",
-      "python_version_badge_url": "https://img.shields.io/pypi/pyversions/dependencies?style=flat-square",
+      "danger_github_api_token": "Z2hwX3BZbXFOQWJXMkNkT0NwejNGS1BWZjBWZ3hTS01uSjJRSmVQbAo=",
       "_template": "https://github.com/proofit404/python-library-template"
     }
   },

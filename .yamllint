@@ -1,5 +1,7 @@
 ---
 extends: default
+rules:
+  line-length: disable
 ignore: |
   .coverage
   .coverage.*

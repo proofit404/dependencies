@@ -1,6 +1,7 @@
 import collections
 import configparser
 import datetime
+import glob
 import itertools
 import os.path
 import platform
@@ -20,8 +21,7 @@ better_exceptions.hook()
 
 def _main():
     _virtual_environment_use_max_python()
-    _azure_install_python_interpreters()
-    _azure_release_job_use_max_base_python()
+    _github_actions_use_all_pyenv_versions()
     _tox_environments_use_all_pyenv_versions()
     _tox_environments_use_max_base_python()
     _tox_envlist_contains_all_tox_environments()
@@ -58,40 +58,41 @@ def _main():
 
 def _virtual_environment_use_max_python():
     current = tuple(map(int, platform.python_version().split(".")[0:2]))
-    version = max(_pyenv_versions())
+    version = max(_pyenv_versions())[0:2]
     assert current == version
 
 
-def _azure_install_python_interpreters():
+def _github_actions_use_all_pyenv_versions():
     versions = [
-        f"{major}.{minor}" if interpreter == "cpython" else f"{interpreter}{major}"
-        for interpreter, (major, minor) in sorted(_pyenv_interpreters())
+        ".".join(map(str, version))
+        if interpreter == "cpython"
+        else interpreter + "-" + ".".join(map(str, version))
+        for interpreter, version in sorted(_pyenv_interpreters())
     ]
-    installed = [
-        s["inputs"]["versionSpec"]
-        for s in _azure_pipelines("jobs", 0, "steps")
-        if s.get("task") == "UsePythonVersion@0"
-    ]
-    assert versions == installed
-
-
-def _azure_release_job_use_max_base_python():
-    version = ".".join(map(str, max(_pyenv_versions())))
-    installed = _azure_pipelines("jobs", 1, "steps", 0, "inputs", "versionSpec")
-    assert version == installed
+    for workflow in glob.glob(".github/workflows/*.yml"):
+        result = yaml.safe_load(open(workflow).read())
+        installed = [
+            step["with"]["python-version"]
+            for job in result["jobs"].values()
+            for step in job["steps"]
+            if step.get("uses") == "actions/setup-python@v3"
+        ]
+        assert versions == installed
 
 
 def _tox_environments_use_all_pyenv_versions():
     versions = [
-        f"py{major}{minor}" if interpreter == "cpython" else f"{interpreter}{major}"
-        for interpreter, (major, minor) in _pyenv_interpreters()
+        f"py{version[0]}{version[1]}"
+        if interpreter == "cpython"
+        else f"{interpreter}{version[0]}"
+        for interpreter, version in _pyenv_interpreters()
     ]
     envlist = _tox_envlist()
     assert set(envlist).issuperset(set(versions))
 
 
 def _tox_environments_use_max_base_python():
-    version = "python" + ".".join(map(str, max(_pyenv_versions())))
+    version = "python" + ".".join(map(str, max(_pyenv_versions())[0:2]))
     for basepython in _tox_config_values("basepython"):
         assert basepython.value == version
 
@@ -449,13 +450,6 @@ def _git_files():
     return subprocess.check_output(["git", "ls-files"]).decode().splitlines()
 
 
-def _azure_pipelines(*items):
-    result = yaml.safe_load(open("azure-pipelines.yml").read())
-    for item in items:
-        result = result[item]
-    return result
-
-
 def _tox_ini():
     ini_parser = configparser.ConfigParser()
     ini_parser.read("tox.ini")
@@ -502,7 +496,7 @@ def _pyenv_interpreters():
     for v in open(".python-version").read().splitlines():
         m = re.match(r"^([a-z]+)?([0-9.]+)", v)
         interpreter = m.group(1) or "cpython"
-        version = tuple(map(int, m.group(2).split(".")[0:2]))
+        version = tuple(map(int, m.group(2).split(".")))
         yield interpreter, version
 
 
