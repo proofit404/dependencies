@@ -1,10 +1,10 @@
 """Tests related to Injector classes written inside other Injector classes."""
 import pytest
 
+from collector import CodeCollector
 from dependencies import Injector
 from dependencies import this
 from dependencies.exceptions import DependencyError
-from helpers import CodeCollector
 
 
 multiple_places = CodeCollector()

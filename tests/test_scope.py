@@ -1,7 +1,7 @@
 """Tests related to scope object."""
+from collector import CodeCollector
 from dependencies import Injector
 from dependencies import this
-from helpers import CodeCollector
 
 
 hide_scope_attributes = CodeCollector()

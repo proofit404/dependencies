@@ -1,9 +1,9 @@
 """Tests related to scalar types."""
 import pytest
 
+from collector import CodeCollector
 from dependencies import Injector
 from dependencies.exceptions import DependencyError
-from helpers import CodeCollector
 
 
 deny_direct_resolve = CodeCollector()

@@ -31,7 +31,7 @@ module.exports = {
     [
       "@semantic-release/git",
       {
-        assets: ["docs/changelog.md", "pyproject.toml"],
+        assets: ["docs/changelog.md", "pyproject.toml", "package.json"],
       },
     ],
     [

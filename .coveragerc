@@ -6,9 +6,9 @@ source =
   dependencies
   app
   attributes
+  collector
   configuration
   examples
-  helpers
   mddoctest
   tests
 

@@ -5,9 +5,9 @@ from enum import unique
 
 import pytest
 
+from collector import CodeCollector
 from dependencies import Injector
 from dependencies.exceptions import DependencyError
-from helpers import CodeCollector
 
 
 @unique

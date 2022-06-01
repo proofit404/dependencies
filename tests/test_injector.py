@@ -3,11 +3,11 @@ from inspect import isclass
 
 import pytest
 
+from collector import CodeCollector
 from dependencies import Injector
 from dependencies import this
 from dependencies import value
 from dependencies.exceptions import DependencyError
-from helpers import CodeCollector
 
 
 def test_lambda_dependency():

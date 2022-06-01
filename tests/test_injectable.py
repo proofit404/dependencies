@@ -1,10 +1,10 @@
 """Tests related to injectable objects."""
 import pytest
 
+from collector import CodeCollector
 from dependencies import Injector
 from dependencies import value
 from dependencies.exceptions import DependencyError
-from helpers import CodeCollector
 
 
 deny_varargs = CodeCollector()

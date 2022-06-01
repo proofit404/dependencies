@@ -3,11 +3,11 @@ import inspect
 
 import pytest
 
+from collector import CodeCollector
 from dependencies import Injector
 from dependencies import Package
 from dependencies import this
 from dependencies.exceptions import DependencyError
-from helpers import CodeCollector
 
 
 provide_module = CodeCollector()

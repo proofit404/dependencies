@@ -4,10 +4,10 @@ from random import randint
 
 import pytest
 
+from collector import CodeCollector
 from dependencies import Injector
 from dependencies import value
 from dependencies.exceptions import DependencyError
-from helpers import CodeCollector
 
 
 def test_define_value():

@@ -1,10 +1,10 @@
 """Tests related to descriptor objects."""
 import pytest
 
+from collector import CodeCollector
 from dependencies import Injector
 from dependencies import Package
 from dependencies.exceptions import DependencyError
-from helpers import CodeCollector
 
 
 deny_descriptors = CodeCollector()

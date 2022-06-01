@@ -3,10 +3,10 @@ from inspect import unwrap
 
 import pytest
 
+from collector import CodeCollector
 from dependencies import Injector
 from dependencies import this
 from dependencies.exceptions import DependencyError
-from helpers import CodeCollector
 
 
 def test_attribute_getter():
