@@ -40,12 +40,13 @@ nav:
   - Usage:
       - Why: why.md
       - Usage: usage.md
-      - Sticky scopes: sticky.md
+      - Scalar types: scalar.md
       - This: this.md
+      - Nested injectors: nested.md
       - Package: package.md
       - Value: value.md
-      - Scalar types: scalar.md
-      - Nested injectors: nested.md
+      - Sticky scopes: sticky.md
+      - Setup and teardown: setup_teardown.md
       - FAQ: faq.md
   - Guides:
       - Attrs: attrs.md
