@@ -1,3 +1,10 @@
+# 7.3.0 (2022-06-03)
+
+### Features
+
+- setup and teardown of [@value](https://github.com/value) decorator
+  [#132](https://github.com/proofit404/dependencies/issues/132) df62d78
+
 # 7.2.0 (2022-05-29)
 
 ### Features
