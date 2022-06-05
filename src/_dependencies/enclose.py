@@ -7,7 +7,7 @@ class _Enclose:
 
     def add(self, function):
         if function is not None:
-            self.callbacks.append(function)
+            self.callbacks.insert(0, function)
 
     def before(self, graph, cache):
         for context in graph.contexts:
