@@ -41,11 +41,11 @@ nav:
   - Usage:
       - Why: why.md
       - Usage: usage.md
-      - Scalar types: scalar.md
       - This: this.md
       - Nested injectors: nested.md
       - Package: package.md
       - Value: value.md
+      - Direct resolve: direct_resolve.md
       - Sticky scopes: sticky.md
       - Setup and teardown: setup_teardown.md
       - FAQ: faq.md
