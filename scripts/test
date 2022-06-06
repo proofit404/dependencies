@@ -7,4 +7,4 @@ set -o pipefail
 . venv/bin/activate
 
 echo "==> Running tox…"
-tox --parallel --parallel-live
+TOX_SKIP_ENV=mutmut tox --parallel --parallel-live

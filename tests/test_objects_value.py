@@ -101,74 +101,17 @@ def _nVlMKQghCDAQ(Foo, arg):
     Injector(foo=Foo, method=arg).foo
 
 
-deny_direct_resolve = CodeCollector()
-
-
-@deny_direct_resolve.parametrize
-def test_direct_value_resolve(touch, code):
-    """Attempt to resolve value directly should raise exception.
-
-    Values are allowed to be used as dependencies for classes.
-
-    """
-    with pytest.raises(DependencyError) as exc_info:
-        touch(code(), "a")
-    expected = "'value' dependencies could only be used to instantiate classes"
-    assert str(exc_info.value) == expected
-
-
-@deny_direct_resolve
-def _n3XOmcCoWc0W():
-    class Container(Injector):
-        @value
-        def a():
-            return 1
-
-    return Container
-
-
-@deny_direct_resolve
-def _pZKCM0OCHMML():
-    @value
-    def a():
-        return 1
-
-    return Injector(a=a)
-
-
-decorated_functions = CodeCollector()
-
-
-@decorated_functions.parametrize
-def test_allow_decorated_functions(touch, code):
+def test_allow_decorated_functions(has, expect):
     """Decorators applied to functions should keep working."""
 
     class Foo:
         def __init__(self, bar):
             self.bar = bar
 
-    Container = code(Foo)
-    assert touch(Container, "foo").bar == touch(Container, "foo").bar
-
-
-@decorated_functions
-def _z4nIvE3QRpik(Foo):
-    class Container(Injector):
-        foo = Foo
-
-        @value
-        @lru_cache()  # noqa: B019
-        def bar():
-            return randint(0, 1000)
-
-    return Container
-
-
-@decorated_functions
-def _q6PYNbsibDGG(Foo):
     @value
     @lru_cache()
     def bar():
         return randint(0, 1000)
 
-    return Injector(foo=Foo, bar=bar)
+    Container = has(foo=Foo, bar=bar)
+    expect(Container).to(lambda c: c.foo.bar == c.foo.bar)

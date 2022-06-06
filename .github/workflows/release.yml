@@ -35,8 +35,6 @@ jobs:
       - run: ./scripts/install
       - run: ./scripts/check
       - run: ./scripts/test
-        env:
-          TOX_SKIP_ENV: mutmut
       - run: ./scripts/release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

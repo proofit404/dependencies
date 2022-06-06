@@ -10,7 +10,7 @@ from dependencies import value
 from dependencies.exceptions import DependencyError
 
 
-def test_lambda_dependency():
+def test_lambda_dependency(has, expect):
     """Inject lambda function."""
 
     class Foo:
@@ -20,14 +20,11 @@ def test_lambda_dependency():
         def do(self, x):
             return self.add(x, x)
 
-    class Container(Injector):
-        foo = Foo
-        add = lambda x, y: x + y  # noqa: E731
-
-    assert Container.foo.do(1) == 2
+    Container = has(foo=Foo, add=lambda x, y: x + y)
+    expect(Container).to(lambda c: c.foo.do(1) == 2)
 
 
-def test_function_dependency():
+def test_function_dependency(has, expect):
     """Inject regular function."""
 
     class Foo:
@@ -40,11 +37,8 @@ def test_function_dependency():
     def plus(x, y):
         return x + y
 
-    class Container(Injector):
-        foo = Foo
-        add = plus
-
-    assert Container.foo.do(1) == 2
+    Container = has(foo=Foo, add=plus)
+    expect(Container).to(lambda c: c.foo.do(1) == 2)
 
 
 def test_inline_dependency():
@@ -118,7 +112,7 @@ def test_do_not_instantiate_dependencies_ended_with_class():
     assert isclass(Container.bar.foo_class)
 
 
-def test_redefine_dependency():
+def test_redefine_dependency(has, expect):
     """We can redefine dependency by inheritance from the `Injector` subclass."""
 
     class Foo:
@@ -128,14 +122,9 @@ def test_redefine_dependency():
         def do(self, x):
             return self.add(x, x)
 
-    class Container(Injector):
-        foo = Foo
-        add = lambda x, y: x + y  # noqa: E731  # pragma: no cover
-
-    class WrongContainer(Container):
-        add = lambda x, y: x - y  # noqa: E731
-
-    assert WrongContainer.foo.do(1) == 0
+    Container = has(foo=Foo, add=lambda x, y: x + y)  # pragma: no cover
+    Wrong = has(Container, add=lambda x, y: x - y)
+    expect(Wrong).to(lambda c: c.foo.do(1) == 0)
 
 
 def test_override_keyword_argument_if_dependency_was_specified():
@@ -397,51 +386,18 @@ def test_show_call_dependencies_with_dir():
     assert "x" in dir(Foo(x=1))
 
 
-attribute_assignment = CodeCollector()
-
-
-@attribute_assignment.parametrize
-def test_deny_injector_attribute_assignment(touch, code):
+def test_deny_injector_attribute_assignment(has, expect):
     """Deny attribute assignment on `Injector` and its subclasses."""
-    with pytest.raises(DependencyError) as exc_info:
-        touch.assign(code(), "foo", 1)
+    Container = has(foo=1)
+    _ = expect(Container).to_raise(DependencyError).catch(attrsetter("foo", 2))
+    assert _ == "'Injector' modification is not allowed"
 
-    assert str(exc_info.value) == "'Injector' modification is not allowed"
 
-
-@attribute_assignment.parametrize
-def test_deny_injector_attribute_deletion(touch, code):
+def test_deny_injector_attribute_deletion(has, expect):
     """Deny attribute deletion on `Injector` and its subclasses."""
-    with pytest.raises(DependencyError) as exc_info:
-        touch.delete(code(), "foo")
-
-    assert str(exc_info.value) == "'Injector' modification is not allowed"
-
-
-@attribute_assignment
-def _mvT9oyJdXhzh():
-    class Container(Injector):
-        x = 1
-
-    return Container
-
-
-@attribute_assignment
-def _xhZaIhujf34t():
-    class Container(Injector):
-        foo = 1
-
-    return Container
-
-
-@attribute_assignment
-def _fXxRX4KFUc8q():
-    return Injector
-
-
-@attribute_assignment
-def _pHfF0rbEjCsV():
-    return Injector(x=1)
+    Container = has(foo=1)
+    _ = expect(Container).to_raise(DependencyError).catch(attrdeleter("foo"))
+    assert _ == "'Injector' modification is not allowed"
 
 
 def test_docstrings():
@@ -1192,3 +1148,13 @@ def _myj1ZoubR68j():
         x = 1
 
     Container()
+
+
+def attrsetter(name, value):
+    """Lazy version of set attribute."""
+    return lambda obj: setattr(obj, name, value)
+
+
+def attrdeleter(name):
+    """Lazy version of delete attribute."""
+    return lambda obj: delattr(obj, name)
