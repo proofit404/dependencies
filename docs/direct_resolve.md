@@ -1,4 +1,12 @@
-# Scalar types
+# Direct resolve
+
+## Why
+
+## Principles
+
+- [Scalar types could not be resolved directly](#scalar-types-could-not-be-resolved-directly)
+
+### Scalar types could not be resolved directly
 
 Scalar types like integer, floats, lists, or dictionaries could be used as
 dependencies for classes. But scalar types can't be resolved directly from
@@ -8,21 +16,10 @@ attribute access.
 
 >>> from dependencies import Injector
 
->>> class Foo:
-...     def __init__(self, bar):
-...         self.bar = bar
-...
-...     def __repr__(self):
-...         return f"Foo(bar={self.bar})"
-
 >>> class Container(Injector):
-...     foo = Foo
-...     bar = 1
+...     integer = 1
 
->>> Container.foo
-Foo(bar=1)
-
->>> Container.bar
+>>> Container.integer
 Traceback (most recent call last):
   ...
 _dependencies.exceptions.DependencyError: Scalar dependencies could only be used to instantiate classes
