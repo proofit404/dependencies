@@ -1,6 +1,4 @@
 """Tests related to direct resolve rules."""
-from operator import attrgetter
-
 from dependencies import Package
 from dependencies import this
 from dependencies import value
@@ -14,7 +12,7 @@ def test_direct_data_resolve(has, expect):
 
     """
     Container = has(a=1)
-    _ = expect(Container).to_raise(DependencyError).catch(attrgetter("a"))
+    _ = expect(Container).to_raise(DependencyError).catch(lambda obj: obj.a)
     assert _ == "Scalar dependencies could only be used to instantiate classes"
 
 
@@ -25,7 +23,7 @@ def test_direct_this_resolve(has, expect):
 
     """
     Container = has(a=this.b, b=1)
-    _ = expect(Container).to_raise(DependencyError).catch(attrgetter("a"))
+    _ = expect(Container).to_raise(DependencyError).catch(lambda obj: obj.a)
     assert _ == "'this' dependencies could only be used to instantiate classes"
 
 
@@ -36,7 +34,7 @@ def test_direct_nested_injector_resolve(has, expect):
 
     """
     Container = has(Nested=has(foo=1))
-    _ = expect(Container).to_raise(DependencyError).catch(attrgetter("Nested"))
+    _ = expect(Container).to_raise(DependencyError).catch(lambda obj: obj.Nested)
     assert _ == "'Injector' dependencies could only be used to instantiate classes"
 
 
@@ -52,7 +50,7 @@ def test_direct_value_resolve(has, expect):
         return 1
 
     Container = has(a=a)
-    _ = expect(Container).to_raise(DependencyError).catch(attrgetter("a"))
+    _ = expect(Container).to_raise(DependencyError).catch(lambda obj: obj.a)
     assert _ == "'value' dependencies could only be used to instantiate classes"
 
 
@@ -60,7 +58,7 @@ def test_direct_package_data_resolve(has, expect):
     """Attempt to resolve scalar types directly should raise exception."""
     examples = Package("examples")
     Container = has(a=examples.submodule.variable)
-    _ = expect(Container).to_raise(DependencyError).catch(attrgetter("a"))
+    _ = expect(Container).to_raise(DependencyError).catch(lambda obj: obj.a)
     expected = "Scalar dependencies could only be used to instantiate classes"
     assert _ == expected
 
@@ -71,4 +69,4 @@ def test_direct_package_class_resolve(has, expect):
 
     examples = Package("examples")
     Container = has(foo=examples.submodule.Foo)
-    expect(Container).to(lambda c: isinstance(c.foo, Foo))
+    expect(Container).to(lambda obj: isinstance(obj.foo, Foo))

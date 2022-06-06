@@ -9,21 +9,29 @@ from dependencies import Injector
 
 def _subclass(*args, **kwargs):
     scope = {}
-    variables = {}
+    bases = []
+    variables = []
+
+    for base in args or (Injector,):
+        lookup = _random_string()
+        bases.append(lookup)
+        scope[lookup] = base
 
     for attribute, dependency in kwargs.items():
         lookup = _random_string()
-        variables[attribute] = lookup
+        variables.append((attribute, lookup))
         scope[lookup] = dependency
 
     name = _random_string().title()
 
-    base = _random_string().title()
-    scope[base] = (args or (Injector,))[0]
+    bases = ", ".join(bases)
 
-    body = "".join(f"    {a} = {l}\n" for a, l in variables.items())
+    if variables:
+        body = "".join(f"    {a} = {l}\n" for a, l in variables)
+    else:
+        body = "    ...\n"
 
-    code = f"class {name}({base}):\n{body}"
+    code = f"class {name}({bases}):\n{body}"
 
     exec(code, scope)
 
@@ -31,7 +39,36 @@ def _subclass(*args, **kwargs):
 
 
 def _call(*args, **kwargs):
-    return (args or (Injector,))[0](**kwargs)
+    scope = {}
+    bases = []
+    variables = []
+
+    for base in args or (Injector,):
+        lookup = _random_string()
+        bases.append(lookup)
+        scope[lookup] = base
+
+    for attribute, dependency in kwargs.items():
+        lookup = _random_string()
+        variables.append((attribute, lookup))
+        scope[lookup] = dependency
+
+    name = _random_string().title()
+
+    bases = " & ".join(bases)
+
+    if variables:
+        body = "(" + ", ".join(f"{a}={l}" for a, l in variables) + ")"
+        if len(args) > 1:
+            bases = "(" + bases + ")"
+    else:
+        body = ""
+
+    code = f"{name} = {bases}{body}"
+
+    exec(code, scope)
+
+    return scope[name]
 
 
 def _random_string():

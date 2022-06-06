@@ -21,7 +21,7 @@ def test_lambda_dependency(has, expect):
             return self.add(x, x)
 
     Container = has(foo=Foo, add=lambda x, y: x + y)
-    expect(Container).to(lambda c: c.foo.do(1) == 2)
+    expect(Container).to(lambda obj: obj.foo.do(1) == 2)
 
 
 def test_function_dependency(has, expect):
@@ -38,11 +38,16 @@ def test_function_dependency(has, expect):
         return x + y
 
     Container = has(foo=Foo, add=plus)
-    expect(Container).to(lambda c: c.foo.do(1) == 2)
+    expect(Container).to(lambda obj: obj.foo.do(1) == 2)
 
 
 def test_inline_dependency():
     """Inject method defined inside Injector subclass."""
+    # FIXME: This should be purely doctest example in the markdown.
+
+    # FIXME: All direct resolve paragraphs should went into single markdown file.
+
+    # FIXME: Code collector should be removed from the codebase.
 
     class Foo:
         def __init__(self, add):
@@ -60,7 +65,7 @@ def test_inline_dependency():
     assert Container.foo.do(1) == 2
 
 
-def test_class_dependency():
+def test_class_dependency(has, expect):
     """Inject class.
 
     Instantiate class from the same scope and inject its instance.
@@ -82,13 +87,8 @@ def test_class_dependency():
         def go(self, x):
             return self.mul(x, x)
 
-    class Container(Injector):
-        foo = Foo
-        bar = Bar
-        add = lambda x, y: x + y  # noqa: E731
-        mul = lambda x, y: x * y  # noqa: E731
-
-    assert Container.foo.do(2) == 8
+    Container = has(foo=Foo, bar=Bar, add=lambda x, y: x + y, mul=lambda x, y: x * y)
+    expect(Container).to(lambda obj: obj.foo.do(2) == 8)
 
 
 def test_do_not_instantiate_dependencies_ended_with_class():
@@ -124,7 +124,7 @@ def test_redefine_dependency(has, expect):
 
     Container = has(foo=Foo, add=lambda x, y: x + y)  # pragma: no cover
     Wrong = has(Container, add=lambda x, y: x - y)
-    expect(Wrong).to(lambda c: c.foo.do(1) == 0)
+    expect(Wrong).to(lambda obj: obj.foo.do(1) == 0)
 
 
 def test_override_keyword_argument_if_dependency_was_specified():
@@ -388,16 +388,20 @@ def test_show_call_dependencies_with_dir():
 
 def test_deny_injector_attribute_assignment(has, expect):
     """Deny attribute assignment on `Injector` and its subclasses."""
-    Container = has(foo=1)
-    _ = expect(Container).to_raise(DependencyError).catch(attrsetter("foo", 2))
-    assert _ == "'Injector' modification is not allowed"
+    assert "'Injector' modification is not allowed" == (
+        expect(has(foo=1))
+        .to_raise(DependencyError)
+        .catch(lambda obj: setattr(obj, "foo", 2))
+    )
 
 
 def test_deny_injector_attribute_deletion(has, expect):
     """Deny attribute deletion on `Injector` and its subclasses."""
-    Container = has(foo=1)
-    _ = expect(Container).to_raise(DependencyError).catch(attrdeleter("foo"))
-    assert _ == "'Injector' modification is not allowed"
+    assert "'Injector' modification is not allowed" == (
+        expect(has(foo=1))
+        .to_raise(DependencyError)
+        .catch(lambda obj: delattr(obj, "foo"))
+    )
 
 
 def test_docstrings():
@@ -754,11 +758,7 @@ def _qDSvtJ7LHoNl(times):
     return e
 
 
-multiple_inheritance = CodeCollector()
-
-
-@multiple_inheritance.parametrize
-def test_multiple_inheritance(code):
+def test_multiple_inheritance(has, expect):
     """We can mix injector together."""
 
     class Foo:
@@ -772,38 +772,11 @@ def test_multiple_inheritance(code):
         def __init__(self, bar):
             self.bar = bar
 
-    class FooContainer(Injector):
-        foo = Foo
-
-    class BarContainer(Injector):
-        bar = Bar
-
-    class BazContainer(Injector):
-        baz = Baz
-
-    foo = code(FooContainer, BarContainer, BazContainer)
-
-    assert isinstance(foo, Foo)
+    Container = has(has(foo=Foo), has(bar=Bar), has(baz=Baz))
+    expect(Container).to(lambda obj: isinstance(obj.baz.bar.foo, Foo))
 
 
-@multiple_inheritance
-def _edf946cc6077(FooContainer, BarContainer, BazContainer):
-    class Container(FooContainer, BarContainer, BazContainer):
-        pass
-
-    return Container.baz.bar.foo
-
-
-@multiple_inheritance
-def _efdc426cd096(FooContainer, BarContainer, BazContainer):
-    return (FooContainer & BarContainer & BazContainer).baz.bar.foo
-
-
-inheritance_order = CodeCollector("expected", "code")
-
-
-@inheritance_order.parametrize
-def test_multiple_inheritance_injectors_order(expected, code):
+def test_multiple_inheritance_injectors_order(has, expect):
     """Order of `Injector` subclasses should affect injection result.
 
     `Injector` which comes first in the subclass bases or inplace creation must have
@@ -815,40 +788,11 @@ def test_multiple_inheritance_injectors_order(expected, code):
         def __init__(self, x):
             self.x = x
 
-    class Container1(Injector):
-        foo = Foo
-        x = 1
+    Container = has(has(foo=Foo, x=1), has(x=2), has(x=3))
+    expect(Container).to(lambda obj: obj.foo.x == 1)
 
-    class Container2(Injector):
-        x = 2
-
-    class Container3(Injector):
-        x = 3
-
-    value = code(Container1, Container2, Container3)
-
-    assert expected == value
-
-
-@inheritance_order(1)
-def _aa10c7747a1f(Container1, Container2, Container3):
-    class Container(Container1, Container2, Container3):
-        pass
-
-    return Container.foo.x
-
-
-@inheritance_order(4)
-def _e056e22f3fd5(Container1, Container2, Container3):
-    class Container(Container1, Container2, Container3):
-        x = 4
-
-    return Container.foo.x
-
-
-@inheritance_order(1)
-def _d851e0414bdf(Container1, Container2, Container3):
-    return (Container1 & Container2 & Container3).foo.x
+    Container = has(has(foo=Foo, x=1), has(x=2), has(x=3), x=4)
+    expect(Container).to(lambda obj: obj.foo.x == 4)
 
 
 attribute_error = CodeCollector("container_name", "code")
@@ -1148,13 +1092,3 @@ def _myj1ZoubR68j():
         x = 1
 
     Container()
-
-
-def attrsetter(name, value):
-    """Lazy version of set attribute."""
-    return lambda obj: setattr(obj, name, value)
-
-
-def attrdeleter(name):
-    """Lazy version of delete attribute."""
-    return lambda obj: delattr(obj, name)
