@@ -47,25 +47,6 @@ dependencies passed to its arguments. Result of the function was stored in the
 injection scope under the same `quiz` name. We received value from `quiz` name
 from the injection scope.
 
-## Restrictions
-
-You can't resolve value objects as main target of dependency injection. The main
-goal of `value` objects is to be evaluated dependencies for classes.
-
-```pycon
-
->>> class Container(Injector):
-...     @value
-...     def foo():
-...         return 1
-
->>> Container.foo
-Traceback (most recent call last):
-  ...
-_dependencies.exceptions.DependencyError: 'value' dependencies could only be used to instantiate classes
-
-```
-
 ## Depending on the value
 
 ```pycon

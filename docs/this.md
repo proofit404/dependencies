@@ -245,23 +245,4 @@ App(Config('https://example.com/frontend', 'https://example.com/backend'))
 
 ```
 
-## Restrictions
-
-You can't resolve this objects as main target of dependency injection. The main
-goal of `this` object is to point to real dependencies for classes. For example,
-if they are located in the attribute with a different name.
-
-```pycon
-
->>> class Container(Injector):
-...     foo = this.bar
-...     bar = 1
-
->>> Container.foo
-Traceback (most recent call last):
-  ...
-_dependencies.exceptions.DependencyError: 'this' dependencies could only be used to instantiate classes
-
-```
-
 <p align="center">&mdash; ⭐ &mdash;</p>

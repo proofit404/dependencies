@@ -98,29 +98,4 @@ is actually happen. You can inject bound methods with exactly one line.
 
 ```
 
-## Restrictions
-
-Package objects will conform its resolution rules with imported objects. If
-package dependency points to the class, it's allowed to resolve such dependency
-directly. If package object points to the scalar type for example, it'll raise
-exception if you tries to resolve such dependency directly.
-
-```pycon
-
->>> examples = Package("examples")
-
->>> class Container(Injector):
-...     foo = examples.submodule.Foo
-...     variable = examples.submodule.variable
-
->>> Container.foo  # doctest: +ELLIPSIS
-<examples.submodule.Foo object at 0x...>
-
->>> Container.variable
-Traceback (most recent call last):
-  ...
-_dependencies.exceptions.DependencyError: Scalar dependencies could only be used to instantiate classes
-
-```
-
 <p align="center">&mdash; ⭐ &mdash;</p>
