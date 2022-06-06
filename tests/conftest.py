@@ -1,4 +1,4 @@
 """Settings module for the Py.test tool."""
 
 
-pytest_plugins = ["attributes"]
+pytest_plugins = ["expect"]

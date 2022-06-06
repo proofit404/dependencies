@@ -444,36 +444,6 @@ def _bd05271fb831(Foo):
     Injector(foo=Foo, bar=(this << 1)).foo
 
 
-deny_direct_resolve = CodeCollector()
-
-
-@deny_direct_resolve.parametrize
-def test_direct_this_resolve(touch, code):
-    """Attempt to resolve this directly should raise exception.
-
-    This objects are allowed to be used as dependencies for classes.
-
-    """
-    with pytest.raises(DependencyError) as exc_info:
-        touch(code(), "a")
-    expected = "'this' dependencies could only be used to instantiate classes"
-    assert str(exc_info.value) == expected
-
-
-@deny_direct_resolve
-def _thSaFsw1po8I():
-    class Container(Injector):
-        a = this.b
-        b = 1
-
-    return Container
-
-
-@deny_direct_resolve
-def _vIWzcvYG5qs5():
-    return Injector(a=this.b, b=1)
-
-
 def test_this_inspect():
     """This should not trigger inspect unwrap infinite loop."""
     assert isinstance(unwrap(this), this.__class__)
