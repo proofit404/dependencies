@@ -1,3 +1,10 @@
+# 7.4.0 (2022-06-06)
+
+### Features
+
+- teardown steps executed in opposite order to setup steps
+  [#547](https://github.com/proofit404/dependencies/issues/547) 6b477e7
+
 # 7.3.0 (2022-06-03)
 
 ### Features
