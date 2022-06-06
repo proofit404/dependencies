@@ -330,34 +330,6 @@ def _fmreItIa9y2J():
     return submodule.Foo
 
 
-deny_direct_resolve = CodeCollector()
-
-
-@deny_direct_resolve.parametrize
-def test_direct_data_resolve(touch, code):
-    """Attempt to resolve scalar types directly should raise exception."""
-    with pytest.raises(DependencyError) as exc_info:
-        touch(code(), "a")
-    expected = "Scalar dependencies could only be used to instantiate classes"
-    assert str(exc_info.value) == expected
-
-
-@deny_direct_resolve
-def _so9SmIf2QZ5l():
-    examples = Package("examples")
-
-    class Container(Injector):
-        a = examples.submodule.variable
-
-    return Container
-
-
-@deny_direct_resolve
-def _gMiVaHHt4rJG():
-    examples = Package("examples")
-    return Injector(a=examples.submodule.variable)
-
-
 injector_pointer = CodeCollector()
 
 

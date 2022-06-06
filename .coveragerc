@@ -7,10 +7,10 @@ source =
   _dependencies
   dependencies
   app
-  attributes
   collector
   configuration
   examples
+  expect
   mddoctest
   tests
 

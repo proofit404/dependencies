@@ -401,21 +401,25 @@ attribute_assignment = CodeCollector()
 
 
 @attribute_assignment.parametrize
-def test_deny_injector_attribute_assignment(touch, code):
+def test_deny_injector_attribute_assignment(code, expect):
     """Deny attribute assignment on `Injector` and its subclasses."""
-    with pytest.raises(DependencyError) as exc_info:
-        touch.assign(code(), "foo", 1)
 
-    assert str(exc_info.value) == "'Injector' modification is not allowed"
+    @expect(code())
+    def to_be(it):
+        with pytest.raises(DependencyError) as exc_info:
+            it.foo = 1
+        assert str(exc_info.value) == "'Injector' modification is not allowed"
 
 
 @attribute_assignment.parametrize
-def test_deny_injector_attribute_deletion(touch, code):
+def test_deny_injector_attribute_deletion(code, expect):
     """Deny attribute deletion on `Injector` and its subclasses."""
-    with pytest.raises(DependencyError) as exc_info:
-        touch.delete(code(), "foo")
 
-    assert str(exc_info.value) == "'Injector' modification is not allowed"
+    @expect(code())
+    def to_be(it):
+        with pytest.raises(DependencyError) as exc_info:
+            del it.foo
+        assert str(exc_info.value) == "'Injector' modification is not allowed"
 
 
 @attribute_assignment
