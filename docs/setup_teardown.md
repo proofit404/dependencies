@@ -42,6 +42,7 @@ such low-level logic.
 ## Principles
 
 - [`@value` object could `yield` value](#value-object-could-yield-value)
+- [Teardown happens in opposite order to setup](#teardown-happens-in-opposite-order-to-setup)
 
 ### `@value` object could `yield` value
 
@@ -92,5 +93,56 @@ tear down logic in this place.
 
 It's a similar approach that `pytest` project takes with it's
 [fixtures](https://docs.pytest.org/en/latest/how-to/fixtures.html#yield-fixtures-recommended).
+
+### Teardown happens in opposite order to setup
+
+As we mention previously, setup and teardown logic usually used to do side
+effects. The order in which you do side effect is not the same in which you undo
+side effects. A database transaction can't be committed or rollback after
+database connection was destroyed.
+
+For that purpose `dependencies` would execute teardown steps in exactly opposite
+order to the setup steps. You could rely of this assumption during design of
+your value objects internals. It's a contract guarantied by our API.
+
+```pycon
+
+>>> from app.database import Cursor, Connection
+
+>>> @dataclass
+... class Account:
+...     cursor: Cursor
+...
+...     def suspend(self, nick):
+...         self.cursor.select(name=nick).delete()
+
+
+>>> class App(Injector):
+...     account = Account
+...
+...     @value
+...     def cursor(connection):
+...         cur = Cursor(connection)
+...         cur.begin_transaction()
+...         yield cur
+...         cur.commit_transaction()
+...
+...     @value
+...     def connection():
+...         db = Connection()
+...         db.connect()
+...         yield db
+...         db.disconnect()
+
+>>> with App as app:
+...     app.account.suspend('Jeff')
+CONNECT TO production;
+BEGIN TRANSACTION;
+SELECT * FROM users FOR UPDATE;
+DELETE FROM users;
+COMMIT TRANSACTION;
+DISCONNECT FROM production;
+
+```
 
 <p align="center">&mdash; ⭐ &mdash;</p>
