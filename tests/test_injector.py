@@ -388,20 +388,14 @@ def test_show_call_dependencies_with_dir():
 
 def test_deny_injector_attribute_assignment(has, expect):
     """Deny attribute assignment on `Injector` and its subclasses."""
-    assert "'Injector' modification is not allowed" == (
-        expect(has(foo=1))
-        .to_raise(DependencyError)
-        .catch(lambda obj: setattr(obj, "foo", 2))
-    )
+    _ = expect(has(foo=1)).to_raise().catch(lambda obj: setattr(obj, "foo", 2))
+    assert _ == "'Injector' modification is not allowed"
 
 
 def test_deny_injector_attribute_deletion(has, expect):
     """Deny attribute deletion on `Injector` and its subclasses."""
-    assert "'Injector' modification is not allowed" == (
-        expect(has(foo=1))
-        .to_raise(DependencyError)
-        .catch(lambda obj: delattr(obj, "foo"))
-    )
+    _ = expect(has(foo=1)).to_raise().catch(lambda obj: delattr(obj, "foo"))
+    assert _ == "'Injector' modification is not allowed"
 
 
 def test_docstrings():
@@ -805,7 +799,7 @@ Can not resolve attribute 'test':
 {Container.__name__}.test
     """.strip()
 
-    _ = expect(Container).to_raise(DependencyError).catch(lambda obj: obj.test)
+    _ = expect(Container).to_raise().catch(lambda obj: obj.test)
     assert _ == expected
 
 

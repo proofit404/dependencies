@@ -1,5 +1,7 @@
 import pytest
 
+from dependencies.exceptions import DependencyError
+
 
 class _Identity:
     def __init__(self, container):
@@ -8,7 +10,7 @@ class _Identity:
     def to(self, predicate):
         assert predicate(self.container)
 
-    def to_raise(self, error):
+    def to_raise(self, error=DependencyError):
         self.error = error
         return self
 
@@ -26,7 +28,7 @@ class _Context:
         with self.container as scope:
             assert predicate(scope)
 
-    def to_raise(self, error):
+    def to_raise(self, error=DependencyError):
         self.error = error
         return self
 
