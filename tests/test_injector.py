@@ -795,45 +795,18 @@ def test_multiple_inheritance_injectors_order(has, expect):
     expect(Container).to(lambda obj: obj.foo.x == 4)
 
 
-attribute_error = CodeCollector("container_name", "code")
-
-
-@attribute_error.parametrize
-def test_attribute_error(container_name, code):
+def test_attribute_error(has, expect):
     """Raise `DependencyError` if we can't find dependency."""
-    with pytest.raises(DependencyError) as exc_info:
-        code()
+    Container = has(has(x=1), y=2)
 
     expected = f"""
 Can not resolve attribute 'test':
 
-{container_name}.test
+{Container.__name__}.test
     """.strip()
 
-    assert str(exc_info.value) == expected
-
-
-@attribute_error("Foo")
-def _c58b054bfcd0():
-    class Foo(Injector):
-        x = 1
-
-    Foo.test
-
-
-@attribute_error("Injector")
-def _f9c50c81e8c9():
-    Foo = Injector(x=1)
-
-    Foo.test
-
-
-@attribute_error("Foo")
-def _e2f16596a652():
-    class Foo(Injector):
-        x = 1
-
-    Foo(y=2).test
+    _ = expect(Container).to_raise(DependencyError).catch(lambda obj: obj.test)
+    assert _ == expected
 
 
 incomplete_dependencies = CodeCollector("container_name", "code")
