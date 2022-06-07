@@ -2,7 +2,6 @@
 from dependencies import Package
 from dependencies import this
 from dependencies import value
-from dependencies.exceptions import DependencyError
 
 
 def test_direct_data_resolve(has, expect):

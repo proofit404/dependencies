@@ -803,46 +803,24 @@ Can not resolve attribute 'test':
     assert _ == expected
 
 
-incomplete_dependencies = CodeCollector("container_name", "code")
-
-
-@incomplete_dependencies.parametrize
-def test_incomplete_dependencies_error(container_name, code):
+def test_incomplete_dependencies_error(has, expect):
     """Raise `DependencyError` if we can't find dependency."""
-    with pytest.raises(DependencyError) as exc_info:
-        code()
 
-    expected = f"""
-Can not resolve attribute 'test':
-
-{container_name}.bar
-  {container_name}.test
-    """.strip()
-
-    assert str(exc_info.value) == expected
-
-
-@incomplete_dependencies("Foo")
-def _c4e7ecf75167():
-    class Bar:
-        def __init__(self, test, two=2):
-            raise RuntimeError
-
-    class Foo(Injector):
-        bar = Bar
-
-    Foo.bar
-
-
-@incomplete_dependencies("Injector")
-def _dmsMgYqbsHgB():
     class Bar:
         def __init__(self, test):
             raise RuntimeError
 
-    Foo = Injector(bar=Bar)
+    Container = has(bar=Bar)
 
-    Foo.bar
+    expected = f"""
+Can not resolve attribute 'test':
+
+{Container.__name__}.bar
+  {Container.__name__}.test
+    """.strip()
+
+    _ = expect(Container).to_raise().catch(lambda obj: obj.bar)
+    assert _ == expected
 
 
 circle_dependencies = CodeCollector("stack_representation", "code")
