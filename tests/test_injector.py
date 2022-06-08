@@ -920,104 +920,43 @@ def test_has_attribute(has, expect):
     expect(Container).to(lambda obj: "bar" not in obj)
 
 
-subclasses_only = CodeCollector()
-
-
-@subclasses_only.parametrize
-def test_multiple_inheritance_deny_regular_classes(code):
+def test_multiple_inheritance_deny_regular_classes(has, expect):
     """Only `Injector` subclasses are allowed to be used in the inheritance."""
-
+    # FIXME: Figure out how to use this with `expect`.
     class Foo:
         pass
 
     with pytest.raises(DependencyError) as exc_info:
-        code(Foo)
+        has(Injector, Foo)
 
     message = str(exc_info.value)
     assert message == "Multiple inheritance is allowed for Injector subclasses only"
 
 
-@subclasses_only
-def _f1583394f1a6(Foo):
-    class Bar(Injector, Foo):
-        pass
-
-
-@subclasses_only
-def _b51814725d07(Foo):
-    Injector & Foo
-
-
-deny_magic_methods = CodeCollector()
-
-
-@deny_magic_methods.parametrize
-def test_deny_magic_methods_injection(code):
+def test_deny_magic_methods_injection(has, expect):
     """`Injector` doesn't accept magic methods."""
 
     class Foo:
         pass
 
-    with pytest.raises(DependencyError) as exc_info:
-        code(Foo)
-
-    assert str(exc_info.value) == "Magic methods are not allowed"
-
-
-@deny_magic_methods
-def _e78bf771747c(Foo):
-    class Container(Injector):
-        foo = Foo
-
-        def __eq__(self, other):
-            raise RuntimeError
-
-    Container.foo
-
-
-@deny_magic_methods
-def _e34b88041f64(Foo):
     def eq(self, other):
         raise RuntimeError
 
-    Injector(foo=Foo, __eq__=eq).foo
+    Container = has(foo=Foo, __eq__=eq)
+    _ = expect(Container).to_raise().catch(lambda obj: obj.foo)
+    assert _ == "Magic methods are not allowed"
 
 
-deny_empty_scope = CodeCollector()
-
-
-@deny_empty_scope.parametrize
-def test_deny_empty_scope_extension(code):
+def test_deny_empty_scope_extension(has, expect):
     """`Injector` subclasses can't extend scope with empty subset."""
+    # FIXME: Figure out how to use this with `expect`.
+
     with pytest.raises(DependencyError) as exc_info:
-        code()
+        has()
 
     assert str(exc_info.value) == "Extension scope can not be empty"
 
+    with pytest.raises(DependencyError) as exc_info:
+        has(has(x=1))
 
-@deny_empty_scope
-def _fQl3MI95Y1Zi():
-    class Container(Injector):
-        pass
-
-
-@deny_empty_scope
-def _pdnQASIDVq2V():
-    Injector()
-
-
-@deny_empty_scope
-def _aWNEsKRIx12r():
-    class Container(Injector):
-        x = 1
-
-    class SubContainer(Container):
-        pass
-
-
-@deny_empty_scope
-def _myj1ZoubR68j():
-    class Container(Injector):
-        x = 1
-
-    Container()
+    assert str(exc_info.value) == "Extension scope can not be empty"

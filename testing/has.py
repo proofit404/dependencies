@@ -61,8 +61,10 @@ def _call(*args, **kwargs):
         body = "(" + ", ".join(f"{a}={l}" for a, l in variables) + ")"
         if len(args) > 1:
             bases = "(" + bases + ")"
-    else:
+    elif len(args) > 1:
         body = ""
+    else:
+        body = "()"
 
     code = f"{name} = {bases}{body}"
 
