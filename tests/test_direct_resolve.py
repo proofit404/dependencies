@@ -12,7 +12,7 @@ def test_direct_data_resolve(has, expect):
     """
     message = "Scalar dependencies could only be used to instantiate classes"
     Container = has(a=1)
-    expect(Container).to_raise(message).when(lambda obj: obj.a)
+    expect(Container).to_raise(message).when("obj.a")
 
 
 def test_direct_this_resolve(has, expect):
@@ -23,7 +23,7 @@ def test_direct_this_resolve(has, expect):
     """
     message = "'this' dependencies could only be used to instantiate classes"
     Container = has(a=this.b, b=1)
-    expect(Container).to_raise(message).when(lambda obj: obj.a)
+    expect(Container).to_raise(message).when("obj.a")
 
 
 def test_direct_nested_injector_resolve(has, expect):
@@ -34,7 +34,7 @@ def test_direct_nested_injector_resolve(has, expect):
     """
     message = "'Injector' dependencies could only be used to instantiate classes"
     Container = has(Nested=has(foo=1))
-    expect(Container).to_raise(message).when(lambda obj: obj.Nested)
+    expect(Container).to_raise(message).when("obj.Nested")
 
 
 def test_direct_value_resolve(has, expect):
@@ -50,7 +50,7 @@ def test_direct_value_resolve(has, expect):
         return 1
 
     Container = has(a=a)
-    expect(Container).to_raise(message).when(lambda obj: obj.a)
+    expect(Container).to_raise(message).when("obj.a")
 
 
 def test_direct_package_data_resolve(has, expect):
@@ -58,7 +58,7 @@ def test_direct_package_data_resolve(has, expect):
     message = "Scalar dependencies could only be used to instantiate classes"
     examples = Package("examples")
     Container = has(a=examples.submodule.variable)
-    expect(Container).to_raise(message).when(lambda obj: obj.a)
+    expect(Container).to_raise(message).when("obj.a")
 
 
 def test_direct_package_class_resolve(has, expect):
@@ -67,4 +67,4 @@ def test_direct_package_class_resolve(has, expect):
 
     examples = Package("examples")
     Container = has(foo=examples.submodule.Foo)
-    expect(Container).to(lambda obj: isinstance(obj.foo, Foo))
+    expect(Container).to("isinstance(obj.foo, Foo)")

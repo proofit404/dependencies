@@ -8,20 +8,31 @@ class _Identity:
     def skip_if_context():
         pass
 
-    def __init__(self, container):
-        self.container = container
+    def __init__(self, injector):
+        self.injector = injector
 
-    def to(self, predicate):
-        assert predicate(self.container)
+    def to(self, expression):
+        code = f"assert {expression}"
+        scope = {"obj": self.injector}
+        exec(code, scope)
 
     def to_raise(self, error):
         self.error = error
         return self
 
-    def when(self, function):
-        with pytest.raises(DependencyError) as exc_info:
-            function(self.container)
-        assert str(exc_info.value) == self.error
+    def when(self, expression):
+        code = f"""
+with pytest.raises(DependencyError) as exc_info:
+    {expression}
+assert str(exc_info.value) == error
+        """.strip()
+        scope = {
+            "pytest": pytest,
+            "DependencyError": DependencyError,
+            "obj": self.injector,
+            "error": self.error,
+        }
+        exec(code, scope)
 
 
 class _Context:
@@ -29,21 +40,35 @@ class _Context:
     def skip_if_context():
         pytest.skip()
 
-    def __init__(self, container):
-        self.container = container
+    def __init__(self, injector):
+        self.injector = injector
 
-    def to(self, predicate):
-        with self.container as scope:
-            assert predicate(scope)
+    def to(self, expression):
+        code = f"""
+with injector as obj:
+    assert {expression}
+        """.strip()
+        scope = {"injector": self.injector}
+        exec(code, scope)
 
     def to_raise(self, error):
         self.error = error
         return self
 
-    def when(self, function):
-        with pytest.raises(DependencyError) as exc_info, self.container as scope:
-            function(scope)
-        assert str(exc_info.value) == self.error
+    def when(self, expression):
+        code = f"""
+with pytest.raises(DependencyError) as exc_info:
+    with injector as obj:
+        {expression}
+assert str(exc_info.value) == error
+        """.strip()
+        scope = {
+            "pytest": pytest,
+            "DependencyError": DependencyError,
+            "injector": self.injector,
+            "error": self.error,
+        }
+        exec(code, scope)
 
 
 @pytest.fixture(params=[_Identity, _Context])

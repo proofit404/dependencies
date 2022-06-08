@@ -21,7 +21,7 @@ def test_lambda_dependency(has, expect):
             return self.add(x, x)
 
     Container = has(foo=Foo, add=lambda x, y: x + y)
-    expect(Container).to(lambda obj: obj.foo.do(1) == 2)
+    expect(Container).to("obj.foo.do(1) == 2")
 
 
 def test_function_dependency(has, expect):
@@ -38,7 +38,7 @@ def test_function_dependency(has, expect):
         return x + y
 
     Container = has(foo=Foo, add=plus)
-    expect(Container).to(lambda obj: obj.foo.do(1) == 2)
+    expect(Container).to("obj.foo.do(1) == 2")
 
 
 def test_inline_dependency():
@@ -88,7 +88,7 @@ def test_class_dependency(has, expect):
             return self.mul(x, x)
 
     Container = has(foo=Foo, bar=Bar, add=lambda x, y: x + y, mul=lambda x, y: x * y)
-    expect(Container).to(lambda obj: obj.foo.do(2) == 8)
+    expect(Container).to("obj.foo.do(2) == 8")
 
 
 def test_do_not_instantiate_dependencies_ended_with_class():
@@ -124,7 +124,7 @@ def test_redefine_dependency(has, expect):
 
     Container = has(foo=Foo, add=lambda x, y: x + y)  # pragma: no cover
     Wrong = has(Container, add=lambda x, y: x - y)
-    expect(Wrong).to(lambda obj: obj.foo.do(1) == 0)
+    expect(Wrong).to("obj.foo.do(1) == 0")
 
 
 def test_override_keyword_argument_if_dependency_was_specified():
@@ -389,13 +389,15 @@ def test_show_call_dependencies_with_dir():
 def test_deny_injector_attribute_assignment(has, expect):
     """Deny attribute assignment on `Injector` and its subclasses."""
     message = "'Injector' modification is not allowed"
-    expect(has(foo=1)).to_raise(message).when(lambda obj: setattr(obj, "foo", 2))
+    Container = has(foo=1)
+    expect(Container).to_raise(message).when("obj.foo = 2")
 
 
 def test_deny_injector_attribute_deletion(has, expect):
     """Deny attribute deletion on `Injector` and its subclasses."""
     message = "'Injector' modification is not allowed"
-    expect(has(foo=1)).to_raise(message).when(lambda obj: delattr(obj, "foo"))
+    Container = has(foo=1)
+    expect(Container).to_raise(message).when("del obj.foo")
 
 
 def test_docstrings():
@@ -767,7 +769,7 @@ def test_multiple_inheritance(has, expect):
             self.bar = bar
 
     Container = has(has(foo=Foo), has(bar=Bar), has(baz=Baz))
-    expect(Container).to(lambda obj: isinstance(obj.baz.bar.foo, Foo))
+    expect(Container).to("isinstance(obj.baz.bar.foo, Foo)")
 
 
 def test_multiple_inheritance_injectors_order(has, expect):
@@ -783,10 +785,10 @@ def test_multiple_inheritance_injectors_order(has, expect):
             self.x = x
 
     Container = has(has(foo=Foo, x=1), has(x=2), has(x=3))
-    expect(Container).to(lambda obj: obj.foo.x == 1)
+    expect(Container).to("obj.foo.x == 1")
 
     Container = has(has(foo=Foo, x=1), has(x=2), has(x=3), x=4)
-    expect(Container).to(lambda obj: obj.foo.x == 4)
+    expect(Container).to("obj.foo.x == 4")
 
 
 def test_attribute_error(has, expect):
@@ -797,7 +799,7 @@ Can not resolve attribute 'test':
 
 {Container.__name__}.test
     """.strip()
-    expect(Container).to_raise(message).when(lambda obj: obj.test)
+    expect(Container).to_raise(message).when("obj.test")
 
 
 def test_incomplete_dependencies_error(has, expect):
@@ -816,7 +818,7 @@ Can not resolve attribute 'test':
   {Container.__name__}.test
     """.strip()
 
-    expect(Container).to_raise(message).when(lambda obj: obj.bar)
+    expect(Container).to_raise(message).when("obj.bar")
 
 
 circle_dependencies = CodeCollector("stack_representation", "code")
@@ -912,8 +914,8 @@ def test_has_attribute(has, expect):
     """`Injector` should support `in` statement."""
     expect.skip_if_context()
     Container = has(foo=1)
-    expect(Container).to(lambda obj: "foo" in obj)
-    expect(Container).to(lambda obj: "bar" not in obj)
+    expect(Container).to("'foo' in obj")
+    expect(Container).to("'bar' not in obj")
 
 
 def test_multiple_inheritance_deny_regular_classes(has, expect):
@@ -940,7 +942,7 @@ def test_deny_magic_methods_injection(has, expect):
         raise RuntimeError
 
     Container = has(foo=Foo, __eq__=eq)
-    expect(Container).to_raise(message).when(lambda obj: obj.foo)
+    expect(Container).to_raise(message).when("obj.foo")
 
 
 def test_deny_empty_scope_extension(has, expect):

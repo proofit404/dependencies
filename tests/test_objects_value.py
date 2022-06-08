@@ -114,4 +114,4 @@ def test_allow_decorated_functions(has, expect):
         return randint(0, 1000)
 
     Container = has(foo=Foo, bar=bar)
-    expect(Container).to(lambda c: c.foo.bar == c.foo.bar)
+    expect(Container).to("obj.foo.bar == obj.foo.bar")
