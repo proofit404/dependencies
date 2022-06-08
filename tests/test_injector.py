@@ -912,28 +912,12 @@ def _nHW3zQ0Kv3se():
     ).foo
 
 
-has_attribute = CodeCollector()
-
-
-@has_attribute.parametrize
-def test_has_attribute(code):
+def test_has_attribute(has, expect):
     """`Injector` should support `in` statement."""
-    container = code()
-    assert "foo" in container
-    assert "bar" not in container
-
-
-@has_attribute
-def _gwufxYkhURAF():
-    class Container(Injector):
-        foo = 1
-
-    return Container
-
-
-@has_attribute
-def _zlZoLka31ndk():
-    return Injector(foo=1)
+    expect.skip_if_context()
+    Container = has(foo=1)
+    expect(Container).to(lambda obj: "foo" in obj)
+    expect(Container).to(lambda obj: "bar" not in obj)
 
 
 subclasses_only = CodeCollector()

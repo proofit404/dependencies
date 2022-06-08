@@ -4,6 +4,10 @@ from dependencies.exceptions import DependencyError
 
 
 class _Identity:
+    @staticmethod
+    def skip_if_context():
+        pass
+
     def __init__(self, container):
         self.container = container
 
@@ -21,6 +25,10 @@ class _Identity:
 
 
 class _Context:
+    @staticmethod
+    def skip_if_context():
+        pytest.skip()
+
     def __init__(self, container):
         self.container = container
 
