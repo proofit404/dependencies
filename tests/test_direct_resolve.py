@@ -10,9 +10,9 @@ def test_direct_data_resolve(has, expect):
     Scalar types are allowed to be used as dependencies for classes.
 
     """
+    message = "Scalar dependencies could only be used to instantiate classes"
     Container = has(a=1)
-    _ = expect(Container).to_raise().catch(lambda obj: obj.a)
-    assert _ == "Scalar dependencies could only be used to instantiate classes"
+    expect(Container).to_raise(message).when(lambda obj: obj.a)
 
 
 def test_direct_this_resolve(has, expect):
@@ -21,9 +21,9 @@ def test_direct_this_resolve(has, expect):
     This objects are allowed to be used as dependencies for classes.
 
     """
+    message = "'this' dependencies could only be used to instantiate classes"
     Container = has(a=this.b, b=1)
-    _ = expect(Container).to_raise().catch(lambda obj: obj.a)
-    assert _ == "'this' dependencies could only be used to instantiate classes"
+    expect(Container).to_raise(message).when(lambda obj: obj.a)
 
 
 def test_direct_nested_injector_resolve(has, expect):
@@ -32,9 +32,9 @@ def test_direct_nested_injector_resolve(has, expect):
     Nested injectors are allowed to be used as this object targets.
 
     """
+    message = "'Injector' dependencies could only be used to instantiate classes"
     Container = has(Nested=has(foo=1))
-    _ = expect(Container).to_raise().catch(lambda obj: obj.Nested)
-    assert _ == "'Injector' dependencies could only be used to instantiate classes"
+    expect(Container).to_raise(message).when(lambda obj: obj.Nested)
 
 
 def test_direct_value_resolve(has, expect):
@@ -43,23 +43,22 @@ def test_direct_value_resolve(has, expect):
     Values are allowed to be used as dependencies for classes.
 
     """
+    message = "'value' dependencies could only be used to instantiate classes"
 
     @value
     def a():
         return 1
 
     Container = has(a=a)
-    _ = expect(Container).to_raise().catch(lambda obj: obj.a)
-    assert _ == "'value' dependencies could only be used to instantiate classes"
+    expect(Container).to_raise(message).when(lambda obj: obj.a)
 
 
 def test_direct_package_data_resolve(has, expect):
     """Attempt to resolve scalar types directly should raise exception."""
+    message = "Scalar dependencies could only be used to instantiate classes"
     examples = Package("examples")
     Container = has(a=examples.submodule.variable)
-    _ = expect(Container).to_raise().catch(lambda obj: obj.a)
-    expected = "Scalar dependencies could only be used to instantiate classes"
-    assert _ == expected
+    expect(Container).to_raise(message).when(lambda obj: obj.a)
 
 
 def test_direct_package_class_resolve(has, expect):

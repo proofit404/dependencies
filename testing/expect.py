@@ -14,14 +14,14 @@ class _Identity:
     def to(self, predicate):
         assert predicate(self.container)
 
-    def to_raise(self, error=DependencyError):
+    def to_raise(self, error):
         self.error = error
         return self
 
-    def catch(self, function):
-        with pytest.raises(self.error) as exc_info:
+    def when(self, function):
+        with pytest.raises(DependencyError) as exc_info:
             function(self.container)
-        return str(exc_info.value)
+        assert str(exc_info.value) == self.error
 
 
 class _Context:
@@ -36,14 +36,14 @@ class _Context:
         with self.container as scope:
             assert predicate(scope)
 
-    def to_raise(self, error=DependencyError):
+    def to_raise(self, error):
         self.error = error
         return self
 
-    def catch(self, function):
-        with pytest.raises(self.error) as exc_info, self.container as scope:
+    def when(self, function):
+        with pytest.raises(DependencyError) as exc_info, self.container as scope:
             function(scope)
-        return str(exc_info.value)
+        assert str(exc_info.value) == self.error
 
 
 @pytest.fixture(params=[_Identity, _Context])

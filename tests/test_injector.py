@@ -388,14 +388,14 @@ def test_show_call_dependencies_with_dir():
 
 def test_deny_injector_attribute_assignment(has, expect):
     """Deny attribute assignment on `Injector` and its subclasses."""
-    _ = expect(has(foo=1)).to_raise().catch(lambda obj: setattr(obj, "foo", 2))
-    assert _ == "'Injector' modification is not allowed"
+    message = "'Injector' modification is not allowed"
+    expect(has(foo=1)).to_raise(message).when(lambda obj: setattr(obj, "foo", 2))
 
 
 def test_deny_injector_attribute_deletion(has, expect):
     """Deny attribute deletion on `Injector` and its subclasses."""
-    _ = expect(has(foo=1)).to_raise().catch(lambda obj: delattr(obj, "foo"))
-    assert _ == "'Injector' modification is not allowed"
+    message = "'Injector' modification is not allowed"
+    expect(has(foo=1)).to_raise(message).when(lambda obj: delattr(obj, "foo"))
 
 
 def test_docstrings():
@@ -792,15 +792,12 @@ def test_multiple_inheritance_injectors_order(has, expect):
 def test_attribute_error(has, expect):
     """Raise `DependencyError` if we can't find dependency."""
     Container = has(has(x=1), y=2)
-
-    expected = f"""
+    message = f"""
 Can not resolve attribute 'test':
 
 {Container.__name__}.test
     """.strip()
-
-    _ = expect(Container).to_raise().catch(lambda obj: obj.test)
-    assert _ == expected
+    expect(Container).to_raise(message).when(lambda obj: obj.test)
 
 
 def test_incomplete_dependencies_error(has, expect):
@@ -812,15 +809,14 @@ def test_incomplete_dependencies_error(has, expect):
 
     Container = has(bar=Bar)
 
-    expected = f"""
+    message = f"""
 Can not resolve attribute 'test':
 
 {Container.__name__}.bar
   {Container.__name__}.test
     """.strip()
 
-    _ = expect(Container).to_raise().catch(lambda obj: obj.bar)
-    assert _ == expected
+    expect(Container).to_raise(message).when(lambda obj: obj.bar)
 
 
 circle_dependencies = CodeCollector("stack_representation", "code")
@@ -935,6 +931,7 @@ def test_multiple_inheritance_deny_regular_classes(has, expect):
 
 def test_deny_magic_methods_injection(has, expect):
     """`Injector` doesn't accept magic methods."""
+    message = "Magic methods are not allowed"
 
     class Foo:
         pass
@@ -943,8 +940,7 @@ def test_deny_magic_methods_injection(has, expect):
         raise RuntimeError
 
     Container = has(foo=Foo, __eq__=eq)
-    _ = expect(Container).to_raise().catch(lambda obj: obj.foo)
-    assert _ == "Magic methods are not allowed"
+    expect(Container).to_raise(message).when(lambda obj: obj.foo)
 
 
 def test_deny_empty_scope_extension(has, expect):
