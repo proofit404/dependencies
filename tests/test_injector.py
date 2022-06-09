@@ -10,18 +10,15 @@ from dependencies import value
 from dependencies.exceptions import DependencyError
 
 
-def test_lambda_dependency(has, expect):
+def test_lambda_dependency(let, has, expect):
     """Inject lambda function."""
-
-    class Foo:
-        def __init__(self, add):
-            self.add = add
-
-        def do(self, x):
-            return self.add(x, x)
-
-    Container = has(foo=Foo, add=lambda x, y: x + y)
-    expect(Container).to("obj.foo.do(1) == 2")
+    foo = let.cls(
+        "Foo",
+        let.defn("__init__", "self, add", "self.add = add"),
+        let.defn("do", "self, x", "return self.add(x, x)"),
+    )
+    it = has(foo=foo, add=let.fn("x, y", "x + y"))
+    expect(it).to("obj.foo.do(1) == 2")
 
 
 def test_function_dependency(has, expect):
@@ -754,22 +751,13 @@ def _qDSvtJ7LHoNl(times):
     return e
 
 
-def test_multiple_inheritance(has, expect):
+def test_multiple_inheritance(let, has, expect):
     """We can mix injector together."""
-
-    class Foo:
-        pass
-
-    class Bar:
-        def __init__(self, foo):
-            self.foo = foo
-
-    class Baz:
-        def __init__(self, bar):
-            self.bar = bar
-
-    Container = has(has(foo=Foo), has(bar=Bar), has(baz=Baz))
-    expect(Container).to("isinstance(obj.baz.bar.foo, Foo)")
+    foo = let.cls("Foo")
+    bar = let.cls("Bar", let.defn("__init__", "self, foo", "self.foo = foo"))
+    baz = let.cls("Baz", let.defn("__init__", "self, bar", "self.bar = bar"))
+    it = has(has(foo=foo), has(bar=bar), has(baz=baz))
+    expect(it).to("isinstance(obj.baz.bar.foo, Foo)")
 
 
 def test_multiple_inheritance_injectors_order(has, expect):

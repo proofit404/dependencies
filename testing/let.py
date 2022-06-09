@@ -8,7 +8,28 @@ from dependencies import value
 class Define:
     def resolve(self, module, export):
         code = f"from {module} import {export}"
-        exec(code, self.scope)
+
+    def cls(self, name, *methods):
+        if methods:
+            methods = "".join([f"    {method}\n" for method in methods])
+        else:
+            methods = "    pass"
+        code = f"""
+class {name}:
+{methods}
+        """
+        scope = {}
+        exec(code, scope)
+        return scope[name]
+
+    def defn(self, name, arg, res):
+        return f"def {name}({arg}): {res}"
+
+    def fn(self, arg, res):
+        code = f"result = lambda {arg}: {res}"
+        scope = {}
+        exec(code, scope)
+        return scope["result"]
 
     def integer(self):
         return 1

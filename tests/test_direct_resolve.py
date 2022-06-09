@@ -1,7 +1,4 @@
 """Tests related to direct resolve rules."""
-from dependencies import Package
-from dependencies import this
-from dependencies import value
 
 
 def test_direct_data_resolve(let, has, expect):
