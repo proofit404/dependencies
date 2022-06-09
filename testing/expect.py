@@ -1,38 +1,43 @@
 import pytest
 
-from dependencies.exceptions import DependencyError
-
 
 class _Identity:
     @staticmethod
     def skip_if_context():
         pass
 
-    def __init__(self, injector):
+    def __init__(self, coder):
+        self.coder = coder
+
+    def __call__(self, injector):
         self.injector = injector
+        return self
 
     def to(self, expression):
-        code = f"assert {expression}"
-        scope = {"obj": self.injector}
-        exec(code, scope)
+        self.coder.write(
+            f"""
+def test_case():
+    obj = {self.injector}
+    assert {expression}
+            """
+        )
+        self.coder.run()
 
     def to_raise(self, error):
         self.error = error
         return self
 
     def when(self, expression):
-        code = f"""
-with pytest.raises(DependencyError) as exc_info:
-    {expression}
-assert str(exc_info.value) == error
-        """.strip()
-        scope = {
-            "pytest": pytest,
-            "DependencyError": DependencyError,
-            "obj": self.injector,
-            "error": self.error,
-        }
-        exec(code, scope)
+        self.coder.write(
+            f"""
+def test_case():
+    obj = {self.injector}
+    with pytest.raises(DependencyError) as exc_info:
+        {expression}
+    assert str(exc_info.value) == {self.error!r}
+            """
+        )
+        self.coder.run()
 
 
 class _Context:
@@ -40,38 +45,41 @@ class _Context:
     def skip_if_context():
         pytest.skip()
 
-    def __init__(self, injector):
+    def __init__(self, coder):
+        self.coder = coder
+
+    def __call__(self, injector):
         self.injector = injector
+        return self
 
     def to(self, expression):
-        code = f"""
-with injector as obj:
-    assert {expression}
-        """.strip()
-        scope = {"injector": self.injector}
-        exec(code, scope)
+        self.coder.write(
+            f"""
+def test_case():
+    with {self.injector} as obj:
+        assert {expression}
+            """
+        )
+        self.coder.run()
 
     def to_raise(self, error):
         self.error = error
         return self
 
     def when(self, expression):
-        code = f"""
-with pytest.raises(DependencyError) as exc_info:
-    with injector as obj:
-        {expression}
-assert str(exc_info.value) == error
-        """.strip()
-        scope = {
-            "pytest": pytest,
-            "DependencyError": DependencyError,
-            "injector": self.injector,
-            "error": self.error,
-        }
-        exec(code, scope)
+        self.coder.write(
+            f"""
+def test_case():
+    with pytest.raises(DependencyError) as exc_info:
+        with {self.injector} as obj:
+            {expression}
+    assert str(exc_info.value) == {self.error!r}
+            """
+        )
+        self.coder.run()
 
 
 @pytest.fixture(params=[_Identity, _Context])
-def expect(request):
+def expect(request, coder):
     """Access Injector subclass in different ways."""
-    return request.param
+    return request.param(coder)

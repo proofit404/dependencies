@@ -7,7 +7,7 @@ def test_direct_data_resolve(let, has, expect):
     Scalar types are allowed to be used as dependencies for classes.
 
     """
-    it = has(a=let.integer())
+    it = has(a="1")
     message = "Scalar dependencies could only be used to instantiate classes"
     expect(it).to_raise(message).when("obj.a")
 
@@ -18,7 +18,7 @@ def test_direct_this_resolve(let, has, expect):
     This objects are allowed to be used as dependencies for classes.
 
     """
-    it = has(a=let.this("b"), b=let.integer())
+    it = has(a=let.this("b"), b="1")
     message = "'this' dependencies could only be used to instantiate classes"
     expect(it).to_raise(message).when("obj.a")
 
@@ -29,7 +29,7 @@ def test_direct_nested_injector_resolve(let, has, expect):
     Nested injectors are allowed to be used as this object targets.
 
     """
-    it = has(Nested=has(foo=let.integer()))
+    it = has(Nested=has(foo="1"))
     message = "'Injector' dependencies could only be used to instantiate classes"
     expect(it).to_raise(message).when("obj.Nested")
 
@@ -40,7 +40,7 @@ def test_direct_value_resolve(let, has, expect):
     Values are allowed to be used as dependencies for classes.
 
     """
-    it = has(a=let.value())
+    it = has(a=let.value("a", "", "return 1"))
     message = "'value' dependencies could only be used to instantiate classes"
     expect(it).to_raise(message).when("obj.a")
 

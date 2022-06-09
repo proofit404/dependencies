@@ -1,51 +1,58 @@
+from textwrap import indent
+
 import pytest
 
 from dependencies import Package
-from dependencies import this
 from dependencies import value
 
 
 class Define:
+    def __init__(self, coder):
+        self.coder = coder
+
     def resolve(self, module, export):
-        code = f"from {module} import {export}"
+        self.coder.write(
+            f"""
+from {module} import {export}
+            """
+        )
 
     def cls(self, name, *methods):
         if methods:
-            methods = "".join([f"    {method}\n" for method in methods])
+            methods = "\n".join([indent(method, "    ") for method in methods])
         else:
             methods = "    pass"
-        code = f"""
+        self.coder.write(
+            f"""
 class {name}:
 {methods}
-        """
-        scope = {}
-        exec(code, scope)
-        return scope[name]
+            """
+        )
+        return name
 
-    def defn(self, name, arg, res):
-        return f"def {name}({arg}): {res}"
+    def defn(self, name, arg, *res):
+        self.coder.write(self.fun(name, arg, *res))
+        return name
+
+    def fun(self, name, arg, *res):
+        lines = "".join(f"    {line}\n" for line in res)
+        return f"""
+def {name}({arg}):
+{lines}
+        """
 
     def fn(self, arg, res):
-        code = f"result = lambda {arg}: {res}"
-        scope = {}
-        exec(code, scope)
-        return scope["result"]
-
-    def integer(self):
-        return 1
+        return f"lambda {arg}: {res}"
 
     def this(self, arg):
-        code = f"result = this.{arg}"
-        scope = {"this": this}
-        exec(code, scope)
-        return scope["result"]
+        return f"this.{arg}"
 
-    def value(self):
-        @value
-        def a():
-            return 1
-
-        return a
+    def value(self, name, arg, *res):
+        function = self.fun(name, arg, *res).lstrip()
+        return f"""
+@value
+{function}
+        """
 
     def package(self, arg):
         module, tail = arg.split(".", 1)
@@ -59,6 +66,6 @@ result = {module}.{tail}
 
 
 @pytest.fixture()
-def let():
+def let(coder):
     """Define dependencies in different ways."""
-    return Define()
+    return Define(coder)

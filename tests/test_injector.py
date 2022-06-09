@@ -14,28 +14,23 @@ def test_lambda_dependency(let, has, expect):
     """Inject lambda function."""
     foo = let.cls(
         "Foo",
-        let.defn("__init__", "self, add", "self.add = add"),
-        let.defn("do", "self, x", "return self.add(x, x)"),
+        let.fun("__init__", "self, add", "self.add = add"),
+        let.fun("do", "self, x", "return self.add(x, x)"),
     )
     it = has(foo=foo, add=let.fn("x, y", "x + y"))
     expect(it).to("obj.foo.do(1) == 2")
 
 
-def test_function_dependency(has, expect):
+def test_function_dependency(let, has, expect):
     """Inject regular function."""
-
-    class Foo:
-        def __init__(self, add):
-            self.add = add
-
-        def do(self, x):
-            return self.add(x, x)
-
-    def plus(x, y):
-        return x + y
-
-    Container = has(foo=Foo, add=plus)
-    expect(Container).to("obj.foo.do(1) == 2")
+    foo = let.cls(
+        "Foo",
+        let.fun("__init__", "self, add", "self.add = add"),
+        let.fun("do", "self, x", "return self.add(x, x)"),
+    )
+    plus = let.defn("plus", "x, y", "return x + y")
+    it = has(foo=foo, add=plus)
+    expect(it).to("obj.foo.do(1) == 2")
 
 
 def test_inline_dependency():
