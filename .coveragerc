@@ -12,6 +12,7 @@ source =
   examples
   expect
   has
+  let
   mddoctest
   tests
 
