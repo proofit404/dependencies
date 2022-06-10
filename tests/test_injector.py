@@ -748,7 +748,7 @@ def test_multiple_inheritance(let, has, expect):
     expect(it).to("isinstance(obj.baz.bar.foo, Foo)")
 
 
-def test_multiple_inheritance_injectors_order(has, expect):
+def test_multiple_inheritance_injectors_order(let, has, expect):
     """Order of `Injector` subclasses should affect injection result.
 
     `Injector` which comes first in the subclass bases or inplace creation must have
@@ -756,15 +756,13 @@ def test_multiple_inheritance_injectors_order(has, expect):
 
     """
 
-    class Foo:
-        def __init__(self, x):
-            self.x = x
+    foo = let.cls("Foo", let.fun("__init__", "self, x", "self.x = x"))
 
-    Container = has(has(foo=Foo, x=1), has(x=2), has(x=3))
-    expect(Container).to("obj.foo.x == 1")
+    it = has(has(foo=foo, x=1), has(x=2), has(x=3))
+    expect(it).to("obj.foo.x == 1")
 
-    Container = has(has(foo=Foo, x=1), has(x=2), has(x=3), x=4)
-    expect(Container).to("obj.foo.x == 4")
+    it = has(has(foo=foo, x=1), has(x=2), has(x=3), x=4)
+    expect(it).to("obj.foo.x == 4")
 
 
 def test_attribute_error(has, expect):
