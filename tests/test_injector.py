@@ -57,30 +57,25 @@ def test_inline_dependency():
     assert Container.foo.do(1) == 2
 
 
-def test_class_dependency(has, expect):
+def test_class_dependency(let, has, expect):
     """Inject class.
 
     Instantiate class from the same scope and inject its instance.
 
     """
 
-    class Foo:
-        def __init__(self, add, bar):
-            self.add = add
-            self.bar = bar
-
-        def do(self, x):
-            return self.add(self.bar.go(x), self.bar.go(x))
-
-    class Bar:
-        def __init__(self, mul):
-            self.mul = mul
-
-        def go(self, x):
-            return self.mul(x, x)
-
-    Container = has(foo=Foo, bar=Bar, add=lambda x, y: x + y, mul=lambda x, y: x * y)
-    expect(Container).to("obj.foo.do(2) == 8")
+    foo = let.cls(
+        "Foo",
+        let.fun("__init__", "self, add, bar", "self.add = add", "self.bar = bar"),
+        let.fun("do", "self, x", "return self.add(self.bar.go(x), self.bar.go(x))"),
+    )
+    bar = let.cls(
+        "Bar",
+        let.fun("__init__", "self, mul", "self.mul = mul"),
+        let.fun("go", "self, x", "return self.mul(x, x)"),
+    )
+    it = has(foo=foo, bar=bar, add=let.fn("x, y", "x + y"), mul=let.fn("x, y", "x * y"))
+    expect(it).to("obj.foo.do(2) == 8")
 
 
 def test_do_not_instantiate_dependencies_ended_with_class():
