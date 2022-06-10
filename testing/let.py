@@ -55,14 +55,13 @@ def {name}({arg}):
         """
 
     def package(self, arg):
-        module, tail = arg.split(".", 1)
-        code = f"""
+        module = arg.split(".", 1)[0]
+        self.coder.write(
+            f"""
 {module} = Package({module!r})
-result = {module}.{tail}
-        """.strip()
-        scope = {"Package": Package}
-        exec(code, scope)
-        return scope["result"]
+            """
+        )
+        return arg
 
 
 @pytest.fixture()
