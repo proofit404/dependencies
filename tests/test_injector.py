@@ -99,19 +99,17 @@ def test_do_not_instantiate_dependencies_ended_with_class():
     assert isclass(Container.bar.foo_class)
 
 
-def test_redefine_dependency(has, expect):
+def test_redefine_dependency(let, has, expect):
     """We can redefine dependency by inheritance from the `Injector` subclass."""
 
-    class Foo:
-        def __init__(self, add):
-            self.add = add
-
-        def do(self, x):
-            return self.add(x, x)
-
-    Container = has(foo=Foo, add=lambda x, y: x + y)  # pragma: no cover
-    Wrong = has(Container, add=lambda x, y: x - y)
-    expect(Wrong).to("obj.foo.do(1) == 0")
+    foo = let.cls(
+        "Foo",
+        let.fun("__init__", "self, add", "self.add = add"),
+        let.fun("do", "self, x", "return self.add(x, x)"),
+    )
+    it = has(foo=foo, add=let.fn("x, y", "x + y"))
+    wrong = has(it, add=let.fn("x, y", "x - y"))
+    expect(wrong).to("obj.foo.do(1) == 0")
 
 
 def test_override_keyword_argument_if_dependency_was_specified():
