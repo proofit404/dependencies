@@ -34,7 +34,7 @@ def test_case():
     obj = {self.injector}
     with pytest.raises(DependencyError) as exc_info:
         {expression}
-    assert str(exc_info.value) == {self.error!r}
+    assert str(exc_info.value) == f{self.error!r}
             """
         )
         self.coder.run()
@@ -73,7 +73,7 @@ def test_case():
     with pytest.raises(DependencyError) as exc_info:
         with {self.injector} as obj:
             {expression}
-    assert str(exc_info.value) == {self.error!r}
+    assert str(exc_info.value) == f{self.error!r}
             """
         )
         self.coder.run()

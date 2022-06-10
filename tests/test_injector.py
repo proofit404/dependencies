@@ -765,15 +765,15 @@ def test_multiple_inheritance_injectors_order(let, has, expect):
     expect(it).to("obj.foo.x == 4")
 
 
-def test_attribute_error(has, expect):
+def test_missing_dependency(let, has, expect, name):
     """Raise `DependencyError` if we can't find dependency."""
-    Container = has(has(x=1), y=2)
+    it = has(has(x="1"), y="2")
     message = f"""
 Can not resolve attribute 'test':
 
-{Container.__name__}.test
+{name(it)}.test
     """.strip()
-    expect(Container).to_raise(message).when("obj.test")
+    expect(it).to_raise(message).when("obj.test")
 
 
 def test_incomplete_dependencies_error(has, expect):

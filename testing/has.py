@@ -56,3 +56,9 @@ def _random_string():
 def has(request, coder):
     """Inherit from Injector in different ways."""
     return request.param(coder)
+
+
+@pytest.fixture()
+def name():
+    """Generate expression to access Injector name."""
+    return lambda of: "{" + of + ".__name__}"
