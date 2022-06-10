@@ -742,8 +742,8 @@ def _qDSvtJ7LHoNl(times):
 def test_multiple_inheritance(let, has, expect):
     """We can mix injector together."""
     foo = let.cls("Foo")
-    bar = let.cls("Bar", let.defn("__init__", "self, foo", "self.foo = foo"))
-    baz = let.cls("Baz", let.defn("__init__", "self, bar", "self.bar = bar"))
+    bar = let.cls("Bar", let.fun("__init__", "self, foo", "self.foo = foo"))
+    baz = let.cls("Baz", let.fun("__init__", "self, bar", "self.bar = bar"))
     it = has(has(foo=foo), has(bar=bar), has(baz=baz))
     expect(it).to("isinstance(obj.baz.bar.foo, Foo)")
 
