@@ -772,26 +772,21 @@ def test_missing_dependency(let, has, expect, name):
 Can not resolve attribute 'test':
 
 {name(it)}.test
-    """.strip()
+    """
     expect(it).to_raise(message).when("obj.test")
 
 
-def test_incomplete_dependencies_error(has, expect):
+def test_incomplete_dependencies_error(let, has, expect, name):
     """Raise `DependencyError` if we can't find dependency."""
 
-    class Bar:
-        def __init__(self, test):
-            raise RuntimeError
-
-    Container = has(bar=Bar)
-
+    bar = let.cls('Bar', let.fun('__init__', 'self, test', 'raise RuntimeError'))
+    it = has(bar=bar)
     message = f"""
 Can not resolve attribute 'test':
 
-{Container.__name__}.bar
-  {Container.__name__}.test
-    """.strip()
-
+{name(it)}.bar
+  {name(it)}.test
+    """
     expect(Container).to_raise(message).when("obj.bar")
 
 

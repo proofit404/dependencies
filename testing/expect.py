@@ -24,7 +24,7 @@ def test_case():
         self.coder.run()
 
     def to_raise(self, error):
-        self.error = error
+        self.error = error.strip()
         return self
 
     def when(self, expression):
