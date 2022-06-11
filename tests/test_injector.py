@@ -778,8 +778,7 @@ Can not resolve attribute 'test':
 
 def test_incomplete_dependencies_error(let, has, expect, name):
     """Raise `DependencyError` if we can't find dependency."""
-
-    bar = let.cls('Bar', let.fun('__init__', 'self, test', 'raise RuntimeError'))
+    bar = let.cls("Bar", let.fun("__init__", "self, test", "raise RuntimeError"))
     it = has(bar=bar)
     message = f"""
 Can not resolve attribute 'test':
@@ -787,7 +786,7 @@ Can not resolve attribute 'test':
 {name(it)}.bar
   {name(it)}.test
     """
-    expect(Container).to_raise(message).when("obj.bar")
+    expect(it).to_raise(message).when("obj.bar")
 
 
 circle_dependencies = CodeCollector("stack_representation", "code")
