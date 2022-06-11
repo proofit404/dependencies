@@ -1,4 +1,7 @@
 """Tests related to the Injector classes."""
+# FIXME: All direct resolve paragraphs should went into single markdown file.
+#
+# FIXME: Code collector should be removed from the codebase.
 from inspect import isclass
 
 import pytest
@@ -33,28 +36,15 @@ def test_function_dependency(let, has, expect):
     expect(it).to("obj.foo.do(1) == 2")
 
 
-def test_inline_dependency():
+def test_inline_dependency(let, has, expect):
     """Inject method defined inside Injector subclass."""
-    # FIXME: This should be purely doctest example in the markdown.
-
-    # FIXME: All direct resolve paragraphs should went into single markdown file.
-
-    # FIXME: Code collector should be removed from the codebase.
-
-    class Foo:
-        def __init__(self, add):
-            self.add = add
-
-        def do(self, x):
-            return self.add(x, x)
-
-    class Container(Injector):
-        foo = Foo
-
-        def add(x, y):
-            return x + y
-
-    assert Container.foo.do(1) == 2
+    foo = let.cls(
+        "Foo",
+        let.fun("__init__", "self, add", "self.add = add"),
+        let.fun("do", "self, x", "return self.add(x, x)"),
+    )
+    it = has(foo=foo, add=let.fun("add", "x, y", "return x + y"))
+    expect(it).to("obj.foo.do(1) == 2")
 
 
 def test_class_dependency(let, has, expect):
@@ -894,18 +884,13 @@ def test_multiple_inheritance_deny_regular_classes(let, has, expect):
     expect(it).to_raise(message).when("obj.test")
 
 
-def test_deny_magic_methods_injection(has, expect):
+def test_deny_magic_methods_injection(let, has, expect):
     """`Injector` doesn't accept magic methods."""
+    foo = let.cls("Foo")
+    eq = let.defn("eq", "self, other", "raise RuntimeError")
+    it = has(foo=foo, __eq__=eq)
     message = "Magic methods are not allowed"
-
-    class Foo:
-        pass
-
-    def eq(self, other):
-        raise RuntimeError
-
-    Container = has(foo=Foo, __eq__=eq)
-    expect(Container).to_raise(message).when("obj.foo")
+    expect(it).to_raise(message).when("obj.foo")
 
 
 def test_deny_empty_scope_extension(has, expect):
