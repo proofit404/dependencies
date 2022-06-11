@@ -886,17 +886,12 @@ def test_has_attribute(has, expect):
     expect(Container).to("'bar' not in obj")
 
 
-def test_multiple_inheritance_deny_regular_classes(has, expect):
+def test_multiple_inheritance_deny_regular_classes(let, has, expect):
     """Only `Injector` subclasses are allowed to be used in the inheritance."""
-    # FIXME: Figure out how to use this with `expect`.
-    class Foo:
-        pass
-
-    with pytest.raises(DependencyError) as exc_info:
-        has(Injector, Foo)
-
-    message = str(exc_info.value)
-    assert message == "Multiple inheritance is allowed for Injector subclasses only"
+    foo = let.cls("Foo")
+    it = has("Injector", foo)
+    message = "Multiple inheritance is allowed for Injector subclasses only"
+    expect(it).to_raise(message).when("obj.test")
 
 
 def test_deny_magic_methods_injection(has, expect):
