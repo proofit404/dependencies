@@ -113,27 +113,20 @@ def test_override_keyword_argument_if_dependency_was_specified(
     expect(it).to("obj.foo.do(1) == 3")
 
 
-def test_preserve_keyword_argument_if_dependency_was_missed():
+def test_preserve_keyword_argument_if_dependency_was_missed(define, let, has, expect):
     """Default keyword arguments should be used if injector attribute is missing.
 
     Use constructor keyword arguments if dependency with desired name was missed in the
     injector.
 
     """
-
-    class Foo:
-        def __init__(self, add, y=1):
-            self.add = add
-            self.y = y
-
-        def do(self, x):
-            return self.add(x, self.y)
-
-    class Container(Injector):
-        foo = Foo
-        add = lambda x, y: x + y  # noqa: E731
-
-    assert Container.foo.do(1) == 2
+    foo = define.cls(
+        "Foo",
+        let.fun("__init__", "self, add, y=1", "self.add = add", "self.y = y"),
+        let.fun("do", "self, x", "return self.add(x, self.y)"),
+    )
+    it = has(foo=foo, add=let.fn("x, y", "x + y"))
+    expect(it).to("obj.foo.do(1) == 2")
 
 
 def test_preserve_missed_keyword_argument_in_the_middle():
