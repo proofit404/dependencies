@@ -129,29 +129,22 @@ def test_preserve_keyword_argument_if_dependency_was_missed(define, let, has, ex
     expect(it).to("obj.foo.do(1) == 2")
 
 
-def test_preserve_missed_keyword_argument_in_the_middle():
+def test_preserve_missed_keyword_argument_in_the_middle(define, let, has, expect):
     """Missed injector attributes could be defined in any order.
 
     Use default keyword argument and override following keyword argument since it was
     specified in the constructor.
 
     """
-
-    class Foo:
-        def __init__(self, x, y=1, z=2):
-            self.x = x
-            self.y = y
-            self.z = z
-
-        def do(self):
-            return self.x + self.y + self.z
-
-    class Container(Injector):
-        foo = Foo
-        x = 5
-        z = 1
-
-    assert Container.foo.do() == 7
+    foo = define.cls(
+        "Foo",
+        let.fun(
+            "__init__", "self, x, y=1, z=2", "self.x = x", "self.y = y", "self.z = z"
+        ),
+        let.fun("do", "self", "return self.x + self.y + self.z"),
+    )
+    it = has(foo=foo, x="5", z="1")
+    expect(it).to("obj.foo.do() == 7")
 
 
 def test_no_reuse_default_value_between_dependencies():
