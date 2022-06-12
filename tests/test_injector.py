@@ -95,28 +95,22 @@ def test_redefine_dependency(define, let, has, expect):
     expect(wrong).to("obj.foo.do(1) == 0")
 
 
-def test_override_keyword_argument_if_dependency_was_specified():
+def test_override_keyword_argument_if_dependency_was_specified(
+    define, let, has, expect
+):
     """Injector attributes takes precedence on default keyword arguments.
 
     Use specified dependency for constructor keyword arguments if dependency with
     desired name was mentioned in the injector.
 
     """
-
-    class Foo:
-        def __init__(self, add, y=1):
-            self.add = add
-            self.y = y
-
-        def do(self, x):
-            return self.add(x, self.y)
-
-    class Container(Injector):
-        foo = Foo
-        add = lambda x, y: x + y  # noqa: E731
-        y = 2
-
-    assert Container.foo.do(1) == 3
+    foo = define.cls(
+        "Foo",
+        let.fun("__init__", "self, add, y=1", "self.add = add", "self.y = y"),
+        let.fun("do", "self, x", "return self.add(x, self.y)"),
+    )
+    it = has(foo=foo, add=let.fn("x, y", "x + y"), y="2")
+    expect(it).to("obj.foo.do(1) == 3")
 
 
 def test_preserve_keyword_argument_if_dependency_was_missed():
