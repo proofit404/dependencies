@@ -168,20 +168,15 @@ Can not resolve attribute 'y':
     expect(it).to_raise(message).when("obj.foo")
 
 
-def test_class_named_argument_default_value():
+def test_class_named_argument_default_value(define, let, has, expect):
     """Allow classes as default argument values if argument name ends with `_class`."""
-
-    class Foo:
-        pass
-
-    class Bar:
-        def __init__(self, foo_class=Foo):
-            self.foo_class = foo_class
-
-    class Container(Injector):
-        bar = Bar
-
-    assert Container.bar.foo_class is Foo
+    # FIXME: Tests like this should be in a separate file.
+    foo = define.cls("Foo")
+    bar = define.cls(
+        "Bar", let.fun("__init__", "self, foo_class=Foo", "self.foo_class = foo_class")
+    )
+    it = has(bar=bar)
+    expect(it).to("obj.bar.foo_class is Foo")
 
 
 def test_injectable_without_its_own_init():
