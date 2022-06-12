@@ -147,38 +147,25 @@ def test_preserve_missed_keyword_argument_in_the_middle(define, let, has, expect
     expect(it).to("obj.foo.do() == 7")
 
 
-def test_no_reuse_default_value_between_dependencies():
+def test_no_reuse_default_value_between_dependencies(define, let, has, expect, name):
     """Deny to reuse default value of keyword argument in another dependency.
 
     Default argument of one dependency should not affect an argument of another
     dependency with the same name.
 
     """
-
-    class Foo:
-        def __init__(self, bar, x, y):
-            raise RuntimeError
-
-    class Bar:
-        def __init__(self, x, y=1):
-            pass
-
-    class Container(Injector):
-        foo = Foo
-        bar = Bar
-        x = 1
-
-    with pytest.raises(DependencyError) as exc_info:
-        Container.foo
-
-    expected = """
+    foo = define.cls(
+        "Foo", let.fun("__init__", "self, bar, x, y", "raise RuntimeError")
+    )
+    bar = define.cls("Bar", let.fun("__init__", "self, x, y=1", "pass"))
+    it = has(foo=foo, bar=bar, x="1")
+    message = f"""
 Can not resolve attribute 'y':
 
-Container.foo
-  Container.y
-    """.strip()
-
-    assert str(exc_info.value) == expected
+{name(it)}.foo
+  {name(it)}.y
+    """
+    expect(it).to_raise(message).when("obj.foo")
 
 
 def test_class_named_argument_default_value():
