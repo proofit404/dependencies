@@ -13,9 +13,9 @@ from dependencies import value
 from dependencies.exceptions import DependencyError
 
 
-def test_lambda_dependency(let, has, expect):
+def test_lambda_dependency(define, let, has, expect):
     """Inject lambda function."""
-    foo = let.cls(
+    foo = define.cls(
         "Foo",
         let.fun("__init__", "self, add", "self.add = add"),
         let.fun("do", "self, x", "return self.add(x, x)"),
@@ -24,21 +24,21 @@ def test_lambda_dependency(let, has, expect):
     expect(it).to("obj.foo.do(1) == 2")
 
 
-def test_function_dependency(let, has, expect):
+def test_function_dependency(define, let, has, expect):
     """Inject regular function."""
-    foo = let.cls(
+    foo = define.cls(
         "Foo",
         let.fun("__init__", "self, add", "self.add = add"),
         let.fun("do", "self, x", "return self.add(x, x)"),
     )
-    plus = let.defn("plus", "x, y", "return x + y")
+    plus = define.fun("plus", "x, y", "return x + y")
     it = has(foo=foo, add=plus)
     expect(it).to("obj.foo.do(1) == 2")
 
 
-def test_inline_dependency(let, has, expect):
+def test_inline_dependency(define, let, has, expect):
     """Inject method defined inside Injector subclass."""
-    foo = let.cls(
+    foo = define.cls(
         "Foo",
         let.fun("__init__", "self, add", "self.add = add"),
         let.fun("do", "self, x", "return self.add(x, x)"),
@@ -47,19 +47,19 @@ def test_inline_dependency(let, has, expect):
     expect(it).to("obj.foo.do(1) == 2")
 
 
-def test_class_dependency(let, has, expect):
+def test_class_dependency(define, let, has, expect):
     """Inject class.
 
     Instantiate class from the same scope and inject its instance.
 
     """
 
-    foo = let.cls(
+    foo = define.cls(
         "Foo",
         let.fun("__init__", "self, add, bar", "self.add = add", "self.bar = bar"),
         let.fun("do", "self, x", "return self.add(self.bar.go(x), self.bar.go(x))"),
     )
-    bar = let.cls(
+    bar = define.cls(
         "Bar",
         let.fun("__init__", "self, mul", "self.mul = mul"),
         let.fun("go", "self, x", "return self.mul(x, x)"),
@@ -68,31 +68,24 @@ def test_class_dependency(let, has, expect):
     expect(it).to("obj.foo.do(2) == 8")
 
 
-def test_do_not_instantiate_dependencies_ended_with_class():
+def test_do_not_instantiate_dependencies_ended_with_class(define, let, has, expect):
     """Do not call class constructor, if it stored with name ended `_class`.
 
     For example, `logger_class`.
 
     """
-
-    class Foo:
-        pass
-
-    class Bar:
-        def __init__(self, foo_class):
-            self.foo_class = foo_class
-
-    class Container(Injector):
-        foo_class = Foo
-        bar = Bar
-
-    assert isclass(Container.bar.foo_class)
+    define.require("inspect", "isclass")
+    foo = define.cls("Foo")
+    bar = define.cls(
+        "Bar", let.fun("__init__", "self, foo_class", "self.foo_class = foo_class")
+    )
+    it = has(foo_class=foo, bar=bar)
+    expect(it).to("isclass(obj.bar.foo_class)")
 
 
-def test_redefine_dependency(let, has, expect):
+def test_redefine_dependency(define, let, has, expect):
     """We can redefine dependency by inheritance from the `Injector` subclass."""
-
-    foo = let.cls(
+    foo = define.cls(
         "Foo",
         let.fun("__init__", "self, add", "self.add = add"),
         let.fun("do", "self, x", "return self.add(x, x)"),
@@ -729,16 +722,16 @@ def _qDSvtJ7LHoNl(times):
     return e
 
 
-def test_multiple_inheritance(let, has, expect):
+def test_multiple_inheritance(define, let, has, expect):
     """We can mix injector together."""
-    foo = let.cls("Foo")
-    bar = let.cls("Bar", let.fun("__init__", "self, foo", "self.foo = foo"))
-    baz = let.cls("Baz", let.fun("__init__", "self, bar", "self.bar = bar"))
+    foo = define.cls("Foo")
+    bar = define.cls("Bar", let.fun("__init__", "self, foo", "self.foo = foo"))
+    baz = define.cls("Baz", let.fun("__init__", "self, bar", "self.bar = bar"))
     it = has(has(foo=foo), has(bar=bar), has(baz=baz))
     expect(it).to("isinstance(obj.baz.bar.foo, Foo)")
 
 
-def test_multiple_inheritance_injectors_order(let, has, expect):
+def test_multiple_inheritance_injectors_order(define, let, has, expect):
     """Order of `Injector` subclasses should affect injection result.
 
     `Injector` which comes first in the subclass bases or inplace creation must have
@@ -746,16 +739,16 @@ def test_multiple_inheritance_injectors_order(let, has, expect):
 
     """
 
-    foo = let.cls("Foo", let.fun("__init__", "self, x", "self.x = x"))
+    foo = define.cls("Foo", let.fun("__init__", "self, x", "self.x = x"))
 
-    it = has(has(foo=foo, x=1), has(x=2), has(x=3))
+    it = has(has(foo=foo, x="1"), has(x="2"), has(x="3"))
     expect(it).to("obj.foo.x == 1")
 
-    it = has(has(foo=foo, x=1), has(x=2), has(x=3), x=4)
+    it = has(has(foo=foo, x="1"), has(x="2"), has(x="3"), x="4")
     expect(it).to("obj.foo.x == 4")
 
 
-def test_missing_dependency(let, has, expect, name):
+def test_missing_dependency(has, expect, name):
     """Raise `DependencyError` if we can't find dependency."""
     it = has(has(x="1"), y="2")
     message = f"""
@@ -766,9 +759,9 @@ Can not resolve attribute 'test':
     expect(it).to_raise(message).when("obj.test")
 
 
-def test_incomplete_dependencies_error(let, has, expect, name):
+def test_incomplete_dependencies_error(define, let, has, expect, name):
     """Raise `DependencyError` if we can't find dependency."""
-    bar = let.cls("Bar", let.fun("__init__", "self, test", "raise RuntimeError"))
+    bar = define.cls("Bar", let.fun("__init__", "self, test", "raise RuntimeError"))
     it = has(bar=bar)
     message = f"""
 Can not resolve attribute 'test':
@@ -876,18 +869,17 @@ def test_has_attribute(has, expect):
     expect(Container).to("'bar' not in obj")
 
 
-def test_multiple_inheritance_deny_regular_classes(let, has, expect):
+def test_multiple_inheritance_deny_regular_classes(define, let, has, expect):
     """Only `Injector` subclasses are allowed to be used in the inheritance."""
-    foo = let.cls("Foo")
-    it = has("Injector", foo)
+    foo = define.cls("Foo")
     message = "Multiple inheritance is allowed for Injector subclasses only"
-    expect(it).to_raise(message).when("obj.test")
+    expect().to_raise(message).when(has("Injector", foo))
 
 
-def test_deny_magic_methods_injection(let, has, expect):
+def test_deny_magic_methods_injection(define, let, has, expect):
     """`Injector` doesn't accept magic methods."""
-    foo = let.cls("Foo")
-    eq = let.defn("eq", "self, other", "raise RuntimeError")
+    foo = define.cls("Foo")
+    eq = define.fun("eq", "self, other", "raise RuntimeError")
     it = has(foo=foo, __eq__=eq)
     message = "Magic methods are not allowed"
     expect(it).to_raise(message).when("obj.foo")
