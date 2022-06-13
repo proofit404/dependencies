@@ -179,21 +179,15 @@ def test_class_named_argument_default_value(define, let, has, expect):
     expect(it).to("obj.bar.foo_class is Foo")
 
 
-def test_injectable_without_its_own_init():
+def test_injectable_without_its_own_init(define, let, has, expect):
     """Instantiate classes without it's own constructor.
 
     Inject dependencies into object subclass which doesn't specify its own `__init__`.
 
     """
-
-    class Foo:
-        def do(self):
-            return 1
-
-    class Baz(Injector):
-        foo = Foo
-
-    assert Baz.foo.do() == 1
+    foo = define.cls("Foo", let.fun("do", "self", "return 1"))
+    it = has(foo=foo)
+    expect(it).to("obj.foo.do() == 1")
 
 
 def test_injectable_with_parent_init():
