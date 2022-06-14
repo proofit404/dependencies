@@ -12,11 +12,13 @@ class Define:
     def cls(self, name, *args):
         result = self.let.cls(name, *args)
         self.coder.write(result)
+        result.defined = True
         return result
 
     def fun(self, name, params, *args):
         result = self.let.fun(name, params, *args)
         self.coder.write(result)
+        result.defined = True
         return result
 
     def package(self, arg):

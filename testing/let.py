@@ -10,6 +10,7 @@ class Class:
     def __init__(self, name, *args):
         self.name = name
         self.args = args
+        self.defined = False
 
     def __str__(self):
         return f"class {self.name}{self.bases}:\n{self.methods}\n"
@@ -45,6 +46,7 @@ class Function:
         self.name = name
         self.params = params
         self.args = args
+        self.defined = False
 
     def __str__(self):
         return f"def {self.name}({self.params}):\n{self.lines}\n"

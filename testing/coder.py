@@ -22,6 +22,7 @@ from dependencies.exceptions import *
             tests.write(code)
 
     def run(self):
+        print(self.pytester.path.joinpath("test_case.py").read_text())
         result = self.pytester.runpytest()
         assert result.ret is pytest.ExitCode.OK
         result.assert_outcomes(passed=1)

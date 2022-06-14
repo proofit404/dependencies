@@ -1,6 +1,7 @@
 from random import choice
 from random import randint
 from string import ascii_letters
+from textwrap import indent
 
 import pytest
 
@@ -16,7 +17,7 @@ class _Subclass:
         name = _random_string().title()
         bases = ", ".join(args or ("Injector",))
         if kwargs:
-            body = "".join(f"    {k} = {_ref(v)}\n" for k, v in kwargs.items())
+            body = "".join(self.ref(k, v) for k, v in kwargs.items())
         else:
             body = "    pass\n"
         self.coder.write(
@@ -27,6 +28,19 @@ class {name}({bases}):
         )
         return name
 
+    def ref(self, k, v):
+        if isinstance(v, (Class, Function)):
+            if not v.defined:
+                # FIXME: Should we replace `v.name` with `k` here?
+                # Maybe introduce `rename` method which would return
+                # brand new instance.
+                return indent(v, "    ")
+            v = v.name
+        if isinstance(v, str):
+            return f"    {k} = {v}\n"
+        else:
+            raise RuntimeError
+
 
 class _Call:
     def __init__(self, coder):
@@ -36,7 +50,7 @@ class _Call:
         name = _random_string().title()
         bases = " & ".join(args or ("Injector",))
         if kwargs:
-            body = "(" + ", ".join(f"{k}={_ref(v)}" for k, v in kwargs.items()) + ")"
+            body = "(" + ", ".join(self.ref(k, v) for k, v in kwargs.items()) + ")"
             if len(args) > 1:
                 bases = "(" + bases + ")"
         elif len(args) > 1:
@@ -50,18 +64,20 @@ class _Call:
         )
         return name
 
+    def ref(self, k, v):
+        if isinstance(v, (Class, Function)):
+            if not v.defined:
+                self.coder.write(v)
+                v.defined = True
+            v = v.name
+        if isinstance(v, str):
+            return f"{k}={v}"
+        else:
+            raise RuntimeError
+
 
 def _random_string():
     return "".join(choice(ascii_letters) for i in range(randint(8, 24)))
-
-
-def _ref(v):
-    if isinstance(v, (Class, Function)):
-        return v.name
-    elif isinstance(v, str):
-        return v
-    else:
-        raise RuntimeError
 
 
 @pytest.fixture(params=[_Subclass, _Call])
