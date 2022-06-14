@@ -1,7 +1,7 @@
 """Tests related to direct resolve rules."""
 
 
-def test_direct_data_resolve(let, has, expect):
+def test_direct_data_resolve(has, expect):
     """Attempt to resolve scalar types directly should raise exception.
 
     Scalar types are allowed to be used as dependencies for classes.
@@ -23,7 +23,7 @@ def test_direct_this_resolve(let, has, expect):
     expect(it).to_raise(message).when("obj.a")
 
 
-def test_direct_nested_injector_resolve(let, has, expect):
+def test_direct_nested_injector_resolve(has, expect):
     """Attempt to resolve nested injector directly should raise exception.
 
     Nested injectors are allowed to be used as this object targets.
@@ -45,15 +45,15 @@ def test_direct_value_resolve(let, has, expect):
     expect(it).to_raise(message).when("obj.a")
 
 
-def test_direct_package_data_resolve(let, has, expect):
+def test_direct_package_data_resolve(define, has, expect):
     """Attempt to resolve scalar types directly should raise exception."""
-    it = has(a=let.package("examples.submodule.variable"))
+    it = has(a=define.package("examples.submodule.variable"))
     message = "Scalar dependencies could only be used to instantiate classes"
     expect(it).to_raise(message).when("obj.a")
 
 
-def test_direct_package_class_resolve(let, has, expect):
+def test_direct_package_class_resolve(define, has, expect):
     """Attempt to resolve class directly should works for packages."""
-    let.resolve("examples.submodule", "Foo")
-    it = has(foo=let.package("examples.submodule.Foo"))
+    define.require("examples.submodule", "Foo")
+    it = has(foo=define.package("examples.submodule.Foo"))
     expect(it).to("isinstance(obj.foo, Foo)")
