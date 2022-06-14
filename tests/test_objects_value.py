@@ -1,7 +1,4 @@
 """Tests related to the @value object."""
-from functools import lru_cache
-from random import randint
-
 import pytest
 
 from collector import CodeCollector
@@ -101,17 +98,13 @@ def _nVlMKQghCDAQ(Foo, arg):
     Injector(foo=Foo, method=arg).foo
 
 
-def test_allow_decorated_functions(has, expect):
+def test_allow_decorated_functions(define, let, has, expect):
     """Decorators applied to functions should keep working."""
-
-    class Foo:
-        def __init__(self, bar):
-            self.bar = bar
-
-    @value
-    @lru_cache()
-    def bar():
-        return randint(0, 1000)
-
-    Container = has(foo=Foo, bar=bar)
-    expect(Container).to("obj.foo.bar == obj.foo.bar")
+    define.require("functools", "lru_cache")
+    define.require("random", "randint")
+    foo = define.cls("Foo", let.fun("__init__", "self, bar", "self.bar = bar"))
+    it = has(
+        foo=foo,
+        bar=let.fun("bar", "", "return randint(0, 1000)").dec("value", "lru_cache()"),
+    )
+    expect(it).to("obj.foo.bar == obj.foo.bar")
