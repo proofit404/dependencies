@@ -294,16 +294,16 @@ def test_show_call_dependencies_with_dir():
 
 def test_deny_injector_attribute_assignment(has, expect):
     """Deny attribute assignment on `Injector` and its subclasses."""
+    it = has(foo="1")
     message = "'Injector' modification is not allowed"
-    Container = has(foo=1)
-    expect(Container).to_raise(message).when("obj.foo = 2")
+    expect(it).to_raise(message).when("obj.foo = 2")
 
 
 def test_deny_injector_attribute_deletion(has, expect):
     """Deny attribute deletion on `Injector` and its subclasses."""
+    it = has(foo="1")
     message = "'Injector' modification is not allowed"
-    Container = has(foo=1)
-    expect(Container).to_raise(message).when("del obj.foo")
+    expect(it).to_raise(message).when("del obj.foo")
 
 
 def test_docstrings():
