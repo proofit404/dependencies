@@ -46,10 +46,17 @@ class Function:
         self.name = name
         self.params = params
         self.args = args
+        self.decorators = ""
         self.defined = False
 
+    def dec(self, *names):
+        assert not self.defined
+        for name in names:
+            self.decorators += f"@{name}\n"
+        return self
+
     def __str__(self):
-        return f"def {self.name}({self.params}):\n{self.lines}\n"
+        return f"{self.decorators}def {self.name}({self.params}):\n{self.lines}\n"
 
     @property
     def lines(self):

@@ -802,9 +802,9 @@ def _nHW3zQ0Kv3se():
 def test_has_attribute(has, expect):
     """`Injector` should support `in` statement."""
     expect.skip_if_context()
-    Container = has(foo=1)
-    expect(Container).to("'foo' in obj")
-    expect(Container).to("'bar' not in obj")
+    it = has(foo="1")
+    expect(it).to("'foo' in obj")
+    expect(it).to("'bar' not in obj")
 
 
 def test_multiple_inheritance_deny_regular_classes(define, let, has, expect):

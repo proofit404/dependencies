@@ -40,7 +40,7 @@ def test_direct_value_resolve(let, has, expect):
     Values are allowed to be used as dependencies for classes.
 
     """
-    it = has(a=let.value("a", "", "return 1"))
+    it = has(a=let.fun("a", "", "return 1").dec("value"))
     message = "'value' dependencies could only be used to instantiate classes"
     expect(it).to_raise(message).when("obj.a")
 
