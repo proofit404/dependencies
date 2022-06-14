@@ -190,40 +190,22 @@ def test_injectable_without_its_own_init(define, let, has, expect):
     expect(it).to("obj.foo.do() == 1")
 
 
-def test_injectable_with_parent_init():
+def test_injectable_with_parent_init(define, let, has, expect):
     """Inject dependencies into object which parent class define `__init__`."""
-
-    class Foo:
-        def __init__(self, x, y):
-            self.x = x
-            self.y = y
-
-    class Bar(Foo):
-        def add(self):
-            return self.x + self.y
-
-    class Baz(Injector):
-        bar = Bar
-        x = 1
-        y = 2
-
-    assert Baz.bar.add() == 3
+    foo = define.cls(
+        "Foo", let.fun("__init__", "self, x, y", "self.x = x", "self.y = y")
+    )
+    bar = define.cls("Bar", foo, let.fun("add", "self", "return self.x + self.y"))
+    it = has(bar=bar, x="1", y="2")
+    expect(it).to("obj.bar.add() == 3")
 
 
-def test_injectable_with_parent_without_init():
+def test_injectable_with_parent_without_init(define, let, has, expect):
     """Inject dependencies into object which parent doesn't define `__init__`."""
-
-    class Foo:
-        pass
-
-    class Bar(Foo):
-        def add(self):
-            return 3
-
-    class Baz(Injector):
-        bar = Bar
-
-    assert Baz.bar.add() == 3
+    foo = define.cls("Foo")
+    bar = define.cls("Bar", foo, let.fun("add", "self", "return 3"))
+    it = has(bar=bar)
+    expect(it).to("obj.bar.add() == 3")
 
 
 def test_call():

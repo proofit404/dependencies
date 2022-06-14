@@ -9,13 +9,15 @@ class Define:
     def require(self, module, export):
         self.coder.write(f"from {module} import {export}\n")
 
-    def cls(self, name, *methods):
-        self.coder.write(self.let.cls(name, *methods))
-        return name
+    def cls(self, name, *args):
+        result = self.let.cls(name, *args)
+        self.coder.write(result)
+        return result
 
-    def fun(self, name, arg, *res):
-        self.coder.write(self.let.fun(name, arg, *res))
-        return name
+    def fun(self, name, params, *args):
+        result = self.let.fun(name, params, *args)
+        self.coder.write(result)
+        return result
 
     def package(self, arg):
         module = arg.split(".", 1)[0]

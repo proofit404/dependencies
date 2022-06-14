@@ -14,7 +14,8 @@ from dependencies.exceptions import *
 
     def write(self, code):
         assert "\n" in code
-        self._write(f"\n\n{code.strip()}\n")
+        self._write("\n\n")
+        self._write(str(code))
 
     def _write(self, code):
         with self.pytester.path.joinpath("test_case.py").open("a") as tests:

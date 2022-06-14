@@ -4,6 +4,9 @@ from string import ascii_letters
 
 import pytest
 
+from let import Class
+from let import Function
+
 
 class _Subclass:
     def __init__(self, coder):
@@ -13,7 +16,7 @@ class _Subclass:
         name = _random_string().title()
         bases = ", ".join(args or ("Injector",))
         if kwargs:
-            body = "".join(f"    {k} = {v}\n" for k, v in kwargs.items())
+            body = "".join(f"    {k} = {_ref(v)}\n" for k, v in kwargs.items())
         else:
             body = "    pass\n"
         self.coder.write(
@@ -33,7 +36,7 @@ class _Call:
         name = _random_string().title()
         bases = " & ".join(args or ("Injector",))
         if kwargs:
-            body = "(" + ", ".join(f"{k}={v}" for k, v in kwargs.items()) + ")"
+            body = "(" + ", ".join(f"{k}={_ref(v)}" for k, v in kwargs.items()) + ")"
             if len(args) > 1:
                 bases = "(" + bases + ")"
         elif len(args) > 1:
@@ -50,6 +53,15 @@ class _Call:
 
 def _random_string():
     return "".join(choice(ascii_letters) for i in range(randint(8, 24)))
+
+
+def _ref(v):
+    if isinstance(v, (Class, Function)):
+        return v.name
+    elif isinstance(v, str):
+        return v
+    else:
+        raise RuntimeError
 
 
 @pytest.fixture(params=[_Subclass, _Call])
