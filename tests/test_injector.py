@@ -209,6 +209,7 @@ def test_injectable_with_parent_without_init(define, let, has, expect):
 
 
 def test_call():
+    # FIXME: Looks like we should remove this tests.
     """`Injector` subclass can produce its own subclasses with call."""
 
     class Foo(Injector):
@@ -259,27 +260,19 @@ def test_call_on_injector_directly():
     assert Injector(foo=Foo, bar=Bar, baz=1).foo.bar.baz == 1
 
 
-def test_show_common_class_attributes_with_dir():
+def test_show_common_class_attributes_with_dir(has, expect):
     """`dir` show common class attributes."""
-
-    class Foo(Injector):
-        x = 1
-        y = 2
-        z = 3
-
-    assert dir(Foo) == ["x", "y", "z"]
+    expect.skip_if_context()
+    it = has(x="1", y="2", z="3")
+    expect(it).to("dir(obj) == ['x', 'y', 'z']")
 
 
-def test_show_injected_dependencies_with_dir_once():
+def test_show_injected_dependencies_with_dir_once(has, expect):
     """Do not repeat injected dependencies in the inheritance chain."""
-
-    class Foo(Injector):
-        x = 1
-
-    class Bar(Foo):
-        x = 2
-
-    assert dir(Bar).count("x") == 1
+    expect.skip_if_context()
+    foo = has(x="1")
+    bar = has(foo, x="2")
+    expect(bar).to("dir(obj).count('x') == 1")
 
 
 def test_show_call_dependencies_with_dir():
