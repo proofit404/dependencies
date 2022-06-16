@@ -79,7 +79,7 @@ def test_case():
         self.coder.run()
 
 
-@pytest.fixture(params=[_Identity, _Context])
+@pytest.fixture(params=[_Identity, _Context], ids=["pass", "context"])
 def expect(request, coder):
     """Access Injector subclass in different ways."""
     return request.param(coder)

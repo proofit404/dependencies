@@ -80,7 +80,7 @@ def _random_string():
     return "".join(choice(ascii_letters) for i in range(randint(8, 24)))
 
 
-@pytest.fixture(params=[_Subclass, _Call])
+@pytest.fixture(params=[_Subclass, _Call], ids=["class", "call"])
 def has(request, coder):
     """Inherit from Injector in different ways."""
     return request.param(coder)

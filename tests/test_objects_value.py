@@ -6,25 +6,12 @@ from dependencies import value
 from dependencies.exceptions import DependencyError
 
 
-def test_define_value():
+def test_define_value(define, let, has, expect):
     """Evaluate @value decorated function during dependency injection process."""
-
-    class Get:
-        def __init__(self, result):
-            self.result = result
-
-    class Container(Injector):
-
-        get = Get
-        foo = 1
-        bar = 2
-        baz = 3
-
-        @value
-        def result(foo, bar, baz):
-            return foo + bar + baz
-
-    assert Container.get.result == 6
+    get = define.cls("Get", let.fun("__init__", "self, result", "self.result = result"))
+    result = let.fun("result", "foo, bar, baz", "return foo + bar + baz").dec("value")
+    it = has(get=get, result=result, foo="1", bar="2", baz="3")
+    expect(it).to("obj.get.result == 6")
 
 
 def test_keyword_arguments():
