@@ -5,8 +5,8 @@ from textwrap import indent
 
 import pytest
 
-from let import Class
-from let import Function
+from let import _Class
+from let import _Function
 
 
 class _Subclass:
@@ -29,7 +29,7 @@ class {name}({bases}):
         return name
 
     def ref(self, k, v):
-        if isinstance(v, (Class, Function)):
+        if isinstance(v, (_Class, _Function)):
             if not v.defined:
                 # FIXME: Should we replace `v.name` with `k` here?
                 # Maybe introduce `rename` method which would return
@@ -65,7 +65,7 @@ class _Call:
         return name
 
     def ref(self, k, v):
-        if isinstance(v, (Class, Function)):
+        if isinstance(v, (_Class, _Function)):
             if not v.defined:
                 self.coder.write(v)
                 v.defined = True

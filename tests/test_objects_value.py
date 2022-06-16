@@ -1,7 +1,6 @@
 """Tests related to the @value object."""
 import pytest
 
-from collector import CodeCollector
 from dependencies import Injector
 from dependencies import value
 from dependencies.exceptions import DependencyError
@@ -64,38 +63,13 @@ def test_protect_against_classes():
     assert str(exc_info.value) == "'value' decorator can not be used on classes"
 
 
-deny_method = CodeCollector()
-
-
-@deny_method.parametrize
-def test_protect_against_self(code):
+def test_protect_against_self(define, let, has, expect):
     """Deny to define a value with argument called `self`."""
-
-    class Foo:
-        pass
-
-    @value
-    def method(self, foo, bar):
-        raise RuntimeError
-
-    with pytest.raises(DependencyError) as exc_info:
-        code(Foo, method)
-
-    assert str(exc_info.value) == "'value' decorator can not be used on methods"
-
-
-@deny_method
-def _sUIvAUUeQIde(Foo, arg):
-    class Container(Injector):
-        foo = Foo
-        method = arg
-
-    Container.foo
-
-
-@deny_method
-def _nVlMKQghCDAQ(Foo, arg):
-    Injector(foo=Foo, method=arg).foo
+    foo = define.cls("Foo")
+    method = let.fun("method", "self, foo, bar", "raise RuntimeError").dec("value")
+    it = has(foo=foo, method=method)
+    message = "'value' decorator can not be used on methods"
+    expect(it).to_raise(message).when("obj.foo")
 
 
 def test_allow_decorated_functions(define, let, has, expect):

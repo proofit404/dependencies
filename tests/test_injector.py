@@ -2,8 +2,6 @@
 # FIXME: All direct resolve paragraphs should went into single markdown file.
 #
 # FIXME: Code collector should be removed from the codebase.
-from inspect import isclass
-
 import pytest
 
 from collector import CodeCollector
@@ -53,7 +51,6 @@ def test_class_dependency(define, let, has, expect):
     Instantiate class from the same scope and inject its instance.
 
     """
-
     foo = define.cls(
         "Foo",
         let.fun("__init__", "self, add, bar", "self.add = add", "self.bar = bar"),
@@ -171,7 +168,7 @@ Can not resolve attribute 'y':
 def test_class_named_argument_default_value(define, let, has, expect):
     """Allow classes as default argument values if argument name ends with `_class`."""
     # FIXME: Tests like this should be in a separate file.
-    foo = define.cls("Foo")
+    define.cls("Foo")
     bar = define.cls(
         "Bar", let.fun("__init__", "self, foo_class=Foo", "self.foo_class = foo_class")
     )
@@ -276,6 +273,7 @@ def test_show_injected_dependencies_with_dir_once(has, expect):
 
 
 def test_show_call_dependencies_with_dir():
+    # FIXME: looks like we would remove this tests as well.
     """`dir` show dependencies injected with call."""
     assert "x" in dir(Injector(x=1))
 
@@ -669,7 +667,6 @@ def test_multiple_inheritance_injectors_order(define, let, has, expect):
     higher precedence.
 
     """
-
     foo = define.cls("Foo", let.fun("__init__", "self, x", "self.x = x"))
 
     it = has(has(foo=foo, x="1"), has(x="2"), has(x="3"))

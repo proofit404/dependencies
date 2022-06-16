@@ -19,7 +19,7 @@ class _Identity:
 def test_case():
     obj = {self.injector}
     assert {expression}
-            """
+            """.lstrip()
         )
         self.coder.run()
 
@@ -35,7 +35,7 @@ def test_case():
     with pytest.raises(DependencyError) as exc_info:
         {expression}
     assert str(exc_info.value) == f{self.error!r}
-            """
+            """.lstrip()
         )
         self.coder.run()
 

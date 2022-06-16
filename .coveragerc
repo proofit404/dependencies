@@ -10,6 +10,7 @@ source =
   coder
   collector
   configuration
+  define
   examples
   expect
   has

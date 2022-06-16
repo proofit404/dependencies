@@ -1,7 +1,7 @@
 import pytest
 
 
-class Coder:
+class _Coder:
     def __init__(self, pytester):
         self.pytester = pytester
         self._write(
@@ -31,4 +31,4 @@ from dependencies.exceptions import *
 @pytest.fixture()
 def coder(pytester):
     """Wride python tests in different ways."""
-    return Coder(pytester)
+    return _Coder(pytester)

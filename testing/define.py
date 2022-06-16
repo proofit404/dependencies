@@ -1,7 +1,7 @@
 import pytest
 
 
-class Define:
+class _Define:
     def __init__(self, coder, let):
         self.coder = coder
         self.let = let
@@ -30,4 +30,4 @@ class Define:
 @pytest.fixture()
 def define(coder, let):
     """Dump defined dependencies into the test case file."""
-    return Define(coder, let)
+    return _Define(coder, let)

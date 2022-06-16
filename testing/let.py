@@ -2,11 +2,8 @@ from textwrap import indent
 
 import pytest
 
-from dependencies import Package
-from dependencies import value
 
-
-class Class:
+class _Class:
     def __init__(self, name, *args):
         self.name = name
         self.args = args
@@ -18,7 +15,7 @@ class Class:
     @property
     def bases(self):
         if self.args:
-            bases = [base.name for base in self.args if isinstance(base, Class)]
+            bases = [base.name for base in self.args if isinstance(base, _Class)]
             if bases:
                 return "(" + ", ".join(bases) + ")"
         return ""
@@ -30,7 +27,7 @@ class Class:
                 [
                     indent(method, "    ")
                     for method in self.args
-                    if isinstance(method, Function)
+                    if isinstance(method, _Function)
                 ]
             )
         else:
@@ -41,7 +38,7 @@ class Class:
         return True
 
 
-class Function:
+class _Function:
     def __init__(self, name, params, *args):
         self.name = name
         self.params = params
@@ -70,12 +67,12 @@ class Function:
         return str(self).splitlines(*args)
 
 
-class Let:
+class _Let:
     def cls(self, name, *args):
-        return Class(name, *args)
+        return _Class(name, *args)
 
     def fun(self, name, params, *args):
-        return Function(name, params, *args)
+        return _Function(name, params, *args)
 
     def fn(self, arg, res):
         return f"lambda {arg}: {res}"
@@ -94,4 +91,4 @@ class Let:
 @pytest.fixture()
 def let():
     """Define dependencies in different ways."""
-    return Let()
+    return _Let()
