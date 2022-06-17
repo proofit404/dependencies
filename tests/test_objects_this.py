@@ -9,29 +9,20 @@ from dependencies import this
 from dependencies.exceptions import DependencyError
 
 
-def test_attribute_getter():
+def test_attribute_getter(define, let, has, expect):
     """We can describe attribute access in the `Injector` in declarative manner."""
-
-    class Foo:
-        def __init__(self, one, two):
-            self.one = one
-            self.two = two
-
-        def do(self):
-            return self.one + self.two
-
-    class Container(Injector):
-        foo = Foo
-        one = this.SubContainer.one
-        two = this.SubContainer.two
-
-        class SubContainer(Injector):
-            one = 1
-            two = 2
-
-    foo = Container.foo
-    assert isinstance(foo, Foo)
-    assert foo.do() == 3
+    foo = define.cls(
+        "Foo",
+        let.fun("__init__", "self, one, two", "self.one = one", "self.two = two"),
+        let.fun("do", "self", "return self.one + self.two"),
+    )
+    it = has(
+        foo=foo,
+        one="this.SubContainer.one",
+        two="this.SubContainer.two",
+        SubContainer=has(one="1", two="2"),
+    )
+    expect(it).to("isinstance(obj.foo, Foo)", "obj.foo.do() == 3")
 
 
 def test_attribute_getter_few_attributes():

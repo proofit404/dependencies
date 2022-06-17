@@ -13,13 +13,11 @@ class _Identity:
         self.injector = injector
         return self
 
-    def to(self, expression):
+    def to(self, *expressions):
+        assert expressions
         self.coder.write(
-            f"""
-def test_case():
-    obj = {self.injector}
-    assert {expression}
-            """.lstrip()
+            f"def test_case():\n    obj = {self.injector}\n"
+            + "".join(f"    assert {expression}\n" for expression in expressions)
         )
         self.coder.run()
 
@@ -52,13 +50,11 @@ class _Context:
         self.injector = injector
         return self
 
-    def to(self, expression):
+    def to(self, *expressions):
+        assert expressions
         self.coder.write(
-            f"""
-def test_case():
-    with {self.injector} as obj:
-        assert {expression}
-            """
+            f"def test_case():\n    with {self.injector} as obj:\n"
+            + "".join(f"        assert {expression}\n" for expression in expressions)
         )
         self.coder.run()
 
