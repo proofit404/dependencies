@@ -1,10 +1,4 @@
 """Tests related to Injector classes written inside other Injector classes."""
-import pytest
-
-from collector import CodeCollector
-from dependencies import Injector
-from dependencies import this
-from dependencies.exceptions import DependencyError
 
 
 def test_one_subcontainer_multiple_parents(define, let, has, expect, name):
@@ -35,42 +29,15 @@ You tried to shift this more times than Injector has levels:
     expect(nested).to_raise(message).when("obj.baz")
 
 
-deny_depends_on = CodeCollector("stack_representation", "code")
-
-
-@deny_depends_on.parametrize
-def test_deny_classes_depend_on_nested_injectors(stack_representation, code):
+def test_deny_classes_depend_on_nested_injectors(define, let, has, expect, name):
     """Classes should not receive nested injectors as arguments of constructors."""
-
-    class Foo:
-        def __init__(self, bar):
-            raise RuntimeError
-
-    class Bar(Injector):
-        baz = None
-
-    with pytest.raises(DependencyError) as exc_info:
-        code(Foo, Bar)
-
-    expected = f"""
+    foo = define.cls("Foo", let.fun("__init__", "self, bar", "raise RuntimeError"))
+    it = has(foo=foo, bar=has(baz="None"))
+    message = f"""
 Do not depend on nested injectors directly.
 
 Use this object to access inner attributes of nested injector:
 
-{stack_representation}
+{name(it)}.foo
     """.strip()
-    assert expected == str(exc_info.value)
-
-
-@deny_depends_on("Container.foo")
-def _xLzoX5QDFuuw(Foo, Bar):
-    class Container(Injector):
-        foo = Foo
-        bar = Bar
-
-    Container.foo
-
-
-@deny_depends_on("Injector.foo")
-def _jrp5adysQeRH(Foo, Bar):
-    Injector(foo=Foo, bar=Bar).foo
+    expect(it).to_raise(message).when("obj.foo")
