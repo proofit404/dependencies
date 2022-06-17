@@ -18,7 +18,7 @@ def test_lambda_dependency(define, let, has, expect):
         let.fun("__init__", "self, add", "self.add = add"),
         let.fun("do", "self, x", "return self.add(x, x)"),
     )
-    it = has(foo=foo, add=let.fn("x, y", "x + y"))
+    it = has(foo=foo, add="lambda x, y: x + y")
     expect(it).to("obj.foo.do(1) == 2")
 
 
@@ -61,7 +61,7 @@ def test_class_dependency(define, let, has, expect):
         let.fun("__init__", "self, mul", "self.mul = mul"),
         let.fun("go", "self, x", "return self.mul(x, x)"),
     )
-    it = has(foo=foo, bar=bar, add=let.fn("x, y", "x + y"), mul=let.fn("x, y", "x * y"))
+    it = has(foo=foo, bar=bar, add="lambda x, y: x + y", mul="lambda x, y: x * y")
     expect(it).to("obj.foo.do(2) == 8")
 
 
@@ -87,8 +87,8 @@ def test_redefine_dependency(define, let, has, expect):
         let.fun("__init__", "self, add", "self.add = add"),
         let.fun("do", "self, x", "return self.add(x, x)"),
     )
-    it = has(foo=foo, add=let.fn("x, y", "x + y"))
-    wrong = has(it, add=let.fn("x, y", "x - y"))
+    it = has(foo=foo, add="lambda x, y: x + y")
+    wrong = has(it, add="lambda x, y: x - y")
     expect(wrong).to("obj.foo.do(1) == 0")
 
 
@@ -106,7 +106,7 @@ def test_override_keyword_argument_if_dependency_was_specified(
         let.fun("__init__", "self, add, y=1", "self.add = add", "self.y = y"),
         let.fun("do", "self, x", "return self.add(x, self.y)"),
     )
-    it = has(foo=foo, add=let.fn("x, y", "x + y"), y="2")
+    it = has(foo=foo, add="lambda x, y: x + y", y="2")
     expect(it).to("obj.foo.do(1) == 3")
 
 
@@ -122,7 +122,7 @@ def test_preserve_keyword_argument_if_dependency_was_missed(define, let, has, ex
         let.fun("__init__", "self, add, y=1", "self.add = add", "self.y = y"),
         let.fun("do", "self, x", "return self.add(x, self.y)"),
     )
-    it = has(foo=foo, add=let.fn("x, y", "x + y"))
+    it = has(foo=foo, add="lambda x, y: x + y")
     expect(it).to("obj.foo.do(1) == 2")
 
 

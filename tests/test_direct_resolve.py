@@ -12,13 +12,13 @@ def test_direct_data_resolve(has, expect):
     expect(it).to_raise(message).when("obj.a")
 
 
-def test_direct_this_resolve(let, has, expect):
+def test_direct_this_resolve(has, expect):
     """Attempt to resolve this directly should raise exception.
 
     This objects are allowed to be used as dependencies for classes.
 
     """
-    it = has(a=let.this("b"), b="1")
+    it = has(a="this.b", b="1")
     message = "'this' dependencies could only be used to instantiate classes"
     expect(it).to_raise(message).when("obj.a")
 

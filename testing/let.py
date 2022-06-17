@@ -74,19 +74,6 @@ class _Let:
     def fun(self, name, params, *args):
         return _Function(name, params, *args)
 
-    def fn(self, arg, res):
-        return f"lambda {arg}: {res}"
-
-    def dec(self, *arg):
-        *decorators, function = arg
-        assert decorators
-        applied = ["@{decorator}" for decorator in decorators]
-        applied.append(function)
-        return "\n".join(applied)
-
-    def this(self, arg):
-        return f"this.{arg}"
-
 
 @pytest.fixture()
 def let():
