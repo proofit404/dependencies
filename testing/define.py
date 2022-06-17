@@ -26,6 +26,14 @@ class _Define:
         self.coder.write(f"{module} = Package({module!r})\n")
         return arg
 
+    def h(self, arg):
+        result = self.cls(
+            "Holder",
+            self.let.fun("__new__", f"cls, {arg}", f"return {arg}"),
+            self.let.fun("__init__", f"self, {arg}", "pass"),
+        )
+        return result
+
 
 @pytest.fixture()
 def define(coder, let):

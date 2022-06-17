@@ -25,121 +25,54 @@ def test_attribute_getter(define, let, has, expect):
     expect(it).to("isinstance(obj.foo, Foo)", "obj.foo.do() == 3")
 
 
-def test_attribute_getter_few_attributes():
+def test_attribute_getter_few_attributes(define, let, has, expect):
     """We resolve attribute access until we find all specified attributes."""
-
-    class Root:
-        def __init__(self, result):
-            self.result = result
-
-    class Foo:
-        def __init__(self, one):
-            self.one = one
-
-    class Container(Injector):
-        root = Root
-        result = this.SubContainer.foo.one
-
-        class SubContainer(Injector):
-            foo = Foo
-            one = 1
-
-    assert Container.root.result == 1
+    root = define.h("result")
+    foo = define.cls("Foo", let.fun("__init__", "self, one", "self.one = one"))
+    it = has(
+        root=root,
+        result="this.SubContainer.foo.one",
+        SubContainer=has(foo=foo, one="1"),
+    )
+    expect(it).to("obj.root == 1")
 
 
-item_access = CodeCollector()
-
-
-@item_access.parametrize
-def test_item_getter(code):
+def test_item_getter(define, let, has, expect):
     """We can describe item access in the `Injector` in the declarative manner."""
+    root = define.h("result")
 
-    class Root:
-        def __init__(self, result):
-            self.result = result
+    it = has(root=root, result="this.foo['one']", foo="{'one': 1}")
+    expect(it).to("obj.root == 1")
 
-    result = code(Root)
-    assert result == 1
+    it = has(root=root, result="this.foo['one']['two']", foo="{'one': {'two': 1}}")
+    expect(it).to("obj.root == 1")
 
+    it = has(
+        root=root,
+        result="this.SubContainer.spam",
+        SubContainer=has(spam="(this << 1).foo['bar']['baz']"),
+        foo="{'bar': {'baz': 1}}",
+    )
+    expect(it).to("obj.root == 1")
 
-@item_access
-def _ce642f492941(Root):
-    class Container(Injector):
-        root = Root
-        foo = {"one": 1}
-        result = this.foo["one"]
+    it = has(
+        root=root,
+        result="this.SubContainer.SubSubContainer.spam",
+        SubContainer=has(SubSubContainer=has(spam="(this << 2).foo['bar']['baz']")),
+        foo="{'bar': {'baz': 1}}",
+    )
+    expect(it).to("obj.root == 1")
 
-    return Container.root.result
+    it = has(root=root, result="this.bar", bar="this.foo[0]", foo="[1, 2, 3]")
+    expect(it).to("obj.root == 1")
 
+    it = has(root=root, result="this.bar", bar="this.foo[2]", foo="{2: 1}")
+    expect(it).to("obj.root == 1")
 
-@item_access
-def _ffa208dc1130(Root):
-    class Container(Injector):
-        root = Root
-        foo = {"one": {"two": 1}}
-        result = this.foo["one"]["two"]
-
-    return Container.root.result
-
-
-@item_access
-def _e5c358190fef(Root):
-    class Container(Injector):
-        root = Root
-        result = this.SubContainer.spam
-        foo = {"bar": {"baz": 1}}
-
-        class SubContainer(Injector):
-            spam = (this << 1).foo["bar"]["baz"]
-
-    return Container.root.result
-
-
-@item_access
-def _ab4cdbf60b2f(Root):
-    class Container(Injector):
-        root = Root
-        result = this.SubContainer.SubSubContainer.spam
-        foo = {"bar": {"baz": 1}}
-
-        class SubContainer(Injector):
-            class SubSubContainer(Injector):
-                spam = (this << 2).foo["bar"]["baz"]
-
-    return Container.root.result
-
-
-@item_access
-def _be332433b74d(Root):
-    class Container(Injector):
-        root = Root
-        result = this.bar
-        foo = [1, 2, 3]
-        bar = this.foo[0]
-
-    return Container.root.result
-
-
-@item_access
-def _fe150d5ebe93(Root):
-    class Container(Injector):
-        root = Root
-        result = this.bar
-        foo = {2: 1}
-        bar = this.foo[2]
-
-    return Container.root.result
-
-
-@item_access
-def _dc4fedcd09d8(Root):
-    class Container(Injector):
-        root = Root
-        result = this.bar
-        foo = {("x", 1): 1}
-        bar = this.foo[("x", 1)]
-
-    return Container.root.result
+    it = has(
+        root=root, result="this.bar", foo="{('x', 1): 1}", bar="this.foo[('x', 1)]"
+    )
+    expect(it).to("obj.root == 1")
 
 
 def test_item_getter_non_printable_key():
