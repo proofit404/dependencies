@@ -1,3 +1,4 @@
+# FIXME: This should be tested with `Package` as well.
 """Tests related to enum objects."""
 from enum import auto
 from enum import Enum

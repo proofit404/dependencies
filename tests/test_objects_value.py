@@ -15,6 +15,7 @@ def test_define_value(define, let, has, expect):
 
 
 def test_keyword_arguments():
+    # FIXME: Should it be parametrized test together with class constructor?
     """@value decorated function should support keyword arguments.
 
     If keyword argument is missing in the Injector subclass the

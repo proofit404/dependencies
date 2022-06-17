@@ -797,11 +797,11 @@ def test_has_attribute(has, expect):
     expect(it).to("'bar' not in obj")
 
 
-def test_multiple_inheritance_deny_regular_classes(define, let, has, expect):
+def test_multiple_inheritance_deny_regular_classes(define, expect_has):
     """Only `Injector` subclasses are allowed to be used in the inheritance."""
     foo = define.cls("Foo")
     message = "Multiple inheritance is allowed for Injector subclasses only"
-    expect().to_raise(message).when(has("Injector", foo))
+    expect_has("Injector", foo).to_raise(message)
 
 
 def test_deny_magic_methods_injection(define, let, has, expect):
@@ -813,16 +813,8 @@ def test_deny_magic_methods_injection(define, let, has, expect):
     expect(it).to_raise(message).when("obj.foo")
 
 
-def test_deny_empty_scope_extension(has, expect):
+def test_deny_empty_scope_extension(has, expect_has):
     """`Injector` subclasses can't extend scope with empty subset."""
-    # FIXME: Figure out how to use this with `expect`.
-
-    with pytest.raises(DependencyError) as exc_info:
-        has()
-
-    assert str(exc_info.value) == "Extension scope can not be empty"
-
-    with pytest.raises(DependencyError) as exc_info:
-        has(has(x=1))
-
-    assert str(exc_info.value) == "Extension scope can not be empty"
+    message = "Extension scope can not be empty"
+    expect_has().to_raise(message)
+    expect_has(has(x="1")).to_raise(message)
