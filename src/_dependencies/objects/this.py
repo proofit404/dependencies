@@ -48,6 +48,7 @@ class _ThisFactory:
         self.expression = expression
 
     def __call__(self, __self__):
+        operators = {".": _get_attribute, "[]": _get_item}
         result = __self__
         for operator, symbol in self.expression:
             result = operators[operator](result, symbol)
@@ -67,12 +68,6 @@ def _get_attribute(instance, name):
 
 def _get_item(instance, name):
     return instance[name]
-
-
-operators = {
-    ".": _get_attribute,
-    "[]": _get_item,
-}
 
 
 def _check_expression(expression):

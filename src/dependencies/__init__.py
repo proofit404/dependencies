@@ -5,4 +5,4 @@ from _dependencies.objects.this import this
 from _dependencies.objects.value import value
 
 
-__all__ = ["Injector", "Package", "this", "value"]
+__all__ = ("Injector", "Package", "this", "value")

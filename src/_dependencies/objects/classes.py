@@ -35,9 +35,10 @@ class _ClassFactory:
         self.cls = cls
 
     def __call__(self, **kwargs):
+        message = no_depend_nested_injector_template
         for argument in kwargs.values():
             if isinstance(argument, _IsScope):
-                raise DependencyError(no_depend_nested_injector_template)
+                raise DependencyError(message)
         return self.cls(**kwargs), None
 
 

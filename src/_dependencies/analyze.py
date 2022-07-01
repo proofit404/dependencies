@@ -20,30 +20,33 @@ def _recursive(builder):
     def wrapper(name, dependency):
         state = builder(name, dependency)
         while True:
-            try:
-                next_dependency = next(state)
-                next_spec = _make_dependency_spec(name, next_dependency)
-                state.send(next_spec)
-            except StopIteration as result:
-                return result.value
+            step = _tick(name, state)
+            if step:
+                return step
 
     return wrapper
 
 
-conditions = (
-    (_is_descriptor, None),
-    (_is_enum, None),
-    (_is_attributes, _recursive(_build_attributes_spec)),
-    (_is_nested_injector, _build_nested_injector_spec),
-    (_is_class, _build_class_spec),
-    (_is_this, _build_this_spec),
-    (_is_package, _recursive(_build_package_spec)),
-    (_is_value, _build_value_spec),
-    (_is_data, _build_data_spec),
-)
+def _tick(name, state):
+    try:
+        dependency = next(state)
+        spec = _make_dependency_spec(name, dependency)
+        state.send(spec)
+    except StopIteration as result:
+        return result.value
 
 
 def _make_dependency_spec(name, dependency):
-    for condition, builder in conditions:  # pragma: no branch
+    for condition, builder in (
+        (_is_descriptor, None),
+        (_is_enum, None),
+        (_is_attributes, _recursive(_build_attributes_spec)),
+        (_is_nested_injector, _build_nested_injector_spec),
+        (_is_class, _build_class_spec),
+        (_is_this, _build_this_spec),
+        (_is_package, _recursive(_build_package_spec)),
+        (_is_value, _build_value_spec),
+        (_is_data, _build_data_spec),
+    ):  # pragma: no branch
         if condition(name, dependency):
             return builder(name, dependency)

@@ -16,19 +16,17 @@ def _method_args(func, funcname, owner):
 
 def _args(func, funcname, owner):
     args = []
+    message_positional = f"{funcname!r} have variable-length positional arguments"
+    message_keyword = f"{funcname!r} have variable-length keyword arguments"
     for name, param in signature(func).parameters.items():
         have_default = param.default is not param.empty
         args.append((name, have_default))
         if have_default:
             _check_argument_default(name, param.default, owner)
         if param.kind is param.VAR_POSITIONAL:
-            raise DependencyError(
-                f"{funcname!r} have variable-length positional arguments"
-            )
+            raise DependencyError(message_positional)
         if param.kind is param.VAR_KEYWORD:
-            raise DependencyError(
-                f"{funcname!r} have variable-length keyword arguments"
-            )
+            raise DependencyError(message_keyword)
     return args
 
 

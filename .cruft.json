@@ -1,6 +1,6 @@
 {
   "template": "https://github.com/proofit404/python-library-template",
-  "commit": "5be61c0a2d9c772d7f81fd4539244d0203eafa58",
+  "commit": "d3627a8456df61c46395e2d3319c5823d3fbc1bf",
   "checkout": null,
   "context": {
     "cookiecutter": {
@@ -9,7 +9,7 @@
       "private_module_name": "_dependencies",
       "exception_name": "DependencyError",
       "project_description": "Constructor injection designed with OOP in mind.",
-      "author_name": "Artem Malyshev",
+      "author_name": "Josiah Kaviani",
       "author_email": "proofit404@gmail.com",
       "github_user": "proofit404",
       "github_repository": "https://github.com/proofit404/dependencies",

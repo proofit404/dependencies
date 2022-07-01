@@ -56,12 +56,10 @@ class _InjectorType(_InjectorTypeType):
         return sorted(cls.__dependencies__.specs)
 
 
-def _transfer(from_namespace, to_namespace):
+def _transfer(source, destination):
     for attr in ("__module__", "__doc__", "__weakref__", "__qualname__"):
-        try:
-            to_namespace[attr] = from_namespace.pop(attr)
-        except KeyError:
-            pass
+        if attr in source:
+            destination[attr] = source.pop(attr)
 
 
 def _check_inheritance(bases):
