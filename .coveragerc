@@ -16,6 +16,7 @@ source =
   has
   let
   mddoctest
+  rnd
   tests
 
 [paths]
