@@ -33,10 +33,6 @@ class _Class:
         else:
             return "    pass"
 
-    def __contains__(self, thing):
-        assert thing == "\n"
-        return True
-
 
 class _Function:
     def __init__(self, name, params, *args):
@@ -58,10 +54,6 @@ class _Function:
     @property
     def lines(self):
         return "".join(f"    {line}\n" for line in self.args)
-
-    def __contains__(self, thing):
-        assert thing == "\n"
-        return True
 
     def splitlines(self, *args):
         return str(self).splitlines(*args)

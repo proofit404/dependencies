@@ -18,12 +18,7 @@ class _Subclass:
             body = "".join(self.ref(k, v) for k, v in kwargs.items())
         else:
             body = "    pass\n"
-        self.coder.write(
-            f"""
-class {name}({bases}):
-{body}
-            """
-        )
+        self.coder.write(f"class {name}({bases}):\n{body}")
         return name
 
     def ref(self, k, v):
@@ -55,11 +50,7 @@ class _Call:
             body = ""
         else:
             body = "()"
-        self.coder.write(
-            f"""
-{name} = {bases}{body}
-            """
-        )
+        self.coder.write(f"{name} = {bases}{body}")
         return name
 
     def ref(self, k, v):
