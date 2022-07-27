@@ -52,8 +52,9 @@ def test_direct_package_data_resolve(define, has, expect):
     expect(it).to_raise(message).when("obj.a")
 
 
-def test_direct_package_class_resolve(define, has, expect):
+def test_direct_package_class_resolve(coder, define, has, expect):
     """Attempt to resolve class directly should works for packages."""
-    define.require("examples.submodule", "Foo")
+    # FIXME: Do not use `coder` fixture directly.
+    coder.write("from examples.submodule import Foo")
     it = has(foo=define.package("examples.submodule.Foo"))
     expect(it).to("isinstance(obj.foo, Foo)")

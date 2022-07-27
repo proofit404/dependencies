@@ -6,8 +6,8 @@ class _Direct:
         self.coder = coder
         self.let = let
 
-    def require(self, module, export):
-        self.coder.write(f"from {module} import {export}")
+    def refer(self, name):
+        ...
 
     def h(self, arg):
         return self.cls(
@@ -36,8 +36,8 @@ class _Package:
         self.direct = _Direct(self.module, let)
         self.coder.write(f"{self.module} = Package({self.module!r})")
 
-    def require(self, module, export):
-        self.direct.require(module, export)
+    def refer(self, name):
+        self.coder.write("from " + repr(self.module)[1:-1] + " import " + name)
 
     def h(self, arg):
         self.direct.h(arg)

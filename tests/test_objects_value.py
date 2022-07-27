@@ -60,10 +60,11 @@ def test_protect_against_self(define, let, has, expect):
     expect(it).to_raise(message).when("obj.foo")
 
 
-def test_allow_decorated_functions(define, let, has, expect):
+def test_allow_decorated_functions(coder, define, let, has, expect):
     """Decorators applied to functions should keep working."""
-    define.require("functools", "lru_cache")
-    define.require("random", "randint")
+    # FIXME: Do not use `coder` fixture directly.
+    coder.write("from functools import lru_cache")
+    coder.write("from random import randint")
     foo = define.cls("Foo", let.fun("__init__", "self, bar", "self.bar = bar"))
     it = has(
         foo=foo,

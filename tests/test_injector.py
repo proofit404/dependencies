@@ -65,13 +65,16 @@ def test_class_dependency(define, let, has, expect):
     expect(it).to("obj.foo.do(2) == 8")
 
 
-def test_do_not_instantiate_dependencies_ended_with_class(define, let, has, expect):
+def test_do_not_instantiate_dependencies_ended_with_class(
+    coder, define, let, has, expect
+):
     """Do not call class constructor, if it stored with name ended `_class`.
 
     For example, `logger_class`.
 
     """
-    define.require("inspect", "isclass")
+    # FIXME: Do not use `coder` fixture directly.
+    coder.write("from inspect import isclass")
     foo = define.cls("Foo")
     bar = define.cls(
         "Bar", let.fun("__init__", "self, foo_class", "self.foo_class = foo_class")
@@ -173,6 +176,7 @@ def test_class_named_argument_default_value(define, let, has, expect):
         "Bar", let.fun("__init__", "self, foo_class=Foo", "self.foo_class = foo_class")
     )
     it = has(bar=bar)
+    define.refer("Foo")  # FIXME: This is ugly, rethink completely.
     expect(it).to("obj.bar.foo_class is Foo")
 
 

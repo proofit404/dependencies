@@ -24,11 +24,9 @@ class _Class:
     def methods(self):
         if self.args:
             return "\n".join(
-                [
-                    indent(method, "    ")
-                    for method in self.args
-                    if isinstance(method, _Function)
-                ]
+                indent(method, "    ")
+                for method in self.args
+                if isinstance(method, _Function)
             )
         else:
             return "    pass"

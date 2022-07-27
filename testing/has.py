@@ -17,7 +17,7 @@ class _Subclass:
         if kwargs:
             body = "".join(self.ref(k, v) for k, v in kwargs.items())
         else:
-            body = "    pass\n"
+            body = "    pass"
         self.coder.write(f"class {name}({bases}):\n{body}")
         return name
 
