@@ -1,5 +1,7 @@
 import pytest
 
+from rnd import _rnd
+
 
 class _Direct:
     def __init__(self, coder, let):
@@ -28,6 +30,11 @@ class _Direct:
         result.defined = True
         return result
 
+    def var(self, value):
+        name = _rnd()
+        self.coder.write(f"{name} = {value}")
+        return name
+
 
 class _Package:
     def __init__(self, coder, let):
@@ -49,6 +56,10 @@ class _Package:
 
     def fun(self, name, params, *args):
         self.direct.fun(name, params, *args)
+        return f"{self.module}.{name}"
+
+    def var(self, value):
+        name = self.direct.var(value)
         return f"{self.module}.{name}"
 
 

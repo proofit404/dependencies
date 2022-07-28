@@ -1,24 +1,26 @@
 """Tests related to direct resolve rules."""
 
 
-def test_direct_data_resolve(has, expect):
+def test_direct_data_resolve(define, has, expect):
     """Attempt to resolve scalar types directly should raise exception.
 
     Scalar types are allowed to be used as dependencies for classes.
 
     """
-    it = has(a="1")
+    a = define.var("1")
+    it = has(a=a)
     message = "Scalar dependencies could only be used to instantiate classes"
     expect(it).to_raise(message).when("obj.a")
 
 
-def test_direct_this_resolve(has, expect):
+def test_direct_this_resolve(define, has, expect):
     """Attempt to resolve this directly should raise exception.
 
     This objects are allowed to be used as dependencies for classes.
 
     """
-    it = has(a="this.b", b="1")
+    b = define.var("1")
+    it = has(a="this.b", b=b)
     message = "'this' dependencies could only be used to instantiate classes"
     expect(it).to_raise(message).when("obj.a")
 
@@ -43,18 +45,3 @@ def test_direct_value_resolve(let, has, expect):
     it = has(a=let.fun("a", "", "return 1").dec("value"))
     message = "'value' dependencies could only be used to instantiate classes"
     expect(it).to_raise(message).when("obj.a")
-
-
-def test_direct_package_data_resolve(define, has, expect):
-    """Attempt to resolve scalar types directly should raise exception."""
-    it = has(a=define.package("examples.submodule.variable"))
-    message = "Scalar dependencies could only be used to instantiate classes"
-    expect(it).to_raise(message).when("obj.a")
-
-
-def test_direct_package_class_resolve(coder, define, has, expect):
-    """Attempt to resolve class directly should works for packages."""
-    # FIXME: Do not use `coder` fixture directly.
-    coder.write("from examples.submodule import Foo")
-    it = has(foo=define.package("examples.submodule.Foo"))
-    expect(it).to("isinstance(obj.foo, Foo)")
