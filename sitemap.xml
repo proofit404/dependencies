@@ -16,6 +16,11 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
+         <loc>https://proofit404.github.io/dependencies/classes/</loc>
+         <lastmod>2022-10-15</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
          <loc>https://proofit404.github.io/dependencies/descriptors/</loc>
          <lastmod>2022-10-15</lastmod>
          <changefreq>daily</changefreq>
