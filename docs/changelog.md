@@ -1,3 +1,10 @@
+# 7.5.0 (2022-10-15)
+
+### Features
+
+- support positional-only arguments
+  [#360](https://github.com/proofit404/dependencies/issues/360) d151e53
+
 # 7.4.0 (2022-06-06)
 
 ### Features
