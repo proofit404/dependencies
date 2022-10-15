@@ -406,20 +406,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../scalar/" class="md-nav__link">
-        Scalar types
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../this/" class="md-nav__link">
         This
       </a>
@@ -495,13 +481,6 @@
   
 </li>
       
-        <li class="md-nav__item">
-  <a href="#restrictions" class="md-nav__link">
-    Restrictions
-  </a>
-  
-</li>
-      
     </ul>
   
 </nav>
@@ -519,6 +498,20 @@
     <li class="md-nav__item">
       <a href="../value/" class="md-nav__link">
         Value
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../direct_resolve/" class="md-nav__link">
+        Direct resolve
       </a>
     </li>
   
@@ -689,13 +682,6 @@
   
 </li>
       
-        <li class="md-nav__item">
-  <a href="#restrictions" class="md-nav__link">
-    Restrictions
-  </a>
-  
-</li>
-      
     </ul>
   
 </nav>
@@ -776,25 +762,6 @@ is actually happen. You can inject bound methods with exactly one line.</p>
 <span class="gp">... </span>    <span class="n">b</span> <span class="o">=</span> <span class="mi">2</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">Container</span><span class="o">.</span><span class="n">foo</span><span class="p">()</span> <span class="o">==</span> <span class="mi">3</span>
-</code></pre></div>
-<h2 id="restrictions">Restrictions<a class="headerlink" href="#restrictions" title="Permanent link">&para;</a></h2>
-<p>Package objects will conform its resolution rules with imported objects. If
-package dependency points to the class, it's allowed to resolve such dependency
-directly. If package object points to the scalar type for example, it'll raise
-exception if you tries to resolve such dependency directly.</p>
-<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">examples</span> <span class="o">=</span> <span class="n">Package</span><span class="p">(</span><span class="s2">&quot;examples&quot;</span><span class="p">)</span>
-
-<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Container</span><span class="p">(</span><span class="n">Injector</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="n">foo</span> <span class="o">=</span> <span class="n">examples</span><span class="o">.</span><span class="n">submodule</span><span class="o">.</span><span class="n">Foo</span>
-<span class="gp">... </span>    <span class="n">variable</span> <span class="o">=</span> <span class="n">examples</span><span class="o">.</span><span class="n">submodule</span><span class="o">.</span><span class="n">variable</span>
-
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Container</span><span class="o">.</span><span class="n">foo</span>  <span class="c1"># doctest: +ELLIPSIS</span>
-<span class="go">&lt;examples.submodule.Foo object at 0x...&gt;</span>
-
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Container</span><span class="o">.</span><span class="n">variable</span>
-<span class="gt">Traceback (most recent call last):</span>
-  <span class="c">...</span>
-<span class="gr">_dependencies.exceptions.DependencyError</span>: <span class="n">Scalar dependencies could only be used to instantiate classes</span>
 </code></pre></div>
 <p align="center">&mdash; ⭐ &mdash;</p>
 

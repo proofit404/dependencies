@@ -406,20 +406,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../scalar/" class="md-nav__link">
-        Scalar types
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../this/" class="md-nav__link">
         This
       </a>
@@ -505,6 +491,20 @@
     <li class="md-nav__item">
       <a href="../value/" class="md-nav__link">
         Value
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../direct_resolve/" class="md-nav__link">
+        Direct resolve
       </a>
     </li>
   
@@ -686,21 +686,11 @@
 <h1 id="nested-injectors">Nested injectors<a class="headerlink" href="#nested-injectors" title="Permanent link">&para;</a></h1>
 <p>Nested injectors supposed to be used as targets for <code>this</code> objects.</p>
 <h2 id="restrictions">Restrictions<a class="headerlink" href="#restrictions" title="Permanent link">&para;</a></h2>
-<p>You can't resolve nested injectors as main target of dependency injection.</p>
-<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dependencies</span> <span class="kn">import</span> <span class="n">Injector</span>
-
-<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Container</span><span class="p">(</span><span class="n">Injector</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="k">class</span> <span class="nc">Nested</span><span class="p">(</span><span class="n">Injector</span><span class="p">):</span>
-<span class="gp">... </span>        <span class="n">foo</span> <span class="o">=</span> <span class="mi">1</span>
-
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Container</span><span class="o">.</span><span class="n">Nested</span>
-<span class="gt">Traceback (most recent call last):</span>
-  <span class="c">...</span>
-<span class="gr">_dependencies.exceptions.DependencyError</span>: <span class="n">&#39;Injector&#39; dependencies could only be used to instantiate classes</span>
-</code></pre></div>
 <p>Your classes can't depend on nested <code>Injector</code> as it's arguments. Nested
 injectors are supposed to be accessed only by <code>this</code> objects.</p>
-<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Foo</span><span class="p">:</span>
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dependencies</span> <span class="kn">import</span> <span class="n">Injector</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Foo</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Bar</span><span class="p">):</span>
 <span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">baz</span> <span class="o">=</span> <span class="n">Bar</span><span class="o">.</span><span class="n">baz</span>
 

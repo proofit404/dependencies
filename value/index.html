@@ -406,20 +406,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../scalar/" class="md-nav__link">
-        Scalar types
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../this/" class="md-nav__link">
         This
       </a>
@@ -503,13 +489,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#restrictions" class="md-nav__link">
-    Restrictions
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#depending-on-the-value" class="md-nav__link">
     Depending on the value
   </a>
@@ -527,6 +506,20 @@
   
 </nav>
       
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../direct_resolve/" class="md-nav__link">
+        Direct resolve
+      </a>
     </li>
   
 
@@ -690,13 +683,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#restrictions" class="md-nav__link">
-    Restrictions
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#depending-on-the-value" class="md-nav__link">
     Depending on the value
   </a>
@@ -763,19 +749,6 @@ injection scope. After that <code>quiz</code> function was called with resolved
 dependencies passed to its arguments. Result of the function was stored in the
 injection scope under the same <code>quiz</code> name. We received value from <code>quiz</code> name
 from the injection scope.</p>
-<h2 id="restrictions">Restrictions<a class="headerlink" href="#restrictions" title="Permanent link">&para;</a></h2>
-<p>You can't resolve value objects as main target of dependency injection. The main
-goal of <code>value</code> objects is to be evaluated dependencies for classes.</p>
-<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Container</span><span class="p">(</span><span class="n">Injector</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="nd">@value</span>
-<span class="gp">... </span>    <span class="k">def</span> <span class="nf">foo</span><span class="p">():</span>
-<span class="gp">... </span>        <span class="k">return</span> <span class="mi">1</span>
-
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Container</span><span class="o">.</span><span class="n">foo</span>
-<span class="gt">Traceback (most recent call last):</span>
-  <span class="c">...</span>
-<span class="gr">_dependencies.exceptions.DependencyError</span>: <span class="n">&#39;value&#39; dependencies could only be used to instantiate classes</span>
-</code></pre></div>
 <h2 id="depending-on-the-value">Depending on the value<a class="headerlink" href="#depending-on-the-value" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Foo</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">quiz</span><span class="p">):</span>
@@ -901,13 +874,13 @@ make pool class a little bit more testable.</p>
       
       
         
-        <a href="../sticky/" class="md-footer__link md-footer__link--next" aria-label="Next: Sticky scopes" rel="next">
+        <a href="../direct_resolve/" class="md-footer__link md-footer__link--next" aria-label="Next: Direct resolve" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              Sticky scopes
+              Direct resolve
             </div>
           </div>
           <div class="md-footer__button md-icon">
