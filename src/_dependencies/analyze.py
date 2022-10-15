@@ -21,7 +21,7 @@ def _recursive(builder):
         state = builder(name, dependency)
         while True:
             step = _tick(name, state)
-            if step:
+            if step:  # pragma: no branch
                 return step
 
     return wrapper
@@ -37,7 +37,7 @@ def _tick(name, state):
 
 
 def _make_dependency_spec(name, dependency):
-    for condition, builder in (
+    for condition, builder in (  # pragma: no branch
         (_is_descriptor, None),
         (_is_enum, None),
         (_is_attributes, _recursive(_build_attributes_spec)),
