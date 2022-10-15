@@ -41,6 +41,7 @@ nav:
   - Usage:
       - Why: why.md
       - Usage: usage.md
+      - Classes: classes.md
       - This: this.md
       - Nested injectors: nested.md
       - Package: package.md
