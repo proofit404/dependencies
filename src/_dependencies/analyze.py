@@ -10,6 +10,8 @@ from _dependencies.objects.nested import _build_nested_injector_spec
 from _dependencies.objects.nested import _is_nested_injector
 from _dependencies.objects.package import _build_package_spec
 from _dependencies.objects.package import _is_package
+from _dependencies.objects.shield import _build_shield_spec
+from _dependencies.objects.shield import _is_shield
 from _dependencies.objects.this import _build_this_spec
 from _dependencies.objects.this import _is_this
 from _dependencies.objects.value import _build_value_spec
@@ -46,6 +48,7 @@ def _make_dependency_spec(name, dependency):
         (_is_this, _build_this_spec),
         (_is_package, _recursive(_build_package_spec)),
         (_is_value, _build_value_spec),
+        (_is_shield, _build_shield_spec),
         (_is_data, _build_data_spec),
     ):  # pragma: no branch
         if condition(name, dependency):
