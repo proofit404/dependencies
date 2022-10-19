@@ -46,6 +46,7 @@ nav:
       - Nested injectors: nested.md
       - Package: package.md
       - Value: value.md
+      - Shield: shield.md
       - Direct resolve: direct_resolve.md
       - Sticky scopes: sticky.md
       - Setup and teardown: setup_teardown.md
