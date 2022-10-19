@@ -10,14 +10,14 @@
       
       
       
-        <link rel="canonical" href="https://proofit404.github.io/dependencies/direct_resolve/">
+        <link rel="canonical" href="https://proofit404.github.io/dependencies/shield/">
       
       <link rel="icon" href="../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.4.1, mkdocs-material-8.5.6">
     
     
       
-        <title>Direct resolve - dependencies</title>
+        <title>Shield - dependencies</title>
       
     
     
@@ -70,7 +70,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#direct-resolve" class="md-skip">
+        <a href="#shield" class="md-skip">
           Skip to content
         </a>
       
@@ -103,7 +103,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Direct resolve
+              Shield
             
           </span>
         </div>
@@ -474,20 +474,6 @@
               
   
   
-  
-    <li class="md-nav__item">
-      <a href="../shield/" class="md-nav__link">
-        Shield
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
     
   
   
@@ -500,12 +486,12 @@
       
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
-          Direct resolve
+          Shield
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
-        Direct resolve
+        Shield
       </a>
       
         
@@ -524,13 +510,6 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#why" class="md-nav__link">
-    Why
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#principles" class="md-nav__link">
     Principles
   </a>
@@ -539,43 +518,8 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#classes-are-resolved-by-attribute-access" class="md-nav__link">
-    Classes are resolved by attribute access
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#scalar-types-could-not-be-resolved-directly" class="md-nav__link">
-    Scalar types could not be resolved directly
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#this-object-could-not-be-resolved-directly" class="md-nav__link">
-    this object could not be resolved directly
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#nested-injectors-could-not-be-resolved-directly" class="md-nav__link">
-    Nested injectors could not be resolved directly
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#value-object-could-not-be-resolved-directly" class="md-nav__link">
-    @value object could not be resolved directly
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#package-object-would-repeat-original-object-behavior" class="md-nav__link">
-    Package object would repeat original object behavior
+  <a href="#variable-length-positional-arguments-could-be-specified" class="md-nav__link">
+    Variable-length positional arguments could be specified
   </a>
   
 </li>
@@ -589,6 +533,20 @@
   
 </nav>
       
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../direct_resolve/" class="md-nav__link">
+        Direct resolve
+      </a>
     </li>
   
 
@@ -745,13 +703,6 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#why" class="md-nav__link">
-    Why
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#principles" class="md-nav__link">
     Principles
   </a>
@@ -760,43 +711,8 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#classes-are-resolved-by-attribute-access" class="md-nav__link">
-    Classes are resolved by attribute access
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#scalar-types-could-not-be-resolved-directly" class="md-nav__link">
-    Scalar types could not be resolved directly
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#this-object-could-not-be-resolved-directly" class="md-nav__link">
-    this object could not be resolved directly
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#nested-injectors-could-not-be-resolved-directly" class="md-nav__link">
-    Nested injectors could not be resolved directly
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#value-object-could-not-be-resolved-directly" class="md-nav__link">
-    @value object could not be resolved directly
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#package-object-would-repeat-original-object-behavior" class="md-nav__link">
-    Package object would repeat original object behavior
+  <a href="#variable-length-positional-arguments-could-be-specified" class="md-nav__link">
+    Variable-length positional arguments could be specified
   </a>
   
 </li>
@@ -821,120 +737,47 @@
                   
 
 
-<h1 id="direct-resolve">Direct resolve<a class="headerlink" href="#direct-resolve" title="Permanent link">&para;</a></h1>
-<h2 id="why">Why<a class="headerlink" href="#why" title="Permanent link">&para;</a></h2>
-<p>Primary goal of <code>dependencies</code> library is making objects composition easier.
-That's why we focus primary on object instantiation. We suppose you not gonna
-use <code>Injector</code> as constant storage for example. This assumption leads us to the
-conclusion that only attributes containing classes are useful to be resolved by
-attribute access. This architectural limitation gives us ability to implement
-interesting features like <a href="../sticky/">Sticky scopes</a>.</p>
+<h1 id="shield">shield<a class="headerlink" href="#shield" title="Permanent link">&para;</a></h1>
+<p>Sometimes you need to instantiate classes that were not designed to be used in
+dependency injection context. For example, it has variable length positional or
+keyword arguments. Commonly known as <code>*args</code> and <code>**kwargs</code>. Our dependency
+injection implementation highly coupled with constructor signature of the class.
+We have to know ahead what arguments we need to pass to the class by names.</p>
+<p>For specific cases like this we introduced <code>shield</code> object. It allows you to
+specify necessary signature manually. In that case dependency injection engine
+would know what arguments to pass.</p>
 <h2 id="principles">Principles<a class="headerlink" href="#principles" title="Permanent link">&para;</a></h2>
 <ul>
-<li><a href="#classes-are-resolved-by-attribute-access">Classes are resolved by attribute access</a></li>
-<li><a href="#scalar-types-could-not-be-resolved-directly">Scalar types could not be resolved directly</a></li>
-<li><a href="#this-object-could-not-be-resolved-directly"><code>this</code> object could not be resolved directly</a></li>
-<li><a href="#nested-injectors-could-not-be-resolved-directly">Nested injectors could not be resolved directly</a></li>
-<li><a href="#value-object-could-not-be-resolved-directly"><code>@value</code> object could not be resolved directly</a></li>
-<li><a href="#package-object-would-repeat-original-object-behavior">Package object would repeat original object behavior</a></li>
+<li><a href="#variable-length-positional-arguments-could-be-specified">Variable-length positional arguments could be specified</a></li>
 </ul>
-<h3 id="classes-are-resolved-by-attribute-access">Classes are resolved by attribute access<a class="headerlink" href="#classes-are-resolved-by-attribute-access" title="Permanent link">&para;</a></h3>
-<p>When we speak about resolving dependencies that mean client code (interactive
-python console in our case) would use attribute access on <code>Injector</code> subclass.
-In some sense you could think of this as access of external code.</p>
-<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dependencies</span> <span class="kn">import</span> <span class="n">Injector</span>
+<h3 id="variable-length-positional-arguments-could-be-specified">Variable-length positional arguments could be specified<a class="headerlink" href="#variable-length-positional-arguments-could-be-specified" title="Permanent link">&para;</a></h3>
+<p>If you specify positional arguments next to the class you want to build inside
+<code>shield</code> object signature, they would be injected based on on the semantic
+commonly used for such dependency type.</p>
+<p>For example, scalar types would be passed as is. The same way they would be
+passed from <code>Injector</code> attributes.</p>
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dependencies</span> <span class="kn">import</span> <span class="n">Injector</span><span class="p">,</span> <span class="n">shield</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">User</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
-<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Sum</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="n">args</span>
 <span class="gp">...</span>
-<span class="gp">... </span>    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="gp">... </span>        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;User(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">=!r}</span><span class="s2">)&quot;</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">do</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">)</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Container</span><span class="p">(</span><span class="n">Injector</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="n">user</span> <span class="o">=</span> <span class="n">User</span>
-<span class="gp">... </span>    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Jeff&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Wrong</span><span class="p">(</span><span class="n">Injector</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="nb">sum</span> <span class="o">=</span> <span class="n">Sum</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Container</span><span class="o">.</span><span class="n">user</span>
-<span class="go">User(self.name=&#39;Jeff&#39;)</span>
-</code></pre></div>
-<h3 id="scalar-types-could-not-be-resolved-directly">Scalar types could not be resolved directly<a class="headerlink" href="#scalar-types-could-not-be-resolved-directly" title="Permanent link">&para;</a></h3>
-<p>Scalar types like integer, floats, lists, or dictionaries could be used as
-dependencies for classes. But scalar types can't be resolved directly from
-attribute access.</p>
-<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dependencies</span> <span class="kn">import</span> <span class="n">Injector</span>
-
-<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Container</span><span class="p">(</span><span class="n">Injector</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="n">integer</span> <span class="o">=</span> <span class="mi">1</span>
-
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Container</span><span class="o">.</span><span class="n">integer</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Wrong</span><span class="o">.</span><span class="n">sum</span><span class="o">.</span><span class="n">do</span><span class="p">()</span>
 <span class="gt">Traceback (most recent call last):</span>
   <span class="c">...</span>
-<span class="gr">_dependencies.exceptions.DependencyError</span>: <span class="n">Scalar dependencies could only be used to instantiate classes</span>
-</code></pre></div>
-<h3 id="this-object-could-not-be-resolved-directly"><code>this</code> object could not be resolved directly<a class="headerlink" href="#this-object-could-not-be-resolved-directly" title="Permanent link">&para;</a></h3>
-<p>You can't resolve this objects as main target of dependency injection. The main
-goal of <code>this</code> object is to point to real dependencies for classes. For example,
-if they are located in the attribute with a different name.</p>
-<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dependencies</span> <span class="kn">import</span> <span class="n">Injector</span><span class="p">,</span> <span class="n">this</span>
+<span class="gr">_dependencies.exceptions.DependencyError</span>: <span class="n">&#39;Sum.__init__&#39; have variable-length positional arguments</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Container</span><span class="p">(</span><span class="n">Injector</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="n">foo</span> <span class="o">=</span> <span class="n">this</span><span class="o">.</span><span class="n">bar</span>
-<span class="gp">... </span>    <span class="n">bar</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="gp">... </span>    <span class="nb">sum</span> <span class="o">=</span> <span class="n">shield</span><span class="p">(</span><span class="n">Sum</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Container</span><span class="o">.</span><span class="n">foo</span>
-<span class="gt">Traceback (most recent call last):</span>
-  <span class="c">...</span>
-<span class="gr">_dependencies.exceptions.DependencyError</span>: <span class="n">&#39;this&#39; dependencies could only be used to instantiate classes</span>
-</code></pre></div>
-<h3 id="nested-injectors-could-not-be-resolved-directly">Nested injectors could not be resolved directly<a class="headerlink" href="#nested-injectors-could-not-be-resolved-directly" title="Permanent link">&para;</a></h3>
-<p>You can't resolve nested injectors as main target of dependency injection.</p>
-<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dependencies</span> <span class="kn">import</span> <span class="n">Injector</span>
-
-<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Container</span><span class="p">(</span><span class="n">Injector</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="k">class</span> <span class="nc">Nested</span><span class="p">(</span><span class="n">Injector</span><span class="p">):</span>
-<span class="gp">... </span>        <span class="n">foo</span> <span class="o">=</span> <span class="mi">1</span>
-
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Container</span><span class="o">.</span><span class="n">Nested</span>
-<span class="gt">Traceback (most recent call last):</span>
-  <span class="c">...</span>
-<span class="gr">_dependencies.exceptions.DependencyError</span>: <span class="n">&#39;Injector&#39; dependencies could only be used to instantiate classes</span>
-</code></pre></div>
-<h3 id="value-object-could-not-be-resolved-directly"><code>@value</code> object could not be resolved directly<a class="headerlink" href="#value-object-could-not-be-resolved-directly" title="Permanent link">&para;</a></h3>
-<p>You can't resolve value objects as main target of dependency injection. The main
-goal of <code>value</code> objects is to be evaluated dependencies for classes.</p>
-<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dependencies</span> <span class="kn">import</span> <span class="n">Injector</span><span class="p">,</span> <span class="n">value</span>
-
-<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Container</span><span class="p">(</span><span class="n">Injector</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="nd">@value</span>
-<span class="gp">... </span>    <span class="k">def</span> <span class="nf">foo</span><span class="p">():</span>
-<span class="gp">... </span>        <span class="k">return</span> <span class="mi">1</span>
-
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Container</span><span class="o">.</span><span class="n">foo</span>
-<span class="gt">Traceback (most recent call last):</span>
-  <span class="c">...</span>
-<span class="gr">_dependencies.exceptions.DependencyError</span>: <span class="n">&#39;value&#39; dependencies could only be used to instantiate classes</span>
-</code></pre></div>
-<h3 id="package-object-would-repeat-original-object-behavior">Package object would repeat original object behavior<a class="headerlink" href="#package-object-would-repeat-original-object-behavior" title="Permanent link">&para;</a></h3>
-<p>Package objects will conform its resolution rules with imported objects. If
-package dependency points to the class, it's allowed to resolve such dependency
-directly. If package object points to the scalar type for example, it'll raise
-exception if you tries to resolve such dependency directly.</p>
-<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dependencies</span> <span class="kn">import</span> <span class="n">Injector</span><span class="p">,</span> <span class="n">Package</span>
-
-<span class="gp">&gt;&gt;&gt; </span><span class="n">examples</span> <span class="o">=</span> <span class="n">Package</span><span class="p">(</span><span class="s2">&quot;examples&quot;</span><span class="p">)</span>
-
-<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Container</span><span class="p">(</span><span class="n">Injector</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="n">foo</span> <span class="o">=</span> <span class="n">examples</span><span class="o">.</span><span class="n">submodule</span><span class="o">.</span><span class="n">Foo</span>
-<span class="gp">... </span>    <span class="n">variable</span> <span class="o">=</span> <span class="n">examples</span><span class="o">.</span><span class="n">submodule</span><span class="o">.</span><span class="n">variable</span>
-
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Container</span><span class="o">.</span><span class="n">foo</span>  <span class="c1"># doctest: +ELLIPSIS</span>
-<span class="go">&lt;examples.submodule.Foo object at 0x...&gt;</span>
-
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Container</span><span class="o">.</span><span class="n">variable</span>
-<span class="gt">Traceback (most recent call last):</span>
-  <span class="c">...</span>
-<span class="gr">_dependencies.exceptions.DependencyError</span>: <span class="n">Scalar dependencies could only be used to instantiate classes</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Container</span><span class="o">.</span><span class="n">sum</span><span class="o">.</span><span class="n">do</span><span class="p">()</span>
+<span class="go">3</span>
 </code></pre></div>
 <p align="center">&mdash; ⭐ &mdash;</p>
 
@@ -957,7 +800,7 @@ exception if you tries to resolve such dependency directly.</p>
     <nav class="md-footer__inner md-grid" aria-label="Footer" >
       
         
-        <a href="../shield/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Shield" rel="prev">
+        <a href="../value/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Value" rel="prev">
           <div class="md-footer__button md-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
           </div>
@@ -966,20 +809,20 @@ exception if you tries to resolve such dependency directly.</p>
               <span class="md-footer__direction">
                 Previous
               </span>
-              Shield
+              Value
             </div>
           </div>
         </a>
       
       
         
-        <a href="../sticky/" class="md-footer__link md-footer__link--next" aria-label="Next: Sticky scopes" rel="next">
+        <a href="../direct_resolve/" class="md-footer__link md-footer__link--next" aria-label="Next: Direct resolve" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              Sticky scopes
+              Direct resolve
             </div>
           </div>
           <div class="md-footer__button md-icon">
