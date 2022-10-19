@@ -1,16 +1,24 @@
 """Tests related to Shield object."""
 from dependencies import Injector
 from dependencies import shield
+from dependencies import this
 
 
-def test_pass_args():
+def test_pass_args(e):
     """Pass positional arguments."""
 
-    class Result:
-        def __init__(self, *args):
-            self.args = args
+    class Container(Injector):
+        result = shield(e.StarArgs, 1, 2)
+
+    assert Container.result.args == (1, 2)
+
+
+def test_pass_args_this(e):
+    """Pass resolved this object as positional arguments."""
 
     class Container(Injector):
-        result = shield(Result, 1, 2)
+        result = shield(e.StarArgs, this.a, this.b)
+        a = 1
+        b = 2
 
     assert Container.result.args == (1, 2)
