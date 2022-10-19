@@ -10,6 +10,7 @@ source =
   collector
   configuration
   examples
+  examples1
   expect
   mddoctest
   tests
