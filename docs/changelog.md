@@ -1,3 +1,10 @@
+# 7.6.0 (2022-10-19)
+
+### Features
+
+- pass positional argument using shield object
+  [#439](https://github.com/proofit404/dependencies/issues/439) 0d7d200
+
 # 7.5.0 (2022-10-15)
 
 ### Features
