@@ -21,19 +21,17 @@ from _dependencies.objects.value import _is_value
 def _recursive(builder):
     def wrapper(name, dependency):
         state = builder(name, dependency)
-        while True:
-            step = _tick(name, state)
-            if step:  # pragma: no branch
-                return step
+        return _iterate(name, state)
 
     return wrapper
 
 
-def _tick(name, state):
+def _iterate(name, state):
     try:
         dependency = next(state)
-        spec = _make_dependency_spec(name, dependency)
-        state.send(spec)
+        while True:
+            spec = _make_dependency_spec(name, dependency)
+            dependency = state.send(spec)
     except StopIteration as result:
         return result.value
 
@@ -48,8 +46,8 @@ def _make_dependency_spec(name, dependency):
         (_is_this, _build_this_spec),
         (_is_package, _recursive(_build_package_spec)),
         (_is_value, _build_value_spec),
-        (_is_shield, _build_shield_spec),
+        (_is_shield, _recursive(_build_shield_spec)),
         (_is_data, _build_data_spec),
-    ):  # pragma: no branch
+    ):
         if condition(name, dependency):
             return builder(name, dependency)
