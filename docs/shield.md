@@ -13,6 +13,7 @@ would know what arguments to pass.
 ## Principles
 
 - [Variable-length positional arguments could be specified](#variable-length-positional-arguments-could-be-specified)
+- [`this` object could be used in arguments](#this-object-could-be-used-in-arguments)
 
 ### Variable-length positional arguments could be specified
 
@@ -44,6 +45,33 @@ _dependencies.exceptions.DependencyError: 'Sum.__init__' have variable-length po
 
 >>> class Container(Injector):
 ...     sum = shield(Sum, 1, 2)
+
+>>> Container.sum.do()
+3
+
+```
+
+### `this` object could be used in arguments
+
+You could pass `this` objects to variable-length positional or keyword
+arguments. It would be resolved in the same scope where `shield` object was
+defined.
+
+```pycon
+
+>>> from dependencies import Injector, shield, this
+
+>>> class Sum:
+...     def __init__(self, *args):
+...         self.args = args
+...
+...     def do(self):
+...         return sum(self.args)
+
+>>> class Container(Injector):
+...     sum = shield(Sum, this.a, this.b)
+...     a = 1
+...     b = 2
 
 >>> Container.sum.do()
 3
