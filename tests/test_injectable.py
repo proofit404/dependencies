@@ -1,207 +1,146 @@
 """Tests related to injectable objects."""
 import pytest
 
-from collector import CodeCollector
 from dependencies import Injector
 from dependencies import Package
 from dependencies import value
 from dependencies.exceptions import DependencyError
 
 
-deny_varargs = CodeCollector()
-varargs_defs = CodeCollector("foo")
-
-
-@deny_varargs.parametrize
-@varargs_defs.parametrize
-def test_deny_variable_length_positional_arguments(code, foo):
+def test_deny_variable_length_positional_arguments(d):
     """Raise `DependencyError` if constructor have *args argument."""
 
     class Baz:
         pass
 
-    with pytest.raises(DependencyError) as exc_info:
-        code(foo(), Baz)
+    class Container(Injector):
+        foo = d
+        args = (1, 2, 3)
+        baz = Baz
 
-    message = str(exc_info.value)
-    assert message in {
+    with pytest.raises(DependencyError) as exc_info:
+        Container.baz
+
+    assert str(exc_info.value) in {
         "'Foo.__init__' have variable-length positional arguments",
         "'func' have variable-length positional arguments",
     }
 
 
-@deny_varargs
-def _dfe1c22c641e(Foo, Baz):
-    class Container(Injector):
-        foo = Foo
-        args = (1, 2, 3)
-        baz = Baz
-
-    Container.baz
-
-
-@deny_varargs
-def _f7ef2aa82c18(Foo, Baz):
-    Injector(foo=Foo, args=(1, 2, 3), baz=Baz).baz
-
-
-@varargs_defs
-def _xkebooxhls7f():
+def _varargs():
     class Foo:
         def __init__(self, *args):
             raise RuntimeError
 
-    return Foo
-
-
-@varargs_defs
-def _eapfhkr8z0mg():
     @value
     def func(*args):
         raise RuntimeError
 
-    return func
+    yield Foo
+    yield func
+    # FIXME: Package is missing.
 
 
-deny_kwargs = CodeCollector()
-kwargs_defs = CodeCollector("foo")
+@pytest.fixture(params=_varargs())
+def d(request):
+    """All possible variable-length positional argument definitions."""
+    return request.param
 
 
-@deny_kwargs.parametrize
-@kwargs_defs.parametrize
-def test_deny_variable_length_keyword_arguments(code, foo):
+def test_deny_variable_length_keyword_arguments(e):
     """Raise `DependencyError` if constructor have **kwargs argument."""
 
     class Baz:
         pass
 
-    with pytest.raises(DependencyError) as exc_info:
-        code(foo(), Baz)
+    class Container(Injector):
+        foo = e
+        kwargs = {"start": 5}
+        baz = Baz
 
-    message = str(exc_info.value)
-    assert message in {
+    with pytest.raises(DependencyError) as exc_info:
+        Container.baz
+
+    assert str(exc_info.value) in {
         "'Foo.__init__' have variable-length keyword arguments",
         "'func' have variable-length keyword arguments",
     }
 
 
-@deny_kwargs
-def _e281099be65d(Foo, Baz):
-    class Container(Injector):
-        foo = Foo
-        kwargs = {"start": 5}
-        baz = Baz
-
-    Container.baz
-
-
-@deny_kwargs
-def _bcf7c5881b2c(Foo, Baz):
-    Injector(foo=Foo, kwargs={"start": 5}, baz=Baz).baz
-
-
-@kwargs_defs
-def _gvhotc3zgfuq():
+def _kwargs():
     class Foo:
         def __init__(self, **kwargs):
             raise RuntimeError
 
-    return Foo
-
-
-@kwargs_defs
-def _hmshyccwnhsw():
     @value
     def func(**kwargs):
         raise RuntimeError
 
-    return func
+    yield Foo
+    yield func
+    # FIXME: Package is missing.
 
 
-deny_positional_only_arguments = CodeCollector()
-positional_only_arguments_defs = CodeCollector("foo")
+@pytest.fixture(params=_kwargs())
+def e(request):
+    """All possible variable-length keyword argument definitions."""
+    return request.param
 
 
-@deny_positional_only_arguments.parametrize
-@positional_only_arguments_defs.parametrize
-def test_deny_positional_only_arguments(code, foo):
+def test_deny_positional_only_arguments(f):
     """We can not inject positional-only arguments."""
-    with pytest.raises(DependencyError) as exc_info:
-        code(foo())
 
-    message = str(exc_info.value)
-    assert message in {
+    class Container(Injector):
+        foo = f
+
+    with pytest.raises(DependencyError) as exc_info:
+        Container.foo
+
+    assert str(exc_info.value) in {
         "'Foo.__init__' have positional-only arguments",
         "'foo' have positional-only arguments",
     }
 
 
-@deny_positional_only_arguments
-def _b81wVbPL16QR(Foo):
-    class Container(Injector):
-        foo = Foo
-
-    Container.foo
-
-
-@deny_positional_only_arguments
-def _bF3JriFujPqf(Foo):
-    Injector(foo=Foo).foo
-
-
-@positional_only_arguments_defs
-def _rPiy4i9XVvzb():
+def _positional_only():
     class Foo:
         def __init__(self, a, /, b):
             raise RuntimeError
 
-    return Foo
-
-
-@positional_only_arguments_defs
-def _hw5TnOooZVOG():
     @value
     def foo(a, /, b):
         raise RuntimeError
 
-    return foo
-
-
-@positional_only_arguments_defs
-def _dQ7tFVMvSYmF():
     examples = Package("examples")
-    return examples.positional_only.Foo
+
+    yield Foo
+    yield foo
+    yield examples.positional_only.Foo
+    yield examples.positional_only.foo
 
 
-@positional_only_arguments_defs
-def _h79dcovVgStH():
-    examples = Package("examples")
-    return examples.positional_only.foo
+@pytest.fixture(params=_positional_only())
+def f(request):
+    """All possible positional-only argument definitions."""
+    return request.param
 
 
-cls_named_arguments = CodeCollector()
-arguments_defs = CodeCollector("bar")
-
-
-@cls_named_arguments.parametrize
-@arguments_defs.parametrize
-def test_deny_classes_as_default_values(code, bar):
+def test_deny_classes_as_default_values(q):
     """Verify constructor default arguments against naming conventions.
 
     If argument name doesn't ends with `_class`, its default value can't be a class.
 
     """
 
-    class Foo:
-        pass
-
     class Baz:
         pass
 
-    with pytest.raises(DependencyError) as exc_info:
-        code(bar(Foo), Baz)
+    class Container(Injector):
+        bar = q
+        baz = Baz
 
-    message = str(exc_info.value)
+    with pytest.raises(DependencyError) as exc_info:
+        Container.baz
 
     expected_class = """
 'Bar' class has a default value of 'foo' argument set to 'Foo' class.
@@ -217,88 +156,65 @@ You should either change the name of the argument into 'foo_class'
 or set the default value to an instance of that class.
 """.strip()
 
-    assert message in {expected_class, expected_value}
+    assert str(exc_info.value) in {expected_class, expected_value}
 
 
-@cls_named_arguments
-def _dad79637580d(Bar, Baz):
-    class Container(Injector):
-        bar = Bar
-        baz = Baz
+def _default_class():
+    class Foo:
+        pass
 
-    Container.baz
-
-
-@cls_named_arguments
-def _bccb4f621e70(Bar, Baz):
-    Injector(bar=Bar, baz=Baz).baz
-
-
-@arguments_defs
-def _sxd25ppy5ypj(Foo):
     class Bar:
         def __init__(self, foo=Foo):
             raise RuntimeError
 
-    return Bar
-
-
-@arguments_defs
-def _oafemes7wcku(Foo):
     @value
     def func(foo=Foo):
         raise RuntimeError
 
-    return func
+    yield Bar
+    yield func
+    # FIXME: Package is missing.
 
 
-cls_named_defaults = CodeCollector()
-defaults_defs = CodeCollector("bar")
+@pytest.fixture(params=_default_class())
+def q(request):
+    """All default argument definitions."""
+    return request.param
 
 
-@cls_named_defaults.parametrize
-@defaults_defs.parametrize
-def test_deny_non_classes_in_class_named_arguments(code, bar):
+def test_deny_non_classes_in_class_named_arguments(t):
     """If argument name ends with `_class`, it must have a class as it default value."""
 
     class Baz:
         pass
 
+    class Container(Injector):
+        bar = t
+        baz = Baz
+
     with pytest.raises(DependencyError) as exc_info:
-        code(bar(), Baz)
+        Container.baz
 
     message = str(exc_info.value)
 
     assert message == "'foo_class' default value should be a class"
 
 
-@cls_named_defaults
-def _a8cd70341d3d(Bar, Baz):
-    class Container(Injector):
-        bar = Bar
-        baz = Baz
-
-    Container.baz
-
-
-@cls_named_defaults
-def _b859e98f2913(Bar, Baz):
-    Injector(bar=Bar, baz=Baz).baz
-
-
-@defaults_defs
-def _x53iiy9oyx4i():
+def _class_named():
     class Bar:
         def __init__(self, foo_class=1):
             raise RuntimeError
 
-    return Bar
-
-
-@defaults_defs
-def _zkh2hnjhe149():
     @value
     def func(foo_class=1):
         raise RuntimeError
 
-    return func
+    yield Bar
+    yield func
+    # FIXME: Package is missing.
+
+
+@pytest.fixture(params=_class_named())
+def t(request):
+    """All class-named argument definitions."""
+    return request.param

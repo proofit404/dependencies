@@ -4,7 +4,6 @@ from random import randint
 
 import pytest
 
-from collector import CodeCollector
 from dependencies import Injector
 from dependencies import value
 from dependencies.exceptions import DependencyError
@@ -67,38 +66,23 @@ def test_protect_against_classes():
     assert str(exc_info.value) == "'value' decorator can not be used on classes"
 
 
-deny_method = CodeCollector()
-
-
-@deny_method.parametrize
-def test_protect_against_self(code):
+def test_protect_against_self():
     """Deny to define a value with argument called `self`."""
 
     class Foo:
         pass
 
-    @value
-    def method(self, foo, bar):
-        raise RuntimeError
-
-    with pytest.raises(DependencyError) as exc_info:
-        code(Foo, method)
-
-    assert str(exc_info.value) == "'value' decorator can not be used on methods"
-
-
-@deny_method
-def _sUIvAUUeQIde(Foo, arg):
     class Container(Injector):
         foo = Foo
-        method = arg
 
-    Container.foo
+        @value
+        def method(self, foo, bar):
+            raise RuntimeError
 
+    with pytest.raises(DependencyError) as exc_info:
+        Container.foo
 
-@deny_method
-def _nVlMKQghCDAQ(Foo, arg):
-    Injector(foo=Foo, method=arg).foo
+    assert str(exc_info.value) == "'value' decorator can not be used on methods"
 
 
 def test_allow_decorated_functions(expect):

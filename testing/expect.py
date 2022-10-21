@@ -2,20 +2,22 @@ import pytest
 
 
 class _Call:
-    def __init__(self, container):
-        self.container = container
+    def __init__(self, *containers):
+        self.containers = containers
 
     def __call__(self, f):
-        f(self.container)
+        for container in self.containers:
+            f(container)
 
 
 class _Context:
-    def __init__(self, container):
-        self.container = container
+    def __init__(self, *containers):
+        self.containers = containers
 
     def __call__(self, f):
-        with self.container as scope:
-            f(scope)
+        for container in self.containers:
+            with container as scope:
+                f(scope)
 
 
 @pytest.fixture(params=[_Call, _Context])
