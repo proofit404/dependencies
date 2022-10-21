@@ -26,6 +26,11 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
+         <loc>https://proofit404.github.io/dependencies/design/</loc>
+         <lastmod>2022-10-21</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
          <loc>https://proofit404.github.io/dependencies/direct_resolve/</loc>
          <lastmod>2022-10-21</lastmod>
          <changefreq>daily</changefreq>
@@ -36,12 +41,12 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://proofit404.github.io/dependencies/faq/</loc>
+         <loc>https://proofit404.github.io/dependencies/installation/</loc>
          <lastmod>2022-10-21</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://proofit404.github.io/dependencies/installation/</loc>
+         <loc>https://proofit404.github.io/dependencies/mixins/</loc>
          <lastmod>2022-10-21</lastmod>
          <changefreq>daily</changefreq>
     </url>
@@ -72,6 +77,11 @@
     </url>
     <url>
          <loc>https://proofit404.github.io/dependencies/this/</loc>
+         <lastmod>2022-10-21</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://proofit404.github.io/dependencies/type_hints/</loc>
          <lastmod>2022-10-21</lastmod>
          <changefreq>daily</changefreq>
     </url>
