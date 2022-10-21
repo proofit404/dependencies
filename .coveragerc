@@ -7,7 +7,6 @@ source =
   _dependencies
   dependencies
   app
-  collector
   configuration
   examples
   examples1

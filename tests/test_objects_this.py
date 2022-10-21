@@ -3,7 +3,6 @@ from inspect import unwrap
 
 import pytest
 
-from collector import CodeCollector
 from dependencies import Injector
 from dependencies import this
 from dependencies.exceptions import DependencyError
@@ -56,43 +55,43 @@ def test_attribute_getter_few_attributes():
     assert Container.root.result == 1
 
 
-item_access = CodeCollector()
-
-
-@item_access.parametrize
-def test_item_getter(code):
+def test_item_getter():
     """We can describe item access in the `Injector` in the declarative manner."""
 
     class Root:
         def __init__(self, result):
             self.result = result
 
-    result = code(Root)
-    assert result == 1
-
-
-@item_access
-def _ce642f492941(Root):
     class Container(Injector):
         root = Root
         foo = {"one": 1}
         result = this.foo["one"]
 
-    return Container.root.result
+    assert Container.root.result == 1
 
 
-@item_access
-def _ffa208dc1130(Root):
+def test_item_getter1():
+    """We can describe item access in the `Injector` in the declarative manner."""
+
+    class Root:
+        def __init__(self, result):
+            self.result = result
+
     class Container(Injector):
         root = Root
         foo = {"one": {"two": 1}}
         result = this.foo["one"]["two"]
 
-    return Container.root.result
+    assert Container.root.result == 1
 
 
-@item_access
-def _e5c358190fef(Root):
+def test_item_getter2():
+    """We can describe item access in the `Injector` in the declarative manner."""
+
+    class Root:
+        def __init__(self, result):
+            self.result = result
+
     class Container(Injector):
         root = Root
         result = this.SubContainer.spam
@@ -101,11 +100,16 @@ def _e5c358190fef(Root):
         class SubContainer(Injector):
             spam = (this << 1).foo["bar"]["baz"]
 
-    return Container.root.result
+    assert Container.root.result == 1
 
 
-@item_access
-def _ab4cdbf60b2f(Root):
+def test_item_getter3():
+    """We can describe item access in the `Injector` in the declarative manner."""
+
+    class Root:
+        def __init__(self, result):
+            self.result = result
+
     class Container(Injector):
         root = Root
         result = this.SubContainer.SubSubContainer.spam
@@ -115,40 +119,55 @@ def _ab4cdbf60b2f(Root):
             class SubSubContainer(Injector):
                 spam = (this << 2).foo["bar"]["baz"]
 
-    return Container.root.result
+    assert Container.root.result == 1
 
 
-@item_access
-def _be332433b74d(Root):
+def test_item_getter4():
+    """We can describe item access in the `Injector` in the declarative manner."""
+
+    class Root:
+        def __init__(self, result):
+            self.result = result
+
     class Container(Injector):
         root = Root
         result = this.bar
         foo = [1, 2, 3]
         bar = this.foo[0]
 
-    return Container.root.result
+    assert Container.root.result == 1
 
 
-@item_access
-def _fe150d5ebe93(Root):
+def test_item_getter5():
+    """We can describe item access in the `Injector` in the declarative manner."""
+
+    class Root:
+        def __init__(self, result):
+            self.result = result
+
     class Container(Injector):
         root = Root
         result = this.bar
         foo = {2: 1}
         bar = this.foo[2]
 
-    return Container.root.result
+    assert Container.root.result == 1
 
 
-@item_access
-def _dc4fedcd09d8(Root):
+def test_item_getter6():
+    """We can describe item access in the `Injector` in the declarative manner."""
+
+    class Root:
+        def __init__(self, result):
+            self.result = result
+
     class Container(Injector):
         root = Root
         result = this.bar
         foo = {("x", 1): 1}
         bar = this.foo[("x", 1)]
 
-    return Container.root.result
+    assert Container.root.result == 1
 
 
 def test_item_getter_non_printable_key():
@@ -211,33 +230,20 @@ def test_this_deny_non_integers():
     assert str(exc_info.value) == "Positive integer argument is required"
 
 
-negative_integers = CodeCollector()
-
-
-@negative_integers.parametrize
-def test_this_deny_negative_integers(code):
+def test_this_deny_negative_integers():
     """We can't shift `this` with negative integer."""
     with pytest.raises(ValueError, match=".*") as exc_info:
-        code()
+        this << -1
+
+    assert str(exc_info.value) == "Positive integer argument is required"
+
+    with pytest.raises(ValueError, match=".*") as exc_info:
+        this << 0
 
     assert str(exc_info.value) == "Positive integer argument is required"
 
 
-@negative_integers
-def _xsJWb2lx6EMs():
-    this << -1
-
-
-@negative_integers
-def _nvm3ybp98vGm():
-    this << 0
-
-
-too_many = CodeCollector("stack_representation", "code")
-
-
-@too_many.parametrize
-def test_require_more_parents_that_injector_actually_has(stack_representation, code):
+def test_require_more_parents_that_injector_actually_has():
     """Verify `this` expression against depth of nesting.
 
     If we shift more that container levels available, we should provide meaningful
@@ -249,50 +255,35 @@ def test_require_more_parents_that_injector_actually_has(stack_representation, c
         def __init__(self, foo):
             raise RuntimeError
 
-    with pytest.raises(DependencyError) as exc_info:
-        code(Root)
+    class Container(Injector):
+        root = Root
+        foo = (this << 1).bar
 
-    expected = f"""
+    with pytest.raises(DependencyError) as exc_info:
+        Container.root
+
+    expected = """
 You tried to shift this more times than Injector has levels:
 
-{stack_representation}
+Container.root
+  Container.foo
     """.strip()
 
     assert str(exc_info.value) == expected
 
 
-@too_many(
+def test_require_more_parents_that_injector_actually_has1():
+    """Verify `this` expression against depth of nesting.
+
+    If we shift more that container levels available, we should provide meaningful
+    message to user.
+
     """
-Container.root
-  Container.foo
-    """.strip()
-)
-def _s6lduD7BJpxW(Root):
-    class Container(Injector):
-        root = Root
-        foo = (this << 1).bar
 
-    Container.root
+    class Root:
+        def __init__(self, foo):
+            raise RuntimeError
 
-
-@too_many(
-    """
-Injector.root
-  Injector.foo
-    """.strip()
-)
-def _ww6xNI4YrNr6(Root):
-    Injector(root=Root, foo=(this << 1).bar).root
-
-
-@too_many(
-    """
-Container.root
-  Container.foo
-    Nested.foo
-    """.strip()
-)
-def _bUICVObtDZ4I(Root):
     class Container(Injector):
         root = Root
         foo = this.Nested.foo
@@ -300,25 +291,21 @@ def _bUICVObtDZ4I(Root):
         class Nested(Injector):
             foo = (this << 2).bar
 
-    Container.root
+    with pytest.raises(DependencyError) as exc_info:
+        Container.root
 
+    expected = """
+You tried to shift this more times than Injector has levels:
 
-@too_many(
-    """
-Injector.root
-  Injector.foo
-    Injector.foo
+Container.root
+  Container.foo
+    Nested.foo
     """.strip()
-)
-def _rN3suiVzhqMM(Root):
-    Injector(root=Root, foo=this.Nested.foo, Nested=Injector(foo=(this << 2).bar)).root
+
+    assert str(exc_info.value) == expected
 
 
-attribute_error = CodeCollector("stack_representation", "code")
-
-
-@attribute_error.parametrize
-def test_attribute_error_on_parent_access(stack_representation, code):
+def test_attribute_error_on_parent_access():
     """Verify `this` object expression against existed dependencies.
 
     We should raise `AttributeError` if we have correct number of parents but specify
@@ -330,53 +317,36 @@ def test_attribute_error_on_parent_access(stack_representation, code):
         def __init__(self, foo):
             raise RuntimeError
 
-    with pytest.raises(DependencyError) as exc_info:
-        code(Root)
+    class Container(Injector):
+        root = Root
+        foo = this.bar
 
-    expected = f"""
+    with pytest.raises(DependencyError) as exc_info:
+        Container.root
+
+    expected = """
 Can not resolve attribute 'bar':
 
-{stack_representation}
+Container.root
+  Container.foo
+    Container.bar
     """.strip()
 
     assert str(exc_info.value) == expected
 
 
-@attribute_error(
+def test_attribute_error_on_parent_access1():
+    """Verify `this` object expression against existed dependencies.
+
+    We should raise `AttributeError` if we have correct number of parents but specify
+    wrong attribute name.
+
     """
-Container.root
-  Container.foo
-    Container.bar
-    """.strip()
-)
-def _t1jn9RI9v42t(Root):
-    class Container(Injector):
-        root = Root
-        foo = this.bar
 
-    Container.root
+    class Root:
+        def __init__(self, foo):
+            raise RuntimeError
 
-
-@attribute_error(
-    """
-Injector.root
-  Injector.foo
-    Injector.bar
-    """.strip()
-)
-def _vnmkIELBH3MN(Root):
-    Injector(root=Root, foo=this.bar).root
-
-
-@attribute_error(
-    """
-Container.root
-  Container.foo
-    Nested.foo
-      Container.bar
-    """.strip()
-)
-def _yOEj1qQfsXHy(Root):
     class Container(Injector):
         root = Root
         foo = this.Nested.foo
@@ -384,64 +354,38 @@ def _yOEj1qQfsXHy(Root):
         class Nested(Injector):
             foo = (this << 1).bar
 
-    Container.root
+    with pytest.raises(DependencyError) as exc_info:
+        Container.root
 
+    expected = """
+Can not resolve attribute 'bar':
 
-@attribute_error(
-    """
-Injector.root
-  Injector.foo
-    Injector.foo
-      Injector.bar
+Container.root
+  Container.foo
+    Nested.foo
+      Container.bar
     """.strip()
-)
-def _pG9M52ZRQr2S(Root):
-    Injector(root=Root, foo=this.Nested.foo, Nested=Injector(foo=(this << 1).bar)).root
+
+    assert str(exc_info.value) == expected
 
 
-direct = CodeCollector()
-
-
-@direct.parametrize
-def test_deny_this_without_attribute_access(code):
+@pytest.mark.parametrize("Bar", [this, this << 1])
+def test_deny_this_without_attribute_access(Bar):
     """`this` object can't be used as a dependency directly."""
 
     class Foo:
         pass
 
+    class Container(Injector):
+        foo = Foo
+        bar = Bar
+
     with pytest.raises(DependencyError) as exc_info:
-        code(Foo)
+        Container.foo
 
-    message = str(exc_info.value)
-    assert message == "You can not use 'this' directly in the 'Injector'"
+    expected = "You can not use 'this' directly in the 'Injector'"
 
-
-@direct
-def _b648b6f6a712(Foo):
-    class Container(Injector):
-        foo = Foo
-        bar = this
-
-    Container.foo
-
-
-@direct
-def _c147d398f4be(Foo):
-    class Container(Injector):
-        foo = Foo
-        bar = this << 1
-
-    Container.foo
-
-
-@direct
-def _a37783b6d1ad(Foo):
-    Injector(foo=Foo, bar=this).foo
-
-
-@direct
-def _bd05271fb831(Foo):
-    Injector(foo=Foo, bar=(this << 1)).foo
+    assert str(exc_info.value) == expected
 
 
 def test_this_inspect():

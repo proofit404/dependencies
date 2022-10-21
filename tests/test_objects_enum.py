@@ -5,7 +5,6 @@ from enum import unique
 
 import pytest
 
-from collector import CodeCollector
 from dependencies import Injector
 from dependencies.exceptions import DependencyError
 
@@ -19,11 +18,7 @@ class Choices(Enum):
     three = auto()
 
 
-deny_enums = CodeCollector()
-
-
-@deny_enums.parametrize
-def test_deny_enums(code):
+def test_deny_enums():
     """Deny inject enum classes.
 
     We should suggest to inject a specific enum member instead.
@@ -33,8 +28,12 @@ def test_deny_enums(code):
     class Foo:
         pass
 
+    class Container(Injector):
+        foo = Foo
+        choices = Choices
+
     with pytest.raises(DependencyError) as exc_info:
-        code(Foo)
+        Container.foo
 
     expected = """
 Attribute 'choices' contains Enum.
@@ -49,79 +48,29 @@ Inject its members instead.
     assert str(exc_info.value) == expected
 
 
-@deny_enums
-def _xO4I429TCjk6(Foo):
-    class Container(Injector):
-        foo = Foo
-        choices = Choices
-
-    Container.foo
-
-
-@deny_enums
-def _bfShH49KZHzO(Foo):
-    Injector(foo=Foo, choices=Choices).foo
-
-
-allow_enum_members = CodeCollector()
-
-
-@allow_enum_members.parametrize
-def test_allow_enum_members(code):
+def test_allow_enum_members():
     """Allow to inject enum members."""
 
     class Foo:
         def __init__(self, choice):
             self.choice = choice
 
-    foo = code(Foo)
-    assert foo.choice is Choices.one
-
-
-@allow_enum_members
-def _jn7EXz98BASo(Foo):
     class Container(Injector):
         foo = Foo
         choice = Choices.one
 
-    return Container.foo
+    assert Container.foo.choice is Choices.one
 
 
-@allow_enum_members
-def _akyelo6E7WLU(Foo):
-    return Injector(
-        foo=Foo,
-        choice=Choices.one,
-    ).foo
-
-
-allow_class_named_enum = CodeCollector()
-
-
-@allow_class_named_enum.parametrize
-def test_allow_class_named_enum(code):
+def test_allow_class_named_enum():
     """Allow to inject enum classes using class-named attributes."""
 
     class Foo:
         def __init__(self, choices_class):
             self.choices_class = choices_class
 
-    foo = code(Foo)
-    assert foo.choices_class is Choices
-
-
-@allow_class_named_enum
-def _zbx0Ur6z6qLa(Foo):
     class Container(Injector):
         foo = Foo
         choices_class = Choices
 
-    return Container.foo
-
-
-@allow_class_named_enum
-def _yhbeVQuEZeTk(Foo):
-    return Injector(
-        foo=Foo,
-        choices_class=Choices,
-    ).foo
+    assert Container.foo.choices_class is Choices
