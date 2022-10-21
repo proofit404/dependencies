@@ -43,15 +43,17 @@ nav:
       - Usage: usage.md
       - Classes: classes.md
       - This: this.md
-      - Nested injectors: nested.md
+      - Nested Injectors: nested.md
       - Package: package.md
       - Value: value.md
       - Shield: shield.md
-      - Direct resolve: direct_resolve.md
-      - Sticky scopes: sticky.md
-      - Setup and teardown: setup_teardown.md
-      - FAQ: faq.md
+      - Sticky Scopes: sticky.md
+      - Setup and Teardown: setup_teardown.md
+      - Direct Resolve: direct_resolve.md
   - Guides:
       - Attrs: attrs.md
       - Descriptors: descriptors.md
       - Enums: enum.md
+      - Type Hints: type_hints.md
+      - Mixins: mixins.md
+      - Design: design.md
