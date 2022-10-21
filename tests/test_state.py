@@ -42,7 +42,7 @@ def _evaluate_once_a():
 
     yield A
     yield a
-    # FIXME: Package is missing.
+    # NOTE: Package is missing.
 
 
 @pytest.fixture(params=_evaluate_once_a())
@@ -62,7 +62,7 @@ def _evaluate_once_b():
 
     yield B
     yield b
-    # FIXME: Package is missing.
+    # NOTE: Package is missing.
 
 
 @pytest.fixture(params=_evaluate_once_b())
@@ -82,7 +82,7 @@ def _evaluate_once_c():
 
     yield C
     yield c
-    # FIXME: Package is missing.
+    # NOTE: Package is missing.
 
 
 @pytest.fixture(params=_evaluate_once_c())
@@ -111,7 +111,7 @@ def _evaluate_once_d_value(times):
 def D(request, times):
     """All possible definitions."""
     return request.param(times)
-    # FIXME: Package is missing.
+    # NOTE: Package is missing.
 
 
 @pytest.fixture()
@@ -238,7 +238,7 @@ def _evaluate_once_nested_d_value(times):
 def Dn(request, d_times):
     """All possible definitions."""
     return request.param(d_times)
-    # FIXME: Package is missing.
+    # NOTE: Package is missing.
 
 
 def _evaluate_once_nested_e_class(times):
@@ -261,7 +261,7 @@ def _evaluate_once_nested_e_value(times):
 def En(request, e_times):
     """All possible definitions."""
     return request.param(e_times)
-    # FIXME: Package is missing.
+    # NOTE: Package is missing.
 
 
 @pytest.fixture()

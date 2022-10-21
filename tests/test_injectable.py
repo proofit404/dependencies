@@ -38,7 +38,7 @@ def _varargs():
 
     yield Foo
     yield func
-    # FIXME: Package is missing.
+    # NOTE: Package is missing.
 
 
 @pytest.fixture(params=_varargs())
@@ -78,7 +78,7 @@ def _kwargs():
 
     yield Foo
     yield func
-    # FIXME: Package is missing.
+    # NOTE: Package is missing.
 
 
 @pytest.fixture(params=_kwargs())
@@ -173,7 +173,7 @@ def _default_class():
 
     yield Bar
     yield func
-    # FIXME: Package is missing.
+    # NOTE: Package is missing.
 
 
 @pytest.fixture(params=_default_class())
@@ -211,7 +211,7 @@ def _class_named():
 
     yield Bar
     yield func
-    # FIXME: Package is missing.
+    # NOTE: Package is missing.
 
 
 @pytest.fixture(params=_class_named())
