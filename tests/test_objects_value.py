@@ -101,5 +101,5 @@ def test_allow_decorated_functions(expect):
             return randint(0, 1000)
 
     @expect(Container)
-    def to_be(it):
+    def case(it):
         assert it.foo.bar == it.foo.bar
