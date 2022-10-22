@@ -394,30 +394,28 @@ def test_show_call_dependencies_with_dir():
     assert "x" in dir(Foo(x=1))
 
 
-def test_deny_injector_attribute_assignment(expect):
+def test_deny_injector_attribute_assignment(expect, catch):
     """Deny attribute assignment on `Injector` and its subclasses."""
 
     class Container(Injector):
         foo = 1
 
     @expect(Container, Injector)
-    def to_be(it):
-        with pytest.raises(DependencyError) as exc_info:
-            it.foo = 1
-        assert str(exc_info.value) == "'Injector' modification is not allowed"
+    @catch("'Injector' modification is not allowed")
+    def case(it):
+        it.foo = 1
 
 
-def test_deny_injector_attribute_deletion(expect):
+def test_deny_injector_attribute_deletion(expect, catch):
     """Deny attribute deletion on `Injector` and its subclasses."""
 
     class Container(Injector):
         foo = 1
 
     @expect(Container, Injector)
-    def to_be(it):
-        with pytest.raises(DependencyError) as exc_info:
-            del it.foo
-        assert str(exc_info.value) == "'Injector' modification is not allowed"
+    @catch("'Injector' modification is not allowed")
+    def case(it):
+        del it.foo
 
 
 def test_docstrings():

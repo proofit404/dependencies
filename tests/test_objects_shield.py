@@ -10,5 +10,5 @@ def test_pass_args(e, expect):
         result = shield(e.StarArgs, 1, 2)
 
     @expect(Container)
-    def to_be(it):
+    def case(it):
         assert it.result.args == (1, 2)
