@@ -6,6 +6,7 @@ ignore = D105, D107, E741, W503
 per-file-ignores =
   src/_dependencies/*.py: D100, D104
   testing/*.py: D100, D104
+  tests/*.py: F811
 exclude =
   .coverage
   .coverage.*

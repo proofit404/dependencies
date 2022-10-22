@@ -1,3 +1,12 @@
-init_variable = 1
-a = 1
-b = 2
+import pytest
+
+
+# Fixtures.
+
+
+@pytest.fixture()
+def e():
+    """Fixture with all possible definitions."""
+    import examples.definitions
+
+    return examples.definitions

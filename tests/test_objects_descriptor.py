@@ -2,32 +2,6 @@
 import pytest
 
 from dependencies import Injector
-from dependencies.exceptions import DependencyError
-
-
-def test_deny_descriptors(d):
-    """Descriptors passed to the injector have confusing expectations.
-
-    If users pass method descriptor to the injector, they probably expect access to the
-    Injector itself.
-
-    """
-
-    class Container(Injector):
-        foo = d
-
-    with pytest.raises(DependencyError) as exc_info:
-        Container.foo
-
-    expected = """
-Attribute 'foo' contains descriptor.
-
-Descriptors usage will be confusing inside Injector subclasses.
-
-Use @value decorator instead, if you really need inject descriptor instance somewhere.
-""".strip()
-
-    assert str(exc_info.value) == expected
 
 
 def _descriptors():
@@ -43,7 +17,27 @@ def _descriptors():
     yield foo
 
 
-@pytest.fixture(params=_descriptors())
-def d(request):
-    """All possible descriptor definitions."""
-    return request.param
+@pytest.mark.parametrize("arg", _descriptors())
+def test_deny_descriptors(expect, catch, arg):
+    """Descriptors passed to the injector have confusing expectations.
+
+    If users pass method descriptor to the injector, they probably expect access to the
+    Injector itself.
+
+    """
+
+    class Container(Injector):
+        foo = arg
+
+    @expect(Container)
+    @catch(
+        """
+Attribute 'foo' contains descriptor.
+
+Descriptors usage will be confusing inside Injector subclasses.
+
+Use @value decorator instead, if you really need inject descriptor instance somewhere.
+        """
+    )
+    def case(it):
+        it.bar

@@ -3,8 +3,10 @@ from dependencies import Injector
 from dependencies import value
 
 
-def test_setup_and_teardown_value():
+def test_setup_and_teardown_value(expect):
     """@value could decorate a generator function."""
+    expect.skip_if_injector()
+
     result = []
 
     class App:
@@ -32,21 +34,24 @@ def test_setup_and_teardown_value():
             yield instance
             instance.release()
 
-    with Container as container:
+    @expect(Container)
+    def case(it):
         assert result == ["setup"]
-        assert isinstance(container.app.lock, Lock)
-        assert container.app.lock.resource == "/"
+        assert isinstance(it.app.lock, Lock)
+        assert it.app.lock.resource == "/"
 
     assert result == ["setup", "teardown"]
 
 
-def test_setup_and_teardown_execution_order():
+def test_setup_and_teardown_execution_order(expect):
     """Validate execution order of @value object steps.
 
     Order of exectution for teardown steps should be an opposite to the order for setup
     steps taken.
 
     """
+    expect.skip_if_injector()
+
     result = []
 
     class App:
@@ -87,9 +92,10 @@ def test_setup_and_teardown_execution_order():
             yield instance
             instance.release()
 
-    with Container as container:
+    @expect(Container)
+    def case(it):
         assert result == ["setup a", "setup b", "setup c"]
-        assert isinstance(container.app, App)
+        assert isinstance(it.app, App)
 
     assert result == [
         "setup a",
