@@ -12,9 +12,9 @@ source =
   configuration
   consul
   examples
-  examples1
   expect
   mddoctest
+  signature
   tests
 
 [paths]

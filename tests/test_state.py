@@ -3,113 +3,80 @@ import pytest
 
 from dependencies import Injector
 from dependencies import value
-
-
-def test_evaluate_once_different_types(A, B, C, D, times):
-    """Evaluate each node in the dependencies graph once.
-
-    Arguments of dependencies of different types should be evaluated once. This rules
-    applies to classes and @value objects. This is a variation of the test above written
-    against all necessary inputs.
-
-    """
-
-    class Root:
-        def __init__(self, a):
-            self.a = a
-
-    class Container(Injector):
-        root = Root
-        a = A
-        b = B
-        c = C
-        d = D
-
-    assert sum(times) == 0
-    Container.root.a
-    assert sum(times) == 1
+from signature import Signature
 
 
 def _evaluate_once_a():
     class A:
         def __init__(self, b, c):
-            pass
+            self.b = b
+            self.c = c
 
     @value
     def a(b, c):
-        pass
+        return Signature(b=b, c=c)
 
     yield A
     yield a
 
 
-@pytest.fixture(params=_evaluate_once_a())
-def A(request):
-    """All possible definitions."""
-    return request.param
-
-
 def _evaluate_once_b():
     class B:
         def __init__(self, d):
-            pass
+            self.d = d
 
     @value
     def b(d):
-        pass
+        return Signature(d=d)
 
     yield B
     yield b
 
 
-@pytest.fixture(params=_evaluate_once_b())
-def B(request):
-    """All possible definitions."""
-    return request.param
-
-
 def _evaluate_once_c():
     class C:
         def __init__(self, d):
-            pass
+            self.d = d
 
     @value
     def c(d):
-        pass
+        return Signature(d=d)
 
     yield C
     yield c
 
 
-@pytest.fixture(params=_evaluate_once_c())
-def C(request):
-    """All possible definitions."""
-    return request.param
-
-
-def _evaluate_once_d_class(times):
+def _evaluate_once_d():
     class D:
         def __init__(self):
-            times.append(1)
+            pass
 
-    return D
-
-
-def _evaluate_once_d_value(times):
     @value
     def d():
-        times.append(1)
+        return object()
 
-    return d
-
-
-@pytest.fixture(params=[_evaluate_once_d_class, _evaluate_once_d_value])
-def D(request, times):
-    """All possible definitions."""
-    return request.param(times)
+    yield D
+    yield d
 
 
-@pytest.fixture()
-def times():
-    """Count number of times object was built."""
-    return []
+@pytest.mark.parametrize("A", _evaluate_once_a())
+@pytest.mark.parametrize("B", _evaluate_once_b())
+@pytest.mark.parametrize("C", _evaluate_once_c())
+@pytest.mark.parametrize("D", _evaluate_once_d())
+def test_evaluate_once(e, expect, A, B, C, D):
+    """Evaluate each node in the dependencies graph once."""
+    expect.skip_if_scope()
+
+    class Container(Injector):
+        v = e.Take["a"]
+        a = A
+        b = B
+        c = C
+        d = D
+
+    @expect(Container)
+    def case(it):
+        assert it.v.b.d is not it.v.b.d
+        assert it.v.b.d is not it.v.c.d
+        v = it.v
+        assert v.b.d is v.c.d

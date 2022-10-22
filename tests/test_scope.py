@@ -2,7 +2,7 @@
 from dependencies import Injector
 
 
-def test_sticky_scope():
+def test_sticky_scope(expect):
     """Check sticky scope implementation.
 
     All objects instantiated during sticky scope life-time should be instantiated once.
@@ -10,6 +10,7 @@ def test_sticky_scope():
     may protect their inner state (which is a good thing).
 
     """
+    expect.skip_if_injector()
 
     class App:
         def __init__(self, db):
@@ -22,8 +23,6 @@ def test_sticky_scope():
         app = App
         db = DB
 
-    with Container as container:
-        app = container.app
-        db = container.db
-
-    assert app.db is db
+    @expect(Container)
+    def case(it):
+        assert it.app.db is it.db

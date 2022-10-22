@@ -65,8 +65,7 @@ def _transfer(source, destination):
 def _check_inheritance(bases):
     for base in bases:
         if not issubclass(base, Injector):
-            message = "Multiple inheritance is allowed for Injector subclasses only"
-            raise DependencyError(message)
+            raise DependencyError("Multiple inheritance requires Injector subclass")
 
 
 def _check_extension_scope(bases, namespace):

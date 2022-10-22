@@ -3,7 +3,7 @@ from dependencies import Injector
 from dependencies import value
 
 
-def test_direct_data_resolve(expect, catch):
+def test_direct_resolve_scalar(expect, catch):
     """Attempt to resolve scalar types directly should raise exception.
 
     Scalar types are allowed to be used as dependencies for classes.
@@ -19,7 +19,7 @@ def test_direct_data_resolve(expect, catch):
         it.a
 
 
-def test_direct_nested_injector_resolve(expect, catch):
+def test_direct_resolve_nested(expect, catch):
     """Attempt to resolve nested injector directly should raise exception.
 
     Nested injectors are allowed to be used as this object targets.
@@ -28,7 +28,7 @@ def test_direct_nested_injector_resolve(expect, catch):
 
     class Container(Injector):
         class Nested(Injector):
-            foo = 1
+            a = 1
 
     @expect(Container)
     @catch("'Injector' dependencies could only be used to instantiate classes")
@@ -36,7 +36,7 @@ def test_direct_nested_injector_resolve(expect, catch):
         it.Nested
 
 
-def test_direct_value_resolve(expect, catch):
+def test_direct_resolve_value(expect, catch):
     """Attempt to resolve value directly should raise exception.
 
     Values are allowed to be used as dependencies for classes.
