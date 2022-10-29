@@ -7,7 +7,9 @@ source =
   _dependencies
   dependencies
   app
+  application
   configuration
+  consul
   examples
   examples1
   expect

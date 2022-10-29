@@ -11,6 +11,14 @@ def _setup():
     environ["FRONTEND_URL"] = "https://example.com/frontend"
     environ["BACKEND_URL"] = "https://example.com/backend"
 
+    # Settings guide.
+    environ[
+        "POSTGRESQL_HOST"
+    ] = "postgresql-instance1.cg034hpkmmjt.us-east-1.rds.amazonaws.com"
+    environ["POSTGRESQL_PORT"] = "5432"
+    environ["REDIS_HOST"] = "redis-01.7abc2d.0001.usw2.cache.amazonaws.com"
+    environ["REDIS_PORT"] = "6379"
+
     # Setup and teardown examples.
     responses.add(responses.GET, "http://api.com/users/142/", json={"groups": [712]})
     responses.add(responses.GET, "http://api.com/users/318/", json={"groups": [905]})
