@@ -1,3 +1,10 @@
+# 7.7.0 (2022-11-01)
+
+### Features
+
+- deprecate this and Package objects
+  [#574](https://github.com/proofit404/dependencies/issues/574) fb31731
+
 # 7.6.0 (2022-10-19)
 
 ### Features
