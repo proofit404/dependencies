@@ -14,5 +14,5 @@ class Consul:
         "redis_port": (..., {"Value": "6379"}),
     }
 
-    def __init__(self):
+    def __init__(self):  # pragma: no cover
         log("Connecting to local consul agent")

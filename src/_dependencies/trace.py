@@ -12,7 +12,7 @@ class _Trace:
     def add(self, error):
         if isinstance(error, DependencyError):
             message = error.args[0]
-            if isinstance(message, _Trace):
+            if isinstance(message, _Trace):  # pragma: no cover
                 self.error = message.error
                 self.states.extend(message.states)
             else:
@@ -28,7 +28,7 @@ class _Trace:
             name = scope.__class__.__name__
             for attribute in [*[s[0] for s in state.stack], state.current]:
                 attributes.append(f"{name}.{attribute}")
-                if (scope, attribute) in seen:
+                if (scope, attribute) in seen:  # pragma: no cover
                     return attributes
                 else:
                     seen.add((scope, attribute))

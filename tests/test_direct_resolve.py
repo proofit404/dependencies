@@ -2,7 +2,6 @@
 import pytest
 
 from dependencies import Injector
-from dependencies import this
 from dependencies import value
 from dependencies.exceptions import DependencyError
 
@@ -22,25 +21,6 @@ def test_direct_data_resolve(expect):
         with pytest.raises(DependencyError) as exc_info:
             it.a
         expected = "Scalar dependencies could only be used to instantiate classes"
-        assert str(exc_info.value) == expected
-
-
-def test_direct_this_resolve(expect):
-    """Attempt to resolve this directly should raise exception.
-
-    This objects are allowed to be used as dependencies for classes.
-
-    """
-
-    class Container(Injector):
-        a = this.b
-        b = 1
-
-    @expect(Container)
-    def to_be(it):
-        with pytest.raises(DependencyError) as exc_info:
-            it.a
-        expected = "'this' dependencies could only be used to instantiate classes"
         assert str(exc_info.value) == expected
 
 
@@ -81,32 +61,3 @@ def test_direct_value_resolve(expect):
             it.a
         expected = "'value' dependencies could only be used to instantiate classes"
         assert str(exc_info.value) == expected
-
-
-def test_direct_package_data_resolve(expect):
-    """Attempt to resolve scalar types directly should raise exception."""
-    from _ import examples
-
-    class Container(Injector):
-        a = examples.submodule.variable
-
-    @expect(Container)
-    def to_be(it):
-        with pytest.raises(DependencyError) as exc_info:
-            it.a
-        expected = "Scalar dependencies could only be used to instantiate classes"
-        assert str(exc_info.value) == expected
-
-
-def test_direct_package_class_resolve(expect):
-    """Attempt to resolve class directly should works for packages."""
-    from examples.submodule import Foo
-
-    from _ import examples
-
-    class Container(Injector):
-        foo = examples.submodule.Foo
-
-    @expect(Container)
-    def to_be(it):
-        assert isinstance(it.foo, Foo)

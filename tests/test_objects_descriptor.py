@@ -39,12 +39,8 @@ def _descriptors():
     def foo(self):
         raise RuntimeError
 
-    from _ import examples
-
     yield Foo()
     yield foo
-    yield examples.descriptor.foo_instance
-    yield examples.descriptor.foo_property
 
 
 @pytest.fixture(params=_descriptors())

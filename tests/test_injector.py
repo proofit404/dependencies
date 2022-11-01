@@ -4,7 +4,6 @@ from inspect import isclass
 import pytest
 
 from dependencies import Injector
-from dependencies import this
 from dependencies.exceptions import DependencyError
 
 
@@ -577,51 +576,6 @@ Can not resolve attribute 'test':
 
 Foo.bar
   Foo.test
-    """.strip()
-
-    assert str(exc_info.value) == expected
-
-
-def test_circle_dependency_error():
-    """Handle circle definitions in dependency graph.
-
-    Attempt to resolve such definition would end up with recursion error. We should
-    provide readable error message from what users would be able to understand what
-    exactly they defined wrong.
-
-    """
-
-    class Foo:
-        def __init__(self, bar):
-            raise RuntimeError
-
-    class Container(Injector):
-        foo = Foo
-        bar = this.SubContainer.bar
-        quiz = this.SubContainer.ham
-
-        class SubContainer(Injector):
-            bar = this.SubSubContainer.baz
-            ham = this.SubSubContainer.egg
-
-            class SubSubContainer(Injector):
-                baz = (this << 2).quiz
-                egg = (this << 2).foo
-
-    with pytest.raises(DependencyError) as exc_info:
-        Container.foo
-
-    expected = """
-Circle error found in definition of the dependency graph:
-
-Container.foo
-  Container.bar
-    SubContainer.bar
-      SubSubContainer.baz
-        Container.quiz
-          SubContainer.ham
-            SubSubContainer.egg
-              Container.foo
     """.strip()
 
     assert str(exc_info.value) == expected

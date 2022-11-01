@@ -11,7 +11,7 @@ class App:
     database: "PostgreSQL"
     cache: "Redis"
 
-    def run(self):
+    def run(self):  # pragma: no cover
         """Run business transaction."""
         self.database.connect()
         self.cache.connect()
@@ -24,7 +24,7 @@ class PostgreSQL:
     host: str
     port: int
 
-    def connect(self):
+    def connect(self):  # pragma: no cover
         """Open connection."""
         log(f"Connecting to {self.host}:{self.port}")
 
@@ -36,6 +36,6 @@ class Redis:
     host: str
     port: int
 
-    def connect(self):
+    def connect(self):  # pragma: no cover
         """Open connection."""
         log(f"Connecting to {self.host}:{self.port}")
