@@ -13,7 +13,7 @@
         <link rel="canonical" href="https://proofit404.github.io/dependencies/shield/">
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.4.1, mkdocs-material-8.5.7">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-8.5.7">
     
     
       
@@ -876,9 +876,8 @@ defined.</p>
 <p>Same as with <code>this</code> object you could pass <code>Package</code> object to variable-length
 positional or keyword arguments. It would be resolved before <code>shield</code> objects
 gets evaluated.</p>
-<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dependencies</span> <span class="kn">import</span> <span class="n">Injector</span><span class="p">,</span> <span class="n">shield</span><span class="p">,</span> <span class="n">Package</span>
-
-<span class="gp">&gt;&gt;&gt; </span><span class="n">examples</span> <span class="o">=</span> <span class="n">Package</span><span class="p">(</span><span class="s2">&quot;examples&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dependencies</span> <span class="kn">import</span> <span class="n">Injector</span><span class="p">,</span> <span class="n">shield</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">_</span> <span class="kn">import</span> <span class="n">examples</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Sum</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>

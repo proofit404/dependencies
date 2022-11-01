@@ -13,7 +13,7 @@
         <link rel="canonical" href="https://proofit404.github.io/dependencies/package/">
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.4.1, mkdocs-material-8.5.7">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-8.5.7">
     
     
       
@@ -773,7 +773,7 @@ other places (like modules and packages). You can point package object to the
 module, a variable defined in the module, a function defined in the module, a
 class defined in the module, any attribute of the class which was defined in
 this module.</p>
-<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dependencies</span> <span class="kn">import</span> <span class="n">Injector</span><span class="p">,</span> <span class="n">Package</span>
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dependencies</span> <span class="kn">import</span> <span class="n">Injector</span>
 </code></pre></div>
 <h2 id="attributes">Attributes<a class="headerlink" href="#attributes" title="Permanent link">&para;</a></h2>
 <p>A usual use case for the <code>Package</code> object is to replace havy import statements
@@ -793,7 +793,7 @@ your injectors.</p>
 <span class="gp">... </span>    <span class="c1"># A lot of import statements here...</span>
 </code></pre></div>
 <p><code>Package</code> can help to deal with this inconsistency</p>
-<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">app</span> <span class="o">=</span> <span class="n">Package</span><span class="p">(</span><span class="s2">&quot;app&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">_</span> <span class="kn">import</span> <span class="n">app</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Container</span><span class="p">(</span><span class="n">Injector</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="n">persist_user</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">repositories</span><span class="o">.</span><span class="n">create_user</span>
@@ -801,7 +801,8 @@ your injectors.</p>
 </code></pre></div>
 <p>If a lot of dependencies defined in the repositories module, you can set
 <code>Package</code> source to the repositories module itself.</p>
-<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="n">repositories</span> <span class="o">=</span> <span class="n">Package</span><span class="p">(</span><span class="s2">&quot;app.repositories&quot;</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">_</span> <span class="kn">import</span> <span class="n">app</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">repositories</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">repositories</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Container</span><span class="p">(</span><span class="n">Injector</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="n">persist_user</span> <span class="o">=</span> <span class="n">repositories</span><span class="o">.</span><span class="n">create_user</span>
@@ -824,7 +825,8 @@ is actually happen. You can inject bound methods with exactly one line.</p>
 
 <span class="go"># app/base.py</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">calc</span> <span class="o">=</span> <span class="n">Package</span><span class="p">(</span><span class="s2">&quot;app.calc&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">_</span> <span class="kn">import</span> <span class="n">app</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">calc</span> <span class="o">=</span> <span class="n">app</span><span class="o">.</span><span class="n">calc</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Container</span><span class="p">(</span><span class="n">Injector</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="n">foo</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">Calc</span><span class="o">.</span><span class="n">do</span>
