@@ -4,4 +4,4 @@
 def __getattr__(name):
     from dependencies import Package
 
-    return Package(name)
+    return Package(name, _DO_NOT_USE_THIS_FLAG_=False)
