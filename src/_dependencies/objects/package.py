@@ -1,5 +1,6 @@
 from importlib import import_module
 from inspect import ismodule
+from warnings import warn
 
 from _dependencies.exceptions import DependencyError
 from _dependencies.objects.attributes import _Attributes
@@ -16,13 +17,19 @@ class Package:
 
     """
 
-    def __init__(self, name):
+    def __init__(self, name, *, _DO_NOT_USE_THIS_FLAG_=True):
+        if _DO_NOT_USE_THIS_FLAG_:
+            warn(
+                "Replace package objects with package import statements",
+                DeprecationWarning,
+                stacklevel=2,
+            )
         _check_relative(name)
         self.__name__ = name
         self.__attrs__ = ()
 
     def __getattr__(self, attrname):
-        result = Package(self.__name__)
+        result = Package(self.__name__, _DO_NOT_USE_THIS_FLAG_=False)
         result.__attrs__ = self.__attrs__ + (attrname,)
         return result
 

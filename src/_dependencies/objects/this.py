@@ -1,3 +1,5 @@
+from warnings import warn
+
 from _dependencies.exceptions import DependencyError
 from _dependencies.spec import _Spec
 
@@ -11,6 +13,11 @@ class This:
     def __getattr__(self, attrname):
         if attrname == "__wrapped__":
             raise AttributeError
+        warn(
+            "Replace this objects with package import statements",
+            DeprecationWarning,
+            stacklevel=2,
+        )
         return This(self.__expression__ + ((".", attrname),))
 
     def __getitem__(self, item):
