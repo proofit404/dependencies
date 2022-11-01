@@ -4,13 +4,13 @@ import inspect
 import pytest
 
 from dependencies import Injector
-from dependencies import Package
 from dependencies import this
 from dependencies.exceptions import DependencyError
 
 
 def test_provide_module():
     """Package instance itself should refer to the module."""
+    from _ import examples as _examples
     import examples
 
     class Root:
@@ -19,17 +19,15 @@ def test_provide_module():
 
     class Container(Injector):
         root = Root
-        result = Package("examples")
+        result = _examples
 
     assert inspect.ismodule(Container.root.result)
     assert examples is Container.root.result
 
 
-@pytest.mark.parametrize(
-    "module", [Package("examples.submodule"), Package("examples").submodule]
-)
-def test_provide_submodule(module):
+def test_provide_submodule():
     """Package instance itself should refer to the module."""
+    from _ import examples as _examples
     import examples.submodule
 
     class Root:
@@ -38,33 +36,36 @@ def test_provide_submodule(module):
 
     class Container(Injector):
         root = Root
-        result = module
+        result = _examples.submodule
 
     assert inspect.ismodule(Container.root.result)
     assert examples.submodule is Container.root.result
 
 
-@pytest.mark.parametrize(
-    "variable",
-    [Package("examples.submodule").variable, Package("examples").init_variable],
-)
-def test_provide_a_variable(variable):
+def test_provide_a_variable():
     """Package instance attribute access should provide regular variable."""
+    from _ import examples
 
     class Root:
         def __init__(self, result):
             self.result = result
 
-    class Container(Injector):
+    class Container1(Injector):
         root = Root
-        result = variable
+        result = examples.submodule.variable
 
-    assert Container.root.result == 1
+    class Container2(Injector):
+        root = Root
+        result = examples.init_variable
+
+    # NOTE: Use @expect with multiple injectors.
+    assert Container1.root.result == 1
+    assert Container2.root.result == 1
 
 
 def test_provide_a_function():
     """Package instance attribute access should provide regular function."""
-    examples = Package("examples")
+    from _ import examples
 
     class Root:
         def __init__(self, result):
@@ -88,7 +89,7 @@ def test_provide_an_instance():
     """
     from examples.submodule import Foo
 
-    examples = Package("examples")
+    from _ import examples
 
     class Container(Injector):
         result = examples.submodule.Foo
@@ -106,7 +107,7 @@ def test_provide_instance_method():
     """
     from examples.submodule import Bar
 
-    examples = Package("examples")
+    from _ import examples
 
     class Root:
         def __init__(self, result):
@@ -132,7 +133,7 @@ def test_provide_a_class():
     """
     from examples.submodule import Foo
 
-    examples = Package("examples")
+    from _ import examples
 
     class Root:
         def __init__(self, result_class):
@@ -153,7 +154,7 @@ def test_point_to_injector():
     another module.
 
     """
-    examples = Package("examples")
+    from _ import examples
 
     class Root:
         def __init__(self, foo, bar):
@@ -177,7 +178,7 @@ def test_package_provides_lazy_loading():
     in the same module, we should handle it as usual.
 
     """
-    examples = Package("examples")
+    from _ import examples
 
     class Container(Injector):
         foo = examples.self_pointer.Container.foo
@@ -192,7 +193,7 @@ def test_handle_import_error():
     implementation.
 
     """
-    examples = Package("examples")
+    from _ import examples
 
     class Root:
         def __init__(self, result):
@@ -214,6 +215,8 @@ def test_handle_import_error():
 @pytest.mark.parametrize("relative", [".", "..", ".example", "..example"])
 def test_protect_against_relative_import(relative):
     """Deny to use relative import path in Package declaration."""
+    from dependencies import Package
+
     with pytest.raises(DependencyError) as exc_info:
         Package(relative)
 

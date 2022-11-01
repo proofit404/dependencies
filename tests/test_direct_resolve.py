@@ -2,7 +2,6 @@
 import pytest
 
 from dependencies import Injector
-from dependencies import Package
 from dependencies import this
 from dependencies import value
 from dependencies.exceptions import DependencyError
@@ -86,7 +85,7 @@ def test_direct_value_resolve(expect):
 
 def test_direct_package_data_resolve(expect):
     """Attempt to resolve scalar types directly should raise exception."""
-    examples = Package("examples")
+    from _ import examples
 
     class Container(Injector):
         a = examples.submodule.variable
@@ -103,7 +102,7 @@ def test_direct_package_class_resolve(expect):
     """Attempt to resolve class directly should works for packages."""
     from examples.submodule import Foo
 
-    examples = Package("examples")
+    from _ import examples
 
     class Container(Injector):
         foo = examples.submodule.Foo

@@ -14,6 +14,7 @@ homepage = "https://pypi.org/project/dependencies"
 license = "BSD-2-Clause"
 name = "dependencies"
 packages = [
+    { include = "_.py", from = "src"},
     { include = "_dependencies", from = "src" },
     { include = "dependencies", from = "src" },
 ]

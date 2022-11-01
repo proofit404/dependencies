@@ -87,9 +87,8 @@ gets evaluated.
 
 ```pycon
 
->>> from dependencies import Injector, shield, Package
-
->>> examples = Package("examples")
+>>> from dependencies import Injector, shield
+>>> from _ import examples
 
 >>> class Sum:
 ...     def __init__(self, *args):

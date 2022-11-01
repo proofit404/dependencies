@@ -8,7 +8,7 @@ this module.
 
 ```pycon
 
->>> from dependencies import Injector, Package
+>>> from dependencies import Injector
 
 ```
 
@@ -45,7 +45,7 @@ To save some typing I tend to write this code like this
 
 ```pycon
 
->>> app = Package("app")
+>>> from _ import app
 
 >>> class Container(Injector):
 ...     persist_user = app.repositories.create_user
@@ -58,7 +58,8 @@ If a lot of dependencies defined in the repositories module, you can set
 
 ```pycon
 
->>> repositories = Package("app.repositories")
+>>> from _ import app
+>>> repositories = app.repositories
 
 >>> class Container(Injector):
 ...     persist_user = repositories.create_user
@@ -87,7 +88,8 @@ is actually happen. You can inject bound methods with exactly one line.
 
 # app/base.py
 
->>> calc = Package("app.calc")
+>>> from _ import app
+>>> calc = app.calc
 
 >>> class Container(Injector):
 ...     foo = calc.Calc.do
