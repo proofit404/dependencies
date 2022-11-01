@@ -134,9 +134,8 @@ exception if you tries to resolve such dependency directly.
 
 ```pycon
 
->>> from dependencies import Injector, Package
-
->>> examples = Package("examples")
+>>> from dependencies import Injector
+>>> from _ import examples
 
 >>> class Container(Injector):
 ...     foo = examples.submodule.Foo

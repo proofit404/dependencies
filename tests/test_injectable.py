@@ -2,7 +2,6 @@
 import pytest
 
 from dependencies import Injector
-from dependencies import Package
 from dependencies import value
 from dependencies.exceptions import DependencyError
 
@@ -111,7 +110,7 @@ def _positional_only():
     def foo(a, /, b):
         raise RuntimeError
 
-    examples = Package("examples")
+    from _ import examples
 
     yield Foo
     yield foo

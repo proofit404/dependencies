@@ -1,6 +1,5 @@
 """Tests related to Shield object."""
 from dependencies import Injector
-from dependencies import Package
 from dependencies import shield
 from dependencies import this
 
@@ -31,7 +30,7 @@ def test_pass_args_this(e, expect):
 
 def test_pass_args_package(e, expect):
     """Pass resolved package object as positional arguments."""
-    examples = Package("examples")
+    from _ import examples
 
     class Container(Injector):
         result = shield(e.StarArgs, examples.a, examples.b)

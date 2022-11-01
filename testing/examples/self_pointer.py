@@ -1,8 +1,8 @@
+from _ import examples
 from dependencies import Injector
-from dependencies import Package
 
 
-current = Package("examples.self_pointer")
+current = examples.self_pointer
 
 
 class Foo:

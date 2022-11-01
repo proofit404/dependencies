@@ -2,7 +2,6 @@
 import pytest
 
 from dependencies import Injector
-from dependencies import Package
 from dependencies.exceptions import DependencyError
 
 
@@ -40,7 +39,7 @@ def _descriptors():
     def foo(self):
         raise RuntimeError
 
-    examples = Package("examples")
+    from _ import examples
 
     yield Foo()
     yield foo
