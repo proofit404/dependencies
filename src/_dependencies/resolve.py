@@ -13,7 +13,7 @@ class _Resolver:
     def resolve(self):
         try:
             return self.find()
-        except RecursionError:
+        except RecursionError:  # pragma: no cover
             message = _Trace(self.state)
             message.add("Circle error found in definition of the dependency graph")
             raise DependencyError(message) from None

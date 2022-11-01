@@ -42,9 +42,7 @@ nav:
       - Why: why.md
       - Usage: usage.md
       - Classes: classes.md
-      - This: this.md
       - Nested Injectors: nested.md
-      - Package: package.md
       - Value: value.md
       - Shield: shield.md
       - Sticky Scopes: sticky.md

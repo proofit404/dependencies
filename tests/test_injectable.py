@@ -37,7 +37,6 @@ def _varargs():
 
     yield Foo
     yield func
-    # NOTE: Package is missing.
 
 
 @pytest.fixture(params=_varargs())
@@ -77,7 +76,6 @@ def _kwargs():
 
     yield Foo
     yield func
-    # NOTE: Package is missing.
 
 
 @pytest.fixture(params=_kwargs())
@@ -110,12 +108,8 @@ def _positional_only():
     def foo(a, /, b):
         raise RuntimeError
 
-    from _ import examples
-
     yield Foo
     yield foo
-    yield examples.positional_only.Foo
-    yield examples.positional_only.foo
 
 
 @pytest.fixture(params=_positional_only())
@@ -172,7 +166,6 @@ def _default_class():
 
     yield Bar
     yield func
-    # NOTE: Package is missing.
 
 
 @pytest.fixture(params=_default_class())
@@ -210,7 +203,6 @@ def _class_named():
 
     yield Bar
     yield func
-    # NOTE: Package is missing.
 
 
 @pytest.fixture(params=_class_named())

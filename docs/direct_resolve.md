@@ -13,10 +13,8 @@ interesting features like [Sticky scopes](./sticky.md).
 
 - [Classes are resolved by attribute access](#classes-are-resolved-by-attribute-access)
 - [Scalar types could not be resolved directly](#scalar-types-could-not-be-resolved-directly)
-- [`this` object could not be resolved directly](#this-object-could-not-be-resolved-directly)
 - [Nested injectors could not be resolved directly](#nested-injectors-could-not-be-resolved-directly)
 - [`@value` object could not be resolved directly](#value-object-could-not-be-resolved-directly)
-- [Package object would repeat original object behavior](#package-object-would-repeat-original-object-behavior)
 
 ### Classes are resolved by attribute access
 
@@ -64,27 +62,6 @@ _dependencies.exceptions.DependencyError: Scalar dependencies could only be used
 
 ```
 
-### `this` object could not be resolved directly
-
-You can't resolve this objects as main target of dependency injection. The main
-goal of `this` object is to point to real dependencies for classes. For example,
-if they are located in the attribute with a different name.
-
-```pycon
-
->>> from dependencies import Injector, this
-
->>> class Container(Injector):
-...     foo = this.bar
-...     bar = 1
-
->>> Container.foo
-Traceback (most recent call last):
-  ...
-_dependencies.exceptions.DependencyError: 'this' dependencies could only be used to instantiate classes
-
-```
-
 ### Nested injectors could not be resolved directly
 
 You can't resolve nested injectors as main target of dependency injection.
@@ -122,32 +99,6 @@ goal of `value` objects is to be evaluated dependencies for classes.
 Traceback (most recent call last):
   ...
 _dependencies.exceptions.DependencyError: 'value' dependencies could only be used to instantiate classes
-
-```
-
-### Package object would repeat original object behavior
-
-Package objects will conform its resolution rules with imported objects. If
-package dependency points to the class, it's allowed to resolve such dependency
-directly. If package object points to the scalar type for example, it'll raise
-exception if you tries to resolve such dependency directly.
-
-```pycon
-
->>> from dependencies import Injector
->>> from _ import examples
-
->>> class Container(Injector):
-...     foo = examples.submodule.Foo
-...     variable = examples.submodule.variable
-
->>> Container.foo  # doctest: +ELLIPSIS
-<examples.submodule.Foo object at 0x...>
-
->>> Container.variable
-Traceback (most recent call last):
-  ...
-_dependencies.exceptions.DependencyError: Scalar dependencies could only be used to instantiate classes
 
 ```
 

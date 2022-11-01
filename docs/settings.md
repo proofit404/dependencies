@@ -34,10 +34,10 @@ inside.
 
 ```pycon
 
->>> from dependencies import Injector, this
+>>> from dependencies import Injector
 >>> from application import App, PostgreSQL, Redis
 
->>> class Container1(Injector):
+>>> class Container1(Injector):  # doctest: +SKIP
 ...     app = App
 ...     database = this.Database.connection
 ...     cache = this.Cache.connection
@@ -63,7 +63,7 @@ inside.
 ...         },
 ...     }
 
->>> Container1.app.run()
+>>> Container1.app.run()  # doctest: +SKIP
 Connecting to localhost:5432
 Connecting to localhost:6379
 
@@ -90,11 +90,11 @@ once.
 ```pycon
 
 >>> from functools import lru_cache
->>> from dependencies import Injector, this, value
+>>> from dependencies import Injector, value
 >>> from yaml import safe_load
 >>> from application import App, PostgreSQL, Redis
 
->>> class Container2(Injector):
+>>> class Container2(Injector):  # doctest: +SKIP
 ...     app = App
 ...     database = this.Database.connection
 ...     cache = this.Cache.connection
@@ -117,7 +117,7 @@ once.
 ...
 ...     config = "docs/config.yml"
 
->>> Container2.app.run()
+>>> Container2.app.run()  # doctest: +SKIP
 Connecting to 127.0.0.3:5432
 Connecting to 127.0.0.3:6379
 
@@ -130,10 +130,10 @@ application container by reusing our first definition with hardcoded settings.
 ```pycon
 
 >>> from functools import lru_cache
->>> from dependencies import this, value
+>>> from dependencies import value
 >>> from yaml import safe_load
 
->>> class Container3(Container1):
+>>> class Container3(Container1):  # doctest: +SKIP
 ...     @value
 ...     @lru_cache
 ...     def settings(config):
@@ -142,7 +142,7 @@ application container by reusing our first definition with hardcoded settings.
 ...
 ...     config = "docs/config.yml"
 
->>> Container2.app.run()
+>>> Container2.app.run()  # doctest: +SKIP
 Connecting to 127.0.0.3:5432
 Connecting to 127.0.0.3:6379
 
@@ -158,10 +158,10 @@ would be an option. But consider it a security risk.
 ```pycon
 
 >>> from os import environ
->>> from dependencies import Injector, this, value
+>>> from dependencies import Injector, value
 >>> from application import App, PostgreSQL, Redis
 
->>> class Container(Injector):
+>>> class Container(Injector):  # doctest: +SKIP
 ...     app = App
 ...     database = this.Database.connection
 ...     cache = this.Cache.connection
@@ -189,7 +189,7 @@ would be an option. But consider it a security risk.
 ...             },
 ...         }
 
->>> Container.app.run()
+>>> Container.app.run()  # doctest: +SKIP
 Connecting to postgresql-instance1.cg034hpkmmjt.us-east-1.rds.amazonaws.com:5432
 Connecting to redis-01.7abc2d.0001.usw2.cache.amazonaws.com:6379
 
@@ -213,10 +213,10 @@ local consul agent.
 
 >>> from functools import lru_cache
 >>> from consul import Consul
->>> from dependencies import Injector, this
+>>> from dependencies import Injector
 >>> from application import App, PostgreSQL, Redis
 
->>> class Container(Injector):
+>>> class Container(Injector):  # doctest: +SKIP
 ...     app = App
 ...     database = this.Database.connection
 ...     cache = this.Cache.connection
@@ -247,7 +247,7 @@ local consul agent.
 ...
 ...     consul = Consul
 
->>> Container.app.run()
+>>> Container.app.run()  # doctest: +SKIP
 Connecting to local consul agent
 Connecting to postgresql-instance1.cg034hpkmmjt.us-east-1.rds.amazonaws.com:5432
 Connecting to redis-01.7abc2d.0001.usw2.cache.amazonaws.com:6379
