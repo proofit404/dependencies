@@ -420,36 +420,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../this/" class="md-nav__link">
-        This
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../nested/" class="md-nav__link">
         Nested Injectors
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../package/" class="md-nav__link">
-        Package
       </a>
     </li>
   
@@ -520,20 +492,6 @@
           <li class="md-nav__item">
   <a href="#variable-length-positional-arguments-could-be-specified" class="md-nav__link">
     Variable-length positional arguments could be specified
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#this-object-could-be-used-in-arguments" class="md-nav__link">
-    this object could be used in arguments
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#package-object-could-be-used-in-arguments" class="md-nav__link">
-    Package object could be used in arguments
   </a>
   
 </li>
@@ -773,20 +731,6 @@
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#this-object-could-be-used-in-arguments" class="md-nav__link">
-    this object could be used in arguments
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#package-object-could-be-used-in-arguments" class="md-nav__link">
-    Package object could be used in arguments
-  </a>
-  
-</li>
-        
       </ul>
     </nav>
   
@@ -819,8 +763,6 @@ would know what arguments to pass.</p>
 <h2 id="principles">Principles<a class="headerlink" href="#principles" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="#variable-length-positional-arguments-could-be-specified">Variable-length positional arguments could be specified</a></li>
-<li><a href="#this-object-could-be-used-in-arguments"><code>this</code> object could be used in arguments</a></li>
-<li><a href="#package-object-could-be-used-in-arguments">Package object could be used in arguments</a></li>
 </ul>
 <h3 id="variable-length-positional-arguments-could-be-specified">Variable-length positional arguments could be specified<a class="headerlink" href="#variable-length-positional-arguments-could-be-specified" title="Permanent link">&para;</a></h3>
 <p>If you specify positional arguments next to the class you want to build inside
@@ -849,47 +791,6 @@ passed from <code>Injector</code> attributes.</p>
 <span class="gp">... </span>    <span class="nb">sum</span> <span class="o">=</span> <span class="n">shield</span><span class="p">(</span><span class="n">Sum</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Container</span><span class="o">.</span><span class="n">sum</span><span class="o">.</span><span class="n">do</span><span class="p">()</span>
-<span class="go">3</span>
-</code></pre></div>
-<h3 id="this-object-could-be-used-in-arguments"><code>this</code> object could be used in arguments<a class="headerlink" href="#this-object-could-be-used-in-arguments" title="Permanent link">&para;</a></h3>
-<p>You could pass <code>this</code> objects to variable-length positional or keyword
-arguments. It would be resolved in the same scope where <code>shield</code> object was
-defined.</p>
-<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dependencies</span> <span class="kn">import</span> <span class="n">Injector</span><span class="p">,</span> <span class="n">shield</span><span class="p">,</span> <span class="n">this</span>
-
-<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Sum</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
-<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="n">args</span>
-<span class="gp">...</span>
-<span class="gp">... </span>    <span class="k">def</span> <span class="nf">do</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="gp">... </span>        <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">)</span>
-
-<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Container</span><span class="p">(</span><span class="n">Injector</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="nb">sum</span> <span class="o">=</span> <span class="n">shield</span><span class="p">(</span><span class="n">Sum</span><span class="p">,</span> <span class="n">this</span><span class="o">.</span><span class="n">a</span><span class="p">,</span> <span class="n">this</span><span class="o">.</span><span class="n">b</span><span class="p">)</span>
-<span class="gp">... </span>    <span class="n">a</span> <span class="o">=</span> <span class="mi">1</span>
-<span class="gp">... </span>    <span class="n">b</span> <span class="o">=</span> <span class="mi">2</span>
-
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Container</span><span class="o">.</span><span class="n">sum</span><span class="o">.</span><span class="n">do</span><span class="p">()</span>
-<span class="go">3</span>
-</code></pre></div>
-<h3 id="package-object-could-be-used-in-arguments">Package object could be used in arguments<a class="headerlink" href="#package-object-could-be-used-in-arguments" title="Permanent link">&para;</a></h3>
-<p>Same as with <code>this</code> object you could pass <code>Package</code> object to variable-length
-positional or keyword arguments. It would be resolved before <code>shield</code> objects
-gets evaluated.</p>
-<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dependencies</span> <span class="kn">import</span> <span class="n">Injector</span><span class="p">,</span> <span class="n">shield</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">_</span> <span class="kn">import</span> <span class="n">examples</span>
-
-<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Sum</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
-<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="n">args</span>
-<span class="gp">...</span>
-<span class="gp">... </span>    <span class="k">def</span> <span class="nf">do</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="gp">... </span>        <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">)</span>
-
-<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Container</span><span class="p">(</span><span class="n">Injector</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="nb">sum</span> <span class="o">=</span> <span class="n">shield</span><span class="p">(</span><span class="n">Sum</span><span class="p">,</span> <span class="n">examples</span><span class="o">.</span><span class="n">a</span><span class="p">,</span> <span class="n">examples</span><span class="o">.</span><span class="n">b</span><span class="p">)</span>
-
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Container</span><span class="o">.</span><span class="n">sum</span><span class="o">.</span><span class="n">do</span><span class="p">()</span>  <span class="c1"># Import happens here.</span>
 <span class="go">3</span>
 </code></pre></div>
 <p align="center">&mdash; ⭐ &mdash;</p>

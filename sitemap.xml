@@ -56,11 +56,6 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://proofit404.github.io/dependencies/package/</loc>
-         <lastmod>2022-11-01</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
          <loc>https://proofit404.github.io/dependencies/settings/</loc>
          <lastmod>2022-11-01</lastmod>
          <changefreq>daily</changefreq>
@@ -77,11 +72,6 @@
     </url>
     <url>
          <loc>https://proofit404.github.io/dependencies/sticky/</loc>
-         <lastmod>2022-11-01</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://proofit404.github.io/dependencies/this/</loc>
          <lastmod>2022-11-01</lastmod>
          <changefreq>daily</changefreq>
     </url>

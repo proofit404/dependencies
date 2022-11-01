@@ -70,7 +70,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#770-2022-11-01" class="md-skip">
+        <a href="#800-rc1-2022-11-01" class="md-skip">
           Skip to content
         </a>
       
@@ -364,8 +364,15 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#features" class="md-nav__link">
-    Features
+  <a href="#code-refactoring" class="md-nav__link">
+    Code Refactoring
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#breaking-changes" class="md-nav__link">
+    BREAKING CHANGES
   </a>
   
 </li>
@@ -461,36 +468,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../this/" class="md-nav__link">
-        This
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../nested/" class="md-nav__link">
         Nested Injectors
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../package/" class="md-nav__link">
-        Package
       </a>
     </li>
   
@@ -732,8 +711,15 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#features" class="md-nav__link">
-    Features
+  <a href="#code-refactoring" class="md-nav__link">
+    Code Refactoring
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#breaking-changes" class="md-nav__link">
+    BREAKING CHANGES
   </a>
   
 </li>
@@ -753,6 +739,17 @@
                   
 
 
+<h1 id="800-rc1-2022-11-01">8.0.0-rc.1 (2022-11-01)<a class="headerlink" href="#800-rc1-2022-11-01" title="Permanent link">&para;</a></h1>
+<h3 id="code-refactoring">Code Refactoring<a class="headerlink" href="#code-refactoring" title="Permanent link">&para;</a></h3>
+<ul>
+<li>drop <code>this</code> and <code>Package</code> objects support
+  <a href="https://github.com/proofit404/dependencies/issues/576">#576</a> 0919f36</li>
+</ul>
+<h3 id="breaking-changes">BREAKING CHANGES<a class="headerlink" href="#breaking-changes" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>this</code> and <code>Package</code> objects were removed entirely. Use references import
+  notation instead. It's syntax is compatible with package import notation.</li>
+</ul>
 <h1 id="770-2022-11-01">7.7.0 (2022-11-01)<a class="headerlink" href="#770-2022-11-01" title="Permanent link">&para;</a></h1>
 <h3 id="features">Features<a class="headerlink" href="#features" title="Permanent link">&para;</a></h3>
 <ul>
@@ -862,7 +859,7 @@
 <li>scalar dependencies can't be resolved directly
   <a href="https://github.com/proofit404/dependencies/issues/480">#480</a></li>
 </ul>
-<h3 id="breaking-changes">BREAKING CHANGES<a class="headerlink" href="#breaking-changes" title="Permanent link">&para;</a></h3>
+<h3 id="breaking-changes_1">BREAKING CHANGES<a class="headerlink" href="#breaking-changes_1" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Injector won't pass nested injectors to the constructor of the class. Use
   <code>this</code> objects to access inner attributes of nested injector and pass them to
@@ -895,7 +892,7 @@
 <li>deprecate <a href="https://github.com/operation">@operation</a> object
   <a href="https://github.com/proofit404/dependencies/issues/457">#457</a></li>
 </ul>
-<h3 id="breaking-changes_1">BREAKING CHANGES<a class="headerlink" href="#breaking-changes_1" title="Permanent link">&para;</a></h3>
+<h3 id="breaking-changes_2">BREAKING CHANGES<a class="headerlink" href="#breaking-changes_2" title="Permanent link">&para;</a></h3>
 <ul>
 <li>@operation object was removed. You could replace it with @value object
   returning inner function. This inner function would use it's closure to
@@ -919,7 +916,7 @@
 <li>add python 3.9 support
   <a href="https://github.com/proofit404/dependencies/issues/410">#410</a></li>
 </ul>
-<h3 id="breaking-changes_2">BREAKING CHANGES<a class="headerlink" href="#breaking-changes_2" title="Permanent link">&para;</a></h3>
+<h3 id="breaking-changes_3">BREAKING CHANGES<a class="headerlink" href="#breaking-changes_3" title="Permanent link">&para;</a></h3>
 <ul>
 <li>drop python 3.6 support.</li>
 </ul>
@@ -946,18 +943,18 @@
 <li>replace let attribute with call
   <a href="https://github.com/proofit404/dependencies/issues/315">#315</a></li>
 </ul>
-<h3 id="breaking-changes_3">BREAKING CHANGES<a class="headerlink" href="#breaking-changes_3" title="Permanent link">&para;</a></h3>
+<h3 id="breaking-changes_4">BREAKING CHANGES<a class="headerlink" href="#breaking-changes_4" title="Permanent link">&para;</a></h3>
 <ul>
 <li><code>let</code> attribute was removed. Use <code>Injector()</code> instead of obsolete
   <code>Injector.let()</code>.</li>
 </ul>
 <h1 id="300-2020-08-30">3.0.0 (2020-08-30)<a class="headerlink" href="#300-2020-08-30" title="Permanent link">&para;</a></h1>
-<h3 id="code-refactoring">Code Refactoring<a class="headerlink" href="#code-refactoring" title="Permanent link">&para;</a></h3>
+<h3 id="code-refactoring_1">Code Refactoring<a class="headerlink" href="#code-refactoring_1" title="Permanent link">&para;</a></h3>
 <ul>
 <li>drop Python 2.7 and 3.4 support
   <a href="https://github.com/proofit404/dependencies/issues/348">#348</a></li>
 </ul>
-<h3 id="breaking-changes_4">BREAKING CHANGES<a class="headerlink" href="#breaking-changes_4" title="Permanent link">&para;</a></h3>
+<h3 id="breaking-changes_5">BREAKING CHANGES<a class="headerlink" href="#breaking-changes_5" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Due to the our new policy of enterprise user support we will drop abandoned
   version of python and libraries we are integrated with as soon as they reach
@@ -974,7 +971,7 @@
 <li>remove contrib package closes
   <a href="https://github.com/proofit404/dependencies/issues/192">#192</a></li>
 </ul>
-<h3 id="breaking-changes_5">BREAKING CHANGES<a class="headerlink" href="#breaking-changes_5" title="Permanent link">&para;</a></h3>
+<h3 id="breaking-changes_6">BREAKING CHANGES<a class="headerlink" href="#breaking-changes_6" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Every time a new user asks me how to use their favorite framework together
   with stories and dependencies I understand that there is a missing module in

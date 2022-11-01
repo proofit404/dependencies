@@ -418,36 +418,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../this/" class="md-nav__link">
-        This
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../nested/" class="md-nav__link">
         Nested Injectors
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../package/" class="md-nav__link">
-        Package
       </a>
     </li>
   
@@ -848,10 +820,10 @@ it inside application <code>Injector</code> subclass. Such approach would work n
 proof of concept development stage. Early in the development days you would
 probably more focused on business idea itself rather environment it would run
 inside.</p>
-<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dependencies</span> <span class="kn">import</span> <span class="n">Injector</span><span class="p">,</span> <span class="n">this</span>
+<div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dependencies</span> <span class="kn">import</span> <span class="n">Injector</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">application</span> <span class="kn">import</span> <span class="n">App</span><span class="p">,</span> <span class="n">PostgreSQL</span><span class="p">,</span> <span class="n">Redis</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Container1</span><span class="p">(</span><span class="n">Injector</span><span class="p">):</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Container1</span><span class="p">(</span><span class="n">Injector</span><span class="p">):</span>  <span class="c1"># doctest: +SKIP</span>
 <span class="gp">... </span>    <span class="n">app</span> <span class="o">=</span> <span class="n">App</span>
 <span class="gp">... </span>    <span class="n">database</span> <span class="o">=</span> <span class="n">this</span><span class="o">.</span><span class="n">Database</span><span class="o">.</span><span class="n">connection</span>
 <span class="gp">... </span>    <span class="n">cache</span> <span class="o">=</span> <span class="n">this</span><span class="o">.</span><span class="n">Cache</span><span class="o">.</span><span class="n">connection</span>
@@ -877,7 +849,7 @@ inside.</p>
 <span class="gp">... </span>        <span class="p">},</span>
 <span class="gp">... </span>    <span class="p">}</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Container1</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Container1</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>  <span class="c1"># doctest: +SKIP</span>
 <span class="go">Connecting to localhost:5432</span>
 <span class="go">Connecting to localhost:6379</span>
 </code></pre></div>
@@ -895,11 +867,11 @@ redis:
 <p>We could create a singleton configuration instance. File would be read only
 once.</p>
 <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">lru_cache</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dependencies</span> <span class="kn">import</span> <span class="n">Injector</span><span class="p">,</span> <span class="n">this</span><span class="p">,</span> <span class="n">value</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dependencies</span> <span class="kn">import</span> <span class="n">Injector</span><span class="p">,</span> <span class="n">value</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">yaml</span> <span class="kn">import</span> <span class="n">safe_load</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">application</span> <span class="kn">import</span> <span class="n">App</span><span class="p">,</span> <span class="n">PostgreSQL</span><span class="p">,</span> <span class="n">Redis</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Container2</span><span class="p">(</span><span class="n">Injector</span><span class="p">):</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Container2</span><span class="p">(</span><span class="n">Injector</span><span class="p">):</span>  <span class="c1"># doctest: +SKIP</span>
 <span class="gp">... </span>    <span class="n">app</span> <span class="o">=</span> <span class="n">App</span>
 <span class="gp">... </span>    <span class="n">database</span> <span class="o">=</span> <span class="n">this</span><span class="o">.</span><span class="n">Database</span><span class="o">.</span><span class="n">connection</span>
 <span class="gp">... </span>    <span class="n">cache</span> <span class="o">=</span> <span class="n">this</span><span class="o">.</span><span class="n">Cache</span><span class="o">.</span><span class="n">connection</span>
@@ -922,7 +894,7 @@ once.</p>
 <span class="gp">...</span>
 <span class="gp">... </span>    <span class="n">config</span> <span class="o">=</span> <span class="s2">&quot;docs/config.yml&quot;</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Container2</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Container2</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>  <span class="c1"># doctest: +SKIP</span>
 <span class="go">Connecting to 127.0.0.3:5432</span>
 <span class="go">Connecting to 127.0.0.3:6379</span>
 </code></pre></div>
@@ -930,10 +902,10 @@ once.</p>
 dependency with path to the file. That make it obvious we could define
 application container by reusing our first definition with hardcoded settings.</p>
 <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">lru_cache</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dependencies</span> <span class="kn">import</span> <span class="n">this</span><span class="p">,</span> <span class="n">value</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dependencies</span> <span class="kn">import</span> <span class="n">value</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">yaml</span> <span class="kn">import</span> <span class="n">safe_load</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Container3</span><span class="p">(</span><span class="n">Container1</span><span class="p">):</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Container3</span><span class="p">(</span><span class="n">Container1</span><span class="p">):</span>  <span class="c1"># doctest: +SKIP</span>
 <span class="gp">... </span>    <span class="nd">@value</span>
 <span class="gp">... </span>    <span class="nd">@lru_cache</span>
 <span class="gp">... </span>    <span class="k">def</span> <span class="nf">settings</span><span class="p">(</span><span class="n">config</span><span class="p">):</span>
@@ -942,7 +914,7 @@ application container by reusing our first definition with hardcoded settings.</
 <span class="gp">...</span>
 <span class="gp">... </span>    <span class="n">config</span> <span class="o">=</span> <span class="s2">&quot;docs/config.yml&quot;</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Container2</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Container2</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>  <span class="c1"># doctest: +SKIP</span>
 <span class="go">Connecting to 127.0.0.3:5432</span>
 <span class="go">Connecting to 127.0.0.3:6379</span>
 </code></pre></div>
@@ -952,10 +924,10 @@ target host system. <a href="https://www.heroku.com/">Heroku</a> advertise its
 twelve-factor application approach heavily. Sometimes environment variables
 would be an option. But consider it a security risk.</p>
 <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">environ</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dependencies</span> <span class="kn">import</span> <span class="n">Injector</span><span class="p">,</span> <span class="n">this</span><span class="p">,</span> <span class="n">value</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dependencies</span> <span class="kn">import</span> <span class="n">Injector</span><span class="p">,</span> <span class="n">value</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">application</span> <span class="kn">import</span> <span class="n">App</span><span class="p">,</span> <span class="n">PostgreSQL</span><span class="p">,</span> <span class="n">Redis</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Container</span><span class="p">(</span><span class="n">Injector</span><span class="p">):</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Container</span><span class="p">(</span><span class="n">Injector</span><span class="p">):</span>  <span class="c1"># doctest: +SKIP</span>
 <span class="gp">... </span>    <span class="n">app</span> <span class="o">=</span> <span class="n">App</span>
 <span class="gp">... </span>    <span class="n">database</span> <span class="o">=</span> <span class="n">this</span><span class="o">.</span><span class="n">Database</span><span class="o">.</span><span class="n">connection</span>
 <span class="gp">... </span>    <span class="n">cache</span> <span class="o">=</span> <span class="n">this</span><span class="o">.</span><span class="n">Cache</span><span class="o">.</span><span class="n">connection</span>
@@ -983,7 +955,7 @@ would be an option. But consider it a security risk.</p>
 <span class="gp">... </span>            <span class="p">},</span>
 <span class="gp">... </span>        <span class="p">}</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Container</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Container</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>  <span class="c1"># doctest: +SKIP</span>
 <span class="go">Connecting to postgresql-instance1.cg034hpkmmjt.us-east-1.rds.amazonaws.com:5432</span>
 <span class="go">Connecting to redis-01.7abc2d.0001.usw2.cache.amazonaws.com:6379</span>
 </code></pre></div>
@@ -999,10 +971,10 @@ client using environment variables. Let say we could change default port for
 local consul agent.</p>
 <div class="highlight"><pre><span></span><code><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">lru_cache</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">consul</span> <span class="kn">import</span> <span class="n">Consul</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dependencies</span> <span class="kn">import</span> <span class="n">Injector</span><span class="p">,</span> <span class="n">this</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dependencies</span> <span class="kn">import</span> <span class="n">Injector</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">application</span> <span class="kn">import</span> <span class="n">App</span><span class="p">,</span> <span class="n">PostgreSQL</span><span class="p">,</span> <span class="n">Redis</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Container</span><span class="p">(</span><span class="n">Injector</span><span class="p">):</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Container</span><span class="p">(</span><span class="n">Injector</span><span class="p">):</span>  <span class="c1"># doctest: +SKIP</span>
 <span class="gp">... </span>    <span class="n">app</span> <span class="o">=</span> <span class="n">App</span>
 <span class="gp">... </span>    <span class="n">database</span> <span class="o">=</span> <span class="n">this</span><span class="o">.</span><span class="n">Database</span><span class="o">.</span><span class="n">connection</span>
 <span class="gp">... </span>    <span class="n">cache</span> <span class="o">=</span> <span class="n">this</span><span class="o">.</span><span class="n">Cache</span><span class="o">.</span><span class="n">connection</span>
@@ -1033,7 +1005,7 @@ local consul agent.</p>
 <span class="gp">...</span>
 <span class="gp">... </span>    <span class="n">consul</span> <span class="o">=</span> <span class="n">Consul</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Container</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Container</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>  <span class="c1"># doctest: +SKIP</span>
 <span class="go">Connecting to local consul agent</span>
 <span class="go">Connecting to postgresql-instance1.cg034hpkmmjt.us-east-1.rds.amazonaws.com:5432</span>
 <span class="go">Connecting to redis-01.7abc2d.0001.usw2.cache.amazonaws.com:6379</span>
