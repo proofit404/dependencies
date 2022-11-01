@@ -1,3 +1,15 @@
+# 8.0.0-rc.1 (2022-11-01)
+
+### Code Refactoring
+
+- drop `this` and `Package` objects support
+  [#576](https://github.com/proofit404/dependencies/issues/576) 0919f36
+
+### BREAKING CHANGES
+
+- `this` and `Package` objects were removed entirely. Use references import
+  notation instead. It's syntax is compatible with package import notation.
+
 # 7.7.0 (2022-11-01)
 
 ### Features
