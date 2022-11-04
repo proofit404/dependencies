@@ -1,8 +1,6 @@
 from inspect import isclass
 
-from _dependencies.exceptions import DependencyError
 from _dependencies.injectable import _method_args
-from _dependencies.scope import _IsScope
 from _dependencies.spec import _Spec
 
 
@@ -35,18 +33,4 @@ class _ClassFactory:
         self.cls = cls
 
     def __call__(self, **kwargs):
-        message = no_depend_nested_injector_template
-        for argument in kwargs.values():
-            if isinstance(argument, _IsScope):
-                raise DependencyError(message)
         return self.cls(**kwargs), None
-
-
-# Messages.
-
-
-no_depend_nested_injector_template = """
-Do not depend on nested injectors directly.
-
-Use this object to access inner attributes of nested injector
-""".strip()

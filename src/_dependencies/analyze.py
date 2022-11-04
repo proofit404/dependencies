@@ -4,7 +4,6 @@ from _dependencies.objects.data import _build_data_spec
 from _dependencies.objects.data import _is_data
 from _dependencies.objects.descriptor import _is_descriptor
 from _dependencies.objects.enum import _is_enum
-from _dependencies.objects.nested import _build_nested_injector_spec
 from _dependencies.objects.nested import _is_nested_injector
 from _dependencies.objects.shield import _build_shield_spec
 from _dependencies.objects.shield import _is_shield
@@ -34,7 +33,7 @@ def _make_dependency_spec(name, dependency):
     for condition, builder in (  # pragma: no branch
         (_is_descriptor, None),
         (_is_enum, None),
-        (_is_nested_injector, _build_nested_injector_spec),
+        (_is_nested_injector, None),
         (_is_class, _build_class_spec),
         (_is_value, _build_value_spec),
         (_is_shield, _recursive(_build_shield_spec)),

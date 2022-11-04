@@ -1,5 +1,4 @@
-from _dependencies.scope import _Scope
-from _dependencies.spec import _Spec
+from _dependencies.exceptions import DependencyError
 
 
 class _InjectorTypeType(type):
@@ -7,24 +6,18 @@ class _InjectorTypeType(type):
 
 
 def _is_nested_injector(name, dependency):
-    return isinstance(dependency, _InjectorTypeType)
+    if isinstance(dependency, _InjectorTypeType):
+        message = nested_injector_template.format(name=name)
+        raise DependencyError(message)
 
 
-def _build_nested_injector_spec(name, dependency):
-    return _Spec(
-        _NestedInjectorFactory(dependency),
-        {"__self__": False},
-        {"__self__"},
-        set(),
-        lambda: "'Injector'",
-        False,
-    )
+# Messages.
 
 
-class _NestedInjectorFactory:
-    def __init__(self, injector):
-        self.injector = injector
+nested_injector_template = """
+Attribute {name!r} contains nested Injector.
 
-    def __call__(self, __self__):
-        graph = self.injector.__dependencies__.copy()
-        return _Scope(self.injector.__name__, graph, lambda graph, cache: None), None
+Do not depend on nested injectors directly.
+
+Use reference objects to access inner attributes of other injectors instead.
+""".strip()

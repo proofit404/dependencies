@@ -1,6 +1,3 @@
-from _dependencies.exceptions import DependencyError
-
-
 class _Trace:
     def __init__(self, state):
         self.states = [state]
@@ -10,15 +7,7 @@ class _Trace:
         return self.error + ":\n\n" + "\n".join(map(indentation, self.stack()))
 
     def add(self, error):
-        if isinstance(error, DependencyError):
-            message = error.args[0]
-            if isinstance(message, _Trace):  # pragma: no cover
-                self.error = message.error
-                self.states.extend(message.states)
-            else:
-                self.error = message
-        else:
-            self.error = error
+        self.error = error
 
     def stack(self):
         attributes = []
