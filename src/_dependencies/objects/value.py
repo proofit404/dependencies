@@ -16,7 +16,7 @@ class Value:
     """
 
     def __init__(self, function):
-        _check_class(function)
+        _check_class(function)  # FIXME: function could be none.
         self.__function__ = function
 
 

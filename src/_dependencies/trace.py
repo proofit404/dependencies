@@ -17,7 +17,7 @@ class _Trace:
             name = scope.__class__.__name__
             for attribute in [*[s[0] for s in state.stack], state.current]:
                 attributes.append(f"{name}.{attribute}")
-                if (scope, attribute) in seen:  # pragma: no cover
+                if (scope, attribute) in seen:
                     return attributes
                 else:
                     seen.add((scope, attribute))

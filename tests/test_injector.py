@@ -6,6 +6,13 @@ from dependencies import value
 from signature import Signature
 
 
+# FIXME: Split things related to kind of the object into objects
+# tests. See descriptor, nested, enums for example.  Classes and
+# @value dependencies could be grouped into objects evaluated.
+# Functions, lambdas, and integers could be grouped into objects
+# scalar. Rename objects definition as well. It isn't data anymore.
+
+
 def test_lambda_dependency(expect):
     """Inject lambda function."""
 
@@ -99,28 +106,6 @@ def test_class_dependency(expect):
     @expect(Container)
     def case(it):
         assert it.foo.do(2) == 8
-
-
-def test_redefine_dependency(expect):
-    """We can redefine dependency by inheritance from the `Injector` subclass."""
-
-    class Foo:
-        def __init__(self, add):
-            self.add = add
-
-        def do(self, x):
-            return self.add(x, x)
-
-    class Container(Injector):
-        foo = Foo
-        add = lambda x, y: x + y  # noqa: E731  # pragma: no cover
-
-    class WrongContainer(Container):
-        add = lambda x, y: x - y  # noqa: E731
-
-    @expect(WrongContainer)
-    def case(it):
-        assert it.foo.do(1) == 0
 
 
 def _defaults():

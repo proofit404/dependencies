@@ -10,6 +10,8 @@ class StarArgs:
 
 
 class _Has(type):
+    # FIXME: Rewrite this class into concept of multiple predefined
+    # HasA, HasB, HasAB classes.
     def __getitem__(self, item):
         from dataclasses import make_dataclass
 
@@ -29,6 +31,9 @@ del _Has
 
 
 class _Take(type):
+    # FIXME: Drop these concept. Direct resolve rule was removed
+    # previousy, which existence was the entire reason we need this
+    # class.
     def __getitem__(self, item):
         from dataclasses import make_dataclass
 
