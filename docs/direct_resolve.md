@@ -13,7 +13,6 @@ interesting features like [Sticky scopes](./sticky.md).
 
 - [Classes are resolved by attribute access](#classes-are-resolved-by-attribute-access)
 - [Scalar types could not be resolved directly](#scalar-types-could-not-be-resolved-directly)
-- [Nested injectors could not be resolved directly](#nested-injectors-could-not-be-resolved-directly)
 - [`@value` object could not be resolved directly](#value-object-could-not-be-resolved-directly)
 
 ### Classes are resolved by attribute access
@@ -59,25 +58,6 @@ attribute access.
 Traceback (most recent call last):
   ...
 _dependencies.exceptions.DependencyError: Scalar dependencies could only be used to instantiate classes
-
-```
-
-### Nested injectors could not be resolved directly
-
-You can't resolve nested injectors as main target of dependency injection.
-
-```pycon
-
->>> from dependencies import Injector
-
->>> class Container(Injector):
-...     class Nested(Injector):
-...         foo = 1
-
->>> Container.Nested
-Traceback (most recent call last):
-  ...
-_dependencies.exceptions.DependencyError: 'Injector' dependencies could only be used to instantiate classes
 
 ```
 
