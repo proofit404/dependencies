@@ -22,11 +22,6 @@ class _Graph:
     def update(self, graph):
         self.specs.update(graph.specs)
 
-    def copy(self):
-        graph = _Graph()
-        graph.update(self)
-        return graph
-
 
 def _check_dunder_name(name):
     if name.startswith("__") and name.endswith("__"):

@@ -40,14 +40,9 @@ class _Resolver:
         raise DependencyError(message)
 
     def create(self, factory, args):
-        try:
-            result, destructor = factory(**self.state.kwargs(args))
-            self.state.store(result)
-            self.remember(destructor)
-        except DependencyError as error:
-            message = _Trace(self.state)
-            message.add(error)
-            raise DependencyError(message) from None
+        result, destructor = factory(**self.state.kwargs(args))
+        self.state.store(result)
+        self.remember(destructor)
 
     def match(self, args):
         for arg, have_default in args.items():  # pragma: no branch

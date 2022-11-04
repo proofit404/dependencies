@@ -19,23 +19,6 @@ def test_direct_resolve_scalar(expect, catch):
         it.a
 
 
-def test_direct_resolve_nested(expect, catch):
-    """Attempt to resolve nested injector directly should raise exception.
-
-    Nested injectors are allowed to be used as this object targets.
-
-    """
-
-    class Container(Injector):
-        class Nested(Injector):
-            a = 1
-
-    @expect(Container)
-    @catch("'Injector' dependencies could only be used to instantiate classes")
-    def case(it):
-        it.Nested
-
-
 def test_direct_resolve_value(expect, catch):
     """Attempt to resolve value directly should raise exception.
 

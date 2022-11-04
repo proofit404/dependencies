@@ -1,33 +1,25 @@
 """Tests related to Injector classes written inside other Injector classes."""
-import pytest
-
 from dependencies import Injector
-from dependencies.exceptions import DependencyError
 
 
-def test_deny_classes_depend_on_nested_injectors():
-    """Classes should not receive nested injectors as arguments of constructors."""
-
-    class Foo:
-        def __init__(self, bar):
-            raise RuntimeError
+def test_deny_nested_injectors(e, expect, catch):
+    """Injectors can not store other Injector in it."""
 
     class Bar(Injector):
-        baz = None
+        foo = e.Null
 
-    class Container(Injector):
-        foo = Foo
+    class Baz(Injector):
         bar = Bar
 
-    with pytest.raises(DependencyError) as exc_info:
-        Container.foo
+    @expect(Baz)
+    @catch(
+        """
+Attribute 'bar' contains nested Injector.
 
-    expected = """
 Do not depend on nested injectors directly.
 
-Use this object to access inner attributes of nested injector:
-
-Container.foo
-    """.strip()
-
-    assert expected == str(exc_info.value)
+Use reference objects to access inner attributes of other injectors instead.
+        """
+    )
+    def case(it):
+        it.quiz
