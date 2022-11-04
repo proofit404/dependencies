@@ -1,3 +1,17 @@
+# 8.0.0-rc.2 (2022-11-04)
+
+### Features
+
+- drop nested injectors support
+  [#578](https://github.com/proofit404/dependencies/issues/578) 500385e
+
+### BREAKING CHANGES
+
+- One Injector subclass can not hold another Injector subclass in its attribute.
+  This possibility were introduced back in a day too workaround limitation of
+  this object. Since this object was not able to reference something outside of
+  Injector subclass.
+
 # 8.0.0-rc.1 (2022-11-01)
 
 ### Code Refactoring
