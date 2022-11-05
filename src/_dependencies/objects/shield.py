@@ -28,7 +28,7 @@ def _build_shield_spec(name, dependency):
         spec_required |= vararg_spec.required
         spec_optional |= vararg_spec.optional
     factory = _ShieldFactory(dependency.callback, varargs_factories)
-    return _Spec(factory, spec_args, spec_required, spec_optional, lambda: None, False)
+    return _Spec(factory, spec_args, spec_required, spec_optional, False)
 
 
 class _ShieldFactory:

@@ -43,7 +43,7 @@ def _build_value_spec(name, dependency):
     else:
         factory = _ValueFactory(function)
         is_context = False
-    return _Spec(factory, args, required, optional, lambda: "'value'", is_context)
+    return _Spec(factory, args, required, optional, is_context)
 
 
 class _ValueFactory:
