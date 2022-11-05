@@ -1,3 +1,16 @@
+# 8.0.0-rc.3 (2022-11-05)
+
+### Features
+
+- allow direct resolve
+  [#584](https://github.com/proofit404/dependencies/issues/584) 132e928
+
+### BREAKING CHANGES
+
+- direct resolve was denied because it was problematic together with nested
+  injectors support. Nested injectors feature was removed, so we don't have a
+  reason to hold to direct resolve restriction as well.
+
 # 8.0.0-rc.2 (2022-11-04)
 
 ### Features
