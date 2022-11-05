@@ -46,7 +46,6 @@ nav:
       - Shield: shield.md
       - Sticky Scopes: sticky.md
       - Setup and Teardown: setup_teardown.md
-      - Direct Resolve: direct_resolve.md
   - Guides:
       - Attrs: attrs.md
       - Descriptors: descriptors.md
