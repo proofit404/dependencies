@@ -1,12 +1,13 @@
 ---
-name: release
+name: pipeline
 "on":
   push:
     branches:
       - release
       - develop
+  pull_request:
 jobs:
-  ci:
+  pipeline:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -16,26 +17,21 @@ jobs:
       - run: |
           git checkout develop || true
           git checkout $GITHUB_HEAD_REF
-      - uses: actions/setup-python@v3
+      - uses: actions/setup-python@v4
         with:
-          python-version: 3.8.12
-      - uses: actions/setup-python@v3
-        with:
-          python-version: 3.9.13
-      - uses: actions/setup-python@v3
-        with:
-          python-version: 3.10.4
-      - uses: actions/setup-python@v3
-        with:
-          python-version: pypy-3.9
-      - run: rm /opt/hostedtoolcache/PyPy/3.9.12/x64/bin/python3.9
+          python-version: 3.11.2
       - uses: actions/setup-node@v3
         with:
-          node-version: 16.14.2
+          node-version: 18.14.0
       - run: ./scripts/install
       - run: ./scripts/check
       - run: ./scripts/test
+      - run: ./scripts/review
+        if: ${{ github.event_name == 'pull_request' }}
+        env:
+          DANGER_GITHUB_API_TOKEN: Z2hwX3BZbXFOQWJXMkNkT0NwejNGS1BWZjBWZ3hTS01uSjJRSmVQbAo=
       - run: ./scripts/release
+        if: ${{ github.ref == 'refs/heads/release' || github.ref == 'refs/heads/develop' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYPI_TOKEN }}

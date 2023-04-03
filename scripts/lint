@@ -5,32 +5,22 @@ set -o pipefail
 
 . venv/bin/activate
 
-echo "==> Running pre-commit…"
-pre-commit run --all-files
+git ls-files -z | xargs -0 grep -Z -I -l '' | xargs -0 fix-byte-order-marker
+git ls-files -z | xargs -0 grep -Z -I -l '' | xargs -0 end-of-file-fixer
+git ls-files -z | xargs -0 grep -Z -I -l '' | xargs -0 mixed-line-ending --fix=lf
+git ls-files -z | xargs -0 grep -Z -I -l '' | xargs -0 trailing-whitespace-fixer
+file-contents-sorter .gitignore requirements.txt
 
-echo "==> Running pyupgrade…"
-git ls-files '*.py' | xargs pyupgrade --py37-plus
+git ls-files -z '*.py' | xargs -0 pyupgrade --py311-plus
 
-echo "==> Running reorder-python-imports…"
-git ls-files '*.py' | xargs reorder-python-imports --application-directories=.:src:testing
+git ls-files -z '*.py' | xargs -0 reorder-python-imports --py311-plus --application-directories=src
 
-echo "==> Running docformatter…"
-git ls-files '*.py' | xargs docformatter --wrap-summaries 88 --wrap-descriptions 88 --blank --in-place
+git ls-files -z '*.py' | xargs -0 docformatter --wrap-summaries 88 --wrap-descriptions 88 --blank --in-place
 
-echo "==> Running black…"
-black .
+git ls-files -z '*.py' | xargs -0 eradicate --aggressive --in-place
 
-echo "==> Running blacken-docs…"
-git ls-files '*.md' | xargs blacken-docs
+git ls-files -z '*.py' | xargs -0 black --target-version=py311 --quiet
 
-echo "==> Running prettier…"
-npx prettier --prose-wrap=always --write .
+git ls-files -z '*.js' '*.ts' '*.md' | xargs -0 npx prettier --prose-wrap=always --write
 
-echo "==> Running misspell fixer…"
-git ls-files | xargs misspell-fixer -rsn
-
-echo "==> Running toml-sort…"
-git ls-files '*.toml' | xargs toml-sort --all --no-header --in-place
-
-echo "==> Running tox-ini-fmt…"
-tox-ini-fmt tox.ini
+git ls-files -z '*.toml' | xargs -0 toml-sort --all --no-header --in-place

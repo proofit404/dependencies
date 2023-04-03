@@ -4,20 +4,11 @@ requires = ["poetry-core"]
 
 [tool.poetry]
 authors = ["Josiah Kaviani <proofit404@gmail.com>"]
-classifiers = [
-    "Programming Language :: Python :: Implementation :: CPython",
-    "Programming Language :: Python :: Implementation :: PyPy",
-]
 description = "Constructor injection designed with OOP in mind."
 documentation = "https://proofit404.github.io/dependencies"
 homepage = "https://pypi.org/project/dependencies"
 license = "BSD-2-Clause"
 name = "dependencies"
-packages = [
-    { include = "_.py", from = "src"},
-    { include = "_dependencies", from = "src" },
-    { include = "dependencies", from = "src" },
-]
 readme = "docs/index.md"
 repository = "https://github.com/proofit404/dependencies"
 version = "8.0.0-rc.3"

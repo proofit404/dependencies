@@ -1,13 +1,11 @@
 {
   "template": "https://github.com/proofit404/python-library-template",
-  "commit": "41476f18af4abbfe83e06539c8ab67db264a6d81",
+  "commit": "3433383469aa2403d4b3e20390bb7490941785ff",
   "checkout": null,
   "context": {
     "cookiecutter": {
       "project_name": "dependencies",
-      "public_module_name": "dependencies",
-      "private_module_name": "_dependencies",
-      "exception_name": "DependencyError",
+      "module_name": "dependencies",
       "project_description": "Constructor injection designed with OOP in mind.",
       "author_name": "Josiah Kaviani",
       "author_email": "proofit404@gmail.com",
@@ -18,9 +16,8 @@
       "changelog_url": "https://proofit404.github.io/dependencies/changelog",
       "twitter_url": "https://twitter.com/proofit404",
       "pypi_project": "https://pypi.org/project/dependencies",
-      "github_workflow": "release",
       "github_workflow_url": "https://github.com/proofit404/dependencies/actions/workflows/release.yml?query=branch%3Arelease",
-      "github_workflow_badge_url": "https://img.shields.io/github/workflow/status/proofit404/dependencies/release?style=flat-square",
+      "github_workflow_badge_url": "https://img.shields.io/github/actions/workflow/status/proofit404/dependencies/release.yml?branch=release&style=flat-square",
       "pypi_badge_url": "https://img.shields.io/pypi/v/dependencies?style=flat-square",
       "danger_github_api_token": "Z2hwX3BZbXFOQWJXMkNkT0NwejNGS1BWZjBWZ3hTS01uSjJRSmVQbAo=",
       "_template": "https://github.com/proofit404/python-library-template"

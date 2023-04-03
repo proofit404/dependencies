@@ -6,5 +6,4 @@ set -o pipefail
 
 . venv/bin/activate
 
-echo "==> Serving documentation…"
 mkdocs serve
