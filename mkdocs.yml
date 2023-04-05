@@ -14,7 +14,9 @@ theme:
     repo: fontawesome/brands/github
   language: en
   features:
+    - navigation.footer
     - navigation.tabs
+    - navigation.tabs.sticky
 repo_name: proofit404/dependencies
 repo_url: https://github.com/proofit404/dependencies
 edit_uri: ""
@@ -26,7 +28,12 @@ markdown_extensions:
   - pymdownx.highlight
   - pymdownx.inlinehilite
   - pymdownx.keys
-  - pymdownx.superfences
+  - pymdownx.snippets
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
   - pymdownx.tabbed:
       alternate_style: true
   - pymdownx.tasklist:
@@ -39,18 +46,4 @@ nav:
       - Installation: installation.md
       - Changelog: changelog.md
   - Usage:
-      - Why: why.md
-      - Usage: usage.md
-      - Classes: classes.md
-      - Value: value.md
-      - Shield: shield.md
-      - Sticky Scopes: sticky.md
-      - Setup and Teardown: setup_teardown.md
-  - Guides:
-      - Attrs: attrs.md
-      - Descriptors: descriptors.md
-      - Enums: enum.md
-      - Type Hints: type_hints.md
-      - Mixins: mixins.md
-      - Design: design.md
-      - Settings: settings.md
+      - Wire: wire.md

@@ -6,74 +6,50 @@ set -o pipefail
 
 . venv/bin/activate
 
-echo "==> Checking configuration…"
-PYTHONPATH=$PWD/testing coverage run -m configuration
+git ls-files -z | xargs -0 check-added-large-files
+git ls-files -z | xargs -0 grep -Z -I -l '' | xargs -0 fix-byte-order-marker
+git ls-files -z | xargs -0 grep -Z -I -l '' | xargs -0 check-merge-conflict
+git ls-files -z | xargs -0 check-symlinks
+git ls-files -z | xargs -0 grep -Z -I -l '' | xargs -0 end-of-file-fixer
+git ls-files -z | xargs -0 grep -Z -I -l '' | xargs -0 mixed-line-ending --fix=lf
+git ls-files -z | xargs -0 grep -Z -I -l '' | xargs -0 trailing-whitespace-fixer
+file-contents-sorter .gitignore requirements.txt
+git ls-files -z '*.py' | xargs -0 debug-statement-hook
+git ls-files -z '*.py' | xargs -0 check-builtin-literals --no-allow-dict-kwargs
+git ls-files -z '*.json' | xargs -0 check-json
+git ls-files -z '*.toml' | xargs -0 check-toml
+git ls-files -z '*.yaml' '*.yml' | xargs -0 check-yaml --unsafe
 
-echo "==> Running pre-commit…"
-pre-commit run --all-files --show-diff-on-failure
+git ls-files -z '*.py' | xargs -0 pyupgrade --py311-plus
 
-echo "==> Running pyupgrade…"
-git ls-files '*.py' | xargs pyupgrade --py37-plus
+git ls-files -z '*.py' | xargs -0 reorder-python-imports --py311-plus --application-directories=src
 
-echo "==> Running reorder-python-imports…"
-git ls-files '*.py' | xargs reorder-python-imports --application-directories=.:src:testing
+git ls-files -z '*.py' | xargs -0 docformatter --wrap-summaries 88 --wrap-descriptions 88 --blank --check
 
-echo "==> Running docformatter…"
-git ls-files '*.py' | xargs docformatter --wrap-summaries 88 --wrap-descriptions 88 --blank --check
+git ls-files -z '*.py' | xargs -0 eradicate --aggressive --in-place --error
 
-echo "==> Running black…"
-black --check --diff .
+git ls-files -z '*.py' | xargs -0 black --target-version=py311 --quiet --diff --check
 
-echo "==> Running blacken-docs…"
-git ls-files '*.md' | xargs blacken-docs
+git ls-files -z '*.js' '*.ts' '*.md' | xargs -0 npx prettier --prose-wrap=always --check
 
-echo "==> Running prettier…"
-npx prettier --prose-wrap=always --check .
+git ls-files -z '*.py' | xargs -0 flake8
 
-echo "==> Running misspell fixer…"
-git ls-files | xargs misspell-fixer -rsn
+git ls-files -z '*.py' | xargs -0 yesqa
 
-echo "==> Running flake8…"
-flake8 .
+git ls-files -z '*.py' | xargs -0 mypy
 
-echo "==> Running yesqa…"
-git ls-files '*.py' | xargs yesqa
+git ls-files -z '*.py' | xargs -0 xenon --max-absolute A --max-modules A --max-average A
 
-echo "==> Running perflint…"
-perflint src/
-
-echo "==> Running bandit…"
-bandit -r src/
-
-echo "==> Running xenon…"
-xenon --max-absolute A --max-modules A --max-average A src/
-
-echo "==> Running lint-imports…"
-PYTHONPATH=$PWD/src lint-imports
-
-echo "==> Running mkdocs…"
 mkdocs build
 
-echo "==> Running vale…"
-git ls-files '*.md' | xargs vale
+git ls-files -z '*.md' | xargs -0 npx remark --frail
 
-echo "==> Running remark…"
-npx remark --frail .
+git ls-files -z '*.ts' '*.js' '*.json' | xargs -0 npx eslint --no-ignore
 
-echo "==> Running eslint…"
-npx eslint .
+git ls-files -z '*.yaml' '*.yml' | xargs -0 yamllint --strict
 
-echo "==> Running yamllint…"
-yamllint --strict .
+git ls-files -z '*.toml' | xargs -0 toml-sort --all --no-header --check
 
-echo "==> Running toml-sort…"
-git ls-files '*.toml' | xargs toml-sort --all --no-header --check
+git ls-files -z | xargs -0 npx jscpd
 
-echo "==> Running tox-ini-fmt…"
-tox-ini-fmt tox.ini
-
-echo "==> Running jscpd…"
-npx jscpd src/
-
-echo "==> Running commitlint…"
 npx commitlint --from $(( git branch --show-current | grep -q develop || git branch --show-current | grep -q issue && git branch --list develop | grep -q develop ) && echo develop || echo release)

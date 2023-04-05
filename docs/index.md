@@ -1,4 +1,4 @@
-# Dependencies [![build](https://img.shields.io/github/workflow/status/proofit404/dependencies/release?style=flat-square)](https://github.com/proofit404/dependencies/actions/workflows/release.yml?query=branch%3Arelease) [![pypi](https://img.shields.io/pypi/v/dependencies?style=flat-square)](https://pypi.org/project/dependencies)
+# dependencies [![build](https://img.shields.io/github/actions/workflow/status/proofit404/dependencies/release.yml?branch=release&style=flat-square)](https://github.com/proofit404/dependencies/actions/workflows/release.yml?query=branch%3Arelease) [![pypi](https://img.shields.io/pypi/v/dependencies?style=flat-square)](https://pypi.org/project/dependencies)
 
 Constructor injection designed with OOP in mind.
 
@@ -20,47 +20,17 @@ pleasant it becomes to change your system.
 This tiny library helps you to connect parts of your system, in particular - to
 inject low level implementation into high level behavior.
 
-## Pros
-
 - Provide composition instead of inheritance.
 - Solves top-down architecture problems.
 - Boilerplate-free object hierarchies.
 - API entrypoints, admin panels, CLI commands are oneliners.
 
-## Example
-
-Dependency injection without `dependencies`
-
-```pycon
-
->>> from app.robot import Robot, Servo, Amplifier, Controller, Settings
-
->>> robot = Robot(
-...     servo=Servo(amplifier=Amplifier()),
-...     controller=Controller(),
-...     settings=Settings(environment="production"),
-... )
-
->>> robot.work()
-
+```python
+--8<-- "examples/wire_class.py"
 ```
 
-Dependency injection with `dependencies`
-
-```pycon
-
->>> from dependencies import Injector
-
->>> class Container(Injector):
-...     robot = Robot
-...     servo = Servo
-...     amplifier = Amplifier
-...     controller = Controller
-...     settings = Settings
-...     environment = "production"
-
->>> Container.robot.work()
-
+```text
+--8<-- "examples/wire_class.log"
 ```
 
 ## Questions
@@ -84,5 +54,3 @@ interested in it.
 ## License
 
 `dependencies` library is offered under the two clause BSD license.
-
-<p align="center">&mdash; ⭐ &mdash;</p>

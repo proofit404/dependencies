@@ -6,9 +6,8 @@ set -o pipefail
 
 . venv/bin/activate
 
-echo "==> Running danger…"
 export DANGER_GITHUB_API_TOKEN=$(echo $DANGER_GITHUB_API_TOKEN | base64 --decode)
+
 npx danger ci
 
-echo "==> Running cruft…"
 cruft check

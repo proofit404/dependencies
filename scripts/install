@@ -4,42 +4,12 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-if [ ! -d venv ]
-then
-    echo "==> Creating virtual environment…"
-    python3.10 -m venv venv
-fi
+python3.11 -m venv venv
 
 . venv/bin/activate
 
-echo "==> Installing python dependencies…"
 pip install -r requirements.txt
-patch venv/lib/python3.10/site-packages/blacken_docs.py blacken-docs.patch
 
-echo "==> Installing node dependencies…"
+pip install -e .
+
 npm install
-
-echo "==> Installing misspell-fixer…"
-git clone https://github.com/vlajos/misspell-fixer venv/misspell-fixer
-rm -rf venv/misspell-fixer/.git
-sed -i "s/^\\(export rules_directory=\\)/export source_directory=$(echo $PWD | sed 's/\//\\\//g')\\/venv\\/misspell-fixer\\/\\n\\1/g" venv/misspell-fixer/misspell-fixer
-ln -s $PWD/venv/misspell-fixer/misspell-fixer $PWD/venv/bin/misspell-fixer
-
-echo "==> Installing vale…"
-VALE_VERSION=$(curl -I -L -s -o /dev/null -w %{url_effective} https://github.com/errata-ai/vale/releases/latest | sed 's/^.*\/v//')
-VALE_FILE=vale_${VALE_VERSION}_Linux_64-bit.tar.gz
-curl -L -O https://github.com/errata-ai/vale/releases/latest/download/${VALE_FILE}
-tar -xvzf ${VALE_FILE} -C venv/bin/
-rm ${VALE_FILE}
-
-curl -L -O https://github.com/errata-ai/proselint/releases/latest/download/proselint.zip
-unzip -d venv/styles proselint.zip
-rm proselint.zip
-
-curl -L -O https://github.com/errata-ai/write-good/releases/latest/download/write-good.zip
-unzip -d venv/styles write-good.zip
-rm write-good.zip
-
-curl -L -O https://github.com/errata-ai/Joblint/releases/latest/download/Joblint.zip
-unzip -d venv/styles Joblint.zip
-rm Joblint.zip

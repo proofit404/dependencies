@@ -1,7 +1,0 @@
----
-postgresql:
-  host: 127.0.0.3
-  port: 5432
-redis:
-  host: 127.0.0.3
-  port: 6379
