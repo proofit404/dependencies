@@ -25,20 +25,12 @@ inject low level implementation into high level behavior.
 - Boilerplate-free object hierarchies.
 - API entrypoints, admin panels, CLI commands are oneliners.
 
-```pycon
+```python
+--8<-- "examples/wire_class.py"
+```
 
->>> from dependencies import Injector
-
->>> class Container(Injector):
-...     robot = Robot
-...     servo = Servo
-...     amplifier = Amplifier
-...     controller = Controller
-...     settings = Settings
-...     environment = "production"
-
->>> Container.robot.work()
-
+```text
+--8<-- "examples/wire_class.log"
 ```
 
 ## Questions

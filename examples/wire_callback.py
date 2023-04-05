@@ -21,3 +21,6 @@ class Container:
 
 
 assert_type(Container.username, str)
+
+
+print(Container.username)

@@ -45,3 +45,5 @@ nav:
       - Home: index.md
       - Installation: installation.md
       - Changelog: changelog.md
+  - Usage:
+      - Wire: wire.md
